@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the assortment of miscellaneous things that are required for
+      the game system. Miscellaneous things include the mechanisms for managing applied
+      damage, user images, and personal info for each actor. It also includes things
+      used to track resource pools, such as those used for managing the available
+      attribute points, skill points, etc.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- Racial - Bonus Racial Edges resource  -->
+  <thing
+    id="resRacEdge"
+    name="Racial Edges"
+    compset="Resource">
+    <fieldval field="resMax" value="0"/>
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    </thing>
+   
+  </document>

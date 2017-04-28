@@ -1,0 +1,52 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- This file contains all specifications pertaining to the operational control of
+      the data files. This includes usage pools, sources, sortsets, and other related
+      mechanisms.
+-->
+
+<document signature="Hero Lab Structure">
+  <!-- TCA: Tags specific to Rifts -->
+
+  <group
+    id="BreedAdv">
+    <value id="Fast"/>      <!-- Breed Advantage: Fast Breed -->
+    <value id="Agile"/>     
+    <value id="Strong"/>    
+    <value id="Rugged"/>    
+    <value id="Tracker"/>
+    <value id="Tough"/>  
+    <value id="Water"/>    
+    <value id="Selected"/>  <!-- Indicates selected from the Racial Tab -->  
+    </group>
+    
+  <group
+    id="Rifts">
+    <value id="HRaceTab"/>       <!-- Hide Racial Tab -->   
+    <value id="HRaceAbil"/>      <!-- Hide Racial Abilities -->   
+    <value id="HRaceProp"/>      <!-- Hide Racial Properties -->     
+    <value id="RaceEdgeB"/>      <!-- Bonus Racial Edge -->     
+    <value id="RaceHindB"/>      <!-- Bonus Racial Hinderence -->     
+    <value id="TKnoSkill"/>      <!-- Tag for selected Tramadore Knowledge Skill -->     
+    </group>
+
+    
+  <!-- TCA: This source enables the selection of Savage Rifts -->
+ <source
+    id="sepSavRif"
+    name="Savage Rifts Campaign Setting"
+    selectable="no"
+    parent="UserParent"
+    sortorder="0"
+    description="Savage Rifts Campaign Setting">
+ </source>
+ <source
+    id="SavRiftC"
+    name="Savage Rifts"
+    parent="sepSavRif"
+    reportable="yes"
+    description="Each character utilizes the Savage Rifts Core material.">
+    </source>
+
+    
+</document>

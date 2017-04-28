@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Abilities" tab panel. This tab is where
+      the user selects the special abilities for the character.
+
+      All public visual elements used with this tab panel start with the prefix "ab"
+      to associate them with the tab.
+-->
+
+<document signature="Hero Lab Data">
+
+  <portal
+    id="raRaceAbil"
+    style="tblInvis">
+    <table_fixed
+      component="RaceAbil"
+      showtemplate="SimpleItem"
+      showsortset="explicit"
+      scrollable="no">
+      <headertitle><![CDATA[
+        @text = "Racial Abilities"
+        ]]></headertitle>
+      </table_fixed>
+    </portal>
+
+  <portal
+    id="raRaceProp"
+    style="tblInvis">
+    <table_fixed
+      component="RacialProp"
+      showtemplate="raPropPick"
+      showsortset="explicit"
+      scrollable="no">
+      <headertitle><![CDATA[
+        @text = "Racial Properties"
+        ]]></headertitle>
+      </table_fixed>
+    </portal>
+
+  <!-- raDogBoy portal - Allows selection of the Dog Boy's Breed Advantage
+  -->
+  <portal
+    id="raDogBoy"
+    style="tblNormal">
+    <table_dynamic
+      component="Edge"
+      showtemplate="SimpleItem"
+      choosetemplate="SimpleItem"
+      showfixedlast="yes"
+      addpick="resRacEdge">
+      <list>BreedAdv.Selected</list>
+      <candidate>BreedAdv.?</candidate>
+      <autotag group="BreedAdv" tag="Selected"/>
+      <titlebar><![CDATA[
+        @text = "Add a Breed Advantage - " & hero.child[resRacEdge].field[resSummary].text
+        ]]></titlebar>
+      <description/>
+      <headertitle><![CDATA[
+        @text = "Breed Advantage: " & hero.child[resRacEdge].field[resSummary].text
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~if we're in advancement mode, we've been frozen, so display accordingly
+        if (state.iscreate = 0) then
+          @text = "{text clrgrey}Add Edges Via Advances Tab"
+          done
+          endif
+
+        ~set the color based on whether the proper number of slots are allocated
+        if (field[resLeft].value = 0) then
+          @text = "{text clrgrey}"
+        elseif (field[resLeft].value < 0) then
+          @text = "{text clrwarning}"
+          endif
+        
+        @text &= "Add Breed Advantage"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+    
+  <!-- raGrackle portal - Allows selection of the Dog Boy's Breed Advantage
+      <candidate>(Hindrance.hinConfide|Hindrance.hinHeroic</candidate>
+  -->
+  <portal
+    id="raGrackle"
+    style="tblNormal">
+    <table_dynamic
+      component="Hindrance"
+      showtemplate="SimpleItem"
+      choosetemplate="SimpleItem"
+      showfixedlast="yes"
+      addpick="resRacEdge">
+      <list>(Hindrance.hinConfide|Hindrance.hinHeroic)</list>
+      <candidate>(Hindrance.hinConfide|Hindrance.hinHeroic)</candidate>
+      <titlebar><![CDATA[
+        @text = "Add a Hindrance - " & hero.child[resRacEdge].field[resSummary].text
+        ]]></titlebar>
+      <description/>
+      <headertitle><![CDATA[
+        @text = "Hindrance: " & hero.child[resRacEdge].field[resSummary].text
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~if we're in advancement mode, we've been frozen, so display accordingly
+        if (state.iscreate = 0) then
+          @text = "{text clrgrey}Add Hinderances Via Advances Tab"
+          done
+          endif
+
+        ~set the color based on whether the proper number of slots are allocated
+        if (field[resLeft].value = 0) then
+          @text = "{text clrgrey}"
+        elseif (field[resLeft].value < 0) then
+          @text = "{text clrwarning}"
+          endif
+        
+        @text &= "Add Hinderance"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <template
+    id="raPropPick"
+    name="Racial Property Pick"
+    compset="RacialProp"
+    marginhorz="3"
+    marginvert="2">
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="thingname">
+        </label>
+      </portal>
+
+    <portal
+      id="lblmenu1"
+      style="lblSecond">
+      <label
+        field="usrLabel1">
+        </label>
+      </portal>
+
+    <portal
+      id="lblmenu2"
+      style="lblSecond">
+      <label
+        field="usrLabel2">
+        </label>
+      </portal>
+
+    <portal
+      id="menu1"
+      style="menuNormal">
+      <menu_things
+        field="usrChosen1"
+        component="none"
+        maxvisible="10"
+        usepicksfield="usrSource1"
+        candidatefield="usrCandid1">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="menu2"
+      style="menuNormal">
+      <menu_things
+        field="usrChosen2"
+        component="none"
+        maxvisible="10"
+        usepicksfield="usrSource2"
+        candidatefield="usrCandid2">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="lblmenuar"
+      style="lblSecond">
+      <label
+        field="usrLabelAr">
+        </label>
+      </portal>
+
+    <portal
+      id="menuarray"
+      style="menuNormal">
+      <menu_array
+        field="usrSelect"
+        array="usrArray"
+        maxvisible="10">
+        </menu_array>
+      </portal>
+
+    <portal
+      id="checkbox"
+      style="chkNormal">
+      <checkbox
+        field="usrIsCheck"
+        dynamicfield="usrChkText">
+        </checkbox>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~center the other portals vertically
+      perform portal[name].centervert
+      perform portal[delete].centervert
+      perform portal[lblmenu1].centervert
+      perform portal[menu1].centervert
+      perform portal[lblmenu2].centervert
+      perform portal[menu2].centervert
+      perform portal[lblmenuar].centervert
+      perform portal[menuarray].centervert
+      perform portal[checkbox].centervert
+
+      ~determine whether our portals are visible; we only show them if requested
+      ~Note: Remember that a non-empty tagexpr field indicates menu selection is used.
+      if (field[usrCandid1].isempty <> 0) then
+        portal[lblmenu1].visible = 0
+        portal[menu1].visible = 0
+      elseif (field[usrLabel1].isempty <> 0) then
+        portal[lblmenu1].visible = 0
+        endif
+      if (field[usrCandid2].isempty <> 0) then
+        portal[lblmenu2].visible = 0
+        portal[menu2].visible = 0
+      elseif (field[usrLabel2].isempty <> 0) then
+        portal[lblmenu2].visible = 0
+        endif
+      if (empty(field[usrArray].arraytext[0]) <> 0) then
+        portal[lblmenuar].visible = 0
+        portal[menuarray].visible = 0
+      elseif (field[usrLabelAr].isempty <> 0) then
+        portal[lblmenuar].visible = 0
+        endif
+      if (field[usrChkText].isempty <> 0) then
+        portal[checkbox].visible = 0
+        endif
+
+      ~position the delete portal on the far right and the info portal next to it
+      perform portal[delete].alignedge[right,0]
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~determine our effective right edge, allowing for the buttons above
+      var edge as number
+      edge = portal[info].left - 10
+
+      ~setup the default portal width and gap to be used between and around portals
+      var defwidth as number
+      var gap as number
+      defwidth = 100
+      gap = 10
+
+      ~determine the minimum amount of space we need to reserve for our portals
+      var reserve as number
+      if (portal[checkbox].visible <> 0) then
+        reserve = defwidth
+      elseif (portal[menuarray].visible <> 0) then
+        reserve = portal[lblmenuar].width * portal[lblmenuar].visible
+        reserve += defwidth + gap
+      elseif (portal[menu1].visible <> 0) then
+        reserve = portal[lblmenu1].width * portal[lblmenu1].visible
+        reserve += defwidth + gap
+        reserve += portal[lblmenu2].width * portal[menu2].visible
+        reserve += (defwidth + gap) * portal[menu2].visible
+        endif
+
+      ~position the name on the left, reserving our minimum space for any portals
+      var x as number
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,edge - portal[name].left - reserve)
+      x = portal[name].right + gap
+
+      ~setup the maximum width for our some portals, regardless of space available
+      var maxwidth as number
+      maxwidth = 150
+
+      ~if we have a checkbox, size and position it appropriately
+      if (portal[checkbox].visible <> 0) then
+        portal[checkbox].left = x
+
+      ~if we have an array-based menu, size and position it appropriately
+      elseif (portal[menuarray].visible <> 0) then
+        if (portal[lblmenuar].visible <> 0) then
+          portal[lblmenuar].left = x
+          x = portal[lblmenuar].right + 4
+          endif
+        portal[menuarray].left = x
+        portal[menuarray].width = maxwidth
+
+      ~if we have one thing-based menu, size and position it appropriately
+      elseif (portal[menu1].visible + portal[menu2].visible = 1) then
+        if (portal[lblmenu1].visible <> 0) then
+          portal[lblmenu1].left = x
+          x = portal[lblmenu1].right + 4
+          endif
+        portal[menu1].left = x
+        portal[menu1].width = minimum(edge - portal[menu1].left,maxwidth)
+
+      ~if we have two thing-based menus, size and position them appropriately
+      elseif (portal[menu1].visible <> 0) then
+        if (portal[lblmenu1].visible <> 0) then
+          portal[lblmenu1].left = x
+          x = portal[lblmenu1].right + 4
+          endif
+        portal[menu1].left = x
+        var extra as number
+        extra = (portal[lblmenu2].width + 4) * portal[lblmenu2].visible
+        var actual as number
+        actual = (edge - portal[menu1].left - extra - gap) / 2
+        portal[menu1].width = minimum(actual,maxwidth)
+        portal[menu2].width = portal[menu1].width
+        x = portal[menu1].right + gap
+        if (portal[lblmenu2].visible <> 0) then
+          portal[lblmenu2].left = x
+          x = portal[lblmenu2].right + 4
+          endif
+        portal[menu2].left = x
+        endif
+
+      ~if a menu is visible, make sure it has a selection
+      if (portal[menu1].visible <> 0) then
+        if (field[usrChosen1].ischosen = 0) then
+          perform portal[menu1].setstyle[menuError]
+          endif
+        endif
+      if (portal[menu2].visible <> 0) then
+        if (field[usrChosen2].ischosen = 0) then
+          perform portal[menu2].setstyle[menuError]
+          endif
+        endif
+      if (portal[menuarray].visible <> 0) then
+        if (field[usrSelect].isempty <> 0) then
+          perform portal[menuarray].setstyle[menuError]
+          endif
+        endif
+      ]]></position>
+
+    </template>
+
+            
+  <!-- racial layout
+  -->
+  <layout
+    id="racial">
+    <portalref portal="raRaceAbil" />
+    <portalref portal="raRaceProp" />
+    <portalref portal="raDogBoy" />
+    <portalref portal="raGrackle" />
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      ~freeze our table in advancement mode to disable adding new choices
+      ~Note: All freezing must be done *before* any positioning is performed.
+      if (state.iscreate = 0) then
+        portal[raRaceAbil].freeze = 1
+        endif
+
+      portal[raRaceAbil].visible = 1
+      portal[raRaceProp].visible = 1
+      portal[raDogBoy].visible = hero.tagis[Race.racSRDogB]
+      portal[raGrackle].visible = hero.tagis[Race.racSRGrack]
+      
+      ~position and size the table to span the full layout; it will only use the
+      ~vertical space that it actually needs
+      perform portal[raRaceAbil].autoplace
+      perform portal[raRaceProp].autoplace[10]
+      perform portal[raDogBoy].autoplace[10]
+      perform portal[raGrackle].autoplace[10]
+      
+      ]]></position>
+
+    </layout>
+
+  <!-- racial panel  -->
+  <panel
+    id="racial"
+    name="Racial"
+    marginhorz="5"
+    marginvert="5"
+    order="120">
+    <live>!Rifts.HRaceTab</live>
+    <layoutref layout="racial"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+  </document>
