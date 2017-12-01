@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Edges" tab panel. This tab is where
+      the user selects and adjusts the edges, hindrances, and rewards for character.
+
+      All public visual elements used with this tab panel start with the prefix "ed"
+      to associate them with the tab.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- edEdges portal
+        Presents a dynamic table where the user can add and adjust edges for the
+        character.
+
+        We use the "SimpleItem" template for selecting the edges, since all we need
+        is basic information. We use a custom template for showing the selected
+        edges to allow future customization of edges (e.g. selecting traits for the
+        Expect edge).
+
+        We use an "additem" script to highlight whether more edges can be selected.
+        This requires that we specify the "addthing" referenced in the script, which
+        is the resource for tracking edges.
+
+        We use a "titlebar" script to replace the default title on the choose form
+        with something that includes the summary information as helpful feedback to
+        the user.
+
+        We use a "headertitle" script to place a suitable title above the table. The
+        title includes an indication of how many edges have been utilized and how
+        many remain, with appropriate color highlighting to prompt the user.
+  -->
+  <portal
+    id="fgFortGl"
+    style="tblNormal">
+    <table_dynamic
+      component="Fortune"
+      showtemplate="SimpleItem"
+      choosetemplate="SimpleItem"
+	  choosesortset="explicit"
+      addpick="resFortune"
+      descwidth="350">
+      <titlebar><![CDATA[
+        @text = "Add an Fortune/Glory"
+        if (hero.tagis[Hero.Creature] = 0) then
+          @text &= "  -  " & hero.child[resFortune].field[resSummary].text
+          endif
+        ]]></titlebar>
+      <headertitle><![CDATA[
+        @text = "Fortune/Glory"
+        if (hero.tagis[Hero.Creature] = 0) then
+          @text &= "  -  " & hero.child[resFortune].field[resSummary].text
+          endif
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~if we're in advancement mode, we've been frozen, so display accordingly
+        if (state.iscreate = 0) then
+          @text = "{text clrgrey}Add Edges Via Advances Tab"
+          done
+          endif
+
+        ~get the color-highlighted "add" text
+        @text = field[resAddItem].text
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <!-- edges layout
+        This layout orchestrates the display of the visual elements that comprise
+        the Edges tab. This amounts to a title at the top and a dynamic table below
+        where the user can add and adjust the edges he wants. Beneath that, we have
+        a table of hindrances and a table of rewards, where the user can select the
+        hindrances he wants and the offsetting rewards for the character.
+
+        The logic for this layout is similar to the logic for the Basics tab. So
+        please refer to the Basics tab for more details.
+  -->
+  <layout
+    id="fortglory">
+    <portalref portal="fgFortGl" taborder="10"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      ~freeze our tables in advancement mode to disable adding new choices
+      ~Note: All freezing must be done *before* any positioning is performed.
+      if (state.iscreate = 0) then
+        portal[fgFortGl].freeze = 1
+        endif
+
+      ~determine the vertical gap we want to use between tables
+      var gap as number
+      gap = 15
+
+      ~size all tables to span the full layout width
+      portal[fgFortGl].width = width
+
+      ~set the height of the small tables to be a maximum number of rows for now
+      ~portal[edHinders].maxrows = 3
+      ~portal[edRewards].maxrows = 1
+
+      ~position the rewards table at the bottom
+      ~portal[edRewards].top = height - portal[edRewards].height
+
+      ~position the hindrances table above the rewards
+      ~portal[edHinders].top = portal[edRewards].top - gap - portal[edHinders].height
+
+      ~assign the remaining space to the edges table
+      ~portal[fgFortGl].height = portal[edHinders].top - gap - portal[edEdges].top
+      portal[fgFortGl].height = 400
+
+      ~position the hindrances table beneath the edges table and let it expand to
+      ~fill whatever vertical space is available between the edges and rewards
+      ~portal[edHinders].top = portal[edEdges].bottom + gap
+      ~portal[edHinders].height = portal[edRewards].top - gap - portal[edHinders].top
+
+      ~position the rewards table beneath hindrance and let it expand to fill space
+      ~portal[edRewards].top = portal[edHinders].bottom + gap
+      ~portal[edRewards].height = height - portal[edRewards].top
+      ]]></position>
+
+    </layout>
+
+
+  <!-- edges panel
+        This is the "Edges" panel shown within Hero Lab. Since we want this panel
+        to appear after Skills and within the traits grouping, we assign it an
+        "order" of 130.
+
+        The logic for this panel is similar to the logic for the Basics panel, so
+        please refer to the Basics panel for more details.
+  -->
+  <panel
+    id="fortglory"
+    name="Fortune/Glory"
+    marginhorz="5"
+    marginvert="5"
+    order="130">
+    <live>Rifts.FortGlory</live>
+    <layoutref layout="fortglory"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of components that don't really fit anywhere
+      else, such as resources, journal entries, etc.
+-->
+
+<document signature="Hero Lab Structure">
+
+  <component
+    id="Fortune"
+    name="Fortune and Glory"
+	autocompset="no">
+
+    <!-- Each fortune must consume an instance in the resource tracking edges -->
+    <eval index="1" phase="Setup" priority="5000"><![CDATA[
+      ~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
+      doneif (origin.ishero = 0)
+
+      ~if this edge was not added by the user, skip it entirely
+      doneif (isuser = 0)
+
+      ~if this edge was added by the cyberware or robotics, skip it entirely
+      doneif (tagis[Helper.ModNoEdge] + tagis[Helper.ModSeEdge] + tagis[Helper.ModVeEdge] + tagis[Helper.ModHeEdge] + tagis[Helper.ModLeEdge] <> 0)
+
+      ~if this Edge is set up as Free, do not count it
+      doneif (tagis[Helper.FreeEdge] <> 0)
+
+      ~consume additional edge slots
+      perform #resspent[resFortune,+,1,field[name].text]
+      ]]></eval>
+    </component>
+
+  <!-- Base component for Hero's Journey entries -->
+  <component
+    id="HeroJrny"
+    name="Hero's Journey"
+	autocompset="no">
+
+	<!-- Forward the Heros Journey category to the actor -->
+
+    <eval index="1" phase="Initialize" priority="2100"><![CDATA[
+      perform forward[RiftsHJ.?]
+      ]]></eval>
+	  
+    <!-- Each fortune must consume an instance in the resource tracking edges -->
+    <eval index="2" phase="Setup" priority="5000"><![CDATA[
+      ~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
+      doneif (origin.ishero = 0)
+
+      ~if this edge was not added by the user, skip it entirely
+      doneif (isuser = 0)
+
+      ~if this edge was added by the cyberware or robotics, skip it entirely
+      doneif (tagis[Helper.ModNoEdge] + tagis[Helper.ModSeEdge] + tagis[Helper.ModVeEdge] + tagis[Helper.ModHeEdge] + tagis[Helper.ModLeEdge] <> 0)
+
+      ~consume additional edge slots
+      perform #resspent[resHeroJrn,+,1,field[name].text]
+      ]]></eval>
+    </component>
+
+	<!-- Transact - all transactions utilize this compset -->
+  <compset
+    id="Fortune">
+    <compref component="Fortune"/>
+	<compref component="Domain"/>
+	<compref component="UserSelect"/>
+    </compset>
+  <compset
+    id="HeroJrny">
+    <compref component="HeroJrny"/>
+	<compref component="Domain"/>
+	<compref component="UserSelect"/>
+    </compset>
+  </document>

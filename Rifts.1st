@@ -19,18 +19,55 @@
     <value id="Water"/>    
     <value id="Selected"/>  <!-- Indicates selected from the Racial Tab -->  
     </group>
-    
+ 
+  <group
+    id="RacAbilCat"
+	sequence="explicit">   
+    <value id="Ability" order="1"/>    <!-- Tag for Racial/IF Abilities -->     
+    <value id="Comp" order="2"/>       <!-- Tag for Racial/IF Complications -->     
+    </group>
+	
   <group
     id="Rifts">
     <value id="HRaceTab"/>       <!-- Hide Racial Tab -->   
     <value id="HRaceAbil"/>      <!-- Hide Racial Abilities -->   
     <value id="HRaceProp"/>      <!-- Hide Racial Properties -->     
+    <value id="FortGlory"/>      <!-- Allow Fortune and Glory selections -->
+	<value id="NoHeroJou"/>      <!-- Disallow Hero's Journey selections -->
     <value id="RaceEdgeB"/>      <!-- Bonus Racial Edge -->     
     <value id="RaceHindB"/>      <!-- Bonus Racial Hinderence -->     
     <value id="TKnoSkill"/>      <!-- Tag for selected Tramadore Knowledge Skill -->     
+    <value id="SpellSkill"/>     <!-- Tag the Hero's Spellcasting skill -->   
     </group>
 
-    
+  <!-- Hero's Journey -->
+  <group
+    id="RiftsHJ"
+	sequence="explicit">
+    <value id="BodArm" name="Body Armor" order="1"/>    
+    <value id="CCW" name="Close Combat Weapons" order="2"/>    
+    <value id="Cyber" name="Cybernetics" order="3"/>    
+    <value id="Edu" name="Education" order="4"/>    
+    <value id="EncMys" name="Enchanted Items/Mystic Gadgets" order="5"/> 
+    <value id="ExpWis" name="Experience/Wisdom" order="6"/>    
+    <value id="MagMys" name="Magic/Mysticism" order="7"/>    
+    <value id="Psi" name="Psionics" order="8"/>    
+    <value id="Ranged" name="Ranged Weapons" order="9"/>    
+    <value id="Train" name="Training" order="10"/>    
+    <value id="Under" name="Underworld/Black Ops" order="11"/>        
+    </group>
+
+  <!-- Cybernetics Categories -->
+  <group
+    id="RiftCyCat"
+	sequence="explicit">
+    <value id="BioRep" name="Bio-Enhancements and Replacements" order="1"/>    
+    <value id="CombatEnh" name="Combat Enhancement" order="2"/>    
+    <value id="Comm" name="Communications, Data and Sensory Systems" order="3"/>    
+    <value id="Mobility" name="Mobility" order="4"/>    
+    <value id="Weapons" name="Weapons and Tools" order="5"/>            
+    </group>
+	
   <!-- TCA: This source enables the selection of Savage Rifts -->
  <source
     id="sepSavRif"
@@ -48,5 +85,18 @@
     description="Each character utilizes the Savage Rifts Core material.">
     </source>
 
+  <sortset
+    id="RacAbilCat"
+    name="Hero's Journey">
+    <sortkey isfield="no" id="RacAbilCat"/>
+    <sortkey isfield="no" id="_Name_"/>
+    </sortset>
+	
+  <sortset
+    id="HeroJrny"
+    name="Hero's Journey">
+    <sortkey isfield="no" id="RiftsHJ"/>
+    <sortkey isfield="no" id="_Name_"/>
+    </sortset>	
     
 </document>

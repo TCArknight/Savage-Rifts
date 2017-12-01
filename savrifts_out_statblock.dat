@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of a traditional "statblock" output for the
+      game system. The statblock is defined as a dossier and then uses an assortment
+      of procedures to orchestrate the synthesis of the output.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- Procedure sbherojrny
+        Output all of the hero journey entries that satisfy the provided tag expression, reporting
+        the name and final value for each. The "tagexpr" text variable specifies the
+        constraints that must be satisfied for the list of traits.
+
+        Inbound parameter:  tagexpr
+  -->
+  <procedure id="sbherojrny" scripttype="synthesize"><![CDATA[
+    var tagexpr as string
+    var ismore as number
+    ismore = 0
+    foreach pick in hero where tagexpr
+      append " " & chr(149) & " " & eachpick.field[name].text & ": " & eachpick.field[summary].text & @newline
+      ismore = 1
+      nexteach
+    append @newline
+    ]]></procedure>
+
+  <procedure id="sbfortune" scripttype="synthesize"><![CDATA[
+    var tagexpr as string
+    var ismore as number
+    ismore = 0
+    foreach pick in hero where tagexpr
+      append " " & chr(149) & " " & eachpick.field[name].text & ": " & eachpick.field[summary].text & @newline
+      ismore = 1
+      nexteach
+    append @newline
+    ]]></procedure>
+	
+  <procedure id="sbcyber" scripttype="synthesize"><![CDATA[
+    var tagexpr as string
+    var ismore as number
+    ismore = 0
+    foreach pick in hero where tagexpr
+      append " " & chr(149) & " " & eachpick.field[grStkName].text & ": " & eachpick.field[summary].text & @newline
+      ismore = 1
+      nexteach
+    append @newline
+    ]]></procedure>
+	
+  <!-- Define the statblock as a text-based dossier. The "synthesize" script actually
+        generates the output.
+  -->
+  <dossier
+    id="riftsstblk"
+    name="Character Statblock (Rifts)">
+    <dossier_text
+      styles="plain+html+bbcode+wikitext+print"
+      grouping="statblock">
+      <synthesize><![CDATA[
+        var txt as string
+        var tagexpr as string
+
+        ~start by getting our name
+        var name as string
+        call sbname
+
+        ~output our name
+        append @boldon & "Name: " & @boldoff & name & @newline
+
+        ~output any race or creature type (plus faction and group)
+        if (!hero.tagis[Hero.NoRace] + hero.tagis[Hero.Creature] > 0) then
+          append @boldon & herofield[acRacePref].text & ": " & @boldoff
+          append herofield[acRaceName].text & @newline
+          endif
+
+        if (herofield[acFactName].isempty = 0) then
+          append @boldon & herofield[acFactTerm].text & ": " & @boldoff
+          append herofield[acFactName].text & @newline
+          endif
+
+        if (herofield[acGrpName].isempty = 0) then
+          append @boldon & herofield[acGrpTerm].text & ": " & @boldoff
+          append herofield[acGrpName].text & @newline
+          endif
+
+        ~output attributes
+        append @boldon & "Attributes: " & @boldoff
+        tagexpr = "component.Attribute & !Hide.Attribute"
+        call sbtraits
+
+        ~output skills
+        append @boldon & "Skills: " & @boldoff
+        tagexpr = "component.Skill & !Hide.Skill"
+        call sbtraits
+
+        ~output derived traits
+        var ismore as number
+        ismore = 0
+        foreach pick in hero from Derived where "!Hide.Trait" sortas explicit
+          if (ismore <> 0) then
+            append ", "
+            endif
+          append @boldon & eachpick.field[name].text & ": " & @boldoff
+          append eachpick.field[trtDisplay].text
+          ismore = 1
+          nexteach
+        append @newline
+
+        ~output all Smarts-based languages
+        if (hero.tagis[Hero.SmartsLang] <> 0) then
+          ismore = 0
+          foreach pick in hero from Language sortas Domain
+            if (ismore = 0) then
+              append @boldon & "Languages: " & @boldoff
+            else
+              append ", "
+              endif
+            append eachpick.field[domDomain].text
+            ismore = 1
+            nexteach
+          if (ismore <> 0) then
+            append @newline
+            endif
+          endif
+
+        ~synthesize all gear
+        var details as string
+        details = ""
+        call sbweapons
+        call sbarmor
+        call sbgear
+        if (empty(details) = 0) then
+          append @boldon & "Gear: " & @boldoff & details & @newline
+          endif
+
+        ~output magic items
+        call sbmagitems
+        if (empty(details) = 0) then
+          append @boldon & "Magic Items: " & @boldoff & details & @newline
+          endif
+
+        ~output Cybernetics
+		if (hero.tagis[Cyberware.?] <> 0) then
+		  append @newline
+          append @boldon & "Cyberware: " & @boldoff & @newline
+          tagexpr = "component.Cyberware"
+          call sbcyber
+		  endif
+		  
+        ~output special abilities
+        if (hero.haschild[Ability] <> 0) then
+          append @boldon & "Special Abilities:" & @boldoff & @newline
+          foreach pick in hero from Ability where "!Print.NoPrint" sortas SpecialTab
+            if (eachpick.tagis[User.HindMajor] <> 0) then
+              append chr(149) & " " & eachpick.field[shortname].text & "(*): "
+            else
+              append chr(149) & " " & eachpick.field[shortname].text & ": "
+              endif
+            append eachpick.field[summary].text & @newline
+            nexteach
+          endif
+
+        ~output arcane powers
+        if (hero.haschild[Power] <> 0) then
+          append @boldon & "Arcane Powers:" & @boldoff & @newline
+          foreach pick in hero from Power
+            append chr(149) & eachpick.field[name].text & ": "
+            append eachpick.field[summary].text & @newline
+            nexteach
+          endif
+
+        ~output super powers
+        if (hero.haschild[SPCPower] <> 0) then
+          append @boldon & "Super Powers:" & @boldoff & @newline
+          foreach pick in hero from SPCPower
+            append chr(149) & eachpick.field[name].text 
+            if (eachpick.field[spcLevel].value > 0) then
+              append "(Lvl" & eachpick.field[spcLevel].text & ")"
+              endif
+            if (eachpick.field[spcNameExt].isempty = 1) then
+              append ""
+            elseif (eachpick.field[spcNameEx2].isempty = 1) then
+              append "[" & eachpick.field[spcNameExt].text & "]"
+            else
+              append "[" & eachpick.field[spcNameExt].text & "," & eachpick.field[spcNameEx2].text & "]"
+              endif
+            append chr(149) & eachpick.field[spcModList].text
+            append ": "
+            append eachpick.field[summary].text & @newline
+            nexteach
+          endif
+
+        ~output personal details
+        if (hero.haschild[Personal] <> 0) then
+          foreach pick in hero from Personal
+            if (eachpick.field[perInfo].isempty = 0) then
+              append @boldon & "Personal Details: " & @boldoff & eachpick.field[perInfo].text & @newline
+              endif
+            nexteach
+          endif
+
+        ~output injuries
+        if (hero.haschild[Injury] <> 0) then
+          append @boldon & "Injuries:" & @boldoff & @newline
+          foreach pick in hero from Injury
+            append chr(149) & eachpick.field[name].text & ": "
+            append eachpick.field[summary].text & @newline
+            nexteach
+          endif
+
+        ~output tracked resources
+        call sbtrackres
+
+        ~output Fortune and Glory selections
+		if (hero.tagis[Rifts.FortGlory] <> 0) then
+		  append @newline
+          append @boldon & "Fortune and Glory: " & @boldoff & @newline
+          tagexpr = "component.Fortune"
+          call sbfortune
+		  endif
+		
+        ~output Hero's Journey selections
+		append @newline
+        append @boldon & "Hero's Journey: " & @boldoff & @newline
+        tagexpr = "component.HeroJrny"
+        call sbherojrny
+		
+        ~output NPC details if this character is a NPC - if any field for any
+        ~of the three blocks of text is set, output that block
+        doneif (hero.tagis[Hero.NPC] = 0)
+        var tagexpr as string
+        var title as string
+
+        ~values of up to 15 are basic details only
+        tagexpr = "val:explicit.? <= 15"
+        title = "Basic Details"
+        call sbnpcinfo
+
+        ~values of up to 30 are tactics
+        tagexpr = "val:explicit.? > 15 & val:explicit.? <= 30"
+        title = "Tactics"
+        call sbnpcinfo
+
+        ~values of up to 45 are ecology
+        tagexpr = "val:explicit.? > 30 & val:explicit.? <= 45"
+        title = "Ecology"
+        call sbnpcinfo
+
+        ~anything else is extra
+        tagexpr = "val:explicit.? > 45"
+        title = "Additional Details"
+        call sbnpcinfo
+        ]]></synthesize>
+      </dossier_text>
+    </dossier>
+
+
+  </document>

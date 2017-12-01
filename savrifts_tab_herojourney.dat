@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Edges" tab panel. This tab is where
+      the user selects and adjusts the edges, hindrances, and rewards for character.
+
+      All public visual elements used with this tab panel start with the prefix "ed"
+      to associate them with the tab.
+-->
+
+<document signature="Hero Lab Data">
+
+  <portal
+    id="hjHeroJrny"
+    style="tblNormal">
+    <table_dynamic
+      component="HeroJrny"
+      showtemplate="hjPick"
+	  showsortset="HeroJrny"
+      choosetemplate="SimpleItem"
+	  choosesortset="HeroJrny"
+      addpick="resHeroJrn"
+      descwidth="350">
+      <titlebar><![CDATA[
+        @text = "Add a Hero's Journey entry"
+        if (hero.tagis[Hero.Creature] = 0) then
+          @text &= "  -  " & hero.child[resHeroJrn].field[resSummary].text
+          endif
+        ]]></titlebar>
+      <headertitle><![CDATA[
+        @text = "Hero's Journey"
+        if (hero.tagis[Hero.Creature] = 0) then
+          @text &= "  -  " & hero.child[resHeroJrn].field[resSummary].text
+          endif
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~if we're in advancement mode, we've been frozen, so display accordingly
+        if (state.iscreate = 0) then
+          @text = "{text clrgrey}Cannot add Hero Journey items after creation"
+          done
+          endif
+
+        ~get the color-highlighted "add" text
+        @text = "Add New Hero's Journey selection"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <template
+    id="hjPick"
+    name="Hero's Journey Pick"
+    compset="HeroJrny"
+    marginhorz="3"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="thingname">
+        </label>
+      </portal>
+
+    <portal
+      id="menu1"
+      style="menuSmall">
+      <menu_things
+        field="usrChosen1"
+        component="none"
+        maxvisible="10"
+        usepicksfield="usrSource1"
+        candidatefield="usrCandid1">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="menu2"
+      style="menuSmall">
+      <menu_things
+        field="usrChosen2"
+        component="none"
+        maxvisible="10"
+        usepicksfield="usrSource2"
+        candidatefield="usrCandid2">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="lbldomain"
+      style="lblSecond">
+      <label>
+        <labeltext><![CDATA[
+          if (tagis[DomainTerm.?] <> 0) then
+            @text = tagnames[DomainTerm.?] & ":"
+          else
+            @text = "Domain:"
+            endif
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="domain"
+      style="editNormal">
+      <edit
+        field="domDomain">
+        </edit>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~determine whether our menus are visible
+      ~Note: Remember that a non-empty tagexpr field indicates menu selection is used.
+      if (field[usrCandid1].isempty <> 0) then
+        portal[menu1].visible = 0
+        endif
+      if (field[usrCandid2].isempty <> 0) then
+        portal[menu2].visible = 0
+        endif
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~position the other portals vertically
+      perform portal[name].centervert
+      perform portal[delete].centervert
+      perform portal[menu1].centervert
+      perform portal[menu2].centervert
+      perform portal[domain].centervert
+      perform portal[lbldomain].alignrel[btob,domain,0]
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~position the name on the left and use availble space, with a gap for menus
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,portal[info].left - portal[name].left - 150)
+
+      ~position the menus to the right of the name in the available space
+      perform portal[menu1].alignrel[ltor,name,10]
+      portal[menu1].width = (portal[info].left - portal[menu1].left - 20) / 2
+      portal[menu2].width = portal[menu1].width
+      perform portal[menu2].alignrel[ltor,menu1,10]
+
+      ~if we don't need a domain, hide the portals
+      if (tagis[User.NeedDomain] = 0) then
+        portal[lbldomain].visible = 0
+        portal[domain].visible = 0
+
+      ~otherwise, position the domain portals next to the name, making sure the
+      ~domain edit portal doesn't run beyond the available space
+      ~RDS altered to make the name portal invivisible and shift the domain to the name position 
+      ~    to use it as a custom Edge name when the Custom Edge is chosen
+      else
+        if (tagis[Custom.Edge] > 0) then
+          portal[name].visible = 0
+          portal[lbldomain].visible = 0
+          portal[domain].left = 0
+          portal[domain].width = minimum(150,portal[info].left - portal[domain].left - 10)
+        else
+          perform portal[lbldomain].alignrel[ltor,name,10]
+          perform portal[domain].alignrel[ltor,lbldomain,5]
+          portal[domain].width = minimum(150,portal[info].left - portal[domain].left - 10)
+          endif
+        endif
+
+      ~if a menu is visible, make sure it has a selection
+      if (portal[menu1].visible <> 0) then
+        if (field[usrChosen1].ischosen = 0) then
+          perform portal[menu1].setstyle[menuErrSm]
+          endif
+        endif
+      if (portal[menu2].visible <> 0) then
+        if (field[usrChosen2].ischosen = 0) then
+          perform portal[menu2].setstyle[menuErrSm]
+          endif
+        endif
+
+      ~if the ability is auto-added, change its font to indicate that fact
+      if (candelete = 0) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+
+    </template>
+
+
+  <layout
+    id="herojourn">
+    <portalref portal="hjHeroJrny" taborder="10"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      ~freeze our tables in advancement mode to disable adding new choices
+      ~Note: All freezing must be done *before* any positioning is performed.
+      if (state.iscreate = 0) then
+        portal[hjHeroJrny].freeze = 1
+        endif
+
+      ~determine the vertical gap we want to use between tables
+      var gap as number
+      gap = 15
+
+      ~size all tables to span the full layout width
+      portal[hjHeroJrny].width = width
+
+      ~set the height of the small tables to be a maximum number of rows for now
+      ~portal[edHinders].maxrows = 3
+      ~portal[edRewards].maxrows = 1
+
+      ~position the rewards table at the bottom
+      ~portal[edRewards].top = height - portal[edRewards].height
+
+      ~position the hindrances table above the rewards
+      ~portal[edHinders].top = portal[edRewards].top - gap - portal[edHinders].height
+
+      ~assign the remaining space to the edges table
+      ~portal[fgFortGl].height = portal[edHinders].top - gap - portal[edEdges].top
+      portal[hjHeroJrny].height = 400
+
+      ~position the hindrances table beneath the edges table and let it expand to
+      ~fill whatever vertical space is available between the edges and rewards
+      ~portal[edHinders].top = portal[edEdges].bottom + gap
+      ~portal[edHinders].height = portal[edRewards].top - gap - portal[edHinders].top
+
+      ~position the rewards table beneath hindrance and let it expand to fill space
+      ~portal[edRewards].top = portal[edHinders].bottom + gap
+      ~portal[edRewards].height = height - portal[edRewards].top
+      ]]></position>
+
+    </layout>
+
+
+  <!-- edges panel
+        This is the "Edges" panel shown within Hero Lab. Since we want this panel
+        to appear after Skills and within the traits grouping, we assign it an
+        "order" of 130.
+
+        The logic for this panel is similar to the logic for the Basics panel, so
+        please refer to the Basics panel for more details.
+  -->
+  <panel
+    id="herojourn"
+    name="Hero's Journey"
+    marginhorz="5"
+    marginvert="5"
+    order="130">
+    <live>!Rifts.NoHeroJou</live>
+    <layoutref layout="herojourn"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>
