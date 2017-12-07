@@ -19,5 +19,25 @@
     <tag group="Helper" tag="Bootstrap"/>
 
     </thing>
-   
+  <thing 
+    id="resFortune" 
+	name="Fortune and Glory Points" 
+	compset="Resource" 
+	panellink="fortglory">
+    <fieldval field="resObject" value="Fortune"/>
+    <tag group="Helper" tag="Bootstrap"/>
+    <tag group="Helper" tag="Creation"/>
+    <tag group="Helper" tag="NPCImpact"/>
+    </thing> 
+	
+  <thing 
+    id="resHeroJrn" 
+	name="Hero&apos;s Journey" 
+	compset="Resource" 
+	panellink="herojourn">
+    <fieldval field="resObject" value="HeroJrny"/>
+    <tag group="Helper" tag="Bootstrap"/>
+    <tag group="Helper" tag="Creation"/>
+    <tag group="Helper" tag="NPCImpact"/>
+    </thing>
   </document>

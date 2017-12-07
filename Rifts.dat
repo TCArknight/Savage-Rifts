@@ -9,8 +9,11 @@ Equipment
 Fortune and Glory tab for MARS
 Hero's Journey functionality
 
+Reworked Iconic Framework abilities and complications as new components (FraAbility,FraComp)
+
 Frameworks Completed -
 * Combat Cyborg
+* Crazy
 * M.A.R.S. (Body Fixer)
 
 xx-xx-xx
@@ -21,12 +24,6 @@ Hero's Journey - bootstraps, bonuses
 Cybernetics - built-in weapons, scripting
 Fennodi - adjust starting powers based on Arcane Framework]]></info_todo>
     </fileinfo>
-  <thing id="resFortune" name="Fortune and Glory Points" compset="Resource" panellink="fortglory">
-    <fieldval field="resObject" value="Fortune"/>
-    <tag group="Helper" tag="Bootstrap"/>
-    <tag group="Helper" tag="Creation"/>
-    <tag group="Helper" tag="NPCImpact"/>
-    </thing>
   <thing id="fg1Close" name="A Mighty Weapon (Close)" description="Your hero may choose any single weapon from the Close Combat—Personal sections." compset="Fortune" summary="Select a Close Combat weapon." uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="1"/>
@@ -148,12 +145,6 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="12"/>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 2</eval>
-    </thing>
-  <thing id="resHeroJrn" name="Hero&apos;s Journey" compset="Resource" panellink="herojourn">
-    <fieldval field="resObject" value="HeroJrny"/>
-    <tag group="Helper" tag="Bootstrap"/>
-    <tag group="Helper" tag="Creation"/>
-    <tag group="Helper" tag="NPCImpact"/>
     </thing>
   <thing id="hjSepBodAr" name="– Body Armor –" compset="HeroJrny" isshowonly="yes">
     <usesource source="SavRiftC"/>
@@ -2209,7 +2200,37 @@ validif (rolls = 0)]]></evalrule>
     </thing>
   <thing id="grpSRCrazy" name="Crazy" description="{b}{i}THE CRAZY HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\n\nCrazies gain three rolls on any of the following tables: {b}Body Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training{/b}, and {b}Underworld &amp; Black Ops{/b}.\n\nCrazies gain two additional rolls on any tables except those dealing with magic." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="arcCrazy"></bootstrap>
+    <bootstrap thing="rpSRCrMOM"></bootstrap>
+    <bootstrap thing="rpSRMiPsCr"></bootstrap>
+    <bootstrap thing="rpSREAttCr"></bootstrap>
+    <bootstrap thing="faSREnhSpd"></bootstrap>
+    <bootstrap thing="faSRHeiSen"></bootstrap>
+    <bootstrap thing="faSRQuick"></bootstrap>
+    <bootstrap thing="faSRSupEnd"></bootstrap>
+    <bootstrap thing="faSRSupRef"></bootstrap>
+    <bootstrap thing="fcSRCrDiAp"></bootstrap>
+    <bootstrap thing="fcSRCrMag"></bootstrap>
+    <bootstrap thing="fcSRCrNeAc"></bootstrap>
+    <bootstrap thing="fcSRCrUnPs"></bootstrap>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Magic-related HJ Tables." summary="Too many rolls on Magic-related HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+~if we have any of the above categories, we're invalid
+validif (rolls = 0)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" message="Two HJ rolls required fromBody Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training, and Underworld &amp; Black Ops Tables." summary="Not enough rolls on required HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.BodArm]
+rolls += hero.tagcount[RiftsHJ.CCW]
+rolls += hero.tagcount[RiftsHJ.Psi]
+rolls += hero.tagcount[RiftsHJ.Ranged]
+rolls += hero.tagcount[RiftsHJ.Train]
+rolls += hero.tagcount[RiftsHJ.Under]
+
+~if we have at least three valid categories, we're valid
+validif (rolls >= 3)]]></evalrule>
     </thing>
   <thing id="grpSRCybKn" name="Cyber-Knight" description="{b}{i}THE CYBER-KNIGHT HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\n\nCyber-Knights gain three rolls on any of the following tables: {b}Education, Experience &amp; Wisdom, Psionics,{/b} and {b}Training{/b}.\n\nCyber-Knights gain two rolls on any table except {b}Cybernetics{/b} and {b}Magic &amp; Mysticism.{/b}" compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2541,46 +2562,6 @@ nexteach]]>
     <fieldval field="arcPowers" value="3"/>
     <fieldval field="arcPoints" value="10"/>
     <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powBanish"/>
-    <tag group="PowerDeny" tag="powBanishE"/>
-    <tag group="PowerDeny" tag="powBeastFr"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlast"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powBurrow"/>
-    <tag group="PowerDeny" tag="powBurst"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDetect"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powGrHeal"/>
-    <tag group="PowerDeny" tag="powGrowShr"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powLightOb"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="PowerDeny" tag="powQuick"/>
-    <tag group="PowerDeny" tag="powShape"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSpeed"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powSuccor"/>
-    <tag group="PowerDeny" tag="powSumAlly"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powWallWlk"/>
-    <tag group="PowerDeny" tag="powZombie"/>
     <tag group="Arcane" tag="Crazy" abbrev="Crazy"/>
     <bootstrap thing="drwPsionic"></bootstrap>
     </thing>
@@ -4242,9 +4223,8 @@ nexteach]]>
         perform #traitadjust[trTough,+,1,"Gladiator Armor"]
         endif]]></eval>
     </thing>
-  <thing id="rpSRBioAug" name="Bionic Augmentation" description="Combat Cyborgs begin with Strength d12+2, Agility d10, and Vigor d12. These traits do not have an attribute maximum." compset="RacialProp" summary="Enhanced starting Strength, Agility and Vigor." uniqueness="unique">
+  <thing id="rpSRBioAug" name="Bionic Augmentation" description="Combat Cyborgs begin with Strength d12+2, Agility d10, and Vigor d12. These traits do not have an attribute maximum." compset="FraAbility" summary="Enhanced starting Strength, Agility and Vigor." uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <tag group="RacAbilCat" tag="Ability"/>
     </thing>
   <thing id="edgSRScho" name="Scholar" description="Learned professors, devoted students, and amateur enthusiasts spend months of their lives studying particular fields. They become experts in these fields, and rarely fail to answer questions in their particular area of expertise.{br}{br}Pick any two Knowledge skills that you have a d8 or better in. Add +2 to your total whenever these skills are used. Yes, those who study military history have a natural edge when commanding troops in mass battles - a +2 to a Knowledge (Battle) roll can mean the difference between a rousing victory and a crushing defeat." compset="Edge" summary="+2 on two Knowledge skills with d8+" replaces="edgScholar" uniqueness="unique">
     <fieldval field="usrCandid1" value="thingid.skKnow? &amp; fieldval:trtFinal &gt;= 4"/>
@@ -4980,7 +4960,7 @@ nexteach]]>
     <tag group="Hide" tag="Equipment"/>
     <tag group="Equipment" tag="Standard" name="Standard equipment" abbrev="Standard equipment"/>
     </thing>
-  <thing id="rpSRCybEnh" name="Cybernetic Enhancements" description="All combat cyborgs begin with the following cybernetic systems: Audio Package, Bionic Strength* Augmentation, Core Electronics Package, Cyber-Wired Reflexes*, Optics Package, Synthetic Organ Replacement* (see page 78 for details). *These are already factored into the Cyborg’s starting Traits." compset="RacialProp" summary="All combat cyborgs begin with a variety of cybernetic systems" uniqueness="unique">
+  <thing id="rpSRCybEnh" name="Cybernetic Enhancements" description="All combat cyborgs begin with the following cybernetic systems: Audio Package, Bionic Strength* Augmentation, Core Electronics Package, Cyber-Wired Reflexes*, Optics Package, Synthetic Organ Replacement* (see page 78 for details). *These are already factored into the Cyborg’s starting Traits." compset="FraAbility" summary="All combat cyborgs begin with a variety of cybernetic systems" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Ability"/>
     <bootstrap thing="cybSRAudiP"></bootstrap>
@@ -4998,7 +4978,7 @@ nexteach]]>
     <eval phase="PreTraits" priority="5000">#traitbonus[trSFStrnMx] += 1
 hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     </thing>
-  <thing id="rpSRHPLegs" name="High-Performance Legs" description="Full-conversion ‘borgs possess powerful legs and actuators; they begin with the Fleet-Footed Edge. This can be enhanced with additional cybernetics." compset="RacialProp" summary="Gain the Fleet Footed Edge">
+  <thing id="rpSRHPLegs" name="High-Performance Legs" description="Full-conversion ‘borgs possess powerful legs and actuators; they begin with the Fleet-Footed Edge. This can be enhanced with additional cybernetics." compset="FraAbility" summary="Gain the Fleet Footed Edge">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Ability"/>
     <bootstrap thing="edgFleetFt"></bootstrap>
@@ -5015,59 +4995,155 @@ hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     <tag group="ArmorType" tag="Other"/>
     <tag group="ArmorLoc" tag="Torso"/>
     </thing>
-  <thing id="rpSRMDCArm" name="M.D.C. Armor" description="A Combat Cyborg alloy structure provides +8 M.D.C. Armor. This cannot be combined with body armor." compset="RacialProp">
+  <thing id="rpSRMDCArm" name="M.D.C. Armor" description="A Combat Cyborg alloy structure provides +8 M.D.C. Armor. This cannot be combined with body armor." compset="FraAbility">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Ability"/>
     <bootstrap thing="armComCyb"></bootstrap>
     </thing>
-  <thing id="rpSRCoCyUC" name="Unarmed Combat" description="Metal frame construction allows the Combat Cyborg to deal Str+d6 (Mega Damage) in unarmed combat. Cyborgs are always considered armed." compset="RacialProp">
+  <thing id="rpSRCoCyUC" name="Unarmed Combat" description="Metal frame construction allows the Combat Cyborg to deal Str+d6 (Mega Damage) in unarmed combat. Cyborgs are always considered armed." compset="FraAbility">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Ability"/>
     <eval phase="Initialize" priority="3001">perform hero.child[wpUnarmed].setfocus
         perform focus.delete[WeaponDie.?]
         perform focus.assign[WeaponDie.3]</eval>
     </thing>
-  <thing id="rpSRMoMach" name="More Machine" description="‘Borgs add +2 to recover from Shaken, ignore one level of wound modifiers, possess a self-contained breathing apparatus, and are immune to poison and disease." compset="RacialProp">
+  <thing id="rpSRMoMach" name="More Machine" description="‘Borgs add +2 to recover from Shaken, ignore one level of wound modifiers, possess a self-contained breathing apparatus, and are immune to poison and disease." compset="FraAbility">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Ability"/>
     </thing>
-  <thing id="rpSRAllTMP" name="All Those Moving Parts" description="‘Borgs cannot be healed or treated with medicine when they are hurt. Instead they must be repaired. Fixing a cyborg requires the Repair skill—which is used like the Healing skill, only with no Golden Hour." compset="RacialProp" summary="Must be repaired using Repair skill instead of Healing.">
+  <thing id="rpSRAllTMP" name="All Those Moving Parts" description="‘Borgs cannot be healed or treated with medicine when they are hurt. Instead they must be repaired. Fixing a cyborg requires the Repair skill—which is used like the Healing skill, only with no Golden Hour." compset="FraComp" summary="Must be repaired using Repair skill instead of Healing.">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     </thing>
-  <thing id="rpSRGrayMa" name="Gray Matter" description="Combat Cyborgs only start with two points (instead of the normal five) for attributes and these may only be spent on Smarts and Spirit. Points from Hindrances and Advances may be used to raise any attribute." compset="RacialProp">
+  <thing id="rpSRGrayMa" name="Gray Matter" description="Combat Cyborgs only start with two points (instead of the normal five) for attributes and these may only be spent on Smarts and Spirit. Points from Hindrances and Advances may be used to raise any attribute." compset="FraComp">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     <eval phase="Setup" priority="1000">#resmax[resAttrib] -= 3</eval>
     </thing>
-  <thing id="rpSRInhApp" name="Inhuman Appearance" description="Combat Cyborgs suffer −2 Charisma when dealing with most beings." compset="RacialProp" summary="Combat Cyborgs suffer −2 Charisma when dealing with most beings.">
+  <thing id="rpSRInhApp" name="Inhuman Appearance" description="Combat Cyborgs suffer −2 Charisma when dealing with most beings." compset="FraComp" summary="Combat Cyborgs suffer −2 Charisma when dealing with most beings.">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     </thing>
-  <thing id="rpSRLosDex" name="Loss Of Dexterity" description="While a Combat Cyborg’s systems and parts are specifically designed for combat excellence, little attention is given to anything else one might want to use his hands for. The lack of real feeling or delicacy of construction in the hands (the exception being specific sensors installed to interact with weapon triggers), as well as the “run through the battlefield” focus of the legs and feet, means the ‘borg suffers −2 to all Agility rolls and linked skills not directly related to combat." compset="RacialProp" summary="The ‘borg suffers −2 to all Agility rolls and linked skills not directly related to combat.">
+  <thing id="rpSRLosDex" name="Loss Of Dexterity" description="While a Combat Cyborg’s systems and parts are specifically designed for combat excellence, little attention is given to anything else one might want to use his hands for. The lack of real feeling or delicacy of construction in the hands (the exception being specific sensors installed to interact with weapon triggers), as well as the “run through the battlefield” focus of the legs and feet, means the ‘borg suffers −2 to all Agility rolls and linked skills not directly related to combat." compset="FraComp" summary="The ‘borg suffers −2 to all Agility rolls and linked skills not directly related to combat.">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     </thing>
-  <thing id="rpSRMalfun" name="Malfunctions" description="Cyborgs are subject to the same potential problems all tech items and gear face (see the Technical Difficulties Setting Rule on page 122). For example, a critical failure on a Strength check means penalties until the ‘borg’s strength systems are repaired." compset="RacialProp" summary="Cyborgs are subject to the same potential problems all tech items and gear face  (Technical Difficulties).">
+  <thing id="rpSRMalfun" name="Malfunctions" description="Cyborgs are subject to the same potential problems all tech items and gear face (see the Technical Difficulties Setting Rule on page 122). For example, a critical failure on a Strength check means penalties until the ‘borg’s strength systems are repaired." compset="FraComp" summary="Cyborgs are subject to the same potential problems all tech items and gear face  (Technical Difficulties).">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     </thing>
-  <thing id="rpSRSpiNum" name="Spiritually Numb" description="All that metal and so little meat means no Arcane Backgrounds are available to a Combat Cyborg." compset="RacialProp" summary="No Arcane Backgrounds are available for Combat Cyborgs.">
+  <thing id="rpSRSpiNum" name="Spiritually Numb" description="All that metal and so little meat means no Arcane Backgrounds are available to a Combat Cyborg." compset="FraComp" summary="No Arcane Backgrounds are available for Combat Cyborgs.">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     <evalrule phase="Validate" priority="5000" message="Combat Cyborgs cannot take Arcane Backgrounds." summary="Arcame Backgrounds Invalid.">validif (hero.tagcount[Arcane.?] = 0)</evalrule>
     </thing>
-  <thing id="rpSRTotCon" name="Total Conversions" description="The process of becoming a Combat Cyborg uses all of a character’s personal Strain. A Combat Cyborg starts with 0 Strain before applying the Upgradable Edge." compset="RacialProp" summary="A Combat Cyborg starts with 0 Strain before applying the Upgradable Edge.">
+  <thing id="rpSRTotCon" name="Total Conversions" description="The process of becoming a Combat Cyborg uses all of a character’s personal Strain. A Combat Cyborg starts with 0 Strain before applying the Upgradable Edge." compset="FraComp" summary="A Combat Cyborg starts with 0 Strain before applying the Upgradable Edge.">
     <usesource source="SavRiftC"/>
     <tag group="RacAbilCat" tag="Comp"/>
     </thing>
+  <thing id="rpSRCrMOM" name="Mind Over Matter Implants" description="M.O.M. implants permanently enhance a Crazy’s speed, endurance, strength, and senses, as well as dramatically increasing her healing factors. She gets all this at the low, low price of rational thought and emotional stability. In a world where Hell can literally erupt right around the corner and a large percentage of the population of the planet wants to kill her, many wouldconsider her choice ironically rational.\n\n{b}LOSING IT{/B}: {i}See Pg. 18{/i}\n\n{b}GETTING IT TOGETHER{/B}: {i}See Pg. 18{/i}" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="rpSRMiPsCr" name="Minor Psionic" description="Unlocking so much of the brain’s potential grants each Crazy the Arcane Background (Psionics) Edge and Psionics d6. Crazies have access to the following powers: {i}armor, barrier, blind, bolt, boost/lower Trait, clairvoyance, confusion, damage field, darksight, deflection, disguise, dispel, divination, drain Power Points, entangle, environmental protection, farsight, fear, fly, havoc, healing, illusion, intangibility, invisibility, mind reading, pummel, puppet, slow, slumber, smite, speak language, stun, telekinesis, telepathy, teleport, warrior’s gift.{/i}" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powBanish"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powBlast"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powBurrow"/>
+    <tag group="PowerDeny" tag="powBurst"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powLightOb"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powQuick"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powSpeed"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powSumAlly"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <bootstrap thing="edgArcPsi"></bootstrap>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1</eval>
+    </thing>
+  <thing id="rpSREAttCr" name="Enhanced Attributes" description="Crazies gain +2 die types to Agility, Strength, and Vigor. These traits have no maximum." compset="FraAbility" summary="+2 die types to Agility, Strength, and Vigor. These traits have no maximum.">
+    <eval phase="PreTraits" priority="5000">#traitcreation[attrAgi] += 2
+#traitcreation[attrStr] += 2
+#traitcreation[attrVig] += 2
+
+hero.childfound[attrAgi].field[trtMaximum].value += 5
+hero.childfound[attrStr].field[trtMaximum].value += 5
+hero.childfound[attrVig].field[trtMaximum].value += 5</eval>
+    </thing>
+  <thing id="faSREnhSpd" name="Enhanced Speed" description="Crazies double their base Pace.\n" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <eval phase="Traits" priority="5500"><![CDATA[      if (field[abilActive].value <> 0) then
+        perform #traitadjust[trPace,*,2,"Crazy"]
+        endif]]></eval>
+    </thing>
+  <thing id="faSRHeiSen" name="Heightened Senses" description="Crazies gain +2 to Notice and Tracking rolls. They also ignore two points of Range penalties.\n" compset="FraAbility" summary="+2 to Notice and Tracking rolls.; Ignore two points of Range penalties.">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[perform #traitroll[skNotice,+,2,"Crazy"]
+perform #traitroll[skTracking,+,2,"Crazy"]]]></eval>
+    </thing>
+  <thing id="faSRQuick" name="Quick" description="Framework Begins with the Quick edge." compset="FraAbility" summary="Gain the Quick Edge">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgQuick"></bootstrap>
+    </thing>
+  <thing id="faSRSupEnd" name="Super Endurance" description="Crazies require only half the normal amount of sleep, and gain +4 on all checks to resist Fatigue." compset="FraAbility" summary="Requires only half the normal amount of sleeep. ; Gain +4 on all checks to resist Fatigue.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRSupRef" name="Super Reflexes" description="Crazies have uncanny reflexes, granting them a −2 to be hit as long as they are aware of the attack." compset="FraAbility" summary="−2 to be hit as long as they are aware of the attack.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRCrDiAp" name="Distinctive Appearance" description="The protrusions from the skull alone mark a Crazy for what she is to anyone who lives on Rifts Earth. Most Crazies also indulge in tattoos, body piercings, and other means of elaborately declaring themselves to the world." compset="FraComp" summary="Obviously a Crazy.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRCrMag" name="Magic" description="M.O.M. implants jumble the mind in such a way as to make the use of magic impossible." compset="FraComp" summary="Unable to use Magic.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRCrNeAc" name="Needs Action" description="Crazies live in a constant state of heightened adrenaline and awareness, even those suffering from depression cannot escape the feeling. During particular slow periods, the Game Master may call for a Spirit roll. Failure means the Crazy gains −2 Charisma as she becomes irritable and impatient. She also suffers a −1 to all Trait rolls from the distraction of her frenzied mind, until some kind of high alert status or action kicks in." compset="FraComp" summary="Unable to use Magic.">
+    <usesource source="SavRiftC"/>
+    <tag group="User" tag="Activation"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[      if (field[abilActive].value <> 0) then
+        perform #traitadjust[trCharisma,-,2,"No Action"]
+        endif]]></eval>
+    </thing>
+  <thing id="fcSRCrUnPs" name="Unstable Psyche" description="From the start (and for no added benefit), the character gains a psychological or emotional Hindrance determined by rolling on the {b}Psyche Degradation Table (pg. 17){/b}. Representing the constant degradation of the Crazy’s psychological state, the character gains an additional Hindrance from the table each time she achieves a new Rank." compset="FraComp" summary="Crazy has an additional specific Hinderance for each rank gained.">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="1000">#resmax[resHinder] += (herofield[acRank].value + 1)</eval>
+    </thing>
+  <preclude id="cybAquatic" source="SavRiftC"/>
+  <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
-  <preclude id="cybAquatic" source="SavRiftC"/>
-  <preclude id="edgNoble" source="SavRiftC"/>
   <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
   </document>

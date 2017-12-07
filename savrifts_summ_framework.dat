@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Abilities" summary panel. This panel
+      contains the list of special abilities and all skills for the character.
+
+      Since all of the tables shown within this summary panel should fit within the
+      available vertical space, no scroller is required, so we turn off the scroller
+      for each table so that Hero Lab doesn't leave space for one.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- frAbility portal - table of edges
+  -->
+  <portal
+    id="frAbility"
+    style="tblInvisSm">
+    <table_fixed
+      component="FraAbility"
+      showtemplate="frAbility"
+      scrollable="no">
+      </table_fixed>
+    </portal>
+
+
+  <!-- frComp portal - table of hindrances
+  -->
+  <portal
+    id="frComp"
+    style="tblInvisSm">
+    <table_fixed
+      component="FraComp"
+      showtemplate="frComp"
+      scrollable="no">
+      </table_fixed>
+    </portal>
+
+
+  <!-- frAbility template
+        This template shows the names of each special ability ability, providing
+        mouse-over behavior to show the details of each ability.
+  -->
+  <template
+    id="frAbility"
+    name="Summary Ability Pick"
+    compset="FraAbility">
+
+    <portal
+      id="name"
+      style="lblSummary">
+      <label
+        field="shortname">
+        </label>
+      <mouseinfo/>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[name].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~the name is the only portal to position
+      portal[name].left = 0
+      portal[name].top = 0
+      ]]></position>
+    </template>
+  <template
+    id="frComp"
+    name="Summary Ability Pick"
+    compset="FraComp">
+
+    <portal
+      id="name"
+      style="lblSummary">
+      <label
+        field="shortname">
+        </label>
+      <mouseinfo/>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[name].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~the name is the only portal to position
+      portal[name].left = 0
+      portal[name].top = 0
+      ]]></position>
+    </template>
+
+
+  <!-- frAbility layout
+        This layout contains both the table of special abilities and the table of
+        skills for the actor.
+  -->
+  <layout
+    id="frAbilComp">
+    <portalref portal="frAbility"/>
+    <portalref portal="frComp"/>
+
+    <position><![CDATA[
+      ~position and size the tables to span the full layout
+      perform portal[frAbility].autoplace
+      perform portal[frComp].autoplace[10]
+      ]]></position>
+
+    </layout>
+
+
+  <!-- frAbility panel
+        This panel is designated as a summary panel and given an order that positions
+        it properly amongst the other defined summary panels. We setup a small margin
+        to indent the layout from the edges of the panel.
+
+        The panel is assigned a "live" tagexpr so that its visibility can be
+        controlled for different types of characters. While not really useful in the
+        sample data files, this approach can be quite useful when the data files
+        expand to govern creation of widely varying characters, such as vampires vs.
+        ghosts vs. mortals in the World of Darkness game system.
+  -->
+  <panel
+    id="frAbility"
+    name="Framework"
+    order="10021"
+    marginhorz="2"
+    marginvert="2"
+    issummary="yes">
+    <live>Group.?</live>
+    <layoutref layout="frAbilComp"/>
+
+    <position><![CDATA[
+      ]]></position>
+
+    </panel>
+
+
+  </document>

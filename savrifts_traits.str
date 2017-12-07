@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of components that don't really fit anywhere
+      else, such as resources, journal entries, etc.
+-->
+
+<document signature="Hero Lab Structure">
+
+
+<!-- TCA - This component provides for the Abilities of the Iconic Frameworks -->
+<!-- FraAbility component
+        Each Framework Ability is based upon this component
+  -->
+  <component
+    id="FraAbility"
+    name="Framework Ability"
+    autocompset="no">
+
+    <!-- Extra value associated with the property -->
+    <field
+      id="frabValue"
+      name="Extra Value"
+      type="derived">
+      </field>
+
+    <!-- Extra text associated with the property -->
+    <field
+      id="frabText"
+      name="Extra Text"
+      type="derived"
+      maxlength="25">
+      </field>
+
+    <!-- Cost value associated with the property -->
+    <field
+      id="frabCstVal"
+      name="Cost Value"
+      type="static">
+      </field>
+
+    <!-- User value associated with the property -->
+    <field
+      id="frabUsrVal"
+      name="User Value"
+      type="user">
+      </field>
+
+    <!-- User text associated with the property -->
+    <field
+      id="frabUsrTxt"
+      name="User Text"
+      type="user"
+      maxlength="25">
+      </field>
+
+    <!-- Domain details for something that has a particular focus (e.g. knowledge skills) -->
+    <field
+      id="frabDomain"
+      name="Domain"
+      maxlength="50"
+      type="user">
+      </field>
+
+    <!-- Each Frame Ability needs its own identity tag to detect cascading dependencies via prereqs -->
+    <identity group="FraAbility"/>
+
+    <!-- All Frame Ability get the same tag for sorting purposes -->
+    <tag group="SpecialTab" tag="RacialProp"/>
+
+    <!-- Track the Frame Ability on the actor -->
+    <eval index="1" phase="Setup" priority="5000"><![CDATA[
+      perform forward[FraAbility.?]
+      ]]></eval>
+
+    <!-- If we have a user field, map it into the derived field -->
+    <eval index="3" phase="Setup" priority="5000"><![CDATA[
+      ~if this pick was NOT user-added, no user fields can be accessed
+      doneif (isuser = 0)
+
+      ~if we have a user value, put it into the derived field
+      if (tagis[User.NeedValue] <> 0) then
+        field[frabValue].value = field[frabUsrVal].value
+
+      ~if we have user text, put it into the derived field
+      elseif (tagis[User.NeedText] <> 0) then
+        field[frabText].text = field[frabUsrTxt].text
+        endif
+      ]]></eval>
+
+    </component>
+	
+<!-- FraComp component
+        Each Framework Complication is based upon this component
+  -->
+  <component
+    id="FraComp"
+    name="Framework Complication"
+    autocompset="no">
+
+    <!-- Extra value associated with the property -->
+    <field
+      id="frcoValue"
+      name="Extra Value"
+      type="derived">
+      </field>
+
+    <!-- Extra text associated with the property -->
+    <field
+      id="frcoText"
+      name="Extra Text"
+      type="derived"
+      maxlength="25">
+      </field>
+
+    <!-- Cost value associated with the property -->
+    <field
+      id="frcoCstVal"
+      name="Cost Value"
+      type="static">
+      </field>
+
+    <!-- User value associated with the property -->
+    <field
+      id="frcoUsrVal"
+      name="User Value"
+      type="user">
+      </field>
+
+    <!-- User text associated with the property -->
+    <field
+      id="frcoUsrTxt"
+      name="User Text"
+      type="user"
+      maxlength="25">
+      </field>
+
+    <!-- Domain details for something that has a particular focus (e.g. knowledge skills) -->
+    <field
+      id="frcoDomain"
+      name="Domain"
+      maxlength="50"
+      type="user">
+      </field>
+
+    <!-- Each Frame Complication needs its own identity tag to detect cascading dependencies via prereqs -->
+    <identity group="FraComp"/>
+
+    <!-- All Frame Complication get the same tag for sorting purposes -->
+    <tag group="SpecialTab" tag="RacialProp"/>
+
+    <!-- Track the Frame Complication on the actor -->
+    <eval index="1" phase="Setup" priority="5000"><![CDATA[
+      perform forward[FraComp.?]
+      ]]></eval>
+
+    <!-- If we have a user field, map it into the derived field -->
+    <eval index="3" phase="Setup" priority="5000"><![CDATA[
+      ~if this pick was NOT user-added, no user fields can be accessed
+      doneif (isuser = 0)
+
+      ~if we have a user value, put it into the derived field
+      if (tagis[User.NeedValue] <> 0) then
+        field[frcoValue].value = field[frcoUsrVal].value
+
+      ~if we have user text, put it into the derived field
+      elseif (tagis[User.NeedText] <> 0) then
+        field[frcoText].text = field[frcoUsrTxt].text
+        endif
+      ]]></eval>
+
+    </component>
+	
+<!-- TCA - This component set enables the use of Iconic Framework Abilities
+           as defined in the Savage Rifts sourcebooks -->
+  <!-- FraAbility - all Framework Abilities derive from this compset -->
+  <compset
+    id="FraAbility">
+    <compref component="FraAbility"/>
+    <compref component="Ability"/>
+    <compref component="UserSelect"/>
+    <compref component="SpecialTab"/>
+    </compset>
+	
+  <!-- FraComp- all Framework Complications derive from this compset -->
+  <compset
+    id="FraComp">
+    <compref component="FraComp"/>
+    <compref component="Ability"/>
+    <compref component="UserSelect"/>
+    <compref component="SpecialTab"/>
+    </compset>
+	
+  </document>

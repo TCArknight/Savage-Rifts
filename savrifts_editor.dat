@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of how the Editor should handle all the
+      various publicly accessible objects (i.e. component sets) within the game
+      system. A separate "editthing" elemenet is defined for each component set,
+      along with the appropriate details for how to configure each facet via
+      "inputthing" elements.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- TCA - Framework Ability editor -->
+           
+  <!-- Framework Ability editthing -->
+  <editthing
+    group="Rifts"
+    compset="FraAbility"
+    name="Framework Ability"
+    prefix="fa"
+    description="Framework Abilities are typically bootstrapped by Iconic Frameworks (Group)"
+    summary="Defines an ability that is added to a character via an Iconic Framework selection.">
+    <inputthing
+      name="Framework Ability Point Cost"
+      helptext="Specify cost in Racial Edge Points of the Racial Property.">
+      <it_field field="frabCstVal"/>
+      </inputthing>
+    <inputthing
+      name="Activated by User?"
+      helptext="Specify whether this racial ability has an effect that can be activated by the user via the In-Play tab.">
+      <it_tagcheck group="User" tag="Activation"/>
+      </inputthing>
+    <inputthing
+      name="Selectable for Creatures?"
+      helptext="Specify whether this racial ability is shown for selection when customizing a creature.">
+      <it_tagcheck group="User" tag="Creature"/>
+      </inputthing>
+    <inputthing
+      name="Omit from Printouts?"
+      helptext="Specify whether this racial ability should be omitted from character sheet output.">
+      <it_tagcheck group="Print" tag="NoPrint"/>
+      </inputthing>
+    <inputthing
+      name="Attribute"
+      helptext="Specify the Attribute this property applies to.">
+      <it_linkage compset="Attribute" linkage="Attribute"/>
+      </inputthing>
+    <inputthing
+      name="Skill"
+      helptext="Specify the Skill this property applies to.">
+      <it_linkage compset="Skill" linkage="Skill" >
+      <match>
+        !Arcane.SuperPower &amp; !Skill.skKnow
+      </match>
+      </it_linkage>
+      </inputthing>
+    <inputthing
+      name="Focus for Knowledge Skill"
+      helptext="Specify a Focus if this is a Knowledge Skill.">
+      <it_field field="frabDomain"/>
+      </inputthing>
+  </editthing>
+
+  <!-- Framework Complication editthing -->
+  <editthing
+    group="Rifts"
+    compset="FraComp"
+    name="Framework Complication"
+    prefix="fc"
+    description="Framework Complication are typically bootstrapped by Iconic Frameworks (Group)."
+    summary="Defines a complication that is added to a character via an Iconic Framework selection.">
+    <inputthing
+      name="Framework Ability Point Cost"
+      helptext="Specify cost in Racial Edge Points of the Racial Property.">
+      <it_field field="frcoCstVal"/>
+      </inputthing>
+    <inputthing
+      name="Activated by User?"
+      helptext="Specify whether this racial ability has an effect that can be activated by the user via the In-Play tab.">
+      <it_tagcheck group="User" tag="Activation"/>
+      </inputthing>
+    <inputthing
+      name="Selectable for Creatures?"
+      helptext="Specify whether this racial ability is shown for selection when customizing a creature.">
+      <it_tagcheck group="User" tag="Creature"/>
+      </inputthing>
+    <inputthing
+      name="Omit from Printouts?"
+      helptext="Specify whether this racial ability should be omitted from character sheet output.">
+      <it_tagcheck group="Print" tag="NoPrint"/>
+      </inputthing>
+    <inputthing
+      name="Attribute"
+      helptext="Specify the Attribute this property applies to.">
+      <it_linkage compset="Attribute" linkage="Attribute"/>
+      </inputthing>
+    <inputthing
+      name="Skill"
+      helptext="Specify the Skill this property applies to.">
+      <it_linkage compset="Skill" linkage="Skill" >
+      <match>
+        !Arcane.SuperPower &amp; !Skill.skKnow
+      </match>
+      </it_linkage>
+      </inputthing>
+    <inputthing
+      name="Focus for Knowledge Skill"
+      helptext="Specify a Focus if this is a Knowledge Skill.">
+      <it_field field="frcoDomain"/>
+      </inputthing>
+  </editthing>
+  
+  </document>
