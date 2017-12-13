@@ -169,6 +169,80 @@
       ]]></eval>
 
     </component>
+
+  <component
+    id="ExprHelp"
+    name="Expression Helper">
+
+    <field
+      id="ehRaceAdd"
+      name="Racial AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="ehRaceHdr"
+      name="Racial Expression Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="ehRaceExp"
+      name="Racial Property Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="ehFrameAdd"
+      name="Racial AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="ehFrameHdr"
+      name="Racial Expression Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+
+    <field
+      id="ehFrameExp"
+      name="Racial Property Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+	<eval phase="PreTraits" priority="1000" index="1"><![CDATA[
+	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
+	doneif (origin.ishero = 0)
+
+	~consume additional resource slots
+	var myCount as number
+	foreach pick in hero where "Rifts.RaceSelect"
+		myCount += 1
+		nexteach
+	  
+	perform #resspent[resRaceSel,+,myCount,field[name].text]
+		]]></eval>
+		
+	<eval phase="PreTraits" priority="1000" index="2"><![CDATA[
+	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
+	doneif (origin.ishero = 0)
+
+	~consume additional resource slots
+	var myCount as number
+	foreach pick in hero where "Rifts.FrameSel"
+		myCount += 1
+		nexteach
+	  
+	perform #resspent[resFraSel,+,myCount,field[name].text]
+		]]></eval>
+	  
+    </component>
 	
 <!-- TCA - This component set enables the use of Iconic Framework Abilities
            as defined in the Savage Rifts sourcebooks -->

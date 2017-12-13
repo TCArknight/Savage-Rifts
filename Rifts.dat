@@ -21,8 +21,9 @@ TCA: Fixed Storm-Fouled Senses Script timing
 TCA: changed SSASkills script to use childfound for trSFStrain]]></info_history>
     <info_todo><![CDATA[Fortune and Glory Selections - bootstraps, bonuses
 Hero's Journey - bootstraps, bonuses
-Cybernetics - built-in weapons, scripting
-Fennodi - adjust starting powers based on Arcane Framework]]></info_todo>
+Cybernetics - built-in weapons
+Fennodi - adjust starting powers based on Arcane Framework
+Glitter Boy armor - Strength adjustment]]></info_todo>
     </fileinfo>
   <thing id="fg1Close" name="A Mighty Weapon (Close)" description="Your hero may choose any single weapon from the Close Combat—Personal sections." compset="Fortune" summary="Select a Close Combat weapon." uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -441,7 +442,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
       <autotag group="thing" tag="skipprereq"/>
       </bootstrap>
     <eval phase="PreTraits" priority="5000">~Investigation d8
-#traitcreation[skKnowBatt] += 1
+#traitcreation[skInvest] += 1
 hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     </thing>
   <thing id="ed17Skill" name="Education: Library" description="Either her parents did everything they could to educate her, she attended one of the few schools left in the world, or she might even have found and lived in an ancient library. However managed, she has five additional skill points to spend at character creation, but they may only be spent on Healing, Investigation, and Knowledge skills." compset="HeroJrny">
@@ -1161,7 +1162,6 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     </thing>
   <thing id="SRSASkills" name="Stain on Arcane Skills" compset="Mechanics" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="setSRifts"></bootstrap>
     <eval phase="Traits" priority="5000"><![CDATA[~ set up a variable and populate it with the integer/absolute value
 ~ (i.e. non-negative value) of Charisma
 var IntBonus as number
@@ -1382,8 +1382,9 @@ endif]]>
     <fieldval field="wpDamage" value="Str + Spi"/>
     <fieldval field="wpPiercing" value="6"/>
     <fieldval field="wpSpecial" value="Mega Damage"/>
-    <tag group="WeaponType" tag="s2SPBW"/>
+    <usesource source="SavRiftC"/>
     <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="s2SPBW"/>
     </thing>
   <thing id="edgSRPsiBl" name="Psi-Blade" description="Another powerful manifestation of will and telekinetic strength, the Psi-Blade provides the psionic with a mental energy blade that does Strength + Spirit melee damage (i.e., roll Strength and Spirit dice for damage). The blade is AP 6 and does Mega Damage. The psi simply activates her smite power, summoning the Psi-Blade instead of putting the power on another weapon or set of ammunition (the smite bonus adds directly to the Psi-Blade’s base damage). This Edge can be used with exalted smite, as well." compset="EdgeWep" summary="Create a blade of Psi Power." uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -1645,6 +1646,7 @@ perform #traitroll[skThrowing,-,2,"Storm-Fouled Senses"]
     <tag group="Hero" tag="BornAHero"/>
     <tag group="Hero" tag="ShowCyber"/>
     <tag group="Hero" tag="GroupUse"/>
+    <tag group="Hero" tag="GroupReq"/>
     <eval phase="PreTraits" priority="2000">perform hero.assign[Hero.ShowLang]
       if (hero.tagis[Hero.SmartsLang] = 1) then
         #resmax[resLang] -= 1
@@ -1670,6 +1672,20 @@ perform #traitroll[skThrowing,-,2,"Storm-Fouled Senses"]
     <bootstrap thing="rpSRRePaA"></bootstrap>
     <bootstrap thing="rpSRDBWant"></bootstrap>
     <bootstrap thing="rpSRDBWeak"></bootstrap>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Breed Advantage"
+header = "Breed Advantage: "
+header &= hero.child[resRaceSel].field[resSummary].text
+
+chooser = "BreedAdv.?"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHelp].field[ehRaceAdd].text = additem
+hero.child[ehExprHelp].field[ehRaceExp].text = chooser
+hero.child[ehExprHelp].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="racSRFenno" name="Fennodi" description="Called the “Quiet Walkers” by the Shoshone, the Fennodi are another race of generally peaceful D-Bees who prefer tending to herds of livestock on the prairies or similar outdoor pursuits. Pale gray and tan, with tiny black dots for eyes on the sides of their heads (embedded in small, mobile flaps that confuse others into thinking they are ears), the Fennodi have an effective 280-degree range of vision. Whisker-like fins on the sides of their jaws act as noses, giving them a wholly alien appearance to most humans. They’re very slender and tall, averaging seven feet in height.\n\nFennodi are naturally psionic, with a set of powers indicative of their primarily peaceful nature (though they can certainly learn other powers). Most are encountered carrying the crescent Nymbu staff (a sacred traditional item representing travel and peace). Most Fennodi are practitioners of the Art of Nodox, a martial art focusing on avoidance and defense. Players of this D-Bee wanting to know the martial art should take Edges benefiting defense such as Martial Artist, Block, and Dodge." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -1691,6 +1707,20 @@ perform #traitroll[skThrowing,-,2,"Storm-Fouled Senses"]
     <bootstrap thing="rpSRRePaB"></bootstrap>
     <bootstrap thing="rpSRGTABFM"></bootstrap>
     <bootstrap thing="rpSRGTSize"></bootstrap>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Hindrance"
+header = "Grackle Tooth Hindrance: "
+header &= hero.child[resRaceSel].field[resSummary].text
+
+chooser = "(Hindrance.hinConfide|Hindrance.hinHeroic)"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHelp].field[ehRaceAdd].text = additem
+hero.child[ehExprHelp].field[ehRaceExp].text = chooser
+hero.child[ehExprHelp].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="racSRLynSr" name="Lyn-Srial" description="Lyn-Srial are humanoids with four arms, bird-like heads, gleaming scales, and wings like a bat. Other races usually call them “Golden Ones” for their shining appearance or “Sky-Knights” due to their drive to help those in need. The Lyn-Srial are a serene people of artists, philosophers, and healers who would rather build communities than engage in combat, but who cannot abide evil. Lyn-Srial find spiritual magic appealing typically becoming Cloudweavers or Mystics (Cloudweavers use the M.A.R.S Personal Concept Option, taking AB (Miracles) and Master of Magic with trappings of air, wind, light, and the environment)." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -1805,10 +1835,10 @@ perform hero.assign[BreedAdv.Rugged]</eval>
   <thing id="rpSRBreAdv" name="Breed Advantage" description="A Dog Boy begins with the Breed Advantage Edge (see sidebar). The player decides what breed (or breeds) the character is influenced by. After creation, the Dog Boy may take the Edge again at Novice Rank." compset="RacialProp" summary="Breed Advantage Edge" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="5000">~set resRaceEdge to selection
-hero.child[resRacEdge].field[resMax].value += 1
+#resmax[resRaceSel] += 1
 
 ~Add extra Edge point to count for Breed Advantage edge
-hero.child[resEdge].field[resMax].value += 1
+#resmax[resEdge] += 1
       <before name="Calc trtFinal"/>
       </eval>
     </thing>
@@ -1827,9 +1857,9 @@ perform hero.assign[BreedAdv.Fast]</eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Tough"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[trTough] += 2
+    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitadjust[trTough,+,2,"Breed Advantage (Tough)"]
 
-perform hero.assign[BreedAdv.Tough]</eval>
+perform hero.assign[BreedAdv.Tough]]]></eval>
     <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
     </thing>
   <thing id="edgSRBreTr" name="Breed Advantage (Tracking)" description="The various breeds of canine provide distinct genetic advantages for individual Dog Boys. Some are fast, others strong, still others astoundingly good trackers.\n\nThis Edge may be taken more than once to represent a breed more fully expressing itself over time, but only once per Rank. The GM has final approval over each choice to ensure it makes sense. Each time the Edge is taken, choose one of the following advantages:\n\nThe Dog Boy gains an additional +2 on all Tracking rolls. This may only be taken once." compset="Edge">
@@ -1837,7 +1867,7 @@ perform hero.assign[BreedAdv.Tough]</eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Tracker"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitroll[skTracking,+,2,"Tracking Breed"]
+    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitroll[skTracking,+,2,"Breed Advantage (Tracking)"]
 
 perform hero.assign[BreedAdv.Tracker]]]></eval>
     <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
@@ -1847,9 +1877,9 @@ perform hero.assign[BreedAdv.Tracker]]]></eval>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="BreedAdv" tag="Water"/>
-    <eval phase="Traits" priority="10000">hero.childfound[skSwimming].field[trtNetRoll].value += 2
+    <eval phase="Traits" priority="10000"><![CDATA[perform #traitroll[skSwimming,+,1,"Breed Advantage (Water)"]
 
-perform hero.assign[BreedAdv.Water]</eval>
+perform hero.assign[BreedAdv.Water]]]></eval>
     <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
     </thing>
   <thing id="rpSRKeenSm" name="Keen Sense of Smell" description="Dog Boys have a sense of smell similar to their canine counterparts. They gain a +2 bonus on Notice checks based on smell, as well as +2 on all Tracking rolls." compset="RacialProp">
@@ -1914,6 +1944,11 @@ if (field[abilActive].value <> 0) then
     </thing>
   <thing id="rpSRJHIWR" name="&quot;Just How I was Raised&quot;" description="Grackles have the Heroic or Overconfident Hindrance for no additional points (the other may be chosen as normal). " compset="RacialProp" summary="Heroic or Overconfident Hinderance for no points.">
     <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">~set resRaceEdge to selection
+#resmax[resRaceSel] += 1
+
+~Offset Hindrance points
+#resmax[resHinder] -= 2</eval>
     </thing>
   <thing id="rpSRGTNatW" name="Natural Weapons" description="Grackles do Str+d6 as damage with their bite, claws, or tail slap." compset="RacialProp" uniqueness="unique">
     <fieldval field="shortname" value="Bite/Horns"/>
@@ -2212,15 +2247,13 @@ validif (rolls = 0)]]></evalrule>
     <bootstrap thing="fcSRCrMag"></bootstrap>
     <bootstrap thing="fcSRCrNeAc"></bootstrap>
     <bootstrap thing="fcSRCrUnPs"></bootstrap>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
+    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Magic-related HJ Tables." summary="Too many rolls on Magic-related HJ Tables."><![CDATA[var rolls as number
-
-rolls += hero.tagcount[RiftsHJ.EncMys]
-rolls += hero.tagcount[RiftsHJ.MagMys]
-
-~if we have any of the above categories, we're invalid
-validif (rolls = 0)]]></evalrule>
-    <evalrule phase="Validate" priority="5000" message="Two HJ rolls required fromBody Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training, and Underworld &amp; Black Ops Tables." summary="Not enough rolls on required HJ Tables."><![CDATA[var rolls as number
+    <evalrule phase="Validate" priority="5000" message="Three HJ rolls required from Body Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training, and Underworld &amp; Black Ops Tables." summary="Not enough rolls on required HJ Tables."><![CDATA[var rolls as number
 
 rolls += hero.tagcount[RiftsHJ.BodArm]
 rolls += hero.tagcount[RiftsHJ.CCW]
@@ -2231,13 +2264,86 @@ rolls += hero.tagcount[RiftsHJ.Under]
 
 ~if we have at least three valid categories, we're valid
 validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Magic-related HJ Tables." summary="Too many rolls on Magic-related HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+~if we have any of the above categories, we're invalid
+validif (rolls = 0)]]></evalrule>
     </thing>
   <thing id="grpSRCybKn" name="Cyber-Knight" description="{b}{i}THE CYBER-KNIGHT HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\n\nCyber-Knights gain three rolls on any of the following tables: {b}Education, Experience &amp; Wisdom, Psionics,{/b} and {b}Training{/b}.\n\nCyber-Knights gain two rolls on any table except {b}Cybernetics{/b} and {b}Magic &amp; Mysticism.{/b}" compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="arcCybKnig"></bootstrap>
+    <bootstrap thing="faSRCKCyAr"></bootstrap>
+    <bootstrap thing="faSRCKCyCo"></bootstrap>
+    <bootstrap thing="faSRCKFiBa"></bootstrap>
+    <bootstrap thing="faSRCKInLi"></bootstrap>
+    <bootstrap thing="faSRCKInCT"></bootstrap>
+    <bootstrap thing="faSRMiPsCK"></bootstrap>
+    <bootstrap thing="faSRPsSwCK"></bootstrap>
+    <bootstrap thing="faSRRePrCK"></bootstrap>
+    <bootstrap thing="fcSRCKCyb"></bootstrap>
+    <bootstrap thing="fcCKCode"></bootstrap>
+    <autoadd thing="eqCross" portal="grGear"></autoadd>
+    <autoadd thing="eqCustom" portal="grGear">
+      <assignval field="grUserName" value="Wooden Stake"/>
+      <assignval field="stackQty" value="6"/>
+      </autoadd>
+    <autoadd thing="armSRCybK" portal="arDefense"></autoadd>
+    <autoadd thing="wpW320LaPi" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" message="Three HJ rolls required from Education, Experience &amp; Wisdom, Psionics,{/b} and {b}Training" summary="Not enough rolls on required HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Edu]
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.Psi]
+rolls += hero.tagcount[RiftsHJ.Train]
+
+~if we have at least three valid categories, we're valid
+validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Cybernetics or Magic/Mysticism HJ Tables." summary="Too many rolls on excluded HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Cyber]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+~if we have any of the above categories, we're invalid
+validif (rolls = 0)]]></evalrule>
     </thing>
-  <thing id="grpSRGlitt" name="Glitter Boy" description="{b}{i}THE GLITTER BOY HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\n\nGlitter Boys gain three rolls on any of the following tables: {b}Cybernetics, Close Combat Weapons, Ranged Weapons,{/b} and {b}Training.{/b}\n\nGlitter Boys gain two additional rolls on any table, although those dealing with magic or psionics may be of limited utility unless the character expects to spend a lot of time out of his armor." compset="Group" uniqueness="unique">
+  <thing id="grpSRGltBY" name="Glitter Boy" description="{b}{i}THE GLITTER BOY HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\n\nGlitter Boys gain three rolls on any of the following tables: {b}Cybernetics, Close Combat Weapons, Ranged Weapons,{/b} and {b}Training.{/b}\n\nGlitter Boys gain two additional rolls on any table, although those dealing with magic or psionics may be of limited utility unless the character expects to spend a lot of time out of his armor." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <bootstrap thing="faSRGBHLg"></bootstrap>
+    <bootstrap thing="faSRGBFYTn"></bootstrap>
+    <bootstrap thing="faSRGBMHF"></bootstrap>
+    <bootstrap thing="faSRGBArm"></bootstrap>
+    <bootstrap thing="fcSRGBENMY"></bootstrap>
+    <bootstrap thing="fcSRGBST2F"></bootstrap>
+    <bootstrap thing="fcSRGBSHNY"></bootstrap>
+    <bootstrap thing="fcSRGBCLOF"></bootstrap>
+    <bootstrap thing="fcSRGBHTMC"></bootstrap>
+    <autoadd thing="vhGlttrBoy" portal="grVehicle"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpW227PLaP" portal="arRange"></autoadd>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" message="Two HJ rolls required from Body Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training, and Underworld &amp; Black Ops" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.BodArm]
+rolls += hero.tagcount[RiftsHJ.CCW]
+rolls += hero.tagcount[RiftsHJ.Psi]
+rolls += hero.tagcount[RiftsHJ.Ranged]
+rolls += hero.tagcount[RiftsHJ.Train]
+rolls += hero.tagcount[RiftsHJ.Under]
+
+~if we have at least three valid categories, we're valid
+validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Magic-related HJ Tables" summary="Too many rolls on Magic-related HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+~if we have any of the above categories, we're invalid
+validif (rolls = 0)]]></evalrule>
     </thing>
   <thing id="grpSRJuice" name="Juicer" description="{b}{i}THE JUICER HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nJuicers gain three rolls on any of the following tables: {b}Body Armor, Close Combat Weapons, Ranged Weapons, Training,{/b} and {b}Underworld &amp; Black Ops.{/b}\n\nJuicers gain two additional rolls on any tables except those dealing with magic or psionics." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2490,80 +2596,6 @@ nexteach]]>
     <fieldval field="powTraps" value="Concentrating look"/>
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="arcCybKnig" name="Cyber-Knight" description="Minor Psionic:  Cyber-Knights have Arcane Background (Psionics), 10 ISP, three powers, and Psionics d6.  The following powers are suable only on the Cyber-Knight but activate as a free action, inflicting no multiple action penalty (a Cyber-Knight) with Master Psionic can use mass healing but not as a free action).  All other aspects of AB (Psionics) remain the same." compset="Arcane">
-    <fieldval field="arcPowers" value="3"/>
-    <fieldval field="arcPoints" value="10"/>
-    <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powBanish"/>
-    <tag group="PowerDeny" tag="powBanishE"/>
-    <tag group="PowerDeny" tag="powBeastFr"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlast"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powBlind"/>
-    <tag group="PowerDeny" tag="powBurrow"/>
-    <tag group="PowerDeny" tag="powBurst"/>
-    <tag group="PowerDeny" tag="powClairvo"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDamageF"/>
-    <tag group="PowerDeny" tag="powDamagFF"/>
-    <tag group="PowerDeny" tag="powDetect"/>
-    <tag group="PowerDeny" tag="powDisguis"/>
-    <tag group="PowerDeny" tag="powDispel"/>
-    <tag group="PowerDeny" tag="powDivinat"/>
-    <tag group="PowerDeny" tag="powDrainPP"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powEntang"/>
-    <tag group="PowerDeny" tag="powFarsigh"/>
-    <tag group="PowerDeny" tag="powFear"/>
-    <tag group="PowerDeny" tag="powFly"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powGrHeal"/>
-    <tag group="PowerDeny" tag="powGrowShr"/>
-    <tag group="PowerDeny" tag="powIllusio"/>
-    <tag group="PowerDeny" tag="powIntangi"/>
-    <tag group="PowerDeny" tag="powInvis"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powLightOb"/>
-    <tag group="PowerDeny" tag="powMindRea"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="PowerDeny" tag="powPuppet"/>
-    <tag group="PowerDeny" tag="powShape"/>
-    <tag group="PowerDeny" tag="powSlow"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSlumber"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powStun"/>
-    <tag group="PowerDeny" tag="powSumAlly"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powTelekin"/>
-    <tag group="PowerDeny" tag="powTelepat"/>
-    <tag group="PowerDeny" tag="powTelepor"/>
-    <tag group="PowerDeny" tag="powWallWlk"/>
-    <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="CyberKnigh" name="Cyber-Knight" abbrev="Cyber-Knight"/>
-    <bootstrap thing="drwPsionic"></bootstrap>
-    </thing>
-  <thing id="arcCrazy" name="Crazy" description="Unlocking the brain&apos;s potential grants a Crazy Arcane Background (Psionics), 10 ISP, three powers, and Psionics d6." compset="Arcane">
-    <fieldval field="arcPowers" value="3"/>
-    <fieldval field="arcPoints" value="10"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="Crazy" abbrev="Crazy"/>
-    <bootstrap thing="drwPsionic"></bootstrap>
     </thing>
   <thing id="arcBurster" name="Burster" description="Though pyrokinesis is the mainstay of a Burster, she also has access to a strong array of other psionic powers.  Most of them relate to manipulation of psionic energy in a physical way, and this always has some kind of fiery or heat-related Trapping.  some, however, are more traditional psionics in nature and use, granting the Burster utility and value in situations beyond the battlefield.\nA Burster&apos;s list of available powers is fairly limited compared to most psionics, and they typically stick to the Fire/Heat Trappings found in Savage Worlds but aren&apos;t required to use them.  Arcane Background (Psionics) with three powers, 20 ISP, and a d8 Psionics skill." compset="Arcane">
     <fieldval field="arcPowers" value="3"/>
@@ -3048,29 +3080,12 @@ nexteach]]>
         perform #traitadjust[trTough,+,2,"Heavy Suit"]
         endif]]></eval>
     </thing>
-  <thing id="edgArBkCzy" name="Arcane Background: Crazy" description="According to sketchy historical records, the original technology leading to Mind Over Matter (more commonly referred to as M.O.M.) implants first appeared in South America during the last years before the Coming of the Rifts.  Initially intended for the treatment of mental disorders, scientists discovered that nanotechnology could be used to rewire mind and body to perform at superhuman levels." compset="Edge">
-    <fieldval field="shortname" value="Arcane Crazy"/>
-    <fieldval field="edgCost" value="0"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="Crazy" name="Crazy" abbrev="Crazy"/>
-    <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <bootstrap thing="arcCrazy"></bootstrap>
-    </thing>
   <thing id="edgArBkBur" name="Arcane Background: Burster" compset="Edge">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
     <tag group="Arcane" tag="Burster" name="Burster" abbrev="Burster"/>
     <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
     <bootstrap thing="arcBurster"></bootstrap>
-    </thing>
-  <thing id="edgArBkCyK" name="Arcane Background: Cyber-Knight" compset="Edge">
-    <fieldval field="shortname" value="Arcane Cyber-Knight"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="CyberKnigh" name="Cyber-Knight" abbrev="Cyber-Knight"/>
-    <tag group="MinRank" tag="0"/>
-    <tag group="EdgeType" tag="Background"/>
-    <bootstrap thing="arcCybKnig"></bootstrap>
     </thing>
   <thing id="edgArBkLLW" name="Arcane Background: Ley Line Walker" compset="Edge">
     <fieldval field="shortname" value="Arcane Ley Line Walker"/>
@@ -4340,14 +4355,16 @@ nexteach]]>
     <fieldval field="grDupMax" value="8"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrStr] += field[stackQty].value</eval>
+    <eval phase="PreTraits" priority="5000">#traitbonus[attrStr] += field[stackQty].value
+hero.child[attrStr].field[trtMaximum].value += field[stackQty].value</eval>
     </thing>
   <thing id="cybSRCWR" name="Cyber-Wired Reflexes" description="The cyborg’s Agility is increased one step for each application of these artificial nervous system enhancements and hard-wired celerity systems. Each step past d12 adds a +1. This particular enhancement is a requirement for many other upgrades." compset="Cyberware" stacking="merge">
     <fieldval field="cybStrain" value="1"/>
     <fieldval field="grCost" value="12000"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrAgi] += field[stackQty].value</eval>
+    <eval phase="PreTraits" priority="5000">#traitbonus[attrAgi] += field[stackQty].value
+	hero.child[attrAgi].field[trtMaximum].value += field[stackQty].value</eval>
     </thing>
   <thing id="cybSRLifeS" name="Internal Life Support" description="The character has an internal air supply and other systems that make him immune to suffocation, toxins, and diseases. He also gains +4 to resist the effects of radiation, intense environmental temperatures (but not direct damage), and other dangerous environmental effects. He only requires a fifth of the nutrition of a fully organic person." compset="Cyberware">
     <fieldval field="grCost" value="150000"/>
@@ -4391,7 +4408,8 @@ nexteach]]>
     <fieldval field="cybStrain" value="1"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
-    <eval phase="PreTraits" priority="5000">#traitbonus[attrVig] += field[stackQty].value</eval>
+    <eval phase="PreTraits" priority="5000">#traitbonus[attrVig] += field[stackQty].value
+hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     </thing>
   <thing id="cybSREmCoN" name="Embedded Combat Coding" description="The specialized training and capabilities of Combat Edges can be wired directly into a cyborg’s systems, so long as he has at least one level of Cyber-Wired Reflexes. Requirements for other Edges must be met, but other requirements may be ignored. Duplications of a specific Edge do not stack." compset="Cyberware">
     <fieldval field="cybStrain" value="2"/>
@@ -5137,13 +5155,274 @@ perform #traitroll[skTracking,+,2,"Crazy"]]]></eval>
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="1000">#resmax[resHinder] += (herofield[acRank].value + 1)</eval>
     </thing>
+  <thing id="faSRCKCyAr" name="Cyber-Armor" description="As a free action, Cyber-Knights can summon an organic metal shell, granting +2 Toughness.\n" compset="FraAbility" summary="As a free action, summon an organic metal shell, granting +2 Toughness.">
+    <usesource source="SavRiftC"/>
+    <tag group="User" tag="Activation"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[
+if (field[abilActive].value <> 0) then
+  perform #traitadjust[trTough,+,2,"Cyber-Armor"]
+  endif]]></eval>
+    </thing>
+  <thing id="faSRCKCyCo" name="Cyberkinetic Combat" description="Any purely technology-based attacks, such as lasers, rail guns, and vibro-blades, suffer a −2 to hit a Cyber-Knight. This ability stacks with the deflection power. \n" compset="FraAbility" summary="-2 to be hit with purely tech-based attacks.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRCKFiBa" name="First Into Battle" description="Cyber-Knights begin with +2 Pace and a d10 running die. If they take the Fleet-Footed Edge, the Pace bonuses stack and the running die becomes a d12.\n" compset="FraAbility" summary="+2 Pace, d10 Running (d12 with Fleet-Footed)">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[perform #traitadjust[trPace,+,2,"First Into Battle"]]]></eval>
+    </thing>
+  <thing id="faSRCKInLi" name="Inner Light" description="Cyber-Knights begin with the Champion Edge." compset="FraAbility" summary="You have the Champion Edge.">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgChamp">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    </thing>
+  <thing id="faSRCKInCT" name="Intense Combat Training" description="A Cyber-Knight begins play with Fighting d8 and two Combat Edges. The latter can be chosen without concern for Rank, but other requirements must be met." compset="FraAbility" summary="Fighting d8; Two Combat Edges">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="skFighting"></bootstrap>
+    <eval phase="Effects" priority="1000" index="2"><![CDATA[~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
+~doneif (origin.ishero = 0)
+
+~if this edge was not added by the user, skip it entirely
+~doneif (isuser = 0)
+
+~consume additional resource slots
+~var myCount as number
+~foreach pick in hero where "component.Edge & Rifts.FrameSel"
+~  myCount += 1
+~  nexteach
+	  
+~perform #resspent[resFraSel,+,myCount,field[name].text]]]></eval>
+    <eval phase="PreTraits" priority="5000" index="3">~Fighting D8
+#traitcreation[skFighting] += 2
+
+~set resRaceEdge to selection
+#resmax[resFraSel] += 2
+
+~Add extra Edge point to count for Breed Advantage edge
+#resmax[resEdge] += 2</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Combat Edge"
+header = "Combat Edge: "
+header &= hero.child[resFraSel].field[resSummary].text
+
+chooser = "EdgeType.Combat"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHelp].field[ehFrameAdd].text = additem
+hero.child[ehExprHelp].field[ehFrameExp].text = chooser
+hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
+    </thing>
+  <thing id="SRGrpReq" name="Savage Rifts Settings" compset="Mechanics" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="setSRifts"></bootstrap>
+    </thing>
+  <thing id="faSRMiPsCK" name="Minor Psionic" description="A Cyber-Knight begins with a special version of Arcane Background (Psionics) and Psionics d6. Cyber-Knights have access to the following powers: armor, barrier, bolt, boost Trait*, confusion, darksight, deflection*, environmental protection, havoc, healing*, pummel, quickness, smite*, speak language, speed*, succor, warrior’s gift{/i}. Powers marked with * are usable only on the Cyber-Knight but activate as a free action, inflicting no multiple action penalty. All other aspects of Arcane Background (Psionics) remain the same." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powBanish"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powBlast"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powBurrow"/>
+    <tag group="PowerDeny" tag="powBurst"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powLightOb"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powQuick"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powSpeed"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powSumAlly"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <bootstrap thing="edgArcPsi"></bootstrap>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1</eval>
+    </thing>
+  <thing id="faSRPsSwCK" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="User" tag="Activation"/>
+    <bootstrap thing="wpCKPsiSwo"></bootstrap>
+    </thing>
+  <thing id="wpCKPsiSwo" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested." compset="Melee">
+    <fieldval field="wpPiercing" value="6"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="s2SPBW"/>
+    <eval phase="Render" priority="10000"><![CDATA[var spirit as string
+var str as string
+str = hero.child[attrStr].field[trtDisplay].text & "+"
+spirit = "2" & hero.child[attrSpi].field[trtDisplay].text
+
+field[wpDamage].text = str & spirit]]></eval>
+    </thing>
+  <thing id="faSRRePrCK" name="Revered Protectors" description="All Cyber-Knights enjoy +2 Charisma when dealing with those who know and love them as guardians of life and freedom." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="User" tag="Activation"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[      if (field[abilActive].value <> 0) then
+        perform #traitadjust[trCharisma,+,2,"Revered Protector"]
+        endif]]></eval>
+    </thing>
+  <thing id="fcSRCKCyb" name="Cybernetics" description="Cybernetics are not an option for Cyber-Knights, as such devices interfere with their nanotechnology." compset="FraComp" summary="Unable to use Cybernetics.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcCKCode" name="Code Of Honor" description="A Cyber-Knight must adhere to the codes and philosophies of the Order, or he loses some or all of his powers, depending on the degree of transgression. Whether this is a function of the special nanotech treatment he undergoes or a loss of confidence damaging his psyche in some way is a matter of some debate among scholars. Regardless, the Game Master must determine the extent of a Cyber-Knight’s transgressions and assess a penalty accordingly." compset="FraComp" summary="Follows a specific code of honor.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="wpBoomGn" name="RG-14 Rapid Acceleration Electromagnetic Rail Gun" description="The primary weapon of the Glitter Boy powered armor is one of the most powerful firearms on the planet.  The Boom gun may be the single loudest weapon in the world.  It emits a sonic boom that requires ear protection or sealed armor.  It also requires the Glitter Boy suit to have to &quot;Dig In&quot;  with a stabilization system to ensure that the Powered armor is not thrown back from the recoil." compset="SpecWeap" summary="The Boom gun is one Big Damn Gun">
+    <fieldval field="wpDamage" value="4d12+6"/>
+    <fieldval field="wpShort" value="250"/>
+    <fieldval field="wpMedium" value="500"/>
+    <fieldval field="wpLong" value="1000"/>
+    <fieldval field="wpPiercing" value="25"/>
+    <fieldval field="wpShots" value="1000"/>
+    <fieldval field="wpBonus" value="Targeting system offsets two points of Shooting Penalites"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <tag group="Weapon" tag="NoMove"/>
+    <tag group="Weapon" tag="MedBurst"/>
+    <tag group="WeaponType" tag="SFVehMassD"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    </thing>
+  <thing id="vhGlttrBoy" name="Glitter Boy" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} d10\n{b}Swimming Pace: {b} 6\n\n\nThe USA-G10 Chromium Guardsman, or &quot;Glitter Boy&quot; powered armor is one of the most technologically advanced weapons developed before the coming of the Rifts.  It stands 10 feet tall and shines like a mirror, due to its laser resistant armor plating.  The wearer has full life support, including a feeding tube, water supply, and waste processing for up to 4 weeks of living.  It also provides the standard powered armor systems." compset="PowerAr" summary="One-Point-Two Tons of Glittering Metal" holdable="no">
+    <fieldval field="vhTopSpeed" value="10"/>
+    <fieldval field="vhTough" value="+6"/>
+    <fieldval field="vhArmor" value="+18"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="3"/>
+    <fieldval field="gearWeight" value="1.2 Tons"/>
+    <fieldval field="grMaxMods" value="7"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 7 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,6,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 18
+   herofield[acDefArms].value += 18
+   herofield[acDefLegs].value += 18
+   herofield[acDefTorso].value += 18
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpBoomGn"></bootstrap>
+      <bootstrap thing="modSRLzrRs"></bootstrap>
+      <bootstrap thing="modStblz"></bootstrap>
+      <bootstrap thing="modSncBm"></bootstrap>
+      <bootstrap thing="modPASenso"></bootstrap>
+      <bootstrap thing="modPATarge"></bootstrap>
+      <bootstrap thing="modPAStren"></bootstrap>
+      </child>
+    </thing>
+  <thing id="modSRLzrRs" name="Laser Resistant Armor" description="This armor reduces the damage of any laser attacks by half (rounded down)" compset="Modificatn">
+    <fieldval field="grDupMax" value="1"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Equipment" tag="UltraTech"/>
+    <tag group="ModType" tag="PowerArmor"/>
+    </thing>
+  <thing id="modStblz" name="Boom Gun Stablization System" description="Activating the Stabilization system is an action.  Firing the Boom Gun without these measures in place knocks the Glitter Boy back 2d6&quot; and prone, leaving the pilot shaken.  Once dug in, the Glitter Boy cannot move and can only fire to the front and sides (180 degrees).  Digging in make the Glitter Boy an easier target, attackers gain a +2 to attack roles against the suit while dug in." compset="Modificatn">
+    <fieldval field="grModsUsed" value="1"/>
+    <fieldval field="grDupMax" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Equipment" tag="UltraTech"/>
+    <tag group="ModType" tag="PowerArmor"/>
+    </thing>
+  <thing id="modSncBm" name="Sonic Boom" description="Firing a Boom Gun causes a sonic boom affecting everyone (except the pilot) within a Large Burst Template. A failure on a Vigor roll −2 inflicts Hard of Hearing (Major) for 3d6 minutes and makes the character Shaken. If he fails with a 1 on the Vigor die, he is Incapacitated and makes a Vigor roll each round to become conscious but Shaken. Anyone in environmentally sealed armor gains +2 to the roll, as do characters with Hard of Hearing (Minor). Characters with the Major version are immune!" compset="Modificatn">
+    <fieldval field="grDupMax" value="1"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="ModType" tag="PowerArmor"/>
+    </thing>
+  <thing id="faSRGBFYTn" name="Fully Trained" description="All Glitter Boy Pilots begin with the Power Armor Jock Edge." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRGBJ"></bootstrap>
+    </thing>
+  <thing id="faSRGBArm" name="Glitter Boy Armor" description="Glitter Boy pilot would not be a thing with their pre-Rifts Power Armor of the highest caliber.\n\n{b}Glitter Boy Armor:{b} Size 3, +18 MDC Armor, +6 Toughness\nPace 10 (Run d10), Swim Pace 6\n{b}Notes:{b} Enhanced Strength (d12+4), Half-damage from Lasers, Life Support \n(Self-contained breathing, immune to heat, cold, radiation, environmental toxins, and disease.)  Full electronics suite (+2 to Notice Checks, Off-sets 2 points of Shooting Penalties)\n{b}Weapons{b}\n{u}{b}Boom Gun{b}{u} \n{b}Range:{b} 250,500,1000\n{b}Damage:{b} 4d12+6 AP 25 MBT, Mega-Damage\n{b}ROF:{b} 1\n{b}Shots:{b} 1000\n{u}{b}Melee{b}{u}\n{b}Damage:{b} Str+d6 Mega Damage, not considered Unarmed" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <usesource source="SciFi"/>
+    </thing>
+  <thing id="faSRGBHLg" name="Heroic Legacy" description="A Glitter Boy pilot gets a +2 Charisma.  If the Glitter Boy armor is stolen, word gets around quickly and the thief is targeted by Glitter Boy pilots across North America." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[abilActive].value <> 0) then
+  perform #traitadjust[trCharisma,+,2, "Heroic Legacy"]
+  endif]]></eval>
+    </thing>
+  <thing id="faSRGBMHF" name="Many have Fallen" description="Numerous Glitter Boys fell to defend the world, leaving plentiful salvageable parts.  Serious repairs cost 250,000 credits and Severe ones 500,000 credits." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRGBSHNY" name="Big and Shiny" description="Glitter Boys suffer -8 to Stealth Rolls and +2 to hit from Man-sized opponents" compset="FraComp">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRGBCLOF" name="Closed Off" description="Glitter Boys cannot use magic or psionics while in their suit.  Such powers can be used by others can still affect them." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRGBHTMC" name="Highly Technical Machinery" description="The Glitter Boy Armor Systems are subject to the Technical Difficulties setting Rules." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRGBENMY" name="Glitter Boy Enemies" description="The Coalition view Glitter Boys as a major threat, and few in the Federation of Magic consider them friends either." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Federation of Magic"/>
+      </bootstrap>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    </thing>
+  <thing id="fcSRGBST2F" name="Stand By to Fire" description="The Glitter Boy cannot move and fire its Boom Gun on the same round.  This is why some carry other firearms as alternatives for when they need to move and shoot." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="edgSRGBJ" name="Power Armor Jock" description="Glitter Boy Power armor requires a basic level of training and experience to operate effectively. A character must have this Edge to avoid a −2 penalty to Agility and all skill rolls while wearing power armor." compset="Edge" summary="No penalty while wearing Glitter Boy power armor." uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <tag group="Print" tag="NoPrint"/>
+    <pickreq thing="grpSRGltBY"/>
+    </thing>
+  <preclude id="cybAdrenal" source="SavRiftC"/>
   <preclude id="cybAquatic" source="SavRiftC"/>
   <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
-  <preclude id="cybAdrenal" source="SavRiftC"/>
-  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   </document>

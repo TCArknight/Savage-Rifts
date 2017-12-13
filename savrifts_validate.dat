@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains an assortment of things used solely for validation reporting.
+      Each thing has one or more "evalrule" scripts that verify facets of each actor
+      and report appropriate error messages if not satisfied.
+
+     If you prefer, you could instead have a small number of things with numerous
+     "evalrule" scripts associated with each. The approach used below is to have lots
+     of things with scripts targeted at a narrow purpose, but there is no reason you
+     couldn't have a few things with lots of scripts targeted as a wide range of
+     purposes. By having lots of separate things, the name of each can be leveraged
+     for use within the validation error report, which can often improve the clarity
+     and usefulness of the validation messages.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- Racial Selections thing for validation reporting -->
+  <thing
+    id="valRacSelL"
+    name="Racial Selections"
+    compset="Simple">
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Make sure that we don't have too many hindrances selected -->
+    <evalrule index="1" phase="Validate" priority="8000" message="Racial selections required." summary="Issue with Racial options."><![CDATA[
+
+      validif (#resleft[resRaceSel] = 0)
+
+      ~mark associated tabs as invalid
+      container.panelvalid[racial] = 0
+	  
+	  if (#resleft[resRaceSel] > 0) then
+	    @message = "Not enough Racial selections made."
+	  else
+	    @message = "Too many Racial selections made."
+		endif
+
+      ]]></evalrule>
+
+    </thing>
+
+  <!-- Framework Selections thing for validation reporting -->
+  <thing
+    id="valFraSel"
+    name="Framework Selections"
+    compset="Simple">
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Make sure that we don't have too many hindrances selected -->
+    <evalrule index="1" phase="Validate" priority="8000" message="Selections required." summary="Issue with Framework options."><![CDATA[
+
+      validif (#resleft[resFraSel] = 0)
+
+      ~mark associated tabs as invalid
+      container.panelvalid[framework] = 0
+	  
+	  if (#resleft[resFraSel] > 0) then
+	    @message = "Not enough Framework selections made."
+	  else
+	    @message = "Too many Framework selections made."
+		endif
+
+      ]]></evalrule>
+
+    </thing>
+	
+    </document>

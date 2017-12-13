@@ -34,8 +34,10 @@
     <value id="HRaceProp"/>      <!-- Hide Racial Properties -->     
     <value id="FortGlory"/>      <!-- Allow Fortune and Glory selections -->
 	<value id="NoHeroJou"/>      <!-- Disallow Hero's Journey selections -->
+    <value id="RaceSelect"/>     <!-- Racial Ability selected through Helper -->     
     <value id="RaceEdgeB"/>      <!-- Bonus Racial Edge -->     
     <value id="RaceHindB"/>      <!-- Bonus Racial Hinderence -->     
+    <value id="FrameSel"/>       <!-- Framework Ability selected through Helper -->     
     <value id="TKnoSkill"/>      <!-- Tag for selected Tramadore Knowledge Skill -->     
     <value id="SpellSkill"/>     <!-- Tag the Hero's Spellcasting skill -->   
     </group>

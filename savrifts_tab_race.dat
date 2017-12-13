@@ -37,85 +37,140 @@
       </table_fixed>
     </portal>
 
-  <!-- raDogBoy portal - Allows selection of the Dog Boy's Breed Advantage
-  -->
+  <!-- raChsTbl1 portal - Allows selection of Racial abilities. -->
   <portal
-    id="raDogBoy"
+    id="raChsTbl1"
     style="tblNormal">
     <table_dynamic
-      component="Edge"
-      showtemplate="SimpleItem"
+      component="none"
+      showtemplate="raChsPick"
       choosetemplate="SimpleItem"
-      showfixedlast="yes"
-      addpick="resRacEdge">
-      <list>BreedAdv.Selected</list>
-      <candidate>BreedAdv.?</candidate>
-      <autotag group="BreedAdv" tag="Selected"/>
-      <titlebar><![CDATA[
-        @text = "Add a Breed Advantage - " & hero.child[resRacEdge].field[resSummary].text
-        ]]></titlebar>
+	  candidatepick="ehExprHelp"
+	  candidatefield="ehRaceExp"
+	  headertemplate="raChsPick"
+	  addpick="resRaceSel">
+      <list>Rifts.RaceSelect</list>
+      <autotag group="Rifts" tag="RaceSelect"/>
       <description/>
-      <headertitle><![CDATA[
-        @text = "Breed Advantage: " & hero.child[resRacEdge].field[resSummary].text
-        ]]></headertitle>
-      <additem><![CDATA[
-        ~if we're in advancement mode, we've been frozen, so display accordingly
-        if (state.iscreate = 0) then
-          @text = "{text clrgrey}Add Edges Via Advances Tab"
-          done
-          endif
-
-        ~set the color based on whether the proper number of slots are allocated
-        if (field[resLeft].value = 0) then
-          @text = "{text clrgrey}"
-        elseif (field[resLeft].value < 0) then
-          @text = "{text clrwarning}"
-          endif
-        
-        @text &= "Add Breed Advantage"
+      <additem><![CDATA[      
+        @text &= hero.child[ehExprHelp].field[ehRaceAdd].text
         ]]></additem>
       </table_dynamic>
     </portal>
-    
-  <!-- raGrackle portal - Allows selection of the Dog Boy's Breed Advantage
-      <candidate>(Hindrance.hinConfide|Hindrance.hinHeroic</candidate>
-  -->
-  <portal
-    id="raGrackle"
-    style="tblNormal">
-    <table_dynamic
-      component="Hindrance"
-      showtemplate="SimpleItem"
-      choosetemplate="SimpleItem"
-      showfixedlast="yes"
-      addpick="resRacEdge">
-      <list>(Hindrance.hinConfide|Hindrance.hinHeroic)</list>
-      <candidate>(Hindrance.hinConfide|Hindrance.hinHeroic)</candidate>
-      <titlebar><![CDATA[
-        @text = "Add a Hindrance - " & hero.child[resRacEdge].field[resSummary].text
-        ]]></titlebar>
-      <description/>
-      <headertitle><![CDATA[
-        @text = "Hindrance: " & hero.child[resRacEdge].field[resSummary].text
-        ]]></headertitle>
-      <additem><![CDATA[
-        ~if we're in advancement mode, we've been frozen, so display accordingly
-        if (state.iscreate = 0) then
-          @text = "{text clrgrey}Add Hinderances Via Advances Tab"
-          done
-          endif
+	
+  <template
+    id="raChsPick"
+    name="Chooser Pick"
+    compset="Simple"
+    marginhorz="3"
+    marginvert="2">
 
-        ~set the color based on whether the proper number of slots are allocated
-        if (field[resLeft].value = 0) then
-          @text = "{text clrgrey}"
-        elseif (field[resLeft].value < 0) then
-          @text = "{text clrwarning}"
+	<portal
+      id="hdrText"
+      style="lblTitle"
+	  isheader="yes">
+      <label>
+      	<labeltext><![CDATA[
+  	       @text = hero.child[ehExprHelp].field[ehRaceHdr].text
+      	   ]]></labeltext>
+        </label>
+      </portal>
+	  
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="name">
+        </label>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if we've been assigned a non-default width for use when showing things, adopt
+      ~that width now
+      if (ispick = 0) then
+        var size as number
+        size = tagvalue[SimpleItem.width?]
+        if (size > 0) then
+          width = size
           endif
-        
-        @text &= "Add Hinderance"
-        ]]></additem>
-      </table_dynamic>
-    </portal>
+        endif
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~center the other portals vertically
+      perform portal[name].centervert
+      perform portal[delete].centervert
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~if we're showing a thing, the info and delete buttons are irrelevant, since
+      ~we should be showing within a chooser, in which case there's nothing to
+      ~delete and we have the description already visible
+      var edge as number
+      if (ispick = 0) then
+        portal[info].visible = 0
+        portal[delete].visible = 0
+        edge = width
+      else
+        edge = portal[info].left - 5
+        endif
+
+      ~position the name on the left and let it use all available space
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,edge)
+
+      ~center the name if requested or this is a show-only thing
+      if (tagis[SimpleItem.CenterName] + tagis[thing.showonly] <> 0) then
+        perform portal[name].centerhorz
+        endif
+
+      ~if this is an auto-added pick, change its font to indicate that fact
+      if (ispick + !candelete >= 2) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+	  <header><![CDATA[
+		~our header height is the height of our labels
+		height = portal[name].height
+
+		~each of our header labels has the same width as the corresponding data beneath
+		portal[hdrText].width = width
+
+		~align all header labels at the bottom of the header region
+		perform portal[hdrText].alignedge[bottom,0]
+
+		]]></header>
+		</template>
 
   <template
     id="raPropPick"
@@ -370,8 +425,7 @@
     id="racial">
     <portalref portal="raRaceAbil" />
     <portalref portal="raRaceProp" />
-    <portalref portal="raDogBoy" />
-    <portalref portal="raGrackle" />
+    <portalref portal="raChsTbl1" />
 
     <!-- This script sizes and positions the layout and its child visual elements. -->
     <position><![CDATA[
@@ -383,15 +437,16 @@
 
       portal[raRaceAbil].visible = 1
       portal[raRaceProp].visible = 1
-      portal[raDogBoy].visible = hero.tagis[Race.racSRDogB]
-      portal[raGrackle].visible = hero.tagis[Race.racSRGrack]
+	  portal[raChsTbl1].visible = 0
+	  if (hero.child[ehExprHelp].field[ehRaceExp].isempty = 0) then
+	    portal[raChsTbl1].visible = 1
+		endif
       
       ~position and size the table to span the full layout; it will only use the
       ~vertical space that it actually needs
       perform portal[raRaceAbil].autoplace
       perform portal[raRaceProp].autoplace[10]
-      perform portal[raDogBoy].autoplace[10]
-      perform portal[raGrackle].autoplace[10]
+      perform portal[raChsTbl1].autoplace[10]
       
       ]]></position>
 

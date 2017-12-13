@@ -9,16 +9,40 @@
 
 <document signature="Hero Lab Data">
 
-  <!-- Racial - Bonus Racial Edges resource  -->
+  <!-- Expression Helper Thing  -->
   <thing
-    id="resRacEdge"
-    name="Racial Edges"
-    compset="Resource">
-    <fieldval field="resMax" value="0"/>
-    <!-- Automatically add the resource to every actor -->
+    id="ehExprHelp"
+    name="Expression Helper"
+    compset="ExprHelp">
+    <!-- Automatically add the helper to every actor -->
     <tag group="Helper" tag="Bootstrap"/>
 
     </thing>
+
+  <!-- Racial - Bonus Abilities resource  -->
+  <thing
+    id="resRaceSel"
+    name="Racial Selections"
+    compset="Resource">
+    <fieldval field="resMax" value="0"/>
+	
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+	
+    </thing>
+	
+  <!-- Iconic Frameworks - Bonus Abilities resource  -->
+  <thing
+    id="resFraSel"
+    name="Iconic Framework Selections"
+    compset="Resource">
+    <fieldval field="resMax" value="0"/>
+	
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+	
+    </thing>
+	
   <thing 
     id="resFortune" 
 	name="Fortune and Glory Points" 
