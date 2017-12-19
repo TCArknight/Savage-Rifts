@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document signature="Hero Lab Data">
   <fileinfo>
-    <info_history><![CDATA[11-16-17
+    <info_author>Coordinator: TCArknight
+Contributors: Salcor</info_author>
+    <info_history><![CDATA[12-19-17
 Equipment
 - Armor
 - Cybernetics
@@ -14,7 +16,19 @@ Reworked Iconic Framework abilities and complications as new components (FraAbil
 Frameworks Completed -
 * Combat Cyborg
 * Crazy
+* Cyber-Knight
+* Glitter Boy
+* Juicer
 * M.A.R.S. (Body Fixer)
+* M.A.R.S. (City Rat)
+* Burster
+
+Issue Fixes:
+* Ambidesterity Edge for Psi-Stalkers throwing a requirement error for Agility less than d8.
+* Bonus Champion Edge for Cyber-Knights is not adding to the Edges tab
+* Cyber-Knight - No option to split Psi-Sword into 2 for the reduced AP.
+* Improved Cyber Armor and Master Cyber Armor edges missing.
+* Master Psionic Edge not doubling Base ISP.
 
 xx-xx-xx
 TCA: Fixed Storm-Fouled Senses Script timing
@@ -2387,7 +2401,7 @@ rolls += hero.tagcount[RiftsHJ.MagMys]
 ~if we have any of the above categories, we're invalid
 validif (rolls = 0)]]></evalrule>
     </thing>
-  <thing id="grpSRMarsA" name="M.A.R.S. (Body-Fixer)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsA" name="M.A.R.S. (Body-Fixer)" description="This package also relates to Cyber-Docs, combining the two ideas. A medical professional and life saver, a Body-Fixer/Cyber-Doc is welcome anywhere she goes.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <bootstrap thing="edgHealer">
       <autotag group="thing" tag="skipprereq"/>
@@ -2415,39 +2429,56 @@ hero.childfound[resSkill].field[resSpent].value -= 3</eval>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
     #resmax[resAdvance] +=4</eval>
     </thing>
-  <thing id="grpSRMarsB" name="M.A.R.S. (City Rat)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsB" name="M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRScrou">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="skStreet"></bootstrap>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
+    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <eval phase="PreTraits" priority="5000">~Streetwise d6
+#traitcreation[skStreet] += 1
+hero.childfound[resSkill].field[resSpent].value -= 1</eval>
+    <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
+    </thing>
+  <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="NOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsH" name="M.A.R.S. (Psi-Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsH" name="M.A.R.S. (Psi-Operator)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsI" name="M.A.R.S. (Robot Armor Pilot)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsI" name="M.A.R.S. (Robot Armor Pilot)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsG" name="M.A.R.S. (Power Armor Soldier)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsG" name="M.A.R.S. (Power Armor Soldier)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="grpSRMarsJ" name="M.A.R.S. (Rogue Scholar)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsJ" name="M.A.R.S. (Rogue Scholar)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="Rogue Scholar"/>
     <usesource source="SavRiftC"/>
     <bootstrap thing="edgScholar"></bootstrap>
@@ -2481,11 +2512,11 @@ nexteach]]>
       <before name="Calc trtFinal"/>
       </eval>
     </thing>
-  <thing id="grpSRMarsL" name="M.A.R.S. (Wilderness Scout)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsL" name="M.A.R.S. (Wilderness Scout)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="grpSRMarsK" name="M.A.R.S. (Vagabond)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsK" name="M.A.R.S. (Vagabond)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
     </thing>
