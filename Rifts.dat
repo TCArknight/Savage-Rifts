@@ -1212,10 +1212,11 @@ perform #traitroll[skPsionics,-,IntBonus,"Strain"]]]></eval>
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="1" name="Seasoned" abbrev="Seasoned"/>
     <tag group="EdgeType" tag="Profession" name="Professional" abbrev="Professional"/>
+    <eval phase="PreTraits" priority="5000">#trkmax[trkPower] *= 2</eval>
     <pickreq thing="edgArcPsi"/>
-    <exprreq message="Smarts d6 required."><![CDATA[#trait[attrSma] >= 3]]></exprreq>
     <exprreq message="Spirit d8 required."><![CDATA[#trait[attrSpi] >= 4]]></exprreq>
     <exprreq message="Psionics d8 required."><![CDATA[#traitfound[skPsionics] >= 4]]></exprreq>
+    <exprreq message="Smarts d6 required."><![CDATA[#trait[attrSma] >= 3]]></exprreq>
     </thing>
   <thing id="edgSRPwrPt" name="Power Points" description="Wizards, weird scientists, and other arcane types always want more power. This Edge grants them an additional 5 Power Points.{br}{br}Power Points may be selected more than once, but only once per Rank." compset="Edge" summary="Gain 5 Power Points">
     <usesource source="SavRiftC"/>
@@ -2020,7 +2021,9 @@ if (field[abilActive].value <> 0) then
     </thing>
   <thing id="rpSRAmbide" name="Ambidexterity" description="Race possesses the Ambidextrous Edge." compset="RacialProp">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgAmbidex"></bootstrap>
+    <bootstrap thing="edgAmbidex">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
     </thing>
   <thing id="rpSRElusiv" name="Elusive" description="Quick-Flex are difficult to pin down in close quarters, giving them a natural +1 to their Parry rating." compset="RacialProp" summary="Parry is +1" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2452,7 +2455,34 @@ nexteach]]>
     </thing>
   <thing id="grpSRBurst" name="Burster" description="{b}{i}THE BURSTER HERO’S JOURNEY (FOUR ROLLS){/b}{/i}\nBursters gain three rolls on the {/b}Experience &amp; Wisdom{/b} Table or the {b}Psionics{/b} Table. \n\nBursters gain one additional roll on any table except {b}Cybernetics{/b} or anything to do with magic." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="arcBurster"></bootstrap>
+    <bootstrap thing="faSRBRETBN"></bootstrap>
+    <bootstrap thing="faSRBRFRMS"></bootstrap>
+    <bootstrap thing="faSRBRFRWL"></bootstrap>
+    <bootstrap thing="fcSRBRPYRO"></bootstrap>
+    <bootstrap thing="fcSRBRENY"></bootstrap>
+    <bootstrap thing="fcSRBRCybe"></bootstrap>
+    <bootstrap thing="edgSRMPsi1">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="faSRBuMaPs"></bootstrap>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpSRBRFLBT" portal="arRange"></autoadd>
+    <autoadd thing="armSRBRFIA" portal="arDefense"></autoadd>
+    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 4</eval>
+    <evalrule phase="Validate" priority="5000" index="21" message="Cannot have any rolls from Magic, or Cybernetics related tables" summary="Too many rolls on Magic or Cybernetics related HJ tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+rolls += hero.tagcount[RiftsHJ.Cyber]
+
+validif (rolls = 0)</evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Three HJ rolls from Experience and Wisdom or Psionics, and one from any except Cybernetics or Magic-Related" summary="Not enough rolls from required HJ tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls >=3)]]></evalrule>
     </thing>
   <thing id="grpSRMinMe" name="Mind Melter" description="{b}{i}THE MIND MELTER HERO’S JOURNEY (THREE ROLLS){/i}{/b}\nMind Melters get two rolls on any of the following tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Experience &amp; Wisdom{/b}, or {b}Psionics{/b}.\n\nThey also get one additional roll on any table except {b}Cybernetics{/b} or {b}Magic{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -5266,9 +5296,18 @@ hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
     <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1</eval>
     </thing>
   <thing id="faSRPsSwCK" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested." compset="FraAbility">
+    <fieldval field="usrChkText" value="Split ?"/>
     <usesource source="SavRiftC"/>
     <tag group="User" tag="Activation"/>
     <bootstrap thing="wpCKPsiSwo"></bootstrap>
+    <eval phase="PreTraits" priority="5000"><![CDATA[perform hero.childfound[wpCKPsiSwo].setfocus
+
+doneif (state.isfocus = 0)
+
+if (field[usrIsCheck].value = 1) then
+  focus.field[wpPiercing].value -= 4
+  focus.field[livename].text = focus.field[name].text & " (Paired)"
+  endif]]></eval>
     </thing>
   <thing id="wpCKPsiSwo" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested." compset="Melee">
     <fieldval field="wpPiercing" value="6"/>
@@ -5292,6 +5331,7 @@ field[wpDamage].text = str & spirit]]></eval>
     </thing>
   <thing id="fcSRCKCyb" name="Cybernetics" description="Cybernetics are not an option for Cyber-Knights, as such devices interfere with their nanotechnology." compset="FraComp" summary="Unable to use Cybernetics.">
     <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#traitbonus[trSFStrnMx] -= 4</eval>
     </thing>
   <thing id="fcCKCode" name="Code Of Honor" description="A Cyber-Knight must adhere to the codes and philosophies of the Order, or he loses some or all of his powers, depending on the degree of transgression. Whether this is a function of the special nanotech treatment he undergoes or a loss of confidence damaging his psyche in some way is a matter of some debate among scholars. Regardless, the Game Master must determine the extent of a Cyber-Knight’s transgressions and assess a penalty accordingly." compset="FraComp" summary="Follows a specific code of honor.">
     <usesource source="SavRiftC"/>
@@ -5373,7 +5413,9 @@ if (field[grIsEquip].value <> 0) then
     </thing>
   <thing id="faSRGBFYTn" name="Fully Trained" description="All Glitter Boy Pilots begin with the Power Armor Jock Edge." compset="FraAbility">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgSRGBJ"></bootstrap>
+    <bootstrap thing="edgSRPAJo">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
     </thing>
   <thing id="faSRGBArm" name="Glitter Boy Armor" description="Glitter Boy pilot would not be a thing with their pre-Rifts Power Armor of the highest caliber.\n\n{b}Glitter Boy Armor:{b} Size 3, +18 MDC Armor, +6 Toughness\nPace 10 (Run d10), Swim Pace 6\n{b}Notes:{b} Enhanced Strength (d12+4), Half-damage from Lasers, Life Support \n(Self-contained breathing, immune to heat, cold, radiation, environmental toxins, and disease.)  Full electronics suite (+2 to Notice Checks, Off-sets 2 points of Shooting Penalties)\n{b}Weapons{b}\n{u}{b}Boom Gun{b}{u} \n{b}Range:{b} 250,500,1000\n{b}Damage:{b} 4d12+6 AP 25 MBT, Mega-Damage\n{b}ROF:{b} 1\n{b}Shots:{b} 1000\n{u}{b}Melee{b}{u}\n{b}Damage:{b} Str+d6 Mega Damage, not considered Unarmed" compset="FraAbility">
     <usesource source="SavRiftC"/>
@@ -5409,20 +5451,238 @@ if (field[grIsEquip].value <> 0) then
   <thing id="fcSRGBST2F" name="Stand By to Fire" description="The Glitter Boy cannot move and fire its Boom Gun on the same round.  This is why some carry other firearms as alternatives for when they need to move and shoot." compset="FraComp">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="edgSRGBJ" name="Power Armor Jock" description="Glitter Boy Power armor requires a basic level of training and experience to operate effectively. A character must have this Edge to avoid a −2 penalty to Agility and all skill rolls while wearing power armor." compset="Edge" summary="No penalty while wearing Glitter Boy power armor." uniqueness="unique">
+  <thing id="wpSRBRFLBT" name="Flame Bolt" description="The Burster can hurl forth a flaming bolt, this costs no ISP and does Mega-Damage.  The Burster may add +2 AP by spending 1 ISP per Flame Bolt, or +4 AP for 2 ISP.  Double the bonus for the smae cst when on a ley line.  Rolling a 1 on the Psionics due when using Flame bolt does not result in a Brainburn." compset="Ranged">
+    <fieldval field="wpDamage" value="4d6"/>
+    <fieldval field="wpShort" value="12"/>
+    <fieldval field="wpMedium" value="24"/>
+    <fieldval field="wpLong" value="48"/>
+    <fieldval field="wpSpecial" value="Use Psionics Die Roll instead of shooting."/>
+    <usesource source="SavRiftC"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="PsiRanged" name="Psionic-based Ranged Attack"/>
+    </thing>
+  <thing id="wpSRBRFIAU" name="Fiery Aura" description="At will, as an action (no roll required) the Burster can surround himself with a sheath of flame and heat, causing 3d6 damage to anyone who touches him (with a melee or touch attack for example.)  He can ad this damage to any Fighting attack he makes, as well.  If he spends 3 ISP when activating Fieary Aura, in addition to the armor benefits, it also makes this attack a Mega-Damage based attack." compset="Melee">
+    <fieldval field="wpDamage" value="3d6"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="PsiAttack" name="Psionic-Based Melee Attack"/>
+    </thing>
+  <thing id="armSRBRFIA" name="Fiery Aura" description="At will, as an action (no roll required), a Burster can surround himself with a sheath of flame and heat.  When the aura is activated, it provides +6 Armor to the Burster (this stacks with the armor power, but not worn armor.)  It costs no ISP.  However, if he spends 3 ISP when he activates that power, in addition to the bonus to the melee attack, the armor gains the MDC quality." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <usesource source="SavRiftC"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorType" tag="PsiArmor" name="Psionic-based Armor"/>
+    <bootstrap thing="wpSRBRFIAU"></bootstrap>
+    </thing>
+  <thing id="faSRBRETBN" name="Everything Burns" description="The fires started by Bursters are some of the most intense possible.  They can catch almost anything on fire, and combustible materials don&apos;t stand much of a chance against them.  Any time a Burster causes damage with a flame ability, roll a d10 (instead of the usual d6, as indicated in Savage Worlds under Fire.)  Anything flammable catches fire on a 6-10, while highly famable targets ignite on a 3-10.  Things that normally don&apos;t catch fire (metal, ceramic, stone) ignite from a Burster&apos;s flames on a 10, or at least begin to melt.  Water super-heats and evaporates nigh-instantly on a 10 as well, and boils away over 2d6 rounds on an 8 or 9." compset="FraAbility" summary="Bursters can burn anything">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRBRFRMS" name="Fire Mastery" description="Over a Large Burst Template centered anywhere within, 12&quot;, the Burster can create minor fire and heat effects (or douse flames) as a free action with no roll.  As an action, he can create enviromental effects that impose a -2 to Trait rolls (-4 with a raise).  For any trait rolls, use the Psionices SKill.  None of these effects cost ISP." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRBRFRWL" name="Firewalker" description="Bursters are completely impervious to all sources of fire and heat, he only suffers half damage from lightning and electrical attacks, as well as laser weapons.  He is also immune to plasma weapon damage." compset="FraAbility" summary="Bursters are immune to heat and flames">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="faSRIM2F"></bootstrap>
+    <bootstrap thing="faSRIM2H"></bootstrap>
+    </thing>
+  <thing id="faSRIM2F" name="Immune to Fire" description="This character is immune to the damage from any attack using fire, to include plasma weapons." compset="FraAbility" summary="The character takes no damage from fire">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRIM2H" name="Immune to Heat" description="This character is immune to the damage from any attack using heat.  This include taking only half damage from attacks with lightning, electrical attacks, and laser weapons." compset="FraAbility" summary="The character takes no damage from heat">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRBRCybe" name="Cybernetics" description="Cybernetics are not an option for Bursters, as such devices interfere with their nanotechnology." compset="FraComp" summary="Unable to use Cybernetics.">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#traitbonus[trSFStrnMx] -= 4</eval>
+    </thing>
+  <thing id="fcSRBRENY" name="Burster Enemies" description="The Coalition view Bursters as a dire threat." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    </thing>
+  <thing id="fcSRBRPYRO" name="Pyromaniac" description="Though most are not sociopathic arsonists, Bursters tend to have a thing about starting fires.  This is more aggravating than dangerous." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinQuirk">
+      <assignval field="domDomain" value="Pyromaniac"/>
+      </bootstrap>
+    </thing>
+  <thing id="edgBRIFLB" name="Flame Blast" description="For 1 ISP, the Burster&apos;s Flame Bolt affects a Medium Blast Template.  For 2 ISP, he can expand the radius to a Large Burst Template.  Alternately, the Burster can spend 1 ISP to use a Cone Template at no range (targes make an opposed Agility roll against Psionics to avoid the affect).  Unless otherwise stated, enhancements from other Edges ( such as Improved Flame Bolt) apply to this use of the this Edge as well." compset="Edge" summary="Flame Bolt can now effect an area.">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRBurst"/>
+    </thing>
+  <thing id="edgSRIIFA" name="Improved Fiery Aura" description="The Burster&apos;s Fiery Aura damage increase to 3d8, and he may choose to affect a Medium Burst Template centered on himself (everyone in the area takes damage at the end of the Burster&apos;s turn.)" compset="Edge" summary="Damage from Fiery Aura improves">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRBurst"/>
+    </thing>
+  <thing id="edgSRBIFMa" name="Improved Fire Mastery" description="Many Bursters grow in their adsolute control over fire and heat, improving their natural Fire Mastery in a number of ways.  A Burster with this Edge increases the Range of his Fire Mastery to 24&quot;.  Alternatively, he can center the effect on himself and affect a radius equal to 2 x Spirit.  All other effects remain the same." compset="Edge" summary="Burster&apos;s control of flames improves">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRBurst"/>
+    </thing>
+  <thing id="edgSRBIFBT" name="Improve Flame Bolt" description="For some Bursters, more destructive power is the summation of their true self.  This Edge improves the Burster&apos;s Flame Bolt Damage to 6d6." compset="Edge" summary="The Burster&apos;s Flame Bolt improves">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Iconic"/>
-    <tag group="Print" tag="NoPrint"/>
-    <pickreq thing="grpSRGltBY"/>
+    <pickreq thing="grpSRBurst"/>
+    <exprreq message="Spirit D10 required"><![CDATA[#trait[attrSpi] >= 5]]></exprreq>
     </thing>
-  <preclude id="cybAdrenal" source="SavRiftC"/>
+  <thing id="edgSRBRTF" name="Read the Flame" description="Bursters with this Edge can make a Notice check to read and understand a fire, or the site of one.  With a succes, she can tell how it started and how long it burned.  With a raise, she can sense what kind of being, if any, started the fire, as well as other interesting details the GM might wish to share, such as the fire&apos;s purpose, if any." compset="Edge" summary="Bursters know things about fire">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRBurst"/>
+    <exprreq message="Notice d6 required"><![CDATA[#traitfound[skNotice] >= 3]]></exprreq>
+    </thing>
+  <thing id="edgSRBBIF2" name="Greater Flame Bolt" description="The next evolution of the Burster&apos;s raw attack force.  This Edge improves the Burster&apos;s Flame Bolt Damage to 6d8.  It also enhances the Range categories to 15/30/60." compset="Edge" summary="The Burster&apos;s Flame Bolt improves">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRBurst"/>
+    <pickreq thing="edgSRBIFBT"/>
+    </thing>
+  <thing id="edgSRBRFBT" name="Rapid Flame Bolt" description="The Burster can use his Flame Bolt power (along with any enhancements from other Edges) with a Rate of Fire of 3." compset="Edge" summary="Increases Flame Bolt Rate of Fire">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRBurst"/>
+    </thing>
+  <thing id="edgSRChmp" name="Champion" description="Champions fight the forces of darkness (or good).  They add +2 damage when attacking supernaturally evil (or good) creatures, and have +2 Toughness when suffering damage from supernaturally evil (or good) sources, including arcane powers and weapons, claws, teeth, etc of such creatures." compset="Edge" summary="Cyber-Knight version of Champion">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Arcane" tag="Psionics"/>
+    <tag group="EdgeType" tag="Profession"/>
+    <pickreq thing="grpSRCybKn"/>
+    </thing>
+  <thing id="edgSRCKCYK" name="Cyberkinetic Awareness" description="As an Action, the Cyber-Knight can stretch out his senses to understand all of the tech weapons and defenses he is engaged with.  The -2 to attacks against him with technical weapons expands to -2 to all Trait rolls against him where technology is involved.  This includes Notice checks and opposed rolls." compset="Edge" summary="A Cyber-Knight can effect more tech devices">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRCybKn"/>
+    <exprreq message="Notice d6 required"><![CDATA[#traitfound[skNotice] >= 3]]></exprreq>
+    </thing>
+  <thing id="edgSRCYICK" name="Improved Cyberkinetic Awareness" description="All rolls against the Cyber-Knight where technology is involved suffer a -4 penalty." compset="Edge" summary="A Cyber-Knight can effect more tech devices">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="3"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRCybKn"/>
+    <pickreq thing="edgSRCKCYK"/>
+    <exprreq message="Notice d6 required"><![CDATA[#traitfound[skNotice] >= 4]]></exprreq>
+    </thing>
+  <thing id="edgSRCYKDN" name="Cyberkinetic Denial" description="As an action, a Cyber-Knight can target a device or vehicle within her Spirit Range and make a Psionics roll to shut it down for 3 rounds, or a full minute with a raise.  Simple items like firearms provide no penalty to the roll.  Advanced systems like a vehicles weapon systems impose a -2 penalty.  While shutting down robot or power armor (like the Glitter Boy) imposes a -4 penalty.  To affect a cyborg requires an opposed roll at -4 against the target&apos;s Smarts.  The target loses the use of his Cybernetics for the duration.  This Incapacitates a Combat Cyborg for that period of time." compset="Edge" summary="A Cyber-Knight can shut down targeted tech devices">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="4"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRCybKn"/>
+    <pickreq thing="edgSRCYICK"/>
+    </thing>
+  <thing id="edgSRMCyAr" name="Master Cyber-Armor" description="In addition to +4 Toughness, the Cyber-Armor now also provides +2 MDC Armor, which stacks with any worn armor." compset="Edge" summary="Makes the Cyber-knight&apos;s Cyber-Armor MDC">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="3"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="edgSRCYICK"/>
+    </thing>
+  <thing id="edgSRICyAr" name="Improved Cyber-Armor" description="Increases the protection of the Cyber-Armor to +4 Toughness total." compset="Edge" summary="Enhances the Cyber-Armor&apos;s protection">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="User" tag="NeedWild"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <eval phase="PreTraits" priority="5550"><![CDATA[if (hero.childfound[faSRCKCyAr].field[abilActive].value <> 0) then
+  perform #traitadjust[trTough,+,2,"Improved Cyber-Armor"]
+  endif]]></eval>
+    <pickreq thing="grpSRCybKn"/>
+    </thing>
+  <thing id="edgSRIPISW" name="Improved Psi-Sword" description="The Cyber-Knight&apos;s weapon is enhanced in power, doing Strength + 3 x Spirit, AP 8.  If split, each blade does Strength  + 3 x Spirit, AP 4.  ISP for Mega Damage still applies." compset="Edge" summary="Increases the damage of the Cyber-Knight&apos;s Psi-Sword">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    <tag group="User" tag="NeedWild"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRCybKn"/>
+    </thing>
+  <thing id="edgSRPISDM" name="Master Psi-Sword" description="The Cyber-Knight&apos;s knows how to channel his inner strength for extra damage with his blade.  Before rolling an attack, the player declares how many ISP he wishes to spend on damage, up to 3 points.  Each point adds +4 damage (up to a maximum of +12).  If using the split blade options, each blade gains +2 damage per ISP spend (to a maximum of +6)" compset="Edge" summary="Increases the damage of the Cyber-Knight&apos;s Psi-Sword">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="3"/>
+    <tag group="User" tag="NeedWild"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRCybKn"/>
+    <pickreq thing="edgSRIPISW"/>
+    </thing>
+  <thing id="edgSRPsiSH" name="Psi-Shield" description="Cyber-Knights with this Edge can summon forth a Psi-Shield, granting +3 Parry and +4 Armor against ranged damage (stacks with worn armor and armor power.) It costs no ISP, and can be summoned as a free action.  IF he has the Psi-Shield and Psi-Sword Manifested, it counts as having two Psi-Swords active (Sword&apos;s AP is reduced by 4.)" compset="Edge" summary="Allows the Cyber-Knight to summon a Shield of Psychic energy">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <tag group="User" tag="Activation"/>
+    <autoadd thing="shdSRPiSH" portal="arDefense"></autoadd>
+    <pickreq thing="grpSRCybKn"/>
+    </thing>
+  <thing id="shdSRPiSH" name="Psi-Shield" description="A Shield that a Cyber-Knight can summon." compset="Shield" summary="A Shield of Psionic energy">
+    <fieldval field="defDefense" value="4 against Ranged Attacks"/>
+    <fieldval field="defParry" value="3"/>
+    <usesource source="SavRiftC"/>
+    <tag group="ArmorType" tag="PsiArmor"/>
+    <pickreq thing="grpSRCybKn"/>
+    </thing>
+  <thing id="faSRBuMaPs" name="Major Psionic" description="Bursters begin with the Arcane Background (Psionics) and Major Psionics Edges, with access to the list of powers noted above. They also begin with a Psionics skill of d8, 20 ISP, and three starting powers. When they take the Power Points Edge, they gain 10 ISP (instead of 5). They are able to spend 2 ISP for a +1 to Psionics rolls, and 4 ISP for a +2 (added before the roll). They can spend +1 ISP for Range ×2 for any ranged (not Self or Touch) powers, or +2 ISP for Range ×10. These last two effects are doubled when on a ley line." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powBanish"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powBlast"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powBurrow"/>
+    <tag group="PowerDeny" tag="powBurst"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powLightOb"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powQuick"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powSpeed"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powSumAlly"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <bootstrap thing="edgArcPsi"></bootstrap>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 2</eval>
+    </thing>
   <preclude id="cybAquatic" source="SavRiftC"/>
   <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
-  <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <preclude id="cybAdrenal" source="SavRiftC"/>
   <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
   </document>

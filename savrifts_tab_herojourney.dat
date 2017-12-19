@@ -271,7 +271,7 @@
     marginhorz="5"
     marginvert="5"
     order="130">
-    <live>!Rifts.NoHeroJou</live>
+    <live>source.SavRiftC &amp; !Rifts.NoHeroJou</live>
     <layoutref layout="herojourn"/>
     <position><![CDATA[
       ]]></position>
