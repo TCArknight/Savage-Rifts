@@ -2350,6 +2350,42 @@ validif (rolls = 0)]]></evalrule>
     </thing>
   <thing id="grpSRJuice" name="Juicer" description="{b}{i}THE JUICER HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nJuicers gain three rolls on any of the following tables: {b}Body Armor, Close Combat Weapons, Ranged Weapons, Training,{/b} and {b}Underworld &amp; Black Ops.{/b}\n\nJuicers gain two additional rolls on any tables except those dealing with magic or psionics." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <bootstrap thing="faSRJuIRS"></bootstrap>
+    <bootstrap thing="faSRJuSuSp"></bootstrap>
+    <bootstrap thing="faSRJuSuSt"></bootstrap>
+    <bootstrap thing="faSRJuSuEn"></bootstrap>
+    <bootstrap thing="faSRJuSuRe"></bootstrap>
+    <bootstrap thing="fcSRJuCyb"></bootstrap>
+    <bootstrap thing="fcSRJuDeWi"></bootstrap>
+    <bootstrap thing="fcSRJuDIET"></bootstrap>
+    <bootstrap thing="fcSRJuMaPs"></bootstrap>
+    <autoadd thing="armSRJuicA" portal="arDefense"></autoadd>
+    <autoadd thing="wpW320LaPi" portal="arRange"></autoadd>
+    <autoadd thing="wpJA9VaLaR" portal="arRange"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <eval phase="Initialize">~reveal the Burn tracker and set to standard 8 Max
+perform hero.childfound[trkBurn].delete[Hide.Tracker]
+#trkmax[trkBurn] = 8</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" message="Three HJ rolls required from Body Armor, Close Combat Weapons, Ranged Weapons, Training, and Underworld &amp; Black Ops" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.BodArm]
+rolls += hero.tagcount[RiftsHJ.CCW]
+rolls += hero.tagcount[RiftsHJ.Ranged]
+rolls += hero.tagcount[RiftsHJ.Train]
+rolls += hero.tagcount[RiftsHJ.Under]
+
+~if we have at least three valid categories, we're valid
+validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionic or Magic-related HJ Tables" summary="Too many rolls on Magic-related HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Psi]
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+~if we have any of the above categories, we're invalid
+validif (rolls = 0)]]></evalrule>
     </thing>
   <thing id="grpSRMarsA" name="M.A.R.S. (Body-Fixer)" description="When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2626,76 +2662,6 @@ validif (rolls >=3)]]></evalrule>
     <fieldval field="powTraps" value="Concentrating look"/>
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="arcBurster" name="Burster" description="Though pyrokinesis is the mainstay of a Burster, she also has access to a strong array of other psionic powers.  Most of them relate to manipulation of psionic energy in a physical way, and this always has some kind of fiery or heat-related Trapping.  some, however, are more traditional psionics in nature and use, granting the Burster utility and value in situations beyond the battlefield.\nA Burster&apos;s list of available powers is fairly limited compared to most psionics, and they typically stick to the Fire/Heat Trappings found in Savage Worlds but aren&apos;t required to use them.  Arcane Background (Psionics) with three powers, 20 ISP, and a d8 Psionics skill." compset="Arcane">
-    <fieldval field="arcPowers" value="3"/>
-    <fieldval field="arcPoints" value="20"/>
-    <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powBanish"/>
-    <tag group="PowerDeny" tag="powBanishE"/>
-    <tag group="PowerDeny" tag="powBeastFr"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlast"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powBolt"/>
-    <tag group="PowerDeny" tag="powBurrow"/>
-    <tag group="PowerDeny" tag="powClairvo"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powFConfus"/>
-    <tag group="PowerDeny" tag="powConfusi"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDamageF"/>
-    <tag group="PowerDeny" tag="powDamagFF"/>
-    <tag group="PowerDeny" tag="powDisguis"/>
-    <tag group="PowerDeny" tag="powDispel"/>
-    <tag group="PowerDeny" tag="powDivinat"/>
-    <tag group="PowerDeny" tag="powDrainPP"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powEntang"/>
-    <tag group="PowerDeny" tag="powEnviron"/>
-    <tag group="PowerDeny" tag="powFear"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powGrHeal"/>
-    <tag group="PowerDeny" tag="powGrowShr"/>
-    <tag group="PowerDeny" tag="powHavoc"/>
-    <tag group="PowerDeny" tag="powHealing"/>
-    <tag group="PowerDeny" tag="powIllusio"/>
-    <tag group="PowerDeny" tag="powIntangi"/>
-    <tag group="PowerDeny" tag="powInvis"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powMindRea"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powPummel"/>
-    <tag group="PowerDeny" tag="powPuppet"/>
-    <tag group="PowerDeny" tag="powQuick"/>
-    <tag group="PowerDeny" tag="powShape"/>
-    <tag group="PowerDeny" tag="powSlow"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSlumber"/>
-    <tag group="PowerDeny" tag="powSpeak"/>
-    <tag group="PowerDeny" tag="powSpeed"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powSuccor"/>
-    <tag group="PowerDeny" tag="powSumAlly"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powTelepor"/>
-    <tag group="PowerDeny" tag="powWallWlk"/>
-    <tag group="PowerDeny" tag="powWarrior"/>
-    <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="Arcane" tag="Burster" abbrev="Bur"/>
-    <bootstrap thing="drwPsionic"></bootstrap>
     </thing>
   <thing id="arcLeyLine" name="Ley Line Walker" description="Ley Line Walkers are the definitive wielders of magic in the world.  As Masters of Magic, Ley Line Walkers have the Mega Power option for any spells they know, and may choose an Trappings for their powers except Necromantic." compset="Arcane">
     <fieldval field="arcPowers" value="5"/>
@@ -3109,13 +3075,6 @@ validif (rolls >=3)]]></evalrule>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,2,"Heavy Suit"]
         endif]]></eval>
-    </thing>
-  <thing id="edgArBkBur" name="Arcane Background: Burster" compset="Edge">
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <tag group="Arcane" tag="Burster" name="Burster" abbrev="Burster"/>
-    <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
-    <bootstrap thing="arcBurster"></bootstrap>
     </thing>
   <thing id="edgArBkLLW" name="Arcane Background: Ley Line Walker" compset="Edge">
     <fieldval field="shortname" value="Arcane Ley Line Walker"/>
@@ -5153,7 +5112,7 @@ hero.childfound[attrVig].field[trtMaximum].value += 5</eval>
         perform #traitadjust[trPace,*,2,"Crazy"]
         endif]]></eval>
     </thing>
-  <thing id="faSRHeiSen" name="Heightened Senses" description="Crazies gain +2 to Notice and Tracking rolls. They also ignore two points of Range penalties.\n" compset="FraAbility" summary="+2 to Notice and Tracking rolls.; Ignore two points of Range penalties.">
+  <thing id="faSRHeiSen" name="Heightened Senses" description="Crazies gain +2 to Notice and Tracking rolls. They also ignore two points of Range penalties." compset="FraAbility" summary="+2 to Notice and Tracking rolls.; Ignore two points of Range penalties.">
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="5500"><![CDATA[perform #traitroll[skNotice,+,2,"Crazy"]
 perform #traitroll[skTracking,+,2,"Crazy"]]]></eval>
@@ -5676,13 +5635,58 @@ if (field[grIsEquip].value <> 0) then
     <bootstrap thing="edgArcPsi"></bootstrap>
     <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 2</eval>
     </thing>
-  <preclude id="cybAquatic" source="SavRiftC"/>
-  <preclude id="edgNoble" source="SavRiftC"/>
+  <thing id="faSRJuIRS" name="Internal Repair System" description="The biocomp system managing the drugs and chemical processes of the Juicer’s body also works overtime to ensure his continued health and good repair. The Juicer gains Slow Regeneration (a natural healing roll once per day). As well, there’s a continuously replenishing supply of nanites and chemical concoctions available for “emergency repairs.” As an action, the Juicer can make a natural healing roll at +2 to heal wounds; this costs one charge. The system holds a maximum of three charges and requires eight hours to recover one charge." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRJuSuSp" name="Super Speed" description="Juicers cover enormous ground quickly, doubling their base Pace. They also have the Fleet-Footed Edge (meaning they have Pace of 16” with a d10 running die).\n" compset="FraAbility" summary="+2 Pace, d10 Running">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgFleetFt">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <eval phase="PreTraits" priority="5500"><![CDATA[perform #traitadjust[trPace,*,2,"Super Speed"]]]></eval>
+    </thing>
+  <thing id="faSRJuSuSt" name="Super Strength" description="Juicers begin with +2 Strength die types, with no Trait maximum. They also begin with the Brawny Edge.\n" compset="FraAbility" summary="Strength +2 Die Types, Brawny">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgFleetFt"></bootstrap>
+    <eval phase="PreTraits" priority="5000">#traitcreation[attrStr] += 2
+hero.child[attrStr].field[trtMaximum].value += 10</eval>
+    </thing>
+  <thing id="faSRJuSuEn" name="Super Endurance" description="Juicers begin with +2 Vigor die types, with no Trait maximum. They require only half the normal amount of sleep, and gain +2 on all Fatigue checks.\n" compset="FraAbility" summary="Vigor +2 Die Types, +2 all Fatigue checks, 1/2 sleep required.">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#traitcreation[attrVig] += 2
+hero.child[attrVig].field[trtMaximum].value += 10</eval>
+    </thing>
+  <thing id="faSRJuSuRe" name="Super Reflexes" description="Juicers begin with +2 Agility die types, with no Trait maximum. They have Uncanny Reflexes, granting them −2 to be hit by all attacks. Finally, they begin with the Quick Edge.\n" compset="FraAbility" summary="Agility +2 Die Types, -2 to be hit by all attacks, Quick Edge.">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgQuick">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <eval phase="PreTraits" priority="5000">#traitcreation[attrAgi] += 2
+hero.child[attrAgi].field[trtMaximum].value += 10</eval>
+    </thing>
+  <thing id="fcSRJuCyb" name="Cybernetics" description="Although it is possible to add cybernetics to the Juicer’s already hacked biology, there is a severe drawback: each point of Strain removes a point of Burn!" compset="FraComp" summary="Cybernetics cost 1 Burn per strain.">
+    <usesource source="SavRiftC"/>
+    <eval phase="Final" priority="5000">#trkmax[trkBurn] -= #trait[trSFStrain]</eval>
+    </thing>
+  <thing id="fcSRJuDeWi" name="Death Wish" description="Although it is possible to add cybernetics to the Juicer’s already hacked biology, there is a severe drawback: each point of Strain removes a point of Burn!" compset="FraComp" summary="You have the Deathwish Hinderance.">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinDeathwi">
+      <assignval field="domDomain" value="Blaze of Glory"/>
+      </bootstrap>
+    </thing>
+  <thing id="fcSRJuDIET" name="Drug Induced Euphoria/Tranquility" description="In order to keep the Juicer from burning out over a matter of days, the bio-comp constantly supplies a combination of psychotropic drugs and chemical inhibitors to keep the subject happy and calm. This results in a Juicer living in a constant state somewhere between mildly ecstatic and stoned, which causes −1 to all Smarts or Smarts-linked skill rolls in non-combat or low stress situations. On the first round of any combat, he doesn’t gain the benefits of Uncanny Reflexes or Quick." compset="FraComp" summary="−1 to all Smarts or Smarts-linked skill rolls in non-combat or low stress situations.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRJuMaPs" name="Psionics and Magic" description="The chemical cocktail inside the Juicer makes it impossible for him to use magic or psionics in any way." compset="FraComp" summary="Unable to use Magic or Psionics.">
+    <usesource source="SavRiftC"/>
+    </thing>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
-  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
+  <preclude id="cybAquatic" source="SavRiftC"/>
+  <preclude id="edgNoble" source="SavRiftC"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   </document>
