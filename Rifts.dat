@@ -26,11 +26,9 @@ Frameworks Completed -
 xx-xx-xx
 TCA: Fixed Storm-Fouled Senses Script timing
 TCA: changed SSASkills script to use childfound for trSFStrain]]></info_history>
-    <info_todo><![CDATA[Fortune and Glory Selections - bootstraps, bonuses
-Hero's Journey - bootstraps, bonuses
-Cybernetics - built-in weapons
+    <info_todo>Cybernetics - built-in weapons
 Fennodi - adjust starting powers based on Arcane Framework
-Glitter Boy armor - Strength adjustment]]></info_todo>
+MARS (Techno Warrior) - choice of starting gear</info_todo>
     </fileinfo>
   <thing id="fg1Close" name="A Mighty Weapon (Close)" description="Your hero may choose any single weapon from the Close Combat—Personal sections." compset="Fortune" summary="Select a Close Combat weapon." uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -589,8 +587,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
   <thing id="exp10Back" name="Exp. and Wis.: Background Edge" description="Some experiences take a person back to the beginning, reconnecting her to her foundations. Select one Background Edge, regardless of requirements, so long as it makes sense and the GM agrees with it." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="ExpWis"/>
-    <eval phase="PreTraits" priority="5000" index="2">
-~set resHJSel to selection
+    <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
 ~Add extra Edge point to count for bonus edge
@@ -630,8 +627,7 @@ hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
   <thing id="exp15Prof" name="Exp. and Wis.: Professional" description="Life on the road, in the wilderness, and wandering the streets of the cities that remain gave your character special insight and some key experience with a particular calling. You may give her one Professional Edge, ignoring requirements, subject to the GM’s approval and it making at least some kind of sense." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="ExpWis"/>
-    <eval phase="PreTraits" priority="5000" index="2">
-~set resHJSel to selection
+    <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
 ~Add extra Edge point to count for bonus edge
@@ -654,8 +650,7 @@ hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
   <thing id="exp17Wild" name="Exp. and Wis.: Wild Card" description="There are moments when everything comes together and an opportunity presents itself. You’re hero knows how to make the most of just such a moment; choose one Wild Card Edge, regardless of requirements." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="ExpWis"/>
-    <eval phase="PreTraits" priority="5000" index="2">
-~set resHJSel to selection
+    <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
 ~Add extra Edge point to count for bonus edge
@@ -901,8 +896,7 @@ perform #traitroll[skPersuade,-,2,"Presence"]]]></eval>
   <thing id="tra6Prof" name="Training: Professional Edge" description="Part of your character’s extensive training including full understanding of a particular occupation or area of focus. You may give her one Professional Edge, ignoring requirements, subject to the GM’s approval and it making at least some kind of sense." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
-    <eval phase="PreTraits" priority="5000" index="2">
-~set resHJSel to selection
+    <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
 ~Add extra Edge point to count for bonus edge
@@ -985,8 +979,7 @@ perform #traitroll[skKnowEng,+,1,"Technician"]]]></eval>
   <thing id="tra15Cbt" name="Training: Combat Edge" description="Constant battle, for cause or survival, means your hero knows a great deal about combat. Select one Combat Edge; you may ignore all requirements except where an Edge has a specific predecessor (such as with Improved Frenzy; your character must have Frenzy first)." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
-    <eval phase="PreTraits" priority="5000" index="2">
-~set resHJSel to selection
+    <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
 ~Add extra Edge point to count for bonus edge
@@ -1022,8 +1015,7 @@ hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
   <thing id="tra18Wild" name="Training: Wild Card" description="There are moments when everything comes together and an opportunity presents itself. You’re hero knows how to make the most of just such a moment; choose one Wild Card Edge, regardless of requirements." compset="HeroJrny">
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
-    <eval phase="PreTraits" priority="5000" index="2">
-~set resHJSel to selection
+    <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
 ~Add extra Edge point to count for bonus edge
@@ -2437,33 +2429,99 @@ perform hero.assign[Rifts.FortGlory]
 hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
     </thing>
-  <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
+  <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRUpgra">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 6)]]></evalrule>
     </thing>
-  <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="NOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
+  <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="Though they like to be paid, it’s not always about the money. This package also applies to anyone with a strong military or security background.\n\nNOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~This package gains 5 skill points
+#resmax[resSkill] += 5
+
+~set resFraSel to selection
+#resmax[resFraSel] += 2
+
+~Add extra Edge point to count for Bonus edges
+#resmax[resEdge] += 2</eval>
+    <eval phase="Render" priority="10000" index="5"><![CDATA[var header as string
+
+var chooser as string
+
+var additem as string
+
+
+
+additem = "Add Combat Edge"
+
+header = "Combat Edge: "
+
+header &= hero.child[resFraSel].field[resSummary].text
+
+
+chooser = "EdgeType.Combat"
+
+
+
+~set up chooser expressions for bonus edges
+
+hero.child[ehExprHelp].field[ehFrameAdd].text = additem
+
+hero.child[ehExprHelp].field[ehFrameExp].text = chooser
+
+hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
     </thing>
   <thing id="grpSRMarsH" name="M.A.R.S. (Psi-Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsI" name="M.A.R.S. (Robot Armor Pilot)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsG" name="M.A.R.S. (Power Armor Soldier)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsJ" name="M.A.R.S. (Rogue Scholar)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="Rogue Scholar"/>
@@ -2472,11 +2530,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <bootstrap thing="edgInvest"></bootstrap>
     <bootstrap thing="skInvest"></bootstrap>
     <bootstrap thing="skStreet"></bootstrap>
-    <eval phase="PreTraits" priority="5000"><![CDATA[~MARS Are Seasoned
-#resmax[resXP] += 20
-#resmax[resAdvance] += 4
-
-~This package gains 5 skill points
+    <eval phase="PreTraits" priority="5000"><![CDATA[~This package gains 5 skill points
 #resmax[resSkill] += 5
 
 ~This will offset the cost:
@@ -2498,14 +2552,27 @@ foreach pick in hero where "thingid.skKnowPoli"
 nexteach]]>
       <before name="Calc trtFinal"/>
       </eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsL" name="M.A.R.S. (Wilderness Scout)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsK" name="M.A.R.S. (Vagabond)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <fieldval field="shortname" value="M.A.R.S."/>
     <usesource source="SavRiftC"/>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRBurst" name="Burster" description="{b}{i}THE BURSTER HERO’S JOURNEY (FOUR ROLLS){/b}{/i}\nBursters gain three rolls on the {/b}Experience &amp; Wisdom{/b} Table or the {b}Psionics{/b} Table. \n\nBursters gain one additional roll on any table except {b}Cybernetics{/b} or anything to do with magic." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
