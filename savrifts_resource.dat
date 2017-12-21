@@ -42,6 +42,18 @@
     <tag group="Helper" tag="Bootstrap"/>
 	
     </thing>
+
+  <!-- Hero's Journey - Bonus Abilities resource  -->
+  <thing
+    id="resHJSel"
+    name="Hero's Journey Selections"
+    compset="Resource">
+    <fieldval field="resMax" value="0"/>
+	
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+	
+    </thing>
 	
   <thing 
     id="resFortune" 
@@ -63,5 +75,21 @@
     <tag group="Helper" tag="Bootstrap"/>
     <tag group="Helper" tag="Creation"/>
     <tag group="Helper" tag="NPCImpact"/>
+    </thing>
+
+  <!-- Burn tracker for Juicer -->
+  <thing
+    id="trkBurn"
+    name="Burn"
+    compset="Tracker">
+
+    <!-- Automatically add the tracker to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Resetting the tracker sets the value to the maximum -->
+    <tag group="Helper" tag="ResetMax"/>
+
+    <!-- Hide the tracker unless we actually have a need for it -->
+    <tag group="Hide" tag="Tracker"/>
     </thing>
   </document>

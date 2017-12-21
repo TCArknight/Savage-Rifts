@@ -45,6 +45,141 @@
       </table_dynamic>
     </portal>
 
+  <portal
+    id="hjChsTbl1"
+    style="tblNormal">
+    <table_dynamic
+      component="none"
+      showtemplate="hjChsPick"
+      choosetemplate="SimpleItem"
+	  candidatepick="ehExprHelp"
+	  candidatefield="ehHJExp"
+	  headertemplate="hjChsPick"
+	  addpick="resHJSel">
+      <list>Rifts.HJSelect</list>
+      <autotag group="Rifts" tag="HJSelect"/>
+      <autotag group="thing" tag="skipprereq"/>
+      <description/>
+      <additem><![CDATA[      
+        @text &= hero.child[ehExprHelp].field[ehHJAdd].text
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+	
+  <template
+    id="hjChsPick"
+    name="Chooser Pick"
+    compset="Simple"
+    marginhorz="3"
+    marginvert="2">
+
+	<portal
+      id="hdrText"
+      style="lblTitle"
+	  isheader="yes">
+      <label>
+      	<labeltext><![CDATA[
+  	       @text = hero.child[ehExprHelp].field[ehHJHdr].text
+      	   ]]></labeltext>
+        </label>
+      </portal>
+	  
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="name">
+        </label>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if we've been assigned a non-default width for use when showing things, adopt
+      ~that width now
+      if (ispick = 0) then
+        var size as number
+        size = tagvalue[SimpleItem.width?]
+        if (size > 0) then
+          width = size
+          endif
+        endif
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~center the other portals vertically
+      perform portal[name].centervert
+      perform portal[delete].centervert
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~if we're showing a thing, the info and delete buttons are irrelevant, since
+      ~we should be showing within a chooser, in which case there's nothing to
+      ~delete and we have the description already visible
+      var edge as number
+      if (ispick = 0) then
+        portal[info].visible = 0
+        portal[delete].visible = 0
+        edge = width
+      else
+        edge = portal[info].left - 5
+        endif
+
+      ~position the name on the left and let it use all available space
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,edge)
+
+      ~center the name if requested or this is a show-only thing
+      if (tagis[SimpleItem.CenterName] + tagis[thing.showonly] <> 0) then
+        perform portal[name].centerhorz
+        endif
+
+      ~if this is an auto-added pick, change its font to indicate that fact
+      if (ispick + !candelete >= 2) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+	  <header><![CDATA[
+		~our header height is the height of our labels
+		height = portal[name].height
+
+		~each of our header labels has the same width as the corresponding data beneath
+		portal[hdrText].width = width
+
+		~align all header labels at the bottom of the header region
+		perform portal[hdrText].alignedge[bottom,0]
+
+		]]></header>
+		</template>
+
   <template
     id="hjPick"
     name="Hero's Journey Pick"
@@ -214,6 +349,7 @@
   <layout
     id="herojourn">
     <portalref portal="hjHeroJrny" taborder="10"/>
+    <portalref portal="hjChsTbl1" taborder="20"/>
 
     <!-- This script sizes and positions the layout and its child visual elements. -->
     <position><![CDATA[
@@ -223,36 +359,18 @@
         portal[hjHeroJrny].freeze = 1
         endif
 
-      ~determine the vertical gap we want to use between tables
-      var gap as number
-      gap = 15
-
       ~size all tables to span the full layout width
       portal[hjHeroJrny].width = width
+      portal[hjChsTbl1].width = width
+	  
+      portal[hjChsTbl1].visible = 0
+	  if (hero.child[ehExprHelp].field[ehHJExp].isempty = 0) then
+	    portal[hjChsTbl1].visible = 1
+		endif
 
-      ~set the height of the small tables to be a maximum number of rows for now
-      ~portal[edHinders].maxrows = 3
-      ~portal[edRewards].maxrows = 1
-
-      ~position the rewards table at the bottom
-      ~portal[edRewards].top = height - portal[edRewards].height
-
-      ~position the hindrances table above the rewards
-      ~portal[edHinders].top = portal[edRewards].top - gap - portal[edHinders].height
-
-      ~assign the remaining space to the edges table
-      ~portal[fgFortGl].height = portal[edHinders].top - gap - portal[edEdges].top
-      portal[hjHeroJrny].height = 400
-
-      ~position the hindrances table beneath the edges table and let it expand to
-      ~fill whatever vertical space is available between the edges and rewards
-      ~portal[edHinders].top = portal[edEdges].bottom + gap
-      ~portal[edHinders].height = portal[edRewards].top - gap - portal[edHinders].top
-
-      ~position the rewards table beneath hindrance and let it expand to fill space
-      ~portal[edRewards].top = portal[edHinders].bottom + gap
-      ~portal[edRewards].height = height - portal[edRewards].top
-      ]]></position>
+      perform portal[hjHeroJrny].autoplace
+      perform portal[hjChsTbl1].autoplace[10]
+		]]></position>
 
     </layout>
 

@@ -9,7 +9,7 @@ Equipment
 - Cybernetics
 
 Fortune and Glory tab for MARS
-Hero's Journey functionality
+Hero's Journey functionality 
 
 Reworked Iconic Framework abilities and complications as new components (FraAbility,FraComp)
 
@@ -22,13 +22,6 @@ Frameworks Completed -
 * M.A.R.S. (Body Fixer)
 * M.A.R.S. (City Rat)
 * Burster
-
-Issue Fixes:
-* Ambidesterity Edge for Psi-Stalkers throwing a requirement error for Agility less than d8.
-* Bonus Champion Edge for Cyber-Knights is not adding to the Edges tab
-* Cyber-Knight - No option to split Psi-Sword into 2 for the reduced AP.
-* Improved Cyber Armor and Master Cyber Armor edges missing.
-* Master Psionic Edge not doubling Base ISP.
 
 xx-xx-xx
 TCA: Fixed Storm-Fouled Senses Script timing
@@ -594,29 +587,28 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
       </bootstrap>
     </thing>
   <thing id="exp10Back" name="Exp. and Wis.: Background Edge" description="Some experiences take a person back to the beginning, reconnecting her to her foundations. Select one Background Edge, regardless of requirements, so long as it makes sense and the GM agrees with it." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="component.Edge &amp; EdgeType.Background &amp; !Arcane.?"/>
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="ExpWis"/>
-    <tag group="ChooseSrc1" tag="Thing"/>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	var mychoice as string
-	if (field[usrChosen1].ischosen <> 0) then
-      #resmax[resEdge] += 1
+    <eval phase="PreTraits" priority="5000" index="2">
+~set resHJSel to selection
+#resmax[resHJSel] += 1
 
-	  mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	  
-	  foreach pick in hero where mychoice
-	    perform eachpick.assign[thing.skipprereq]
-		nexteach
-	  endif]]></eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Selected Hero&apos;s Journey background Edge needs to be chosen" summary="Edge missing."><![CDATA[
-	  var mychoice as string
+~Add extra Edge point to count for bonus edge
+#resmax[resEdge] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
 
-	  if (field[usrChosen1].ischosen <> 0) then
-	    mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	    endif
+additem = "Add Bonus Edge"
+header = "Bonus Edge: "
+header &= hero.child[resHJSel].field[resSummary].text
 
-      validif (hero.tagsearch[mychoice] <> 0)]]></evalrule>
+chooser = "EdgeType.Background & !Arcane.? & !BreedAdv.?"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehHJAdd].text = additem
+hero.child[ehExprHelp].field[ehHJExp].text = chooser
+hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="exp12Trav" name="Exp. and Wis.: Travelling" description="He’s traveled far and wide, and he knows a lot about the world that could come in handy. Your character gains a +2 on any Common Knowledge rolls related to geography and understanding the people and places of North America. He also gains a +2 on Survival and Streetwise checks in North America." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -636,54 +628,52 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <exprreq message="Luck Edge required."><![CDATA[hero.tagcount[Edge.edgLuck] >= 1]]></exprreq>
     </thing>
   <thing id="exp15Prof" name="Exp. and Wis.: Professional" description="Life on the road, in the wilderness, and wandering the streets of the cities that remain gave your character special insight and some key experience with a particular calling. You may give her one Professional Edge, ignoring requirements, subject to the GM’s approval and it making at least some kind of sense." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="component.Edge &amp; EdgeType.Profession"/>
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="ExpWis"/>
-    <tag group="ChooseSrc1" tag="Thing"/>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	var mychoice as string
-	if (field[usrChosen1].ischosen <> 0) then
-      #resmax[resEdge] += 1
+    <eval phase="PreTraits" priority="5000" index="2">
+~set resHJSel to selection
+#resmax[resHJSel] += 1
 
-	  mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	  
-	  foreach pick in hero where mychoice
-	    perform eachpick.assign[thing.skipprereq]
-		nexteach
-	  endif]]></eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Selected Hero&apos;s Journey professional Edge needs to be chosen" summary="Edge missing."><![CDATA[
-	  var mychoice as string
+~Add extra Edge point to count for bonus edge
+#resmax[resEdge] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
 
-	  if (field[usrChosen1].ischosen <> 0) then
-	    mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	    endif
+additem = "Add Bonus Edge"
+header = "Bonus Edge: "
+header &= hero.child[resHJSel].field[resSummary].text
 
-      validif (hero.tagsearch[mychoice] <> 0)]]></evalrule>
+chooser = "EdgeType.Profession"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehHJAdd].text = additem
+hero.child[ehExprHelp].field[ehHJExp].text = chooser
+hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="exp17Wild" name="Exp. and Wis.: Wild Card" description="There are moments when everything comes together and an opportunity presents itself. You’re hero knows how to make the most of just such a moment; choose one Wild Card Edge, regardless of requirements." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="component.Edge &amp; EdgeType.Wildcard"/>
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="ExpWis"/>
-    <tag group="ChooseSrc1" tag="Thing"/>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	var mychoice as string
-	if (field[usrChosen1].ischosen <> 0) then
-      #resmax[resEdge] += 1
+    <eval phase="PreTraits" priority="5000" index="2">
+~set resHJSel to selection
+#resmax[resHJSel] += 1
 
-	  mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	  
-	  foreach pick in hero where mychoice
-	    perform eachpick.assign[thing.skipprereq]
-		nexteach
-	  endif]]></eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Selected Hero&apos;s Journey professional Edge needs to be chosen" summary="Edge missing."><![CDATA[
-	  var mychoice as string
+~Add extra Edge point to count for bonus edge
+#resmax[resEdge] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
 
-	  if (field[usrChosen1].ischosen <> 0) then
-	    mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	    endif
+additem = "Add Bonus Edge"
+header = "Bonus Edge: "
+header &= hero.child[resHJSel].field[resSummary].text
 
-      validif (hero.tagsearch[mychoice] <> 0)]]></evalrule>
+chooser = "EdgeType.Wildcard"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehHJAdd].text = additem
+hero.child[ehExprHelp].field[ehHJExp].text = chooser
+hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="mag1Soul" name="Mag. and Mys.: Soul Drain" description="There are times to put it all on the line, no matter the cost. Your character is always prepared to do just that, thanks to having the Soul Drain Edge. Techno-Wizards gain +5 PPE instead." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -909,29 +899,28 @@ perform #traitroll[skPersuade,-,2,"Presence"]]]></eval>
     <exprreq message="Martial Artist Edge required."><![CDATA[hero.tagcount[Edge.edgMartia1] >= 1]]></exprreq>
     </thing>
   <thing id="tra6Prof" name="Training: Professional Edge" description="Part of your character’s extensive training including full understanding of a particular occupation or area of focus. You may give her one Professional Edge, ignoring requirements, subject to the GM’s approval and it making at least some kind of sense." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="component.Edge &amp; EdgeType.Profession"/>
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
-    <tag group="ChooseSrc1" tag="Thing"/>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	var mychoice as string
-	if (field[usrChosen1].ischosen <> 0) then
-      #resmax[resEdge] += 1
+    <eval phase="PreTraits" priority="5000" index="2">
+~set resHJSel to selection
+#resmax[resHJSel] += 1
 
-	  mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	  
-	  foreach pick in hero where mychoice
-	    perform eachpick.assign[thing.skipprereq]
-		nexteach
-	  endif]]></eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Selected Hero&apos;s Journey professional Edge needs to be chosen" summary="Edge missing."><![CDATA[
-	  var mychoice as string
+~Add extra Edge point to count for bonus edge
+#resmax[resEdge] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
 
-	  if (field[usrChosen1].ischosen <> 0) then
-	    mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	    endif
+additem = "Add Bonus Edge"
+header = "Bonus Edge: "
+header &= hero.child[resHJSel].field[resSummary].text
 
-      validif (hero.tagsearch[mychoice] <> 0)]]></evalrule>
+chooser = "EdgeType.Profession"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehHJAdd].text = additem
+hero.child[ehExprHelp].field[ehHJExp].text = chooser
+hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="tra8Wood" name="Training: Woodsman" description="While the cities of {i}Savage Rifts®{/i} are deadly in their own right, your hero understands the dangers of the wilderness in ways few ever grasp. He has the Woodsman Edge and gains one die increase each in Survival and Tracking." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -994,29 +983,28 @@ perform #traitroll[skKnowEng,+,1,"Technician"]]]></eval>
     <exprreq message="You must have the Dirty Fighter Edge."><![CDATA[hero.tagcount[Edge.edgSRDFigh] >= 1]]></exprreq>
     </thing>
   <thing id="tra15Cbt" name="Training: Combat Edge" description="Constant battle, for cause or survival, means your hero knows a great deal about combat. Select one Combat Edge; you may ignore all requirements except where an Edge has a specific predecessor (such as with Improved Frenzy; your character must have Frenzy first)." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="component.Edge &amp; EdgeType.Combat"/>
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
-    <tag group="ChooseSrc1" tag="Thing"/>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	var mychoice as string
-	if (field[usrChosen1].ischosen <> 0) then
-      #resmax[resEdge] += 1
+    <eval phase="PreTraits" priority="5000" index="2">
+~set resHJSel to selection
+#resmax[resHJSel] += 1
 
-	  mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	  
-	  foreach pick in hero where mychoice
-	    perform eachpick.assign[thing.skipprereq]
-		nexteach
-	  endif]]></eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Selected Hero&apos;s Journey combat Edge needs to be chosen" summary="Edge missing."><![CDATA[
-	  var mychoice as string
+~Add extra Edge point to count for bonus edge
+#resmax[resEdge] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
 
-	  if (field[usrChosen1].ischosen <> 0) then
-	    mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	    endif
+additem = "Add Bonus Edge"
+header = "Bonus Edge: "
+header &= hero.child[resHJSel].field[resSummary].text
 
-      validif (hero.tagsearch[mychoice] <> 0)]]></evalrule>
+chooser = "EdgeType.Combat"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehHJAdd].text = additem
+hero.child[ehExprHelp].field[ehHJExp].text = chooser
+hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="tra17Ace" name="Training: Ace" description="Though lots of folks can jump behind a wheel or grab a stick, your hero understands the nuances of guiding a machine effectively through the worst conditions. She gains the Ace Edge (or Combat Ace, if she already has Ace), as well as a free die type increase in her choice of Boating, Driving, or Piloting." compset="HeroJrny">
     <fieldval field="usrCandid1" value="thingid.skBoating|thingid.skDriving|thingid.skPiloting"/>
@@ -1032,29 +1020,28 @@ perform #traitroll[skKnowEng,+,1,"Technician"]]]></eval>
 	  endif]]></eval>
     </thing>
   <thing id="tra18Wild" name="Training: Wild Card" description="There are moments when everything comes together and an opportunity presents itself. You’re hero knows how to make the most of just such a moment; choose one Wild Card Edge, regardless of requirements." compset="HeroJrny">
-    <fieldval field="usrCandid1" value="component.Edge &amp; EdgeType.Wildcard"/>
     <usesource source="SavRiftC"/>
     <tag group="RiftsHJ" tag="Train"/>
-    <tag group="ChooseSrc1" tag="Thing"/>
-    <eval phase="Setup" priority="5000"><![CDATA[
-	var mychoice as string
-	if (field[usrChosen1].ischosen <> 0) then
-      #resmax[resEdge] += 1
+    <eval phase="PreTraits" priority="5000" index="2">
+~set resHJSel to selection
+#resmax[resHJSel] += 1
 
-	  mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	  
-	  foreach pick in hero where mychoice
-	    perform eachpick.assign[thing.skipprereq]
-		nexteach
-	  endif]]></eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Selected Hero&apos;s Journey professional Edge needs to be chosen" summary="Edge missing."><![CDATA[
-	  var mychoice as string
+~Add extra Edge point to count for bonus edge
+#resmax[resEdge] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
 
-	  if (field[usrChosen1].ischosen <> 0) then
-	    mychoice = "Edge." & field[usrChosen1].chosen.idstring
-	    endif
+additem = "Add Bonus Edge"
+header = "Bonus Edge: "
+header &= hero.child[resHJSel].field[resSummary].text
 
-      validif (hero.tagsearch[mychoice] <> 0)]]></evalrule>
+chooser = "EdgeType.Wildcard"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehHJAdd].text = additem
+hero.child[ehExprHelp].field[ehHJExp].text = chooser
+hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="und1Rep" name="Underworld: McGyver" description="When all else fails, your hero knows how to take any available resources and juryrig her way into or out of situations. She has the McGyver Edge, and she gains a die type in Repair." compset="HeroJrny">
     <usesource source="SavRiftC"/>

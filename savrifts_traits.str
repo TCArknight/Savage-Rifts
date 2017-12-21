@@ -216,6 +216,27 @@
 	  maxlength="500">
 	  </field>
 	  
+    <field
+      id="ehHJAdd"
+      name="Hero's Journey Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="ehHJHdr"
+      name="Hero's Journey Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+
+    <field
+      id="ehHJExp"
+      name="Hero's Journey Expression"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
 	<eval phase="PreTraits" priority="1000" index="1"><![CDATA[
 	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
 	doneif (origin.ishero = 0)
@@ -241,7 +262,19 @@
 	  
 	perform #resspent[resFraSel,+,myCount,field[name].text]
 		]]></eval>
+		
+	<eval phase="PreTraits" priority="1000" index="3"><![CDATA[
+	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
+	doneif (origin.ishero = 0)
+
+	~consume additional resource slots
+	var myCount as number
+	foreach pick in hero where "Rifts.HJSelect"
+		myCount += 1
+		nexteach
 	  
+	perform #resspent[resHJSel,+,myCount,field[name].text]
+		]]></eval>	  
     </component>
 	
 <!-- TCA - This component set enables the use of Iconic Framework Abilities

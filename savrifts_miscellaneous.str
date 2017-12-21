@@ -35,7 +35,27 @@
     id="HeroJrny"
     name="Hero's Journey"
 	autocompset="no">
+	  
+    <field
+      id="hjAddTxt"
+      name="Hero's Journey Add Text"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="hjHdrTxt"
+      name="Hero's Journey Header Text"
+      type="derived"
+	  maxlength="500">
+	  </field>
 
+    <field
+      id="hjExpr"
+      name="Hero's Journey Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
 	<!-- Forward the Heros Journey category to the actor -->
 
     <eval index="1" phase="Initialize" priority="2100"><![CDATA[
