@@ -41,6 +41,8 @@
     <value id="HJSelect"/>       <!-- Hero's Journey option selected through Helper -->     
     <value id="TKnoSkill"/>      <!-- Tag for selected Tramadore Knowledge Skill -->     
     <value id="SpellSkill"/>     <!-- Tag the Hero's Spellcasting skill -->   
+    <value id="MARS"/>           <!-- indicates a M.A.R.S framework -->   
+    <value id="HHEquip"/>        <!-- indicates a specific Edge for Headhunter (Mars Cyber Techno Warrior) equipment -->   
     </group>
 
   <!-- Hero's Journey -->

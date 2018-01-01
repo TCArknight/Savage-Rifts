@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document signature="Hero Lab Data">
   <fileinfo>
-    <info_author>Coordinator: TCArknight
-Contributors: Salcor</info_author>
+    <info_author>Coordinator: TCArknight (Thomas Clegg)
+Contributors: Salcor, Father Morpheus</info_author>
     <info_history><![CDATA[12-19-17
 Equipment
 - Armor
 - Cybernetics
+- CS Armor
+- CS Weapons
+- CS Equipment
 
 Fortune and Glory tab for MARS
 Hero's Journey functionality 
@@ -21,14 +24,15 @@ Frameworks Completed -
 * Juicer
 * M.A.R.S. (Body Fixer)
 * M.A.R.S. (City Rat)
+* M.A.R.S. (Cybernetic Techno-Warrior)
+* M.A.R.S. (Merc Soldier)
 * Burster
 
 xx-xx-xx
 TCA: Fixed Storm-Fouled Senses Script timing
 TCA: changed SSASkills script to use childfound for trSFStrain]]></info_history>
     <info_todo>Cybernetics - built-in weapons
-Fennodi - adjust starting powers based on Arcane Framework
-MARS (Techno Warrior) - choice of starting gear</info_todo>
+Fennodi - adjust starting powers based on Arcane Framework</info_todo>
     </fileinfo>
   <thing id="fg1Close" name="A Mighty Weapon (Close)" description="Your hero may choose any single weapon from the Close Combat—Personal sections." compset="Fortune" summary="Select a Close Combat weapon." uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -590,8 +594,6 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
-~Add extra Edge point to count for bonus edge
-#resmax[resEdge] += 1</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -629,9 +631,7 @@ hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     <tag group="RiftsHJ" tag="ExpWis"/>
     <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
-
-~Add extra Edge point to count for bonus edge
-#resmax[resEdge] += 1</eval>
+</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -653,8 +653,7 @@ hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
-~Add extra Edge point to count for bonus edge
-#resmax[resEdge] += 1</eval>
+</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -899,8 +898,7 @@ perform #traitroll[skPersuade,-,2,"Presence"]]]></eval>
     <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
-~Add extra Edge point to count for bonus edge
-#resmax[resEdge] += 1</eval>
+</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -982,8 +980,7 @@ perform #traitroll[skKnowEng,+,1,"Technician"]]]></eval>
     <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
-~Add extra Edge point to count for bonus edge
-#resmax[resEdge] += 1</eval>
+</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -1018,8 +1015,7 @@ hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
     <eval phase="PreTraits" priority="5000" index="2">~set resHJSel to selection
 #resmax[resHJSel] += 1
 
-~Add extra Edge point to count for bonus edge
-#resmax[resEdge] += 1</eval>
+</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -1831,8 +1827,6 @@ perform hero.assign[BreedAdv.Rugged]</eval>
     <eval phase="PreTraits" priority="5000">~set resRaceEdge to selection
 #resmax[resRaceSel] += 1
 
-~Add extra Edge point to count for Breed Advantage edge
-#resmax[resEdge] += 1
       <before name="Calc trtFinal"/>
       </eval>
     </thing>
@@ -2382,18 +2376,25 @@ validif (rolls = 0)]]></evalrule>
     </thing>
   <thing id="grpSRMarsA" name="M.A.R.S. (Body-Fixer)" description="This package also relates to Cyber-Docs, combining the two ideas. A medical professional and life saver, a Body-Fixer/Cyber-Doc is welcome anywhere she goes.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgHealer">
-      <autotag group="thing" tag="skipprereq"/>
-      </bootstrap>
+    <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="skHealing"></bootstrap>
     <bootstrap thing="skKnowCybr"></bootstrap>
     <bootstrap thing="skKnowMed"></bootstrap>
-    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <bootstrap thing="edgHealer">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
     <autoadd thing="wpW227PLaP" portal="arRange"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <autoadd thing="eqBioAnlKt" portal="grGear"></autoadd>
     <autoadd thing="eqDosimete" portal="grGear"></autoadd>
     <autoadd thing="eqTraumKit" portal="grGear"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     <eval phase="PreTraits" priority="5000">~+1 die type to Smarts 
 #traitbonus[attrSma] += 1
 
@@ -2402,134 +2403,168 @@ validif (rolls = 0)]]></evalrule>
 #traitcreation[skKnowCybr] += 1
 #traitcreation[skKnowMed] += 1
 hero.childfound[resSkill].field[resSpent].value -= 3</eval>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-	  perform hero.assign[Rifts.FortGlory]
-	  #resmax[resFortune] += 3</eval>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-    #resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsB" name="M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="MARS"/>
+    <bootstrap thing="skStreet"></bootstrap>
     <bootstrap thing="edgSRScrou">
       <autotag group="thing" tag="skipprereq"/>
       </bootstrap>
-    <bootstrap thing="skStreet"></bootstrap>
-    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
     <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
     <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
     <eval phase="PreTraits" priority="5000">~Streetwise d6
 #traitcreation[skStreet] += 1
 hero.childfound[resSkill].field[resSpent].value -= 1</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
     </thing>
   <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="edgSRUpgra">
       <autotag group="thing" tag="skipprereq"/>
       </bootstrap>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Gear"
+header = "Gear: "
+header &= hero.child[resFraSel].field[resSummary].text
+
+chooser = "Rifts.HHEquip"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehFrameAdd].text = additem
+hero.child[ehExprHelp].field[ehFrameExp].text = chooser
+hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
+perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4
+
+~set resFraSel
+#resmax[resFraSel] += 1</eval>
     <evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 6)]]></evalrule>
     </thing>
   <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="Though they like to be paid, it’s not always about the money. This package also applies to anyone with a strong military or security background.\n\nNOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
+    <tag group="Rifts" tag="MARS"/>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <eval phase="PreTraits" priority="5000" index="4">~This package gains 5 skill points
 #resmax[resSkill] += 5
 
 ~set resFraSel to selection
-#resmax[resFraSel] += 2
-
-~Add extra Edge point to count for Bonus edges
-#resmax[resEdge] += 2</eval>
+#resmax[resFraSel] += 2</eval>
     <eval phase="Render" priority="10000" index="5"><![CDATA[var header as string
-
 var chooser as string
-
 var additem as string
 
-
-
 additem = "Add Combat Edge"
-
 header = "Combat Edge: "
-
 header &= hero.child[resFraSel].field[resSummary].text
 
-
 chooser = "EdgeType.Combat"
-
-
-
 ~set up chooser expressions for bonus edges
-
 hero.child[ehExprHelp].field[ehFrameAdd].text = additem
-
 hero.child[ehExprHelp].field[ehFrameExp].text = chooser
-
 hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <evalrule phase="Final" priority="1000" index="2" message="Must have two Weapons from (Close Combat, Ranged Weapons - Personal)"><![CDATA[var MyWpn as number
+
+foreach pick in hero where "(component.WeapMelee|component.WeapRange) & !Weapon.Unarmed"
+  MyWpn += 1
+  nexteach
+
+validif (MyWpn >= 2)]]></evalrule>
+    <evalrule phase="Final" priority="1000" message="Must have one Body Armor"><![CDATA[var MyArmor as number
+
+foreach pick in hero where "component.Armor"
+  MyArmor += 1
+  nexteach
+
+validif (MyArmor >= 1)]]></evalrule>
     </thing>
   <thing id="grpSRMarsH" name="M.A.R.S. (Psi-Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRMarsI" name="M.A.R.S. (Robot Armor Pilot)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRMarsG" name="M.A.R.S. (Power Armor Soldier)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRMarsJ" name="M.A.R.S. (Rogue Scholar)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="Rogue Scholar"/>
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgScholar"></bootstrap>
+    <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="edgInvest"></bootstrap>
     <bootstrap thing="skInvest"></bootstrap>
     <bootstrap thing="skStreet"></bootstrap>
+    <bootstrap thing="edgScholar"></bootstrap>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
     <eval phase="PreTraits" priority="5000"><![CDATA[~This package gains 5 skill points
 #resmax[resSkill] += 5
 
@@ -2552,27 +2587,26 @@ foreach pick in hero where "thingid.skKnowPoli"
 nexteach]]>
       <before name="Calc trtFinal"/>
       </eval>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
     </thing>
   <thing id="grpSRMarsL" name="M.A.R.S. (Wilderness Scout)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRMarsK" name="M.A.R.S. (Vagabond)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-#resmax[resFortune] += 3</eval>
+    <tag group="Rifts" tag="MARS"/>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
     </thing>
   <thing id="grpSRBurst" name="Burster" description="{b}{i}THE BURSTER HERO’S JOURNEY (FOUR ROLLS){/b}{/i}\nBursters gain three rolls on the {/b}Experience &amp; Wisdom{/b} Table or the {b}Psionics{/b} Table. \n\nBursters gain one additional roll on any table except {b}Cybernetics{/b} or anything to do with magic." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -5272,8 +5306,7 @@ if (field[abilActive].value <> 0) then
 ~set resRaceEdge to selection
 #resmax[resFraSel] += 2
 
-~Add extra Edge point to count for Breed Advantage edge
-#resmax[resEdge] += 2</eval>
+</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
@@ -5339,30 +5372,59 @@ hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
     <bootstrap thing="edgArcPsi"></bootstrap>
     <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1</eval>
     </thing>
-  <thing id="faSRPsSwCK" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested." compset="FraAbility">
+  <thing id="faSRPsSwCK" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested.\n\n{b}Note:{/b} The In-Play tab selection is for whether Mega Damage is active for the Psi-Sword. Must manually spend 2 ISP then check the box to have the sword Special display the Mega Damage status." compset="FraAbility">
     <fieldval field="usrChkText" value="Split ?"/>
     <usesource source="SavRiftC"/>
     <tag group="User" tag="Activation"/>
+    <tag group="User" tag="NoAutoName"/>
     <bootstrap thing="wpCKPsiSwo"></bootstrap>
-    <eval phase="PreTraits" priority="5000"><![CDATA[perform hero.childfound[wpCKPsiSwo].setfocus
-
-doneif (state.isfocus = 0)
-
-if (field[usrIsCheck].value = 1) then
-  focus.field[wpPiercing].value -= 4
-  focus.field[livename].text = focus.field[name].text & " (Paired)"
-  endif]]></eval>
     </thing>
   <thing id="wpCKPsiSwo" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested." compset="Melee">
     <fieldval field="wpPiercing" value="6"/>
-    <fieldval field="wpSpecial" value="Mega Damage"/>
     <usesource source="SavRiftC"/>
-    <tag group="Hide" tag="Equipment"/>
     <tag group="WeaponType" tag="s2SPBW"/>
+    <tag group="Hide" tag="Equipment"/>
+    <eval phase="PreTraits" priority="1000" index="2"><![CDATA[if (hero.tagis[Edge.edgSRIPISW] <> 0) then
+  field[wpPiercing].value += 2
+  endif
+
+perform hero.childfound[faSRPsSwCK].setfocus
+if (state.isfocus <> 0) then
+
+  if (focus.field[usrIsCheck].value = 1) then
+    field[wpPiercing].value -= 4
+    field[livename].text = focus.field[name].text & " (Paired)"
+    endif
+
+  if (focus.field[abilActive].value = 1) then
+    field[wpSpecial].text &= "Mega Damage"
+    endif
+  endif]]></eval>
+    <eval phase="PreTraits" priority="5000" index="3"><![CDATA[trustme
+
+perform hero.childfound[shdSRPiSH].setfocus
+doneif (state.isfocus = 0) 
+
+~if shield is equipped, hide the paired option for psi-sword abil.
+if (focus.field[grIsEquip].value = 1) then
+  hero.childfound[faSRPsSwCK].field[usrIsCheck].value = 0
+  hero.childfound[faSRPsSwCK].field[usrChkText].text = ""
+  endif
+
+if (field[grIsEquip].value = 1) then
+  field[wpPiercing].value -= 4
+  endif]]></eval>
     <eval phase="Render" priority="10000"><![CDATA[var spirit as string
 var str as string
 str = hero.child[attrStr].field[trtDisplay].text & "+"
-spirit = "2" & hero.child[attrSpi].field[trtDisplay].text
+
+if (hero.tagis[Edge.edgSRIPISW] <> 0) then
+  spirit = "3"
+else
+  spirit = "2"
+  endif
+
+spirit &= hero.child[attrSpi].field[trtDisplay].text
 
 field[wpDamage].text = str & spirit]]></eval>
     </thing>
@@ -5519,6 +5581,7 @@ if (field[grIsEquip].value <> 0) then
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
     <tag group="ArmorType" tag="PsiArmor" name="Psionic-based Armor"/>
+    <tag group="Hide" tag="Equipment"/>
     <bootstrap thing="wpSRBRFIAU"></bootstrap>
     </thing>
   <thing id="faSRBRETBN" name="Everything Burns" description="The fires started by Bursters are some of the most intense possible.  They can catch almost anything on fire, and combustible materials don&apos;t stand much of a chance against them.  Any time a Burster causes damage with a flame ability, roll a d10 (instead of the usual d6, as indicated in Savage Worlds under Fire.)  Anything flammable catches fire on a 6-10, while highly famable targets ignite on a 3-10.  Things that normally don&apos;t catch fire (metal, ceramic, stone) ignite from a Burster&apos;s flames on a 10, or at least begin to melt.  Water super-heats and evaporates nigh-instantly on a 10 as well, and boils away over 2d6 rounds on an 8 or 9." compset="FraAbility" summary="Bursters can burn anything">
@@ -5632,7 +5695,7 @@ if (field[grIsEquip].value <> 0) then
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="3"/>
     <tag group="EdgeType" tag="Iconic"/>
-    <pickreq thing="edgSRCYICK"/>
+    <pickreq thing="edgSRICyAr"/>
     </thing>
   <thing id="edgSRICyAr" name="Improved Cyber-Armor" description="Increases the protection of the Cyber-Armor to +4 Toughness total." compset="Edge" summary="Enhances the Cyber-Armor&apos;s protection">
     <usesource source="SavRiftC"/>
@@ -5672,6 +5735,7 @@ if (field[grIsEquip].value <> 0) then
     <fieldval field="defParry" value="3"/>
     <usesource source="SavRiftC"/>
     <tag group="ArmorType" tag="PsiArmor"/>
+    <tag group="Hide" tag="Equipment"/>
     <pickreq thing="grpSRCybKn"/>
     </thing>
   <thing id="faSRBuMaPs" name="Major Psionic" description="Bursters begin with the Arcane Background (Psionics) and Major Psionics Edges, with access to the list of powers noted above. They also begin with a Psionics skill of d8, 20 ISP, and three starting powers. When they take the Power Points Edge, they gain 10 ISP (instead of 5). They are able to spend 2 ISP for a +1 to Psionics rolls, and 4 ISP for a +2 (added before the roll). They can spend +1 ISP for Range ×2 for any ranged (not Self or Touch) powers, or +2 ISP for Range ×10. These last two effects are doubled when on a ley line." compset="FraAbility">
@@ -5765,13 +5829,377 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
   <thing id="fcSRJuMaPs" name="Psionics and Magic" description="The chemical cocktail inside the Juicer makes it impossible for him to use magic or psionics in any way." compset="FraComp" summary="Unable to use Magic or Psionics.">
     <usesource source="SavRiftC"/>
     </thing>
+  <thing id="edgSRBeTLi" name="Beyond The Limit" description="There are those so obsessed with cybernetic upgrades that they sacrifice sanity for superiority. Having taken all the cybernetics their humanity should be able to bear, they somehow manage to shove even more into the framework and damn the consequences. \n\nTaking this Edge grants +6 Strain, but the player must select one of the Unstable Psyche Hindrances (see Crazies, page 15) to go along with this." compset="Edge" summary="+6 Strain, Unstable Psyche Hindrance.">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <eval phase="Traits" priority="5500"><![CDATA[
+      perform #traitadjust[trSFStrnMx,+,6,"Beyond The Limit"]]]></eval>
+    <exprreq message="Combat Cyborg or M.A.R.S. required."><![CDATA[(hero.tagcount[Group.grpSRCoCyb] + hero.tagcount[Rifts.MARS]) >= 1]]></exprreq>
+    <exprreq message="Veteran required."><![CDATA[herofield[acRank].value >= 2]]></exprreq>
+    </thing>
+  <thing id="armSRCSCA1" name="CS CA-1 &quot;Dead Boy&quot; Heavy Body Armor" description="The standard issue to Coalition soldiers circa 101 P.A. and still one of the finest combat suits found in service anywhere. With the upgrade currently underway to advanced models within the CS military, more of the older Dead Boy suits are finding their way into the Black Market. CA-1 models provide +6 Armor, +2 Toughness, and Full Environmental Protection. They also have built-in mini-computers for basic functions; a communications system with a 10 mile range; public-address loudspeakers; and thermal vision mode for vision. This suit has a Strength Minimum of d6." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <fieldval field="grCost" value="45000"/>
+    <fieldval field="gearWeight" value="18"/>
+    <fieldval field="shortname" value="CA-1 Dead Boy"/>
+    <fieldval field="defStrReq" value="3"/>
+    <usesource source="sepSavRif"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,2,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="armSRCSCA2" name="CS CA-2 &quot;Dead Boy&quot; Light Body Armor" description="Lighter weight and easier to wear, the CA-2 was primarily used by pilots, scouts, and police forces before the massive upgrade program.  It provides +6 Armor.  It also provides the same basic electronic and environmental systems. The biggest attraction most buyers have to this version is the lighter weight and greater mobility." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <fieldval field="grCost" value="35000"/>
+    <fieldval field="shortname" value="CA-2 Dead Boy"/>
+    <fieldval field="gearWeight" value="9"/>
+    <usesource source="sepSavRif"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    </thing>
+  <thing id="armSRCSDP1" name="CS DPM 101 &quot;Dog Pack&quot; Light Riot Armor" description="Issued primarily to Coalition Dog Boy soldiers, this armor has none of the electronics or environmental systems of the CA suits. It is fairly lightweight and certainly easier to find and acquire.  Provides +5 Armor." compset="Armor">
+    <fieldval field="defDefense" value="5"/>
+    <fieldval field="grCost" value="14000"/>
+    <fieldval field="shortname" value="DPM 101 &quot;Dog Pack&quot;"/>
+    <fieldval field="gearWeight" value="8"/>
+    <usesource source="sepSavRif"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    </thing>
+  <thing id="armSRCSCA3" name="CS CA-3 Light &quot;Dead Boy&quot; Body Armor" description="The new standard for scout and special commando units, the CA-3 features light sensitive coating on the highlights to ensure night maneuvers don’t suffer.  CA-3 models provide +6 Armor, +1 Toughness, and Full Environmental Protection. They also have built-in mini-computers for basic functions; a communications system with a 10 mile range; public-address loudspeakers; and both night and thermal vision mode for vision." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <fieldval field="shortname" value="CA-3 Dead Boy"/>
+    <fieldval field="gearWeight" value="12"/>
+    <fieldval field="grCost" value="Unavailable for purchase."/>
+    <usesource source="sepSavRif"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,1,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="armSRCSCA4" name="CS CA-4 Standard &quot;Dead Boy&quot; Body Armor" description="The new standard for Coalition Grunts, the CA-4 provides +7 Armor and +2 Toughness.  They also have built-in mini-computers for basic functions; a communications system with a 10 mile range; public-address loudspeakers; and both night and thermal vision mode for vision." compset="Armor">
+    <fieldval field="defDefense" value="7"/>
+    <fieldval field="shortname" value="CA-4 Dead Boy"/>
+    <fieldval field="gearWeight" value="20"/>
+    <fieldval field="grCost" value="Unavailable for purchase."/>
+    <usesource source="sepSavRif"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,2,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="armSRCSCA7" name="CS CA-7 Standard &quot;Dead Boy&quot; Body Armor" description="A very special suit designed for elite assault and special forces units, the CA-7 has a significantly different design.  While there are some updated details—including a new approach to the skullmotif helmet and studded spikes on the shoulders, helmet, elbows, and shins—the CA-7 returns to the all-black coloring of the original Dead Boy suits. These suits also feature embedded vibroknives on the forearms (Str+d6, AP 4, Mega Damage) and a garrote wire connected to the left wrist (Str+d4, must follow successful Grapple with a raise). The suits are also set up to embed a Mag-5 Jetpack, a personal flight system with sound-suppression buffering systems (Flight Pace 10&quot;).  Provides +8 Armor and +2 Toughness." compset="Armor">
+    <fieldval field="shortname" value="CA-7 Dead Boy"/>
+    <fieldval field="gearWeight" value="20"/>
+    <fieldval field="grCost" value="Unavailable for purchase."/>
+    <fieldval field="defDefense" value="8"/>
+    <usesource source="sepSavRif"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,2,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="wpCSc18" name="C-18 Laser Pistol" description="This was the standard issue sidearm of the Coalition Army prior to 105 P.A." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="15"/>
+    <fieldval field="wpMedium" value="30"/>
+    <fieldval field="wpLong" value="60"/>
+    <fieldval field="grCost" value="12000"/>
+    <fieldval field="gearWeight" value="2"/>
+    <fieldval field="wpShots" value="10"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    </thing>
+  <thing id="wpCSc10" name="C-10 Light Assault Laser Rifle" description="The Coalition States C-10 light laser rifle is long barreled lighter version of the C-12 Heavy Assault Laser Rifle.    The standard Light Assault Laser rilfe of the Coalition States military prior to 105 P.A.     It has an Intigrated Laser Targeting system which provides a bonus, though it tends to be flaky at times." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="16000"/>
+    <fieldval field="gearWeight" value="5"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
+    <fieldval field="wpShots" value="30"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpCSc12" name="C-12 Heavy Assault Laser Rifle" description="The Coalition States C-12 Heavy Assault Laser Rifle.   The standard Heavy Assault Laser rilfe of the Coalition States military prior to 105 P.A.  Has an Intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="20000"/>
+    <fieldval field="gearWeight" value="7"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
+    <fieldval field="wpShots" value="60"/>
+    <fieldval field="wpDmgBonus" value="+1"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpCSc14" name="C-14 &quot;Fire Breather&quot; Laser Rifle" description="The Coalition States C-14 &quot;Fire Breather&quot; Laser Rifle.   This is a popular Coalition States Laser Rifle which has a built in Grenade Launcher, (20/40/80, Shots 12, damage by greande type).  Not only does it have abuilt  built in Grenade Launcher, it also has a  scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties).   It was a standard weapon prior to 105 P.A., but will reamin in service for at least another five to ten years." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="30000"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
+    <fieldval field="wpShots" value="20"/>
+    <fieldval field="gearWeight" value="10"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="StrReqDie" tag="3"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpCScv212" name="CV-212 Variable Light Frequency Rifle" description="Originally, the CV-212 Variable Light Frequency Laser Rifle was developed for limited use by CS Skeleabots, and a special operative branch of the CS MIlitary.   Special microchips rotate the light frequency, enabling it to bypass laser resistant armor.  The weapon also has the ability to act as a Mega Damage weapon, but requires 10 shots for a more powerful charge." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="50000"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Mega Damage if 10 shots used.  Scope with nightvision and laser targeting (offset two points of Ra"/>
+    <fieldval field="gearWeight" value="8"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <fieldval field="wpShots" value="30"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    </thing>
+  <thing id="wpCSc27" name="C-27 Heavy Plasma Cannon" description="The Coalition States C-27 Heavy Plasma Cannon was the original heavy support weapon for CS infantry units prior to 105 P.A.  Firing what amounts to a tiny comet of superheated gas, plasma weapons (called “plasma ejectors” by some old-school warriors) are heavy, bulky affairs, causing them all to have the Snapfire quality (−2 if the firer moves on the same round). They have some distinct advantages, though. First, plasma hits a target all-at-once, engulfing the target and affecting the least-armored area on the body. This means anyone not in fully sealed armor is in serious trouble. Second, plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  As with many of the CS weapons, it also has intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
+    <fieldval field="wpDamage" value="2d10"/>
+    <fieldval field="wpShort" value="18"/>
+    <fieldval field="wpMedium" value="36"/>
+    <fieldval field="wpLong" value="72"/>
+    <fieldval field="grCost" value="32000"/>
+    <fieldval field="gearWeight" value="12"/>
+    <fieldval field="wpSpecial" value="Mega Damage.  Engulfs the target and affecting the least-armored area on the body.  Plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  Intigrate"/>
+    <fieldval field="wpShots" value="10"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="StrReqDie" tag="4"/>
+    <tag group="Weapon" tag="LeastArmor"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpCSs20" name="C-20 Laser Pistol" description="As the Coalition States military upgraded its weapons for the Campgain of Unity, they started with the standard sidearm.  Giving the previous C-18 Laser Pistol an overhaul and upgrade, it was upgraded to the C-20 Laser Pistol.\nIn the post-105 P.A. world, it being issued as a sidearm for officers, military police, guards and special operatives." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="15"/>
+    <fieldval field="wpMedium" value="30"/>
+    <fieldval field="wpLong" value="60"/>
+    <fieldval field="grCost" value="16000"/>
+    <fieldval field="wpShots" value="21"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <fieldval field="gearWeight" value="3"/>
+    <fieldval field="wpDmgBonus" value="+1"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    </thing>
+  <thing id="wpCScp30" name="CP-30 Laser Pulse Pistol" description="New CS heavy Laser Pulse Pistol,  it is now the the standard sidearm for &quot;officer&apos;s&quot; for the CS miltary.   Not to be out done by other weapons manufactures,  the Coalition States military create a new Laser Pulse Pistol.  Able to perform three round bursts, it also has an optional backpack unit which can give it 72 additional shots." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="12"/>
+    <fieldval field="wpMedium" value="24"/>
+    <fieldval field="wpLong" value="48"/>
+    <fieldval field="grCost" value="26000"/>
+    <fieldval field="wpShots" value="30"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="wpDmgBonus" value="+1"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    </thing>
+  <thing id="wpCScp40" name="CP-40 Laser Pulse Rifle" description="One of the new Coalition infantry assault rifle&apos;s, the CP-40 uses similar pulse technology as the CP-30 Laser Pulse Pistol.  With the ability to perform three round bursts and an expanded magazine size, is becoming a standard infantry weapon." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="40000"/>
+    <fieldval field="wpShots" value="60"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <fieldval field="gearWeight" value="9"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpCScp50" name="CP-50 &quot;Dragonfire&quot; Laser Rifle" description="Looking to update the C-14 &quot;Fire Breather&quot; rifle, the CP-50 was created.  With the ability to perform three round bursts, an expanded magazine size, integrated nightvision/laser site, and underslung grenade launcher it will be valued by CS forces.  Built-in Grenade Launcher, (20/40/80, Shots 12, damage by greande type).  Not only does it have abuilt  built in Grenade Launcher, it also has an Integrated scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="50000"/>
+    <fieldval field="wpShots" value="60"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Integrated scope with nightvision and laser targeting (offset two points of Range and/or darkness "/>
+    <fieldval field="gearWeight" value="10"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="StrReqDie" tag="3"/>
+    </thing>
+  <thing id="wpCSc29" name="C-29 Heavy Plasma Cannon" description="The Coalition States C-29 Heavy Plasma Cannon is the upgraded heavy support weapon for CS infantry units post-105 P.A.  Firing what amounts to a tiny comet of superheated gas, plasma weapons (called “plasma ejectors” by some old-school warriors) are heavy, bulky affairs, causing them all to have the Snapfire quality (−2 if the firer moves on the same round). They have some distinct advantages, though. First, plasma hits a target all-at-once, engulfing the target and affecting the least-armored area on the body. This means anyone not in fully sealed armor is in serious trouble. Second, plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  As with many of the CS weapons, it also has intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShort" value="18"/>
+    <fieldval field="wpMedium" value="36"/>
+    <fieldval field="wpLong" value="72"/>
+    <fieldval field="grCost" value="42000"/>
+    <fieldval field="gearWeight" value="12"/>
+    <fieldval field="wpSpecial" value="Mega Damage.  Engulfs the target and affecting the least-armored area on the body.  Plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  Intigrate"/>
+    <fieldval field="wpShots" value="16"/>
+    <fieldval field="wpDmgBonus" value="+4"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="StrReqDie" tag="4"/>
+    <tag group="Weapon" tag="LeastArmor"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpCScttp40" name="CTT-P40 Particle Beam Cannon" description="In the post-105 P.A. the Coalition States needed a non-integated weapon for its suits of Power Armor.  The CTT-P40 was designed and deployed, while too heavy (89 lbs in weight, requiring min d12 STR to use)  for normal infantry units it can be placed on a fixed tri-pod, vehicle mount point, carried by suit of Power Armor or full conversion Borg, or perhaps the occasional CS Juicer." compset="Ranged">
+    <fieldval field="wpDamage" value="3d8"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="Not Available"/>
+    <fieldval field="gearWeight" value="89"/>
+    <fieldval field="wpSpecial" value="Min Str d10, Mega Damage, Snapfire."/>
+    <fieldval field="wpShots" value="40"/>
+    <fieldval field="wpDmgBonus" value="+5"/>
+    <fieldval field="wpPiercing" value="6"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    </thing>
+  <thing id="eqCSeap" name="Electro-Adhesive Pads" description="Developed for covert operations by the CS Military, the Electro-Adhesive Pads use small powerful electro-magnets to assist those needing to climb  metal surfaces.  Providing +4 to all Climb checks involving metal." compset="Equipment">
+    <fieldval field="grCost" value="30000"/>
+    <fieldval field="gearWeight" value=".5"/>
+    <usesource source="SavRiftC"/>
+    <tag group="GearType" tag="Adventure"/>
+    </thing>
+  <thing id="eqCSlprg" name="Lock Pick Release Gun" description="An automatic system which can handle just about any every form of purely mechanical lock, providing a +4 to any Lockpicking skill with such locks." compset="Equipment">
+    <fieldval field="gearWeight" value="2"/>
+    <fieldval field="grCost" value="1800"/>
+    <usesource source="SavRiftC"/>
+    <tag group="GearType" tag="Adventure"/>
+    </thing>
+  <thing id="eqCSub" name="Utility Belt" description="Standard issue for all field personnel, the Coalition Utility Belt has numerous pouches and containment options, carrying a number of very useful items. While not as all-purpose as the NGS2 Basic Survival Pack, the belt does aid in survival and other operations in many ways.\n* One Canteen (half gallon).\n* One Communicator (5 mile range).\n* One Compass/inertial mapper.\n* One Firestarter kit (solar-powered lighter and flint &amp; steel).\n* One Flashlight/signal light (with bright halogen and infrared options).\n* One Mini first aid kit (+1 Healing check, only one use).\n* Power bars (three, each can sustain a normal human for a day)." compset="Equipment">
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="grCost" value="2500"/>
+    <usesource source="SavRiftC"/>
+    <tag group="GearType" tag="Adventure"/>
+    </thing>
+  <thing id="edgSREqCoC" name="Equipment: Combat Cyborg" description="Equipment as a Combat Cyborg" compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="HHEquip"/>
+    <autoadd thing="wpChainGS" portal="arMelee"></autoadd>
+    <autoadd thing="wpNG56LtIo" portal="arRange"></autoadd>
+    <autoadd thing="wpMinRailG" portal="arSpecial"></autoadd>
+    </thing>
+  <thing id="edgSREqCra" name="Equipment: Crazy" description="Equipment as a Crazy" compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="HHEquip"/>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    </thing>
+  <thing id="edgSREqJui" name="Equipment: Juicer" description="Equipment as a Juicer" compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="HHEquip"/>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="wpW320LaPi" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpJA9VaLaR" portal="arRange"></autoadd>
+    <autoadd thing="armSRJuicA" portal="arDefense"></autoadd>
+    </thing>
+  <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
   <preclude id="cybAquatic" source="SavRiftC"/>
-  <preclude id="edgNoble" source="SavRiftC"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
   <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   </document>

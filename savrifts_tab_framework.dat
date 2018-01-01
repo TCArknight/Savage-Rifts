@@ -49,6 +49,7 @@
 	  headertemplate="fraChsPick"
 	  addpick="resFraSel">
       <list>Rifts.FrameSel</list>
+      <autotag group="Helper" tag="FreeEdge"/>
       <autotag group="Rifts" tag="FrameSel"/>
       <description/>
       <additem><![CDATA[      

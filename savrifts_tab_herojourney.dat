@@ -57,6 +57,7 @@
 	  headertemplate="hjChsPick"
 	  addpick="resHJSel">
       <list>Rifts.HJSelect</list>
+	  <autotag group="Helper" tag="FreeEdge"/>
       <autotag group="Rifts" tag="HJSelect"/>
       <autotag group="thing" tag="skipprereq"/>
       <description/>
