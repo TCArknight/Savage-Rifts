@@ -3,9 +3,25 @@
   <fileinfo>
     <info_author>Coordinator: TCArknight (Thomas Clegg)
 Contributors: Salcor, Father Morpheus</info_author>
-    <info_history><![CDATA[1/1/18
+    <info_history><![CDATA[1/24/18
+Coalition Field Manual - Complete
+Power Armors - Complete
+Robot Armors - Complete
+
+1/1/18
+Modified Glitter Boy armor (id from vhGlttrBoy to vhSRGlttr)
 Robot Armor 
 * NG-V67 Gunwolf
+
+Vehicle
+* NG357
+* Mountaineer ATV
+
+Frameworks
+* M.A.R.S. (Cybernetic Techno-Warrior)
+* M.A.R.S. (Merc Soldier)
+* M.A.R.S. (Operator)
+
 
 12-19-17
 Equipment
@@ -28,8 +44,6 @@ Frameworks Completed -
 * Juicer
 * M.A.R.S. (Body Fixer)
 * M.A.R.S. (City Rat)
-* M.A.R.S. (Cybernetic Techno-Warrior)
-* M.A.R.S. (Merc Soldier)
 * Burster
 
 xx-xx-xx
@@ -2304,7 +2318,7 @@ validif (rolls = 0)]]></evalrule>
     <bootstrap thing="fcSRGBSHNY"></bootstrap>
     <bootstrap thing="fcSRGBCLOF"></bootstrap>
     <bootstrap thing="fcSRGBHTMC"></bootstrap>
-    <autoadd thing="vhGlttrBoy" portal="grVehicle"></autoadd>
+    <autoadd thing="vhSRGlittr" portal="grVehicle"></autoadd>
     <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <autoadd thing="wpW227PLaP" portal="arRange"></autoadd>
@@ -2527,12 +2541,40 @@ perform hero.assign[Rifts.FortGlory]
   <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
+    <bootstrap thing="edgAce"></bootstrap>
+    <bootstrap thing="edgMcGyver"></bootstrap>
+    <bootstrap thing="skBoating"></bootstrap>
+    <bootstrap thing="skDriving"></bootstrap>
+    <bootstrap thing="skPiloting"></bootstrap>
+    <bootstrap thing="skRepair"></bootstrap>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpW227PLaP" portal="arRange"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
-	  perform hero.assign[Rifts.MARS]
+perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Driving d6, Boating d4, Piloting d4, Repair d8
+#traitcreation[skDriving] += 1
+#traitcreation[skRepair] += 3
+
+hero.childfound[resSkill].field[resSpent].value -= 4</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <eval phase="Render" priority="10000" index="5"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Choose Vehicle"
+header = "Vehicle: "
+header &= hero.child[resFraSel].field[resSummary].text
+
+chooser = "thingid.vhSRMoATV|thingid.vhSRNG357H"
+
+~set up chooser expressions
+hero.child[ehExprHelp].field[ehFrameAdd].text = additem
+hero.child[ehExprHelp].field[ehFrameExp].text = chooser
+hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
     </thing>
   <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -4449,6 +4491,10 @@ validif (rolls >=3)]]></evalrule>
     <fieldval field="cybStrain" value="1"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
+    <eval phase="Effects">herofield[acDefHead].value += 4
+herofield[acDefArms].value += 4
+herofield[acDefLegs].value += 4
+herofield[acDefTorso].value += 4</eval>
     </thing>
   <thing id="cybSRBiStA" name="Bionic Strength Augmentation" description="Fully bionic arms and legs, reinforced artificial musculature, and other techniques raise the cyborg’s Strength. Each step past d12 adds a +1." compset="Cyberware" summary="Strength +1 Step" stacking="merge">
     <fieldval field="cybStrain" value="1"/>
@@ -4497,6 +4543,7 @@ hero.child[attrStr].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="cybStrain" value="1"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
+    <eval phase="Effects"><![CDATA[perform #traitadjust[trTough,+,2,"Reinforced Frame"]]]></eval>
     </thing>
   <thing id="cybSRSecCo" name="Secret Compartment" description="Useful for hiding tools, weapons, and contraband, a cyborg can have one or more compartments for carrying things. Each such compartment can hold three grenades or a decent-sized pistol. Notice checks are made at −4 to find such a compartment, unless the searcher is very familiar with cyborgs, in which case there is no penalty." compset="Cyberware">
     <fieldval field="grCost" value="2500"/>
@@ -4712,6 +4759,7 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <fieldval field="grCost" value="30000"/>
     <usesource source="SavRiftC"/>
     <tag group="Equipment" tag="StdCyber"/>
+    <eval phase="PreTraits"><![CDATA[perform #traitadjust[trPace,+,2,"Cyberware"]]]></eval>
     </thing>
   <thing id="cybSRLockF" name="Lockpick Fingers" description="Various tools and gizmos support breaking-and-entering efforts, granting a +2 to all Lockpicking checks." compset="Cyberware">
     <fieldval field="grDupMax" value="1"/>
@@ -5102,7 +5150,7 @@ hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     <tag group="RacAbilCat" tag="Ability"/>
     <bootstrap thing="edgFleetFt"></bootstrap>
     </thing>
-  <thing id="armComCyb" name="M.D.C. Armor" description="A Combat Cyborg alloy structure provides +8 M.D.C. Armor. This cannot be combined with body armor." compset="Armor">
+  <thing id="armComCyb" name="M.D.C. Armor" description="Description: A Combat Cyborg alloy structure provides +8 M.D.C. Armor. and +3 Toughness. This cannot be combined with normal body armor." compset="Armor">
     <fieldval field="defDefense" value="8"/>
     <fieldval field="grIsEquip" value="1"/>
     <usesource source="SavRiftC"/>
@@ -5113,6 +5161,10 @@ hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     <tag group="Hide" tag="Equipment"/>
     <tag group="ArmorType" tag="Other"/>
     <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="Equipment" tag="StackArmor"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,3,"Toughness"]
+        endif]]></eval>
     </thing>
   <thing id="rpSRMDCArm" name="M.D.C. Armor" description="A Combat Cyborg alloy structure provides +8 M.D.C. Armor. This cannot be combined with body armor." compset="FraAbility">
     <usesource source="SavRiftC"/>
@@ -5447,14 +5499,15 @@ field[wpDamage].text = str & spirit]]></eval>
     <tag group="WeaponType" tag="SFVehMassD"/>
     <tag group="Weapon" tag="HvyWeapon"/>
     </thing>
-  <thing id="vhGlttrBoy" name="Glitter Boy" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} d10\n{b}Swimming Pace: {b} 6\n\n\nThe USA-G10 Chromium Guardsman, or &quot;Glitter Boy&quot; powered armor is one of the most technologically advanced weapons developed before the coming of the Rifts.  It stands 10 feet tall and shines like a mirror, due to its laser resistant armor plating.  The wearer has full life support, including a feeding tube, water supply, and waste processing for up to 4 weeks of living.  It also provides the standard powered armor systems." compset="PowerAr" summary="One-Point-Two Tons of Glittering Metal" holdable="no">
+  <thing id="vhSRGlittr" name="Glitter Boy" description="The USA-G10 Chromium Guardsman, or &quot;Glitter Boy&quot; powered armor is one of the most technologically advanced weapons developed before the coming of the Rifts.  It stands 10 feet tall and shines like a mirror, due to its laser resistant armor plating.  The wearer has full life support, including a feeding tube, water supply, and waste processing for up to 4 weeks of living.  It also provides the standard powered armor systems." compset="PowerAr" summary="One-Point-Two Tons of Glittering Metal" holdable="no">
     <fieldval field="vhTopSpeed" value="10"/>
-    <fieldval field="vhTough" value="+6"/>
-    <fieldval field="vhArmor" value="+18"/>
+    <fieldval field="vhTough" value="6"/>
+    <fieldval field="vhArmor" value="18"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="3"/>
     <fieldval field="gearWeight" value="1.2 Tons"/>
     <fieldval field="grMaxMods" value="7"/>
+    <fieldval field="vhSpecial" value="{b}Running Die: {b} d10{br}{b}Swimming Pace: {b} 6{br}{br}{br}{br}"/>
     <usesource source="SavRiftC"/>
     <tag group="Vehicle" tag="Radar"/>
     <tag group="Vehicle" tag="Sealed"/>
@@ -5465,6 +5518,8 @@ field[wpDamage].text = str & spirit]]></eval>
     <tag group="Vehicle" tag="FusionPow"/>
     <tag group="Vehicle" tag="NightVis"/>
     <tag group="Vehicle" tag="Infrared"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
     <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
 DiffStr = 7 - #trait[attrStr]
 
@@ -5835,12 +5890,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="18"/>
     <fieldval field="shortname" value="CA-1 Dead Boy"/>
     <fieldval field="defStrReq" value="3"/>
-    <usesource source="sepSavRif"/>
-    <tag group="ArmorLoc" tag="Torso"/>
+    <usesource source="CoFieldMan"/>
     <tag group="ArmorLoc" tag="Legs"/>
     <tag group="ArmorLoc" tag="Head"/>
     <tag group="ArmorType" tag="FutArmor"/>
     <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Torso"/>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,2,"Armor"]
         endif]]></eval>
@@ -5850,12 +5905,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="grCost" value="35000"/>
     <fieldval field="shortname" value="CA-2 Dead Boy"/>
     <fieldval field="gearWeight" value="9"/>
-    <usesource source="sepSavRif"/>
-    <tag group="ArmorLoc" tag="Legs"/>
+    <usesource source="CoFieldMan"/>
     <tag group="ArmorLoc" tag="Head"/>
     <tag group="ArmorType" tag="FutArmor"/>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
     </thing>
   <thing id="armSRCSDP1" name="CS DPM 101 &quot;Dog Pack&quot; Light Riot Armor" description="Issued primarily to Coalition Dog Boy soldiers, this armor has none of the electronics or environmental systems of the CA suits. It is fairly lightweight and certainly easier to find and acquire.  Provides +5 Armor." compset="Armor">
     <fieldval field="defDefense" value="5"/>
@@ -5874,12 +5929,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="shortname" value="CA-3 Dead Boy"/>
     <fieldval field="gearWeight" value="12"/>
     <fieldval field="grCost" value="Unavailable for purchase."/>
-    <usesource source="sepSavRif"/>
-    <tag group="ArmorLoc" tag="Head"/>
+    <usesource source="CoFieldMan"/>
     <tag group="ArmorType" tag="FutArmor"/>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,1,"Armor"]
         endif]]></eval>
@@ -5889,12 +5944,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="shortname" value="CA-4 Dead Boy"/>
     <fieldval field="gearWeight" value="20"/>
     <fieldval field="grCost" value="Unavailable for purchase."/>
-    <usesource source="sepSavRif"/>
-    <tag group="ArmorLoc" tag="Head"/>
+    <usesource source="CoFieldMan"/>
     <tag group="ArmorType" tag="FutArmor"/>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,2,"Armor"]
         endif]]></eval>
@@ -5904,12 +5959,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="20"/>
     <fieldval field="grCost" value="Unavailable for purchase."/>
     <fieldval field="defDefense" value="8"/>
-    <usesource source="sepSavRif"/>
-    <tag group="ArmorType" tag="FutArmor"/>
+    <usesource source="CoFieldMan"/>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
     <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,2,"Armor"]
         endif]]></eval>
@@ -5924,10 +5979,10 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="2"/>
     <fieldval field="wpShots" value="10"/>
     <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCSc10" name="C-10 Light Assault Laser Rifle" description="The Coalition States C-10 light laser rifle is long barreled lighter version of the C-12 Heavy Assault Laser Rifle.    The standard Light Assault Laser rilfe of the Coalition States military prior to 105 P.A.     It has an Intigrated Laser Targeting system which provides a bonus, though it tends to be flaky at times." compset="Ranged">
     <fieldval field="wpDamage" value="3d6"/>
@@ -5939,11 +5994,11 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="5"/>
     <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
     <fieldval field="wpShots" value="30"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCSc12" name="C-12 Heavy Assault Laser Rifle" description="The Coalition States C-12 Heavy Assault Laser Rifle.   The standard Heavy Assault Laser rilfe of the Coalition States military prior to 105 P.A.  Has an Intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
     <fieldval field="wpDamage" value="3d6"/>
@@ -5957,12 +6012,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpShots" value="60"/>
     <fieldval field="wpDmgBonus" value="+1"/>
     <fieldval field="wpFireRate" value="3"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
     <tag group="Weapon" tag="ThreeRound"/>
     <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     <tag group="Equipment" tag="TwoHand"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     </thing>
   <thing id="wpCSc14" name="C-14 &quot;Fire Breather&quot; Laser Rifle" description="The Coalition States C-14 &quot;Fire Breather&quot; Laser Rifle.   This is a popular Coalition States Laser Rifle which has a built in Grenade Launcher, (20/40/80, Shots 12, damage by greande type).  Not only does it have abuilt  built in Grenade Launcher, it also has a  scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties).   It was a standard weapon prior to 105 P.A., but will reamin in service for at least another five to ten years." compset="Ranged">
     <fieldval field="wpDamage" value="3d6"/>
@@ -5974,13 +6029,13 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
     <fieldval field="wpShots" value="20"/>
     <fieldval field="gearWeight" value="10"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     <tag group="Weapon" tag="ThreeRound"/>
     <tag group="StrReqDie" tag="3"/>
     <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
     <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCScv212" name="CV-212 Variable Light Frequency Rifle" description="Originally, the CV-212 Variable Light Frequency Laser Rifle was developed for limited use by CS Skeleabots, and a special operative branch of the CS MIlitary.   Special microchips rotate the light frequency, enabling it to bypass laser resistant armor.  The weapon also has the ability to act as a Mega Damage weapon, but requires 10 shots for a more powerful charge." compset="Ranged">
     <fieldval field="wpDamage" value="3d6"/>
@@ -5994,11 +6049,11 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpDmgBonus" value="+2"/>
     <fieldval field="wpFireRate" value="3"/>
     <fieldval field="wpShots" value="30"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     <tag group="Weapon" tag="ThreeRound"/>
     <tag group="Weapon" tag="SnapFire"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCSc27" name="C-27 Heavy Plasma Cannon" description="The Coalition States C-27 Heavy Plasma Cannon was the original heavy support weapon for CS infantry units prior to 105 P.A.  Firing what amounts to a tiny comet of superheated gas, plasma weapons (called “plasma ejectors” by some old-school warriors) are heavy, bulky affairs, causing them all to have the Snapfire quality (−2 if the firer moves on the same round). They have some distinct advantages, though. First, plasma hits a target all-at-once, engulfing the target and affecting the least-armored area on the body. This means anyone not in fully sealed armor is in serious trouble. Second, plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  As with many of the CS weapons, it also has intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
     <fieldval field="wpDamage" value="2d10"/>
@@ -6010,14 +6065,14 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpSpecial" value="Mega Damage.  Engulfs the target and affecting the least-armored area on the body.  Plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  Intigrate"/>
     <fieldval field="wpShots" value="10"/>
     <fieldval field="wpDmgBonus" value="+2"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="StrReqDie" tag="4"/>
     <tag group="Weapon" tag="LeastArmor"/>
     <tag group="Weapon" tag="SnapFire"/>
     <tag group="Weapon" tag="SetFire"/>
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCSs20" name="C-20 Laser Pistol" description="As the Coalition States military upgraded its weapons for the Campgain of Unity, they started with the standard sidearm.  Giving the previous C-18 Laser Pistol an overhaul and upgrade, it was upgraded to the C-20 Laser Pistol.\nIn the post-105 P.A. world, it being issued as a sidearm for officers, military police, guards and special operatives." compset="Ranged">
     <fieldval field="wpDamage" value="2d6"/>
@@ -6030,10 +6085,10 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
     <fieldval field="gearWeight" value="3"/>
     <fieldval field="wpDmgBonus" value="+1"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
     <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     </thing>
   <thing id="wpCScp30" name="CP-30 Laser Pulse Pistol" description="New CS heavy Laser Pulse Pistol,  it is now the the standard sidearm for &quot;officer&apos;s&quot; for the CS miltary.   Not to be out done by other weapons manufactures,  the Coalition States military create a new Laser Pulse Pistol.  Able to perform three round bursts, it also has an optional backpack unit which can give it 72 additional shots." compset="Ranged">
     <fieldval field="wpDamage" value="2d6"/>
@@ -6047,10 +6102,10 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="4"/>
     <fieldval field="wpDmgBonus" value="+1"/>
     <fieldval field="wpFireRate" value="3"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCScp40" name="CP-40 Laser Pulse Rifle" description="One of the new Coalition infantry assault rifle&apos;s, the CP-40 uses similar pulse technology as the CP-30 Laser Pulse Pistol.  With the ability to perform three round bursts and an expanded magazine size, is becoming a standard infantry weapon." compset="Ranged">
     <fieldval field="wpDamage" value="3d6"/>
@@ -6064,11 +6119,11 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="9"/>
     <fieldval field="wpDmgBonus" value="+2"/>
     <fieldval field="wpFireRate" value="3"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     <tag group="Weapon" tag="ThreeRound"/>
     <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCScp50" name="CP-50 &quot;Dragonfire&quot; Laser Rifle" description="Looking to update the C-14 &quot;Fire Breather&quot; rifle, the CP-50 was created.  With the ability to perform three round bursts, an expanded magazine size, integrated nightvision/laser site, and underslung grenade launcher it will be valued by CS forces.  Built-in Grenade Launcher, (20/40/80, Shots 12, damage by greande type).  Not only does it have abuilt  built in Grenade Launcher, it also has an Integrated scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)." compset="Ranged">
     <fieldval field="wpDamage" value="3d6"/>
@@ -6082,12 +6137,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="gearWeight" value="10"/>
     <fieldval field="wpDmgBonus" value="+2"/>
     <fieldval field="wpFireRate" value="3"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
     <tag group="Weapon" tag="ThreeRound"/>
     <tag group="Equipment" tag="TwoHand"/>
     <tag group="StrReqDie" tag="3"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCSc29" name="C-29 Heavy Plasma Cannon" description="The Coalition States C-29 Heavy Plasma Cannon is the upgraded heavy support weapon for CS infantry units post-105 P.A.  Firing what amounts to a tiny comet of superheated gas, plasma weapons (called “plasma ejectors” by some old-school warriors) are heavy, bulky affairs, causing them all to have the Snapfire quality (−2 if the firer moves on the same round). They have some distinct advantages, though. First, plasma hits a target all-at-once, engulfing the target and affecting the least-armored area on the body. This means anyone not in fully sealed armor is in serious trouble. Second, plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  As with many of the CS weapons, it also has intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
     <fieldval field="wpDamage" value="3d10"/>
@@ -6099,14 +6154,14 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpSpecial" value="Mega Damage.  Engulfs the target and affecting the least-armored area on the body.  Plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  Intigrate"/>
     <fieldval field="wpShots" value="16"/>
     <fieldval field="wpDmgBonus" value="+4"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <usesource source="CoFieldMan"/>
     <tag group="StrReqDie" tag="4"/>
     <tag group="Weapon" tag="LeastArmor"/>
     <tag group="Weapon" tag="SnapFire"/>
     <tag group="Weapon" tag="SetFire"/>
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
     </thing>
   <thing id="wpCScttp40" name="CTT-P40 Particle Beam Cannon" description="In the post-105 P.A. the Coalition States needed a non-integated weapon for its suits of Power Armor.  The CTT-P40 was designed and deployed, while too heavy (89 lbs in weight, requiring min d12 STR to use)  for normal infantry units it can be placed on a fixed tri-pod, vehicle mount point, carried by suit of Power Armor or full conversion Borg, or perhaps the occasional CS Juicer." compset="Ranged">
     <fieldval field="wpDamage" value="3d8"/>
@@ -6119,29 +6174,29 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="wpShots" value="40"/>
     <fieldval field="wpDmgBonus" value="+5"/>
     <fieldval field="wpPiercing" value="6"/>
-    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
-    <tag group="StrReqDie" tag="6"/>
+    <usesource source="CoFieldMan"/>
     <tag group="Weapon" tag="SnapFire"/>
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="Equipment" tag="TwoHand"/>
     <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="StrReqDie" tag="6"/>
     </thing>
   <thing id="eqCSeap" name="Electro-Adhesive Pads" description="Developed for covert operations by the CS Military, the Electro-Adhesive Pads use small powerful electro-magnets to assist those needing to climb  metal surfaces.  Providing +4 to all Climb checks involving metal." compset="Equipment">
     <fieldval field="grCost" value="30000"/>
     <fieldval field="gearWeight" value=".5"/>
-    <usesource source="SavRiftC"/>
+    <usesource source="CoFieldMan"/>
     <tag group="GearType" tag="Adventure"/>
     </thing>
   <thing id="eqCSlprg" name="Lock Pick Release Gun" description="An automatic system which can handle just about any every form of purely mechanical lock, providing a +4 to any Lockpicking skill with such locks." compset="Equipment">
     <fieldval field="gearWeight" value="2"/>
     <fieldval field="grCost" value="1800"/>
-    <usesource source="SavRiftC"/>
+    <usesource source="CoFieldMan"/>
     <tag group="GearType" tag="Adventure"/>
     </thing>
   <thing id="eqCSub" name="Utility Belt" description="Standard issue for all field personnel, the Coalition Utility Belt has numerous pouches and containment options, carrying a number of very useful items. While not as all-purpose as the NGS2 Basic Survival Pack, the belt does aid in survival and other operations in many ways.\n* One Canteen (half gallon).\n* One Communicator (5 mile range).\n* One Compass/inertial mapper.\n* One Firestarter kit (solar-powered lighter and flint &amp; steel).\n* One Flashlight/signal light (with bright halogen and infrared options).\n* One Mini first aid kit (+1 Healing check, only one use).\n* Power bars (three, each can sustain a normal human for a day)." compset="Equipment">
     <fieldval field="gearWeight" value="4"/>
     <fieldval field="grCost" value="2500"/>
-    <usesource source="SavRiftC"/>
+    <usesource source="CoFieldMan"/>
     <tag group="GearType" tag="Adventure"/>
     </thing>
   <thing id="edgSREqCoC" name="Equipment: Combat Cyborg" description="Equipment as a Combat Cyborg" compset="Edge">
@@ -6216,13 +6271,1395 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
       <bootstrap thing="wpSFFlameH"></bootstrap>
       </child>
     </thing>
+  <thing id="grpSRShift" name="Shifter" compset="Group" summary="A magical specialist focused on Summoning and controlling Rifts." uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="edgSREqHCy" name="Hovercycle" description="Start with a NG-357 Magnum-Turbo Hovercycle." compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="HHEquip"/>
+    <autoadd thing="vhSRNG357H" portal="grVehicle"></autoadd>
+    </thing>
+  <thing id="edgSREqATV" name="ATV" description="Start with a Mountaineer ATV." compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="HHEquip"/>
+    <autoadd thing="vhSRMoATV" portal="grVehicle"></autoadd>
+    </thing>
+  <thing id="vhSRNG357H" name="NG-357 Magnum-Turbo Hovercycle" description="If the NG-150 is a street rocket, the NG-357 is its massive hog of a cousin. Heavy, tough, and powerful, the Magnum-Turbo is particularly popular with cyborgs, juicers, crazies, and similar types. The electric engine provides a maximum range of 500 miles, with a maximum altitude of 100 feet, before a night’s recharge is required. The powerful engines are distributed in a way that enables the cycle to handle drops from up to 400 feet. (375,000 credits for the electric model; 1.3 million credits for a nuclear engine)." compset="Vehicle">
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="70"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="2"/>
+    <fieldval field="grCost" value="375000"/>
+    <fieldval field="grMaxMods" value="3"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Exposed" name="Exposed Crew"/>
+    <tag group="Vehicle" tag="Handle1" name="Handling 1"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <tag group="VehEra" tag="RiftsEra" name="Rifts"/>
+    <tag group="VehType" tag="AirHov" name="Air and Hovercraft"/>
+    <tag group="Vehicle" tag="MDCArmor" name="M.D.C. Armor"/>
+    </thing>
+  <thing id="vhSRMoATV" name="Mountaineer ATV" description="The Mountaineer is expensive, but most adventurers consider it a bargain in the long run. It’s tough, roomy, and well-equipped, and its special three-wheeled design gives it remarkable handling. The electric engine version has a range of 600 miles! As well, up to 5 Mods of weaponry can be added. (76,000 credits for the electric model; 500,000 credits for a nuclear engine)" compset="Vehicle">
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhSize" value="5"/>
+    <fieldval field="vhAccel" value="10"/>
+    <fieldval field="vhTopSpeed" value="50"/>
+    <fieldval field="vhArmor" value="14"/>
+    <fieldval field="vhCrew" value="6"/>
+    <fieldval field="grCost" value="76000"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Handle1" name="Handling 1"/>
+    <tag group="VehEra" tag="RiftsEra" name="Rifts"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="Vehicle" tag="AllTerrain" name="All-Terrain"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="EnvironSys" name="Environmental Systems"/>
+    </thing>
+  <thing id="cybSRBICCW" name="Built-In Close Combat Weapon" description="Each of the weapons listed in the Close Combat section can be integrated into a cyborg’s framework. Treat the Strain as 1 for every five pounds (round up), and multiply the cost by 1.5 to get the cybernetic version cost." compset="Cyberware">
+    <fieldval field="grDupMax" value="2"/>
+    <fieldval field="cybStrain" value="1"/>
+    <fieldval field="cybCandid1" value="component.WeapMelee &amp; !Equipment.Natural"/>
+    <fieldval field="grCost" value="1.5"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Equipment" tag="StdCyber"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    </thing>
+  <thing id="vhSRTR001" name="TR-001 Titan Combat Robot" description="Titan Robotics’ answer to the Coalition’s Enforcer robot, this is a durable and popular model favored by many who travel dangerous territory or expect trouble with the Coalition. Strangely enough, the Titan also suffers the same vulnerability as the Enforcer where the sensor turret is concerned (−4 to hit, 12 damage to destroy). Not surprisingly, Titans are very prized and expensive." compset="Walker" summary="Popular and durable Robot Armor">
+    <fieldval field="grCost" value="24000000"/>
+    <fieldval field="vhTopSpeed" value="10"/>
+    <fieldval field="vhTough" value="44"/>
+    <fieldval field="vhArmor" value="22"/>
+    <fieldval field="vhCrew" value="1+2"/>
+    <fieldval field="vhSize" value="8"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMedRailG"></bootstrap>
+      <bootstrap thing="wpMdMisLau">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpSFVLasM"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX500" name="Triax X-500 Forager Combat Robot" description="Phased out of service in the New German Republic (NGR) decades ago, this highly\ndependable vehicle is in solid supply in North America now. Designed for longrange\npatrols, the Forager is noted for its multiple spotlights for area illumination. It\nalso has enough storage capacity to keep four people in water and food for up to two \nweeks’ travel. Tough, strong, and versatile, the Forager is a favored choice for robot jocks working their way across the wilderness." compset="Walker" summary="Highly dependable vehicle from the NGR">
+    <fieldval field="grCost" value="24000000"/>
+    <fieldval field="vhTopSpeed" value="10"/>
+    <fieldval field="vhTough" value="33"/>
+    <fieldval field="vhArmor" value="15"/>
+    <fieldval field="vhCrew" value="2+2"/>
+    <fieldval field="vhSize" value="6"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMdMisLau">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdIonCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX535" name="Triax X-535 Hunter" description="One of the NGR’s favorite workhorses, the X-535 Hunter (more commonly known as the “Jager”) makes up over a quarter of the nation’s robot armor force. Speedy and agile, this small robot armor suit is a nimble all-purpose infantry weapon. The Hunter can leap, climb, and roll with surprising grace, making it a superb choice for reconnaissance and infantry duties. The X-535 is equipped with two small rapid-fire machine guns in its head. These weapons are primarily meant for peacekeeping and riot control and are not employed against heavy targets (Range 24/48/96, Damage 3d6, RoF 3, AP 2). Like the T-10 Cyclops, this robot armor is highly modular and can be adapted with several weapon systems mounted on the robot’s shoulders and extend over its head. However, doing so reduces the robot armor’s Pace by half, and it can only carry one of these systems at a time. Commonly, the X-535 also carries a light rail gun as a handheld weapon. (12 million credits)" compset="Walker" summary="Work Horse of the NGR">
+    <fieldval field="vhTopSpeed" value="22"/>
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="12000000"/>
+    <fieldval field="vhSize" value="4"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRHTMG"></bootstrap>
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="wpSRHTMG" name="Hunter Head Machine Guns" compset="SpecWeap" summary="Peacekeeping and riot control weapons">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpShort" value="24"/>
+    <fieldval field="wpMedium" value="48"/>
+    <fieldval field="wpLong" value="96"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="SFVehSlugt"/>
+    </thing>
+  <thing id="wpSRTX843" name="TX-843P Particle Beam Cannon" compset="SpecWeap" summary="A short ranged anti-armor infantry weapon">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpPiercing" value="4"/>
+    <usesource source="SavRiftC"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="Fixed"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="SFVehParAc"/>
+    </thing>
+  <thing id="wpSRTX826" name="TX-826C Anti-Aircraft Flak Gun" description="A double-barreled, rapid-fire cannon for long ranged infantry support and static defense" compset="SpecWeap" summary="Anti-Aircraft Mount">
+    <fieldval field="wpDamage" value="7d6"/>
+    <fieldval field="wpShort" value="200"/>
+    <fieldval field="wpMedium" value="400"/>
+    <fieldval field="wpLong" value="800"/>
+    <fieldval field="wpPiercing" value="6"/>
+    <fieldval field="wpFireRate" value="2"/>
+    <usesource source="SavRiftC"/>
+    <tag group="WeaponType" tag="SFVehAutoC"/>
+    <tag group="Weapon" tag="SmallBurst"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="StrReqDie" tag="6"/>
+    </thing>
+  <thing id="wpSRTX871" name="TX-871MM Rotary Missile Launcher" description="Launchers list their standard anti-personnel configuration. They can instead be loaded with anti-vehicle missiles, reducing damage dice by one but increasing AP by 5. For example, a Medium Missile does 8d6 with AP 15, while an anti-vehicle version does 7d6 at AP 20. These launchers roll a  normal Shooting ranged attack, targets can roll Agility to dive for cover (no penalty for a SBT, −2 for a MBT, and −4 for a LBT).\n\nUsing a unique rotary drum design, this Light Missile Launcher has a Rate of Fire of 4." compset="SpecWeap" summary="unique missile launcher">
+    <fieldval field="wpDamage" value="6d6"/>
+    <fieldval field="wpSpecial" value="Mega Damage.  MBT.  Full reload $24,000 ($3000/missile)."/>
+    <fieldval field="wpPiercing" value="8"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpShots" value="8"/>
+    <fieldval field="grCost" value="100000"/>
+    <fieldval field="grModsUsed" value="2"/>
+    <fieldval field="gearWeight" value="200"/>
+    <fieldval field="wpFireRate" value="4"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="User" tag="SizeCost" name="SizeCost" abbrev="SizeCost"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="MedBurst"/>
+    <tag group="WeaponType" tag="SFVehMissi" name="Vehicle Missiles/Torpedoes" abbrev="Vehicle Missiles/Torpedoes"/>
+    <tag group="Hide" tag="Equipment"/>
+    </thing>
+  <thing id="vhSRX535PB" name="Triax X-535 Hunter with Particle Cannon shoulder mount" description="One of the NGR’s favorite workhorses, the X-535 Hunter (more commonly known as the “Jager”) makes up over a quarter of the nation’s robot armor force. Speedy and agile, this small robot armor suit is a nimble all-purpose infantry weapon. The Hunter can leap, climb, and roll with surprising grace, making it a superb choice for reconnaissance and infantry duties. The X-535 is equipped with two small rapid-fire machine guns in its head. These weapons are primarily meant for peacekeeping and riot control and are not employed against heavy targets (Range 24/48/96, Damage 3d6, RoF 3, AP 2). Like the T-10 Cyclops, this robot armor is highly modular and can be adapted with several weapon systems mounted on the robot’s shoulders and extend over its head. However, doing so reduces the robot armor’s Pace by half, and it can only carry one of these systems at a time. Commonly, the X-535 also carries a light rail gun as a handheld weapon. (12 million credits)" compset="Walker" summary="Work Horse of the NGR with Shoulder mounted Particle  Beam">
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="12000000"/>
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="vhTopSpeed" value="11"/>
+    <fieldval field="vhSpecial" value="The Shoulder platform mount for the X-535 reduces the pace from 22 to 11. "/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="VehType" tag="Walker"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRHTMG"></bootstrap>
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpSRTX843"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX535AA" name="Triax X-535 Hunter with Anti-Aircraft Gun shoulder mount" description="One of the NGR’s favorite workhorses, the X-535 Hunter (more commonly known as the “Jager”) makes up over a quarter of the nation’s robot armor force. Speedy and agile, this small robot armor suit is a nimble all-purpose infantry weapon. The Hunter can leap, climb, and roll with surprising grace, making it a superb choice for reconnaissance and infantry duties. The X-535 is equipped with two small rapid-fire machine guns in its head. These weapons are primarily meant for peacekeeping and riot control and are not employed against heavy targets (Range 24/48/96, Damage 3d6, RoF 3, AP 2). Like the T-10 Cyclops, this robot armor is highly modular and can be adapted with several weapon systems mounted on the robot’s shoulders and extend over its head. However, doing so reduces the robot armor’s Pace by half, and it can only carry one of these systems at a time. Commonly, the X-535 also carries a light rail gun as a handheld weapon. (12 million credits)" compset="Walker" summary="Work Horse of the NGR with Shoulder mounted Anti-Aircraft Gun">
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="12000000"/>
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="vhTopSpeed" value="11"/>
+    <fieldval field="vhSpecial" value="The Shoulder platform mount for the X-535 reduces the pace from 22 to 11. "/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="VehType" tag="Walker"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="AirDefRad"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRHTMG"></bootstrap>
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpSRTX826"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX535IC" name="Triax X-535 Hunter with Ion Cannon &amp; Missiles shoulder mount" description="One of the NGR’s favorite workhorses, the X-535 Hunter (more commonly known as the “Jager”) makes up over a quarter of the nation’s robot armor force. Speedy and agile, this small robot armor suit is a nimble all-purpose infantry weapon. The Hunter can leap, climb, and roll with surprising grace, making it a superb choice for reconnaissance and infantry duties. The X-535 is equipped with two small rapid-fire machine guns in its head. These weapons are primarily meant for peacekeeping and riot control and are not employed against heavy targets (Range 24/48/96, Damage 3d6, RoF 3, AP 2). Like the T-10 Cyclops, this robot armor is highly modular and can be adapted with several weapon systems mounted on the robot’s shoulders and extend over its head. However, doing so reduces the robot armor’s Pace by half, and it can only carry one of these systems at a time. Commonly, the X-535 also carries a light rail gun as a handheld weapon. (12 million credits)" compset="Walker" summary="Work Horse of the NGR with Shoulder mounted Ion Cannon and Missile Launcher">
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="12000000"/>
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="vhTopSpeed" value="11"/>
+    <fieldval field="vhSpecial" value="The Shoulder platform mount for the X-535 reduces the pace from 22 to 11. "/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="VehType" tag="Walker"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRHTMG"></bootstrap>
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdIonCan"></bootstrap>
+      <bootstrap thing="wpMdMisLau"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX535RM" name="Triax X-535 Hunter with Rotary Missile Launcher shoulder mount" description="One of the NGR’s favorite workhorses, the X-535 Hunter (more commonly known as the “Jager”) makes up over a quarter of the nation’s robot armor force. Speedy and agile, this small robot armor suit is a nimble all-purpose infantry weapon. The Hunter can leap, climb, and roll with surprising grace, making it a superb choice for reconnaissance and infantry duties. The X-535 is equipped with two small rapid-fire machine guns in its head. These weapons are primarily meant for peacekeeping and riot control and are not employed against heavy targets (Range 24/48/96, Damage 3d6, RoF 3, AP 2). Like the T-10 Cyclops, this robot armor is highly modular and can be adapted with several weapon systems mounted on the robot’s shoulders and extend over its head. However, doing so reduces the robot armor’s Pace by half, and it can only carry one of these systems at a time. Commonly, the X-535 also carries a light rail gun as a handheld weapon. (12 million credits)" compset="Walker" summary="Work Horse of the NGR with Shoulder mounted Rotary Missile Launcher">
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="12000000"/>
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="vhTopSpeed" value="11"/>
+    <fieldval field="vhSpecial" value="The Shoulder platform mount for the X-535 reduces the pace from 22 to 11. "/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="VehType" tag="Walker"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRHTMG"></bootstrap>
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpSRTX871"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRNGEX5" name="NG Ex-5 Behemoth Explorer" description="This massive robot vehicle is often considered akin to a “mobile home on legs.” Part science laboratory, part medical bay, the Behemoth is an unusual robot often used by adventurers, researchers, and scientists who seek comfort during their travels. The robot features 10 separate living quarters, with each room able to accommodate up to four people sleeping in bunk-bed style cots that fold down from the walls. There’s a communal dining area and observation deck, plus a storage bay that can hold up to four small vehicles (e.g., hover-cycles) and up to six suits of power armor with room to spare. The robot’s small med-lab has basic equipment and tools for treating wounds and performing bioresearch. The Behemoth has two robot arms designed for wilderness exploration, well-suited to grasping and taking samples of topsoil or plant life. There are smaller, retractable arms and mechanical hands housed in the forearms. These smaller hands are suited to more delicate tasks requiring manual dexterity. Although the behemoth is lightly armed, it is popular amongst mercenaries and adventurers as a mobile base camp or command post. The robot has a distinctive profile, and it has a long history of being one of Northern Gun’s oldest and most famous designs for non-combat personnel. In addition to the standard robot features, the Behemoth possesses a thermal-imager, infrared and ultraviolet optics, infrared searchlights, an enhanced radar system, and a multicamera system to expand the crew’s vision to all sides of the robot. (85 million credits)" compset="Walker" summary="Massive mobile robot base">
+    <fieldval field="vhTopSpeed" value="7"/>
+    <fieldval field="vhTough" value="40"/>
+    <fieldval field="vhArmor" value="18"/>
+    <fieldval field="vhCrew" value="2+38"/>
+    <fieldval field="grCost" value="85000000"/>
+    <fieldval field="vhSize" value="8"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="CargoSpace"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="modSHangar"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRNGV7" name="NG-V7 Block IV Hunter Mobile Gun" description="An upgrade to the venerable Hunter Mobile Gun design by Northern Gun, the NG-V7 takes a classic design and improves on it. The NG-V7’s name comes from the massive rail gun mounted on a dome-shaped turret for the robot’s “head.” Heavily armed and armored, the Hunter Mobile Gun continues Northern Gun’s tradition of manufacturing rugged, dependable, and difficult-to-destroy vehicles. It is also highly modular, able\nto field a number of different weapons on its hardpoints depending on the mission. The rail gun can be exchanged with a medium ion cannon, while the belly gun laser can be swapped for a flamethrower or a light rail gun. (56 million credits)" compset="Walker" summary="Combat Robot with a massive Railgun">
+    <fieldval field="vhTopSpeed" value="12"/>
+    <fieldval field="vhTough" value="35"/>
+    <fieldval field="vhArmor" value="17"/>
+    <fieldval field="vhCrew" value="2+3"/>
+    <fieldval field="grCost" value="56000000"/>
+    <fieldval field="vhSize" value="6"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdLasCan"></bootstrap>
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX545" name="Triax X-545 Super Hunter" description="The Super Hunter (also sometimes called the “Armored Jager”) is a larger and far more heavily armored version of the Hunter combat robot. The Super Hunter is meant to stand its ground and fight advancing enemy troops while NGR forces retreat or regroup—a situation all too common in the war against the Gargoyle Empire. The X-545 is equipped with the same head-mounted light machine gun system as the X-535, and it also tends to carry a Light Rail Gun in its hands. Unlike the X-535, the Super Hunter’s weapons array is fixed. (16 million credits)" compset="Walker" summary="A larger more heavily armored version of the NGR Jaeger">
+    <fieldval field="vhTopSpeed" value="12"/>
+    <fieldval field="vhTough" value="29"/>
+    <fieldval field="vhArmor" value="14"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="16000000"/>
+    <fieldval field="vhSize" value="5"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="11"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMdIonCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="6"/>
+        </bootstrap>
+      <bootstrap thing="wpVibSword">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpSRTX545F">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="wpSRTX545F" name="TX-545 Flamethrower" compset="SpecWeap" summary="Flamethrower mounted on Armored Jaeger">
+    <fieldval field="wpDamage" value="2d10+2"/>
+    <usesource source="SavRiftC"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="Weapon" tag="LeastArmor"/>
+    <tag group="Weapon" tag="ConeTempl"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="WeaponType" tag="SFFlamer"/>
+    <tag group="Hide" tag="Equipment"/>
+    </thing>
+  <thing id="vhSRCSUAR1" name="CS UAR-1 Enforcer" description="At nearly 20 feet tall and designed to look like a giant suit of Deadboy armor striding across the battlefield, the UAR-1 Enforcer robot armor is bound to make anyone think twice about doing battle with the Coalition. This venerable war machine remains in extensive use throughout the CS, though more and more are finding their way (repainted and modified, of course) into the Black Market. One artifact of its original design is that much of its sensory enhancement is external to the main body; the sensor turret, which provides +2 Notice and radar, can be directly targeted (−4 to hit, an attack dealing 15 damage destroys it). Knocking it out removes those benefits.\n (28 million credits)" compset="Walker" summary="A venerable warmachine of the Coalition States">
+    <fieldval field="vhSize" value="6"/>
+    <fieldval field="vhCrew" value="1+1"/>
+    <fieldval field="vhTough" value="33"/>
+    <fieldval field="vhArmor" value="15"/>
+    <fieldval field="vhTopSpeed" value="10"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpWIGL20GL"></bootstrap>
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpLtMisLau">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdLasCan">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdMisLau"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRCT003" name="CS CR-003 Spider-Skull Walker Assault Armor" description="Designed as much for terror as for tactics, the Spider-Skull is a giant death head motif hull on six legs, festooned with heavy weapons. At 30 feet in height, it towers over most battlefield combatants, and the insect-like legs give it exceptional mobility through rough terrain and surprising capacity for climbing fairly steep inclines. Very few find their way into the Black Market, as they’ve not been part of the phase-out programs. (36 million credits)" compset="Walker" summary="Robot APC">
+    <fieldval field="grCost" value="36000000"/>
+    <fieldval field="vhTopSpeed" value="12"/>
+    <fieldval field="vhTough" value="35"/>
+    <fieldval field="vhArmor" value="16"/>
+    <fieldval field="vhCrew" value="2+6"/>
+    <fieldval field="vhSize" value="8"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="User" tag="Military"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpHvLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpHvLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRAFC023" name="CS AFC-023 Sky Cycle" description="One of the key components of the Coalition military’s air force, the one-man AFC-023 Sky Cycle is an adrenaline junkie’s dream and a safety officer’s nightmare. A longtime mainstay of the Coalition’s military machine, a small number of 023s recently came into the Black Market as newer vehicles slowly replaced them. Fantastic speed and maneuverability make it highly desirable and hard to find, even for the cost. (2 million credits)" compset="Vehicle" summary="One man attack aircraft">
+    <fieldval field="vhAccel" value="30"/>
+    <fieldval field="vhTopSpeed" value="190"/>
+    <fieldval field="vhClimb" value="0"/>
+    <fieldval field="vhTough" value="16"/>
+    <fieldval field="vhArmor" value="6"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="VTOL"/>
+    <tag group="VehType" tag="VTOL"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <child entity="LoadOut">
+      <bootstrap thing="modVHandli"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpHvLasCan"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRAFC050" name="CS AFC-050 Death&apos;s Head Transport" description="One of the most terrifying sights in the sky is a fully-loaded Death’s Head transport; a single vehicle represents a large unit of Coalition soldiers capable of taking on an entire town with ease. The usual compliment aboard is the nine man crew (Pilot, co-pilot, two gunners, technicians); two Mark V APCs with 20 Dead Boy soldiers in each; two UAR-1 Enforcers; a Spider-Skull Walker; and either a hundred more Dead Boys or two dozen SAMAS troopers. One of these should represent a terrible threat for any group of heroes, more of a thing to avoid instead of taking on unless they’ve got one seriously fantastic plan. (Unavailable for purchase)" compset="Vehicle" summary="Massive Coalition combat transport">
+    <fieldval field="vhAccel" value="30"/>
+    <fieldval field="vhTopSpeed" value="245"/>
+    <fieldval field="vhTough" value="52"/>
+    <fieldval field="vhArmor" value="30"/>
+    <fieldval field="vhSize" value="10"/>
+    <fieldval field="vhCrew" value="2+407"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="DronePABay"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="Vehicle" tag="VTOL"/>
+    <tag group="VehType" tag="Aircraft"/>
+    <tag group="User" tag="Military"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="CargoSpace"/>
+    <tag group="Vehicle" tag="Comm"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpHvLasCan">
+        <assignval field="stackQty" value="6"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRCSMKV" name="CS Mark V Armored Personnel Carrier" description="Most experienced mercenaries and adventurers in North America dream of one\nday having a Mark V to call their own. A machine designed for combat zones, this\neight-wheeled monster normally loads up 20 Dead Boy soldiers and 6 SAMAS, with\nenough room for crew and cargo for a couple of weeks in the field. Two gunners operate the heavy rail gun and the laser turrets, while the driver or co-driver handles the forward mounted mini rail guns and the missile launchers (a communications\nspecialist is usually assigned as well). It’s highly illegal to own one with the full\narmaments compliment anywhere near Coalition territory, though a stripped-down\nmodel (laser turrets only) will normally only get the hairy eyeball from Coalition\nauthorities if paperwork is otherwise in order. (21 million credits fully loaded; 10\nmillion stripped down)" compset="Vehicle" summary="The standard APC of the Coalition">
+    <fieldval field="vhAccel" value="5"/>
+    <fieldval field="vhTopSpeed" value="30"/>
+    <fieldval field="vhTough" value="32"/>
+    <fieldval field="vhArmor" value="17"/>
+    <fieldval field="vhCrew" value="2+33"/>
+    <fieldval field="grCost" value="21000000"/>
+    <fieldval field="vhCost" value="10 Million stripped"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <fieldval field="vhSize" value="7"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="User" tag="Military"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="Vehicle" tag="Amphib"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="CargoSpace"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpMdLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMinRailG">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRNG150" name="NG-150 Streetrunner Hovercycle" description="Northern Gun’s main entry in the hovercycle market isn’t quite as fast as the Speedster,\nnor as tough, but it gets high marks for handling and maneuverability. Combining\nsolar cells and a powerful electric engine, the NG-150 has a range of 600 miles and\na max ceiling of 20 feet, before it needs a night’s recharge. (153,000 credits)" compset="Vehicle" summary="Northern Gun&apos;s main entry into the hovercycle market">
+    <fieldval field="vhAccel" value="12"/>
+    <fieldval field="vhTopSpeed" value="60"/>
+    <fieldval field="vhTough" value="11"/>
+    <fieldval field="vhArmor" value="4"/>
+    <fieldval field="vhCrew" value="1+1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="1"/>
+    <fieldval field="grCost" value="153000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="AirHov"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="Handle3"/>
+    </thing>
+  <thing id="vhSRNG357" name="NG-357 Magnum-Turbo Hovercycle - electric" description="If the NG-150 is a street rocket, the NG-357 is its massive hog of a cousin. Heavy, tough, and powerful, the Magnum-Turbo is particularly popular with cyborgs, juicers, crazies, and similar types. The electric engine provides a maximum range of 500 miles, with a\nmaximum altitude of 100 feet, before a night’s recharge is required. The powerful\nengines are distributed in a way that enables the cycle to handle drops from up to 400\nfeet. (375,000 credits for the electric model)" compset="Vehicle" summary="The massive hog of hovercycles">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="70"/>
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1+1"/>
+    <fieldval field="grMaxMods" value="3"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grCost" value="375000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="SRHANDLING" name="Handling 1"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="AirHov"/>
+    </thing>
+  <thing id="vhSRNG357N" name="NG-357 Magnum-Turbo Hovercycle - nuclear" description="If the NG-150 is a street rocket, the NG-357 is its massive hog of a cousin. Heavy, tough, and powerful, the Magnum-Turbo is particularly popular with cyborgs, juicers, crazies, and similar types.  The powerful engines are distributed in a way that enables the cycle to handle drops from up to 400 feet. (1.3 million credits for the nuclear model)" compset="Vehicle" summary="The massive hog of hovercycles with a nuclear engine">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="70"/>
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1+1"/>
+    <fieldval field="grMaxMods" value="3"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grCost" value="1300000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="SRHANDLING" name="Handling 1"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <tag group="VehType" tag="AirHov"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    </thing>
+  <thing id="vhSRTWVSB" name="Sky Boat (TW)" description="Using a combination of wind, telekinesis, and pure ley line energy, this small yacht-sized craft (capable of comfortably bearing 10 –14 people) is capable of traveling ley lines in a very similar fashion to its seaborne counterpart. Depending on the design, either Boating or Piloting is the appropriate skill to manage it. For long distances where the ship is regularly crewed over time, it can cover an average 500 miles in a day. Sky Boats start grounded along a ley line, where they can be boarded and disembarked, and they are levitated to an altitude of 100 feet above the ground for travel. (30,000 credits)" compset="Vehicle" summary="Small Techno-Wizard Yacht">
+    <fieldval field="vhAccel" value="4"/>
+    <fieldval field="vhTopSpeed" value="20"/>
+    <fieldval field="vhSize" value="6"/>
+    <fieldval field="vhTough" value="13"/>
+    <fieldval field="vhArmor" value="2"/>
+    <fieldval field="vhCrew" value="2+12"/>
+    <fieldval field="grMaxMods" value="4"/>
+    <fieldval field="grCost" value="30000"/>
+    <fieldval field="vhSpecial" value="Operates only on Ley Lines"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="VTOL"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="SRTCHNWZVH" name="Techno-Wizard Vehicle"/>
+    <tag group="Vehicle" tag="SRLEYLINE" name="Ley Line Vehicle"/>
+    </thing>
+  <thing id="vhSRSPDSTR" name="Speedster Hovercycle - Electric, Light Laser" description="A fairly common (and frequently modified) hover vehicle that handles the tough terrain of crosscountry  travel. The speedster can reach a maximum altitude of 20 feet. Though it has some weaponry mounted, the Speedster is not considered a particularly worthy combat vehicle. There are still electric motor versions in use; they have about\n800 miles worth of range before they need a night’s recharge. Designed for a single\ndriver, the Speedster can accomodate a passenger though all tasks for the driver\nand passenger are at −1. (110,000 credits for the electric model)." compset="Vehicle" summary="Common hovecycle">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="80"/>
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="1"/>
+    <fieldval field="grCost" value="110000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="AirHov"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRSDNL" name="Speedster Hovercycle - Nuclear,  Light Laser" description="A fairly common (and frequently modified) hover vehicle that handles the tough terrain of crosscountry  travel. The speedster can reach a maximum altitude of 20 feet. Though it has some weaponry mounted, the Speedster is not considered a particularly worthy combat vehicle. There are still electric motor versions in use; they have about\n800 miles worth of range before they need a night’s recharge. Designed for a single\ndriver, the Speedster can accomodate a passenger though all tasks for the driver\nand passenger are at −1. (110,000 credits for the electric model)." compset="Vehicle" summary="Common hovecycle">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="80"/>
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="1"/>
+    <fieldval field="grCost" value="450000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="AirHov"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRSDHNLM" name="Speedster Hovercycle - Nuclear,  Light Laser and mini missiles" description="A fairly common (and frequently modified) hover vehicle that handles the tough terrain of crosscountry  travel. The speedster can reach a maximum altitude of 20 feet. Though it has some weaponry mounted, the Speedster is not considered a particularly worthy combat vehicle. There are still electric motor versions in use; they have about\n800 miles worth of range before they need a night’s recharge. Designed for a single\ndriver, the Speedster can accomodate a passenger though all tasks for the driver\nand passenger are at −1. (110,000 credits for the electric model)." compset="Vehicle" summary="Common hovecycle">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="80"/>
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grCost" value="620000"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehType" tag="AirHov"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSDHERG" name="Speedster Hovercycle - Electric, Mini Railgun" description="A fairly common (and frequently modified) hover vehicle that handles the tough terrain of crosscountry  travel. The speedster can reach a maximum altitude of 20 feet. Though it has some weaponry mounted, the Speedster is not considered a particularly worthy combat vehicle. There are still electric motor versions in use; they have about\n800 miles worth of range before they need a night’s recharge. Designed for a single\ndriver, the Speedster can accomodate a passenger though all tasks for the driver\nand passenger are at −1. (110,000 credits for the electric model)." compset="Vehicle" summary="Common hovecycle">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="80"/>
+    <fieldval field="vhTough" value="17"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="1"/>
+    <fieldval field="grCost" value="110000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="AirHov"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="Hover"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMinRailG"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRTWTKF" name="TK Flyer (TW)" description="Constructed with dual engines and designed to enable flight travel both on and off ley lines, TK Flyers are a mainstay of many groups with a Techno-Wizard among them. The foundation is usually a medium multi-prop plane (jet engines are much harder to adapt to TW principles), capable of carrying up to eight passengers and gear. Its flight stats\nare considerably improved on a ley line. (60,000 credits)" compset="Vehicle" summary="Techno-Wizard vehicle for both one and off ley lines">
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="grMaxMods" value="2"/>
+    <fieldval field="vhAccel" value="20"/>
+    <fieldval field="vhTopSpeed" value="90"/>
+    <fieldval field="vhTough" value="16"/>
+    <fieldval field="vhArmor" value="4"/>
+    <fieldval field="vhCrew" value="1+7"/>
+    <fieldval field="grCost" value="60000"/>
+    <fieldval field="vhSpecial" value="Acceleration/Top Speed on a Ley Line 20/180 wiht Handling +1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehType" tag="SRTCHNWZVH"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="SRHANDLING"/>
+    <tag group="Vehicle" tag="SRLEYLINE"/>
+    </thing>
+  <thing id="vhSRBBATV" name="Big Boss ATV" description="A popular choice in the wilds of North America. It has no standard weapons, but there’s a top hatch with plenty of space for a mounted weapon of some kind. The electric engine has a range of 300 miles. The interior is roomy enough to handle four\nregular-sized passengers and their cargo for a long journey. As many as seven could be squeezed in, but vital cargo would have to be strapped to the outside with the rest left behind. (28,000 credits)" compset="Vehicle" summary="Popular ground vehicle in North America">
+    <fieldval field="vhAccel" value="15"/>
+    <fieldval field="vhTopSpeed" value="60"/>
+    <fieldval field="vhTough" value="23"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="grMaxMods" value="2"/>
+    <fieldval field="vhCrew" value="1+3"/>
+    <fieldval field="grCost" value="28000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="Vehicle" tag="4WD"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    </thing>
+  <thing id="vhSRHYMNL" name="Highway-Man Motorcycle - Light Laser" description="Though fairly common around the most civilized areas (where roads are kept in decent repair, or at least reasonable trails are available), the Highway-Man is less desirable for overland use where the terrain gets rough. Its electric engine can go 400 miles before recharge. (29,000 credits)" compset="Vehicle" summary="A common ground motorcycle">
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <fieldval field="vhAccel" value="20"/>
+    <fieldval field="vhTopSpeed" value="75"/>
+    <fieldval field="vhTough" value="13"/>
+    <fieldval field="vhArmor" value="2"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="29000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="SRHANDLING"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="Ground"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRHYMNRG" name="Highway-Man Motorcycle - Mini Railgun" description="Though fairly common around the most civilized areas (where roads are kept in decent repair, or at least reasonable trails are available), the Highway-Man is less desirable for overland use where the terrain gets rough. Its electric engine can go 400 miles before recharge. (29,000 credits)" compset="Vehicle" summary="A common ground motorcycle">
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <fieldval field="vhAccel" value="20"/>
+    <fieldval field="vhTopSpeed" value="75"/>
+    <fieldval field="vhTough" value="13"/>
+    <fieldval field="vhArmor" value="2"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="29000"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="SRHANDLING"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="Ground"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMinRailG"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRMNTMK1" name="Mountaineer MK1 ATV" description="The Mountaineer is expensive, but most consider it a bargain in the long run. It’s tough, roomy, and well-equipped, and its special three-wheeled design gives it remarkable handling. The electric engine version has a range of 600 miles.  (76,000 credits for the electric model.)" compset="Vehicle" summary="Common large ATV">
+    <fieldval field="vhSize" value="5"/>
+    <fieldval field="vhAccel" value="10"/>
+    <fieldval field="vhTopSpeed" value="50"/>
+    <fieldval field="vhTough" value="25"/>
+    <fieldval field="vhArmor" value="14"/>
+    <fieldval field="vhCrew" value="1+5"/>
+    <fieldval field="grCost" value="76000"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="SRHANDLING"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="4WD"/>
+    </thing>
+  <thing id="vhSRMNTMK2" name="Mountaineer MK2 ATV" description="The Mountaineer is expensive, but most consider it a bargain in the long run. It’s tough, roomy, and well-equipped, and its six-wheeled design gives it remarkable handling." compset="Vehicle" summary="Common large ATV">
+    <fieldval field="vhAccel" value="10"/>
+    <fieldval field="vhTopSpeed" value="50"/>
+    <fieldval field="vhArmor" value="16"/>
+    <fieldval field="vhCrew" value="2+8"/>
+    <fieldval field="grCost" value="76000"/>
+    <fieldval field="vhSize" value="6"/>
+    <fieldval field="grMaxMods" value="6"/>
+    <fieldval field="vhTough" value="31"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="4WD"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SRHANDLING"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    </thing>
+  <thing id="vhSRZRTW" name="Zone Ranger (TW)" description="A popular Techno-Wizard alternative to the Mountaineer ATV, the Zone Ranger has\nhuge, knobby tires whose additional enchantments allow the vehicle to navigate\n(at one-quarter speed) across water. When buttoned up, the vehicle provides full\nenvironmental protection to all passengers. The magical engine requires 3 Power Points per hour of operation, and it can store up to 30 Power Points at a time. To refill the tank, a character with an Arcane Background make an arcane skill roll; the result is the maximum number of Power Points they can put into the engine for that action. Parking the vehicle on a ley line allows it to recharge 1 PPE per 15 minutes. (1.5 million credits)" compset="Vehicle" summary="Techno-Wizard Ground vehicle">
+    <fieldval field="vhAccel" value="10"/>
+    <fieldval field="vhTopSpeed" value="50"/>
+    <fieldval field="vhTough" value="32"/>
+    <fieldval field="vhArmor" value="18"/>
+    <fieldval field="vhCrew" value="1+6"/>
+    <fieldval field="vhSize" value="6"/>
+    <fieldval field="grMaxMods" value="4"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehType" tag="SRTCHNWZVH"/>
+    <tag group="Vehicle" tag="4WD"/>
+    <tag group="Vehicle" tag="SRHANDLING"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="SRLEYLINE"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    </thing>
+  <thing id="vhSRWLRBC" name="Wellington Road Boss Combat Chopper" description="The Road Boss heralds back to the pre-Rifts days of long, wide-open highways and heavy touring bikes designed to cruise mile after mile in relative comfort. Neither as fast or as nimble as most modern motorcycles, the Road Boss nonetheless requires\na skilled pair of hands to fully extract every ounce of its formidable capabilities. Its low-slung, extended-fork design makes for a distinctive profile, a lower center of gravity, and promotes a retro &quot;chopper&quot; look popular in pre-Rifts days. Added to this is a heavily reinforced chassis and substantial armor, making the Road Boss combat chopper a menace to all who find themselves at the wrong end of her weapon systems. Juicers love the vehicle, which has spawned entire nomadic gangs of enhanced\nbikers." compset="Vehicle">
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="vhAccel" value="20"/>
+    <fieldval field="vhTopSpeed" value="80"/>
+    <fieldval field="vhTough" value="18"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="200000"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="3"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="wpSRQTROG" name="Quatro-Gun" description="The Quatro-Gun is a multi-system weapon and tool designed to penetrate armor.  It includes a medium laser, a particle beam (primary stats), a cutting laser, and a flamethrower.\n\nCutting Laser (Range: 10/20/40, Damage 3d6, RoF 1, AP 20, Mega-Damage)\nFlame Thrower (Damage 2d10, RoF 1, Mega-Damage, Cone Template)\nMedium Laser (150/300/600, Damage 3d10, RoF 1, AP 10, Mega-Damage)" compset="SpecWeap" summary="A special hand weapon for the IAR-4 Hellraiser">
+    <fieldval field="wpDamage" value="3d8+5"/>
+    <fieldval field="wpShort" value="20"/>
+    <fieldval field="wpMedium" value="40"/>
+    <fieldval field="wpLong" value="80"/>
+    <fieldval field="wpPiercing" value="6"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Hide" tag="Equipment"/>
+    <tag group="WeaponType" tag="SFVehHeavy"/>
+    <tag group="Equipment" tag="Natural"/>
+    </thing>
+  <thing id="wpSRELSTNR" name="Electro-Stunner" compset="SpecWeap" summary="A robot stun gun">
+    <fieldval field="wpDamage" value="4D6"/>
+    <fieldval field="wpShort" value="10"/>
+    <fieldval field="wpMedium" value="20"/>
+    <fieldval field="wpLong" value="40"/>
+    <fieldval field="wpSpecial" value="Nonlethal unless the Shooting Die rolls a 1 or 2"/>
+    <usesource source="SavRiftC"/>
+    <tag group="WeaponType" tag="SFVehHeavy"/>
+    <tag group="Weapon" tag="Nonlethal"/>
+    </thing>
+  <thing id="wpSRVbrClw" name="Vibro-Claw" compset="Melee" summary="Vibro-Claw for IAR-4 Hellfire">
+    <fieldval field="wpPiercing" value="4"/>
+    <fieldval field="wpSpecial" value="Mega-Damage"/>
+    <usesource source="SavRiftC"/>
+    <tag group="WeaponDie" tag="5"/>
+    <tag group="WeaponType" tag="SFVehMelee"/>
+    </thing>
+  <thing id="vhSRCSIAR4" name="CS IAR-4 Hellraiser" description="Designated officially as an Infantry Assault Robot, and unofficially as a “Robot Killer,”\nthe Hellraiser is a highly mobile and maneuverable combat vehicle designed\nto counter the heavy weapon platforms of enemy forces. Considered by many frontline\nveterans of the Coalition as the best of the new vehicles, the Hellraiser is, among other\nthings, looked upon as a fine “Glitter Boy killer.” The Hellraiser is also effective for\nurban missions and riot control, with a special Electro-Stunner weapon designed\nfor nonlethal pacification. (Unavailable for purchase)" compset="Walker" summary="Coalition Infantry Robot">
+    <fieldval field="vhTopSpeed" value="15"/>
+    <fieldval field="vhTough" value="36"/>
+    <fieldval field="vhArmor" value="18"/>
+    <fieldval field="vhCrew" value="1+2"/>
+    <fieldval field="vhSize" value="6"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="Future"/>
+    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="VehType" tag="Walker"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRQTROG"></bootstrap>
+      <bootstrap thing="wpSRELSTNR"></bootstrap>
+      <bootstrap thing="wpCSc29"></bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpLtMisLau"></bootstrap>
+      <bootstrap thing="wpSRVbrClw"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRX1000" name="Triax X-1000 Ulti-Max" description="This 16-foot-tall war machine straddles the line between power armor and robot armor.  Powerful and effective, the Coalition has an entire brigade of the machines, and the Ulti-Max is absolutely forbidden for private ownership in CS territory.  \n\nThe integrated force field is one of the most advanced of its kind.   Provides +6 Armor, stops working if the robot takes a wound or more, requiring 24 hours to recharge.  Energy weapons can&apos;t fire out of the field while it is enabled.\n(2.5 tons, 22 million credits)" compset="Walker" summary="Triax X-1000 Ulti-Max Power Armor which Operates like Robot Armor.">
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="grCost" value="22000000"/>
+    <fieldval field="vhArmor" value="14"/>
+    <fieldval field="grMaxMods" value="10"/>
+    <fieldval field="vhSize" value="4"/>
+    <fieldval field="gearWeight" value="2.5 tons"/>
+    <fieldval field="vhTough" value="13"/>
+    <fieldval field="vhSpecial" value="Propulsion Jets: Pace 6&quot; in water or vacuum{br}{br}Force Field: +6 Armor, Action. The field stops working if the robot takes a wound+. 24 Hours to recharge. No Energy Weapons when turned on."/>
+    <fieldval field="vhTopSpeed" value="8"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="RobotAr" name="Robot Armor"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="HvyWeapon"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="vhWalkerSt" tag="11"/>
+    <tag group="Vehicle" tag="Comm" name="Communications System"/>
+    <tag group="Vehicle" tag="PropJets" name="Propulsion Jets"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhPAFT005" name="FT-005 Flying Titan" description="{b}Strength: {b} d12+2\n{b}Running Die: {b} d10\n\nStraddling the line between body armor and power armor, the Flying Titan is a light weight suit of power armor which is favored by those who want a light, fast and maneuverable suit of Power Armor.  Only down side, doesn&apos;t have a large built in weapon.\n\nHaving no main weapon, doesn&apos;t leave it defenceless though.  It has 2 x Dual Linked Light Lasers and 2 x Mini-Missile Launchers.  Both mounted under the suit&apos;s wings." compset="PowerAr" summary="One-Point-Two Tons of Glittering Metal" holdable="no">
+    <fieldval field="vhTough" value="3"/>
+    <fieldval field="vhArmor" value="8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="1"/>
+    <fieldval field="gearWeight" value="160"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="1000000"/>
+    <fieldval field="vhTopSpeed" value="8 / 24"/>
+    <fieldval field="vhClimb" value="2"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="HvyWeapon"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[if (field[grIsEquip].value <> 0) then
+   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 8
+   herofield[acDefArms].value += 8
+   herofield[acDefLegs].value += 8
+   herofield[acDefTorso].value += 8
+   endif]]></eval>
+    <eval phase="Traits" priority="2900" index="2"><![CDATA[var DiffStr as number
+DiffStr = 6 - #traituser[attrStr]
+
+if (field[grIsEquip].value <> 0) then
+   #traitbonus[attrStr] += DiffStr
+   perform #traitroll[attrStr,+,2,"Power Armor"]
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      <bootstrap thing="wpLtLasCan"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhNGX9" name="NG-X9 Samson" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} 2d10\n{b}Jet Boosters (Jump 20&quot; horizontal, 10&quot; vertical)\n\nOne of the, if not the most common, suit of power armor in North America, the NG-X9 Samson PA is one of the best selling pieces of Northern Gun equipment on the market.\n\nWith a built in Light Rail gun, 2 x Rocket Launchers (One in each forearm) and Knuckle Blades for punching, it is easy to see how the NG-X9 became so popular." compset="PowerAr" summary="Perhaps the most common PA in North America." holdable="no">
+    <fieldval field="vhTough" value="+3"/>
+    <fieldval field="vhArmor" value="+12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="3"/>
+    <fieldval field="gearWeight" value="460"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="900000"/>
+    <fieldval field="vhTopSpeed" value="12"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 9 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 12
+   herofield[acDefArms].value += 12
+   herofield[acDefLegs].value += 12
+   herofield[acDefTorso].value += 12
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="wpKBPARA"></bootstrap>
+      </child>
+    </thing>
+  <thing id="wpKBPARA" name="Knuckle Blades (PA/RA Mounted)" description="A set of Power or Robot armor mounted Blades which are perminately installed into a vehicles hands/fingers." compset="SpecWeap" summary="Power/Robot Armor mounted Melee Weapon">
+    <fieldval field="wpDamage" value="Str+d4"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpShots" value="1"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="StrReqDie" tag="6"/>
+    </thing>
+  <thing id="vhNGMRU" name="NG-MRU886 Grease Monkey" description="{b}Strength: {b} d12+1\n{b}Flight Pace:{b}3\n{b}Swimming Pace: {b} 6\n\nThe NG-MRU886 has multiple built in systems designed to aid in the field repair of other vehicles, power armor and robot armor.\nThe suits systems, provide a +2 bonus to Repair and +1 bonus to any other skill involving electronics or mechanical technology.  Repair times are cut in half and bonsu stack with Mr. Fix It Edge.  Additional, the suit counts as having a fully equipped repair shop." compset="PowerAr" summary="A suit of PA designed to be a mobile support piece for more PA." holdable="no">
+    <fieldval field="vhTough" value="+3"/>
+    <fieldval field="vhArmor" value="+8"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="1"/>
+    <fieldval field="gearWeight" value="356"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="1300000"/>
+    <fieldval field="vhClimb" value="0"/>
+    <fieldval field="vhTopSpeed" value="7"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 7 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 1
+   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 8
+   herofield[acDefArms].value += 8
+   herofield[acDefLegs].value += 8
+   herofield[acDefTorso].value += 8
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpNGMRUMT"></bootstrap>
+      <bootstrap thing="wpNGMRULT"></bootstrap>
+      </child>
+    </thing>
+  <thing id="wpNGMRUMT" name="NG-MRU886 Multi-Tool" description="Multi-Tool System built into the NG-MRU886 Power Armor. \n\nWith a wide array of hammers, drills, grinderse and vibro-cutters, this tool can be used as a MD capable melee weapon." compset="SpecWeap" summary="Multi-Tool System built into the NG-MRU886 Power Armor.">
+    <fieldval field="wpDamage" value="Str+d6"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="WeaponType" tag="SFVehMelee"/>
+    </thing>
+  <thing id="wpNGMRULT" name="Laser Torch (MD Vehicle)" description="Laser Torch system used for cutting and field repairs, and somtimes to tear into opponents.\n\nWhile used for cutting and wleding, it also works as a limited range Mega Damage Weapon." compset="SpecWeap" summary="Laser Torch which is built into several PA/RA units.">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpPiercing" value="3"/>
+    <fieldval field="wpShort" value="4"/>
+    <fieldval field="wpMedium" value="8"/>
+    <fieldval field="wpLong" value="16"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="WeaponType" tag="SFVehLaser"/>
+    </thing>
+  <thing id="vhTRx31" name="Triax X-31 Super Trooper" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} 2d6\n{b}Jet Boosters (Jump 12&quot; horizontal, 6&quot; vertical)\n\nDesigned to be an Anti-Tank/Anti-Giant Robot assault suit, this suit has multiple weapon systems designed to aid it in taking down the larger more powerfully built foes.   Multiple Rocket systems, Hand Charges, Vibro-Sword and even Laser Torches.\n\nThe Triax X-31 Super Trooper caries special missiles.  These F4 Fusion Block missiles with a Range 15/30/60 do 6d6 damage, AP 25, MD.  Each of the 4 launchers carries 2 qty missiles each.\n\nThe left arm has a 100 ft leight weight cord attached toa grapnel launcher, as well as moleculare adhesion systems which provide +4 Climbing check when uitlized." compset="PowerAr" summary="The Anti-Tank/Anti-Giant Robot assault suit, giving lots of options to take down your foes." holdable="no">
+    <fieldval field="vhTough" value="+2"/>
+    <fieldval field="vhArmor" value="+10"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="1"/>
+    <fieldval field="gearWeight" value="450"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="1800000"/>
+    <fieldval field="vhTopSpeed" value="7"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 9 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 10
+   herofield[acDefArms].value += 10
+   herofield[acDefLegs].value += 10
+   herofield[acDefTorso].value += 10
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="wpVibroSwo"></bootstrap>
+      <bootstrap thing="wpNGMRULT"></bootstrap>
+      <bootstrap thing="wpNGMRULT"></bootstrap>
+      <bootstrap thing="wpMAE3"></bootstrap>
+      <bootstrap thing="wpMAE3"></bootstrap>
+      <bootstrap thing="wpMAE3"></bootstrap>
+      </child>
+    </thing>
+  <thing id="wpMAE3" name="MAE-3 &quot;Maysies&quot; Hand Charges" compset="SpecWeap" summary="Mine like charges, that can be placed on or thrown at opponents.">
+    <fieldval field="wpDamage" value="3d8"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpLong" value="20"/>
+    <fieldval field="grCost" value="1800"/>
+    <fieldval field="gearWeight" value=".25"/>
+    <fieldval field="wpPiercing" value="10"/>
+    <usesource source="SavRiftC"/>
+    <tag group="WeaponType" tag="SpecGren"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="SmallBurst"/>
+    </thing>
+  <thing id="vhTRx10" name="Triax X-10 Predator" description="{b}Strength: {b} d12+6\n{b}Running Die: {b} 2d6\n\nWhiel a little larger and not as fast as the CS SAMASA, the Triax X-10 Predator has a better main weapon and just as many Mini-Missiles, with a bit more armor protection for the pilot." compset="PowerAr" summary="The Triax answer to the CS SAMAS, while not as fast in many ways better." holdable="no">
+    <fieldval field="vhTough" value="+2"/>
+    <fieldval field="vhArmor" value="+12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="gearWeight" value="900"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="1900000"/>
+    <fieldval field="vhTopSpeed" value="8 / 24"/>
+    <fieldval field="vhClimb" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 9 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 12
+   herofield[acDefArms].value += 12
+   herofield[acDefLegs].value += 12
+   herofield[acDefTorso].value += 12
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpMdLasCan"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhCSpa06a" name="CS PA-06A SAMAS" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} d8\n\nWhiel a little larger and not as fast as the CS SAMASA, the Triax X-10 Predator has a better main weapon and just as many Mini-Missiles, with a bit more armor protection for the pilot." compset="PowerAr" summary="Coalition States PA-06A SAMAS, the most commonly known CS Power Armor." holdable="no">
+    <fieldval field="vhTough" value="+2"/>
+    <fieldval field="vhArmor" value="+10"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="gearWeight" value="450"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="1600000"/>
+    <fieldval field="vhClimb" value="2"/>
+    <fieldval field="vhTopSpeed" value="10 / 25 "/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 9 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 10
+   herofield[acDefArms].value += 10
+   herofield[acDefLegs].value += 10
+   herofield[acDefTorso].value += 10
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhCSpa100" name="CS PA-100 Mauler Power Armor" description="{b}Strength: {b} d12+5\n{b}Running Die: {b} 2d6\n{b}Maneuvering Jets (Jump 8&quot; horizontal, 4&quot; vertical)\n{b}Swimming Pace: {b} 6\n\nThe PA-100 Mauler Power armor is known by the nickname of &quot;No Neck&quot; and a suit of PA which is designed to use blunt-force to survive in an urban environment while people riot.  It has both the ability to work in both amphibious situations, as well as limited flight using maneuvering jets.\n\nThe Mauler is packed with several weapon systems, from Anti-Personnel Lasers, Mini Rail Gun, Mini-Missile Launchers, shoulder mounted Plasma Ejectors, and even Vibro-Sabers mounted in each forearm." compset="PowerAr" summary="New suilt of armor, nick named the &quot;No Neck&quot; it is known for blunt force attacks." holdable="no">
+    <fieldval field="vhTough" value="+2"/>
+    <fieldval field="vhArmor" value="+10"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="gearWeight" value="1800"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="vhTopSpeed" value="7"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 9 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 10
+   herofield[acDefArms].value += 10
+   herofield[acDefLegs].value += 10
+   herofield[acDefTorso].value += 10
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpantiplas"></bootstrap>
+      <bootstrap thing="wpantiplas"></bootstrap>
+      <bootstrap thing="wpMinRailG"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      <bootstrap thing="wpPlasmaEV"></bootstrap>
+      <bootstrap thing="wpPlasmaEV"></bootstrap>
+      <bootstrap thing="wpVBSaber"></bootstrap>
+      <bootstrap thing="wpVBSaber"></bootstrap>
+      </child>
+    </thing>
+  <thing id="wpantiplas" name="Anti-Personnel Lasers" description="One of the more common vehicular weapon mounts, providing extra firepower options to almost any combat-oriented vehicle and at least basic defense for some, vehicular lasers have no payload limits, drawing directly from the vehicle or armor power source. Lasers automatically cauterize wounds, granting anyone Incapacitated by a laser +2 on Vigor rolls to avoid Bleeding Out." compset="SpecWeap" summary="Anti-Personnel Lasers builtin to Vehicles.">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <fieldval field="wpSpecial" value="Lasers automatically cauterize wounds, granting anyone Incapacitated by a laser +2 on Vigor rolls to avoid Bleeding Out."/>
+    <usesource source="SavRiftC"/>
+    <tag group="User" tag="SizeCost"/>
+    <tag group="WeaponType" tag="SFVehLaser"/>
+    <tag group="Weapon" tag="NoRecoil"/>
+    </thing>
+  <thing id="wpPlasmaEV" name="Plasma Ejector (Vehicle Mounted)" compset="SpecWeap" summary="A vehicle mounted Plasma Ejector.">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShort" value="24"/>
+    <fieldval field="wpMedium" value="48"/>
+    <fieldval field="wpLong" value="96"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpShots" value="1"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="StrReqDie" tag="5"/>
+    <tag group="WeaponType" tag="SpecHeavy"/>
+    </thing>
+  <thing id="wpVBSaber" name="Vibro-Sabers (Vehicle Mounted)" description="Vibro-Saber usually mounted on the forearm of a suit of Power Armor or Robot Armor." compset="SpecWeap" summary="Power/Robot Armor mounted Melee Weapon">
+    <fieldval field="wpDamage" value="Str+d8"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="wpPiercing" value="4"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="WeaponType" tag="SFVehMelee"/>
+    </thing>
+  <thing id="vhCSpa09A" name="CS PA-09A Super SAMAS" description="{b}Strength: {b} d12+5\n{b}Running Die: {b} 2d6\n\nThe PA-09A Super SAMAS is the Coalition&apos;s upgraded flying power armor.  With upgrades to both speed, armor, and weapon systems this is becoming a favorite vehicle of the SAMAS corps." compset="PowerAr" summary="Coalition States PA-09A Super SAMAS, new and improved death from above!" holdable="no">
+    <fieldval field="vhTough" value="+3"/>
+    <fieldval field="vhArmor" value="+12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="3"/>
+    <fieldval field="gearWeight" value="4400"/>
+    <fieldval field="grMaxMods" value="7"/>
+    <fieldval field="vhClimb" value="2"/>
+    <fieldval field="vhTopSpeed" value="7 / 30"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
+DiffStr = 9 - #trait[attrStr]
+
+
+if (field[grIsEquip].value <> 0) then
+   #traitcreation[attrStr] += DiffStr
+   hero.child[attrStr].field[trtMaximum].value += 4
+   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
+   herofield[acDefHead].value += 12
+   herofield[acDefArms].value += 12
+   herofield[acDefLegs].value += 12
+   herofield[acDefTorso].value += 12
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpCScttp40"></bootstrap>
+      <bootstrap thing="wpIZTAWUG"></bootstrap>
+      <bootstrap thing="wpIZTAWUG"></bootstrap>
+      <bootstrap thing="wpSRpa09pl"></bootstrap>
+      <bootstrap thing="wpSRpa09pl"></bootstrap>
+      <bootstrap thing="wpVBd10"></bootstrap>
+      <bootstrap thing="wpVBd10"></bootstrap>
+      </child>
+    </thing>
+  <thing id="wpSRpa09pl" name="Dual-Linked Plasma and Laser Weapon System" description="This is a weapon system originally built into each shoulder on the CS Super SAMAS PA-09A.\n\nThis system is a Dual-Linked Plasma and Laser Weapon Systems which incorporates a Light Vehicle Laser or a Plasma Ejector (Equivlant to NG-E4A)." compset="SpecWeap" summary="A dual-linked Plasma and Laser system built for PA-09A.">
+    <fieldval field="wpDamage" value="2d10 / 3d10+3"/>
+    <fieldval field="wpShort" value="150 / 30"/>
+    <fieldval field="wpMedium" value="300 / 60"/>
+    <fieldval field="wpLong" value="600 / 120"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="wpPiercing" value="5 / -"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="WeaponType" tag="SpecHeavy"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="LeastArmor"/>
+    <tag group="Weapon" tag="SetFire"/>
+    </thing>
+  <thing id="wpVBd10" name="Vibro-Blades (Vehicle Mounted Str+d10)" description="Vibro-Blade usually mounted on the forearm of a suit of Power Armor or Robot Armor." compset="SpecWeap" summary="Power/Robot Armor mounted Melee Weapon">
+    <fieldval field="wpDamage" value="Str+d10"/>
+    <fieldval field="wpSpecial" value="Mega Damage"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="wpPiercing" value="4"/>
+    <usesource source="SavRiftC" parent="UserParent" name="Rifts"/>
+    <tag group="StrReqDie" tag="6"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="WeaponType" tag="SFVehMelee"/>
+    </thing>
+  <preclude id="cybAquatic" source="SavRiftC"/>
+  <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
-  <preclude id="cybAquatic" source="SavRiftC"/>
-  <preclude id="edgNoble" source="SavRiftC"/>
-  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   </document>

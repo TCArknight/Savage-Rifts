@@ -80,16 +80,32 @@
     selectable="no"
     parent="UserParent"
     sortorder="0"
-    description="Savage Rifts Campaign Setting">
+    description="Savage Rifts Setting">
+ </source>
+ <source
+    id="sepSavRifS"
+    name="Savage Rifts Sourcebooks"
+    selectable="no"
+    parent="sepSavRif"
+    sortorder="2"
+    description="Savage Rifts Sourcebooks">
  </source>
  <source
     id="SavRiftC"
-    name="Savage Rifts"
+    name="Savage Rifts Core"
     parent="sepSavRif"
     reportable="yes"
-    description="Each character utilizes the Savage Rifts Core material.">
+	sortorder="1"
+    description="Each character utilizes the Tomorrow Legion Players Guide material.">
     </source>
-
+ <source
+    id="CoFieldMan"
+    name="Coalition Field Manual"
+    parent="sepSavRifS"
+    reportable="yes"
+	sortorder="1"
+    description="Each character utilizes the Tomorrow Legion Players Guide material.">
+    </source>
   <sortset
     id="RacAbilCat"
     name="Hero's Journey">
