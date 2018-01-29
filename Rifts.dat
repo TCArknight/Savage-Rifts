@@ -3,7 +3,17 @@
   <fileinfo>
     <info_author>Coordinator: TCArknight (Thomas Clegg)
 Contributors: Salcor, Father Morpheus</info_author>
-    <info_history><![CDATA[1/24/18
+    <info_history><![CDATA[History
+1/29/18
+Added: Adjustment for Fortune/Glory points
+Added: Adjustment for Hero's Journey points
+Reworked Strength calculation for Power, Robot armors
+-- Added vhSRArmStr tag group to use instead of vhSRArmStr
+-- Scripted armors to increase Strength value based on new tag
+Fixed: Dog Boy Breed Advantage costing Edge points when selected from Racial tab.
+
+	
+1/24/18
 Coalition Field Manual - Complete
 Power Armors - Complete
 Robot Armors - Complete
@@ -5507,7 +5517,7 @@ field[wpDamage].text = str & spirit]]></eval>
     <fieldval field="vhSize" value="3"/>
     <fieldval field="gearWeight" value="1.2 Tons"/>
     <fieldval field="grMaxMods" value="7"/>
-    <fieldval field="vhSpecial" value="{b}Running Die: {b} d10{br}{b}Swimming Pace: {b} 6{br}{br}{br}{br}"/>
+    <fieldval field="vhSpecial" value="{b}Swimming Pace: {b} 6{br}{br}{br}{br}"/>
     <usesource source="SavRiftC"/>
     <tag group="Vehicle" tag="Radar"/>
     <tag group="Vehicle" tag="Sealed"/>
@@ -5518,20 +5528,31 @@ field[wpDamage].text = str & spirit]]></eval>
     <tag group="Vehicle" tag="FusionPow"/>
     <tag group="Vehicle" tag="NightVis"/>
     <tag group="Vehicle" tag="Infrared"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="8"/>
     <tag group="Vehicle" tag="HvyArmor"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 7 - #trait[attrStr]
+    <tag group="RiftRunDie" tag="5"/>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
 
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
+   endif]]></eval>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,6,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 18
-   herofield[acDefArms].value += 18
-   herofield[acDefLegs].value += 18
-   herofield[acDefTorso].value += 18
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpBoomGn"></bootstrap>
@@ -6251,7 +6272,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="Vehicle" tag="Comm" name="Communications System"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="VehType" tag="RobotAr" name="Robot Armor"/>
     <child entity="LoadOut">
@@ -6352,7 +6373,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="NightVis"/>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpMedRailG"></bootstrap>
@@ -6380,7 +6401,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="NightVis"/>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpMdMisLau">
@@ -6407,7 +6428,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="10"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpSRHTMG"></bootstrap>
@@ -6488,7 +6509,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="10"/>
     <tag group="VehType" tag="Walker"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
@@ -6515,7 +6536,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="10"/>
     <tag group="VehType" tag="Walker"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
@@ -6543,7 +6564,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="10"/>
     <tag group="VehType" tag="Walker"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
@@ -6571,7 +6592,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="10"/>
     <tag group="VehType" tag="Walker"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
@@ -6600,7 +6621,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Sealed"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="Vehicle" tag="Radar"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
@@ -6625,7 +6646,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpHvyRailG"></bootstrap>
@@ -6651,7 +6672,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="11"/>
+    <tag group="vhSRArmStr" tag="11"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpMdIonCan">
@@ -6690,7 +6711,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <fieldval field="vhTopSpeed" value="10"/>
     <usesource source="CoFieldMan"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="10"/>
+    <tag group="vhSRArmStr" tag="10"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="Infrared"/>
@@ -6727,7 +6748,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpHvyRailG">
@@ -7177,7 +7198,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="Future"/>
-    <tag group="vhWalkerSt" tag="12"/>
+    <tag group="vhSRArmStr" tag="12"/>
     <tag group="VehType" tag="Walker"/>
     <child entity="LoadOut">
       <bootstrap thing="wpSRQTROG"></bootstrap>
@@ -7209,7 +7230,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="HvyWeapon"/>
     <tag group="Vehicle" tag="FusionPow"/>
-    <tag group="vhWalkerSt" tag="11"/>
+    <tag group="vhSRArmStr" tag="11"/>
     <tag group="Vehicle" tag="Comm" name="Communications System"/>
     <tag group="Vehicle" tag="PropJets" name="Propulsion Jets"/>
     <child entity="LoadOut">
@@ -7222,7 +7243,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
       <bootstrap thing="wpVhMnMsLa"></bootstrap>
       </child>
     </thing>
-  <thing id="vhPAFT005" name="FT-005 Flying Titan" description="{b}Strength: {b} d12+2\n{b}Running Die: {b} d10\n\nStraddling the line between body armor and power armor, the Flying Titan is a light weight suit of power armor which is favored by those who want a light, fast and maneuverable suit of Power Armor.  Only down side, doesn&apos;t have a large built in weapon.\n\nHaving no main weapon, doesn&apos;t leave it defenceless though.  It has 2 x Dual Linked Light Lasers and 2 x Mini-Missile Launchers.  Both mounted under the suit&apos;s wings." compset="PowerAr" summary="One-Point-Two Tons of Glittering Metal" holdable="no">
+  <thing id="vhPAFT005" name="FT-005 Flying Titan" description="Straddling the line between body armor and power armor, the Flying Titan is a light weight suit of power armor which is favored by those who want a light, fast and maneuverable suit of Power Armor.  Only down side, doesn&apos;t have a large built in weapon.\n\nHaving no main weapon, doesn&apos;t leave it defenceless though.  It has 2 x Dual Linked Light Lasers and 2 x Mini-Missile Launchers.  Both mounted under the suit&apos;s wings." compset="PowerAr" summary="One-Point-Two Tons of Glittering Metal" holdable="no">
     <fieldval field="vhTough" value="3"/>
     <fieldval field="vhArmor" value="8"/>
     <fieldval field="vhCrew" value="1"/>
@@ -7243,19 +7264,30 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Radar"/>
     <tag group="Vehicle" tag="Sealed"/>
     <tag group="Vehicle" tag="HvyWeapon"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[if (field[grIsEquip].value <> 0) then
-   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 8
-   herofield[acDefArms].value += 8
-   herofield[acDefLegs].value += 8
-   herofield[acDefTorso].value += 8
-   endif]]></eval>
-    <eval phase="Traits" priority="2900" index="2"><![CDATA[var DiffStr as number
-DiffStr = 6 - #traituser[attrStr]
+    <tag group="vhSRArmStr" tag="8"/>
+    <tag group="RiftRunDie" tag="5"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitbonus[attrStr] += DiffStr
-   perform #traitroll[attrStr,+,2,"Power Armor"]
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpLtLasCan"></bootstrap>
@@ -7263,17 +7295,17 @@ if (field[grIsEquip].value <> 0) then
       <bootstrap thing="wpVhMnMsLa"></bootstrap>
       </child>
     </thing>
-  <thing id="vhNGX9" name="NG-X9 Samson" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} 2d10\n{b}Jet Boosters (Jump 20&quot; horizontal, 10&quot; vertical)\n\nOne of the, if not the most common, suit of power armor in North America, the NG-X9 Samson PA is one of the best selling pieces of Northern Gun equipment on the market.\n\nWith a built in Light Rail gun, 2 x Rocket Launchers (One in each forearm) and Knuckle Blades for punching, it is easy to see how the NG-X9 became so popular." compset="PowerAr" summary="Perhaps the most common PA in North America." holdable="no">
-    <fieldval field="vhTough" value="+3"/>
-    <fieldval field="vhArmor" value="+12"/>
+  <thing id="vhNGX9" name="NG-X9 Samson" description="One of the, if not the most common, suit of power armor in North America, the NG-X9 Samson PA is one of the best selling pieces of Northern Gun equipment on the market.\n\nWith a built in Light Rail gun, 2 x Rocket Launchers (One in each forearm) and Knuckle Blades for punching, it is easy to see how the NG-X9 became so popular." compset="PowerAr" summary="Perhaps the most common PA in North America." holdable="no">
+    <fieldval field="vhTough" value="3"/>
+    <fieldval field="vhArmor" value="12"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="3"/>
     <fieldval field="gearWeight" value="460"/>
     <fieldval field="grMaxMods" value="5"/>
     <fieldval field="grCost" value="900000"/>
     <fieldval field="vhTopSpeed" value="12"/>
+    <fieldval field="vhSpecial" value="{b}Jet Boosters (Jump 20&quot; horizontal, 10&quot; vertical)"/>
     <usesource source="SavRiftC"/>
-    <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehType" tag="PowerAr"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="Vehicle" tag="FusionPow"/>
@@ -7283,18 +7315,31 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Vehicle" tag="Radar"/>
     <tag group="Vehicle" tag="Sealed"/>
     <tag group="Vehicle" tag="HvyArmor"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 9 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="10"/>
+    <tag group="RiftRunDie" tag="9"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 12
-   herofield[acDefArms].value += 12
-   herofield[acDefLegs].value += 12
-   herofield[acDefTorso].value += 12
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpLtRailGu"></bootstrap>
@@ -7311,9 +7356,9 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="StrReqDie" tag="6"/>
     </thing>
-  <thing id="vhNGMRU" name="NG-MRU886 Grease Monkey" description="{b}Strength: {b} d12+1\n{b}Flight Pace:{b}3\n{b}Swimming Pace: {b} 6\n\nThe NG-MRU886 has multiple built in systems designed to aid in the field repair of other vehicles, power armor and robot armor.\nThe suits systems, provide a +2 bonus to Repair and +1 bonus to any other skill involving electronics or mechanical technology.  Repair times are cut in half and bonsu stack with Mr. Fix It Edge.  Additional, the suit counts as having a fully equipped repair shop." compset="PowerAr" summary="A suit of PA designed to be a mobile support piece for more PA." holdable="no">
-    <fieldval field="vhTough" value="+3"/>
-    <fieldval field="vhArmor" value="+8"/>
+  <thing id="vhNGMRU" name="NG-MRU886 Grease Monkey" description="The NG-MRU886 has multiple built in systems designed to aid in the field repair of other vehicles, power armor and robot armor.\n\nThe suits systems, provide a +2 bonus to Repair and +1 bonus to any other skill involving electronics or mechanical technology.  Repair times are cut in half and bonuses stack with Mr. Fix It Edge.  Additional, the suit counts as having a fully equipped repair shop." compset="PowerAr" summary="A suit of PA designed to be a mobile support piece for more PA." holdable="no">
+    <fieldval field="vhTough" value="3"/>
+    <fieldval field="vhArmor" value="8"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="1"/>
     <fieldval field="gearWeight" value="356"/>
@@ -7321,8 +7366,8 @@ if (field[grIsEquip].value <> 0) then
     <fieldval field="grCost" value="1300000"/>
     <fieldval field="vhClimb" value="0"/>
     <fieldval field="vhTopSpeed" value="7"/>
+    <fieldval field="vhSpecial" value="{b}Flight Pace:{b}3{br}{b}Swimming Pace: {b} 6{br}"/>
     <usesource source="SavRiftC"/>
-    <tag group="VehEra" tag="RiftsEra"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <tag group="Vehicle" tag="NightVis"/>
     <tag group="Vehicle" tag="Infrared"/>
@@ -7332,18 +7377,30 @@ if (field[grIsEquip].value <> 0) then
     <tag group="VehType" tag="PowerAr"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="Vehicle" tag="HvyArmor"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 7 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="7"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 1
-   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 8
-   herofield[acDefArms].value += 8
-   herofield[acDefLegs].value += 8
-   herofield[acDefTorso].value += 8
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpNGMRUMT"></bootstrap>
@@ -7371,17 +7428,17 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="WeaponType" tag="SFVehLaser"/>
     </thing>
-  <thing id="vhTRx31" name="Triax X-31 Super Trooper" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} 2d6\n{b}Jet Boosters (Jump 12&quot; horizontal, 6&quot; vertical)\n\nDesigned to be an Anti-Tank/Anti-Giant Robot assault suit, this suit has multiple weapon systems designed to aid it in taking down the larger more powerfully built foes.   Multiple Rocket systems, Hand Charges, Vibro-Sword and even Laser Torches.\n\nThe Triax X-31 Super Trooper caries special missiles.  These F4 Fusion Block missiles with a Range 15/30/60 do 6d6 damage, AP 25, MD.  Each of the 4 launchers carries 2 qty missiles each.\n\nThe left arm has a 100 ft leight weight cord attached toa grapnel launcher, as well as moleculare adhesion systems which provide +4 Climbing check when uitlized." compset="PowerAr" summary="The Anti-Tank/Anti-Giant Robot assault suit, giving lots of options to take down your foes." holdable="no">
-    <fieldval field="vhTough" value="+2"/>
-    <fieldval field="vhArmor" value="+10"/>
+  <thing id="vhTRx31" name="Triax X-31 Super Trooper" description="Designed to be an Anti-Tank/Anti-Giant Robot assault suit, this suit has multiple weapon systems designed to aid it in taking down the larger more powerfully built foes.   Multiple Rocket systems, Hand Charges, Vibro-Sword and even Laser Torches.\n\nThe Triax X-31 Super Trooper carries special missiles.  These F4 Fusion Block missiles with a Range 15/30/60 do 6d6 damage, AP 25, MD.  Each of the 4 launchers carries 2 qty missiles each.\n\nThe left arm has a 100 ft leight weight cord attached toa grapnel launcher, as well as moleculare adhesion systems which provide +4 Climbing check when uitlized." compset="PowerAr" summary="The Anti-Tank/Anti-Giant Robot assault suit, giving lots of options to take down your foes." holdable="no">
+    <fieldval field="vhTough" value="2"/>
+    <fieldval field="vhArmor" value="10"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="1"/>
     <fieldval field="gearWeight" value="450"/>
     <fieldval field="grMaxMods" value="5"/>
     <fieldval field="grCost" value="1800000"/>
     <fieldval field="vhTopSpeed" value="7"/>
+    <fieldval field="vhSpecial" value="{b}Jet Boosters (Jump 12&quot; horizontal, 6&quot; vertical){br}"/>
     <usesource source="SavRiftC"/>
-    <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehType" tag="PowerAr"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="Vehicle" tag="FusionPow"/>
@@ -7391,18 +7448,31 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Vehicle" tag="Radar"/>
     <tag group="Vehicle" tag="Sealed"/>
     <tag group="Vehicle" tag="HvyArmor"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 9 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="10"/>
+    <tag group="RiftRunDie" tag="7"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 10
-   herofield[acDefArms].value += 10
-   herofield[acDefLegs].value += 10
-   herofield[acDefTorso].value += 10
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpMouRockL"></bootstrap>
@@ -7430,9 +7500,9 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="Weapon" tag="SmallBurst"/>
     </thing>
-  <thing id="vhTRx10" name="Triax X-10 Predator" description="{b}Strength: {b} d12+6\n{b}Running Die: {b} 2d6\n\nWhiel a little larger and not as fast as the CS SAMASA, the Triax X-10 Predator has a better main weapon and just as many Mini-Missiles, with a bit more armor protection for the pilot." compset="PowerAr" summary="The Triax answer to the CS SAMAS, while not as fast in many ways better." holdable="no">
-    <fieldval field="vhTough" value="+2"/>
-    <fieldval field="vhArmor" value="+12"/>
+  <thing id="vhTRx10" name="Triax X-10 Predator" description="While a little larger and not as fast as the CS SAMASA, the Triax X-10 Predator has a better main weapon and just as many Mini-Missiles, with a bit more armor protection for the pilot." compset="PowerAr" summary="The Triax answer to the CS SAMAS, while not as fast in many ways better." holdable="no">
+    <fieldval field="vhTough" value="2"/>
+    <fieldval field="vhArmor" value="12"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="2"/>
     <fieldval field="gearWeight" value="900"/>
@@ -7451,18 +7521,30 @@ if (field[grIsEquip].value <> 0) then
     <tag group="VehType" tag="PowerAr"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="Vehicle" tag="HvyArmor"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 9 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="12"/>
+    <tag group="RiftRunDie" tag="7"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 12
-   herofield[acDefArms].value += 12
-   herofield[acDefLegs].value += 12
-   herofield[acDefTorso].value += 12
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpMdLasCan"></bootstrap>
@@ -7470,9 +7552,9 @@ if (field[grIsEquip].value <> 0) then
       <bootstrap thing="wpVhMnMsLa"></bootstrap>
       </child>
     </thing>
-  <thing id="vhCSpa06a" name="CS PA-06A SAMAS" description="{b}Strength: {b} d12+4\n{b}Running Die: {b} d8\n\nWhiel a little larger and not as fast as the CS SAMASA, the Triax X-10 Predator has a better main weapon and just as many Mini-Missiles, with a bit more armor protection for the pilot." compset="PowerAr" summary="Coalition States PA-06A SAMAS, the most commonly known CS Power Armor." holdable="no">
-    <fieldval field="vhTough" value="+2"/>
-    <fieldval field="vhArmor" value="+10"/>
+  <thing id="vhCSpa06a" name="CS PA-06A SAMAS" description="Although classified as Power Armor, the flight system requires a Piloting check for high-speed or tricky maneuvers in the SAMAS. With the recent spate of upgrades a few of these have found their way into the Black Market. Even for the prices they go for, they get snatched up fast thanks to the integrated vehicle-grade flight systems." compset="PowerAr" summary="Coalition States PA-06A SAMAS, the most commonly known CS Power Armor." holdable="no">
+    <fieldval field="vhTough" value="2"/>
+    <fieldval field="vhArmor" value="10"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="2"/>
     <fieldval field="gearWeight" value="450"/>
@@ -7491,34 +7573,47 @@ if (field[grIsEquip].value <> 0) then
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 9 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="10"/>
+    <tag group="RiftRunDie" tag="4"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 10
-   herofield[acDefArms].value += 10
-   herofield[acDefLegs].value += 10
-   herofield[acDefTorso].value += 10
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpLtRailGu"></bootstrap>
       <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="modPAStren"></bootstrap>
       </child>
     </thing>
-  <thing id="vhCSpa100" name="CS PA-100 Mauler Power Armor" description="{b}Strength: {b} d12+5\n{b}Running Die: {b} 2d6\n{b}Maneuvering Jets (Jump 8&quot; horizontal, 4&quot; vertical)\n{b}Swimming Pace: {b} 6\n\nThe PA-100 Mauler Power armor is known by the nickname of &quot;No Neck&quot; and a suit of PA which is designed to use blunt-force to survive in an urban environment while people riot.  It has both the ability to work in both amphibious situations, as well as limited flight using maneuvering jets.\n\nThe Mauler is packed with several weapon systems, from Anti-Personnel Lasers, Mini Rail Gun, Mini-Missile Launchers, shoulder mounted Plasma Ejectors, and even Vibro-Sabers mounted in each forearm." compset="PowerAr" summary="New suilt of armor, nick named the &quot;No Neck&quot; it is known for blunt force attacks." holdable="no">
-    <fieldval field="vhTough" value="+2"/>
-    <fieldval field="vhArmor" value="+10"/>
+  <thing id="vhCSpa100" name="CS PA-100 Mauler Power Armor" description="The PA-100 Mauler Power armor is known by the nickname of &quot;No Neck&quot; and a suit of PA which is designed to use blunt-force to survive in an urban environment while people riot.  It has both the ability to work in both amphibious situations, as well as limited flight using maneuvering jets.\n\nThe Mauler is packed with several weapon systems, from Anti-Personnel Lasers, Mini Rail Gun, Mini-Missile Launchers, shoulder mounted Plasma Ejectors, and even Vibro-Sabers mounted in each forearm." compset="PowerAr" summary="New suilt of armor, nick named the &quot;No Neck&quot; it is known for blunt force attacks." holdable="no">
+    <fieldval field="vhTough" value="2"/>
+    <fieldval field="vhArmor" value="10"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="2"/>
     <fieldval field="gearWeight" value="1800"/>
     <fieldval field="grMaxMods" value="5"/>
     <fieldval field="vhTopSpeed" value="7"/>
+    <fieldval field="vhSpecial" value="{b}Maneuvering Jets (Jump 8&quot; horizontal, 4&quot; vertical){br}{b}Swimming Pace: {b} 6"/>
     <usesource source="CoFieldMan"/>
-    <tag group="VehType" tag="PowerAr"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <tag group="Vehicle" tag="NightVis"/>
@@ -7528,18 +7623,31 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Vehicle" tag="Sealed"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="Targeting"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 9 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="11"/>
+    <tag group="RiftRunDie" tag="7"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,2,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 10
-   herofield[acDefArms].value += 10
-   herofield[acDefLegs].value += 10
-   herofield[acDefTorso].value += 10
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpantiplas"></bootstrap>
@@ -7586,9 +7694,9 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="WeaponType" tag="SFVehMelee"/>
     </thing>
-  <thing id="vhCSpa09A" name="CS PA-09A Super SAMAS" description="{b}Strength: {b} d12+5\n{b}Running Die: {b} 2d6\n\nThe PA-09A Super SAMAS is the Coalition&apos;s upgraded flying power armor.  With upgrades to both speed, armor, and weapon systems this is becoming a favorite vehicle of the SAMAS corps." compset="PowerAr" summary="Coalition States PA-09A Super SAMAS, new and improved death from above!" holdable="no">
-    <fieldval field="vhTough" value="+3"/>
-    <fieldval field="vhArmor" value="+12"/>
+  <thing id="vhCSpa09A" name="CS PA-09A Super SAMAS" description="Often called the “Grinning Demon,” thanks to the shape of the skeleton jaw motif, the Super SAMAS is a significant upgrade to the original SAMAS power armor. It’s intended for multi-profile missions, including establishing low-to-mid altitude air superiority. Though many pilots are happy flying into battle with only the standard weapons, more than a few will carry the CTT-P40 Particle Beam Cannon as well." compset="PowerAr" summary="Coalition States PA-09A Super SAMAS, new and improved death from above!" holdable="no">
+    <fieldval field="vhTough" value="3"/>
+    <fieldval field="vhArmor" value="12"/>
     <fieldval field="vhCrew" value="1"/>
     <fieldval field="vhSize" value="3"/>
     <fieldval field="gearWeight" value="4400"/>
@@ -7606,27 +7714,40 @@ if (field[grIsEquip].value <> 0) then
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
-    <eval phase="PreTraits" priority="5500"><![CDATA[var DiffStr as number
-DiffStr = 9 - #trait[attrStr]
-
+    <tag group="vhSRArmStr" tag="11"/>
+    <tag group="RiftRunDie" tag="7"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
 
 if (field[grIsEquip].value <> 0) then
-   #traitcreation[attrStr] += DiffStr
-   hero.child[attrStr].field[trtMaximum].value += 4
-   perform #traitadjust[trTough,+,3,"Glitter Boy Toughness"]
-   herofield[acDefHead].value += 12
-   herofield[acDefArms].value += 12
-   herofield[acDefLegs].value += 12
-   herofield[acDefTorso].value += 12
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
    endif]]></eval>
     <child entity="LoadOut">
       <bootstrap thing="wpCScttp40"></bootstrap>
-      <bootstrap thing="wpIZTAWUG"></bootstrap>
-      <bootstrap thing="wpIZTAWUG"></bootstrap>
+      <bootstrap thing="wpSFVGrenL"></bootstrap>
+      <bootstrap thing="wpSFVGrenL"></bootstrap>
       <bootstrap thing="wpSRpa09pl"></bootstrap>
       <bootstrap thing="wpSRpa09pl"></bootstrap>
       <bootstrap thing="wpVBd10"></bootstrap>
       <bootstrap thing="wpVBd10"></bootstrap>
+      <bootstrap thing="modPAStren"></bootstrap>
       </child>
     </thing>
   <thing id="wpSRpa09pl" name="Dual-Linked Plasma and Laser Weapon System" description="This is a weapon system originally built into each shoulder on the CS Super SAMAS PA-09A.\n\nThis system is a Dual-Linked Plasma and Laser Weapon Systems which incorporates a Light Vehicle Laser or a Plasma Ejector (Equivlant to NG-E4A)." compset="SpecWeap" summary="A dual-linked Plasma and Laser system built for PA-09A.">
@@ -7653,13 +7774,13 @@ if (field[grIsEquip].value <> 0) then
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="WeaponType" tag="SFVehMelee"/>
     </thing>
-  <preclude id="cybAquatic" source="SavRiftC"/>
-  <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
+  <preclude id="cybAquatic" source="SavRiftC"/>
+  <preclude id="edgNoble" source="SavRiftC"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
   <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   </document>

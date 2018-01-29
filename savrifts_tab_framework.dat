@@ -35,8 +35,7 @@
         ]]></headertitle>
       </table_fixed>
     </portal>
-  <!-- raDogBoy portal - Allows selection of the Dog Boy's Breed Advantage
-  -->
+
   <portal
     id="fraChsTbl1"
     style="tblNormal">

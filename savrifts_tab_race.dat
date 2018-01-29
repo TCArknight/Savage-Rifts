@@ -50,6 +50,7 @@
 	  headertemplate="raChsPick"
 	  addpick="resRaceSel">
       <list>Rifts.RaceSelect</list>
+      <autotag group="Helper" tag="FreeEdge"/>
       <autotag group="Rifts" tag="RaceSelect"/>
       <description/>
       <additem><![CDATA[      

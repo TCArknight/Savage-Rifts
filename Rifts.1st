@@ -72,7 +72,40 @@
     <value id="Mobility" name="Mobility" order="4"/>    
     <value id="Weapons" name="Weapons and Tools" order="5"/>            
     </group>
+
+  <!-- TCA: Power/Robot Armor Strength Tags  -->
+  <group
+    id="vhSRArmStr"
+    name="Armor Strength">
+    <value id="7" name="d12+1"/>
+    <value id="8" name="d12+2"/>
+    <value id="9" name="d12+3"/>
+    <value id="10" name="d12+4"/>
+    <value id="11" name="d12+5"/>
+    <value id="12" name="d12+6"/>
+    <value id="13" name="d12+7"/>
+    <value id="14" name="d12+8"/>
+    <value id="15" name="d12+9"/>
+    <value id="16" name="d12+10"/>
+    <value id="17" name="d12+11"/>
+    <value id="18" name="d12+12"/>
+    </group>
 	
+  <!-- TCA: Power/Robot Armor Strength Tags  -->
+  <group
+    id="RiftRunDie"
+    name="Running Die">
+    <value id="1" name="d2"/>
+    <value id="2" name="d4"/>
+    <value id="3" name="d6"/>
+    <value id="4" name="d8"/>
+    <value id="5" name="d10"/>
+    <value id="6" name="d12"/>
+    <value id="7" name="2d6"/>
+    <value id="8" name="2d8"/>
+    <value id="9" name="2d10"/>
+    <value id="10" name="2d12"/>
+    </group>	
   <!-- TCA: This source enables the selection of Savage Rifts -->
  <source
     id="sepSavRif"
