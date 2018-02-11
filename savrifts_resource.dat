@@ -9,16 +9,25 @@
 
 <document signature="Hero Lab Data">
 
-  <!-- Expression Helper Thing  -->
+  <!-- Expression Helper Things  -->
   <thing
-    id="ehExprHelp"
+    id="ehExprHlp1"
     name="Expression Helper"
     compset="ExprHelp">
     <!-- Automatically add the helper to every actor -->
     <tag group="Helper" tag="Bootstrap"/>
 
     </thing>
+	
+  <thing
+    id="ehExprHlp2"
+    name="Expression Helper"
+    compset="ExprHelp">
+    <!-- Automatically add the helper to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
 
+    </thing>
+	
   <!-- Racial - Bonus Abilities resource  -->
   <thing
     id="resRaceSel"
@@ -33,7 +42,7 @@
 	
   <!-- Iconic Frameworks - Bonus Abilities resource  -->
   <thing
-    id="resFraSel"
+    id="resFraSel1"
     name="Iconic Framework Selections"
     compset="Resource">
     <fieldval field="resMax" value="0"/>
@@ -42,7 +51,17 @@
     <tag group="Helper" tag="Bootstrap"/>
 	
     </thing>
-
+	
+  <thing
+    id="resFraSel2"
+    name="Iconic Framework Selections"
+    compset="Resource">
+    <fieldval field="resMax" value="0"/>
+	
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+	
+    </thing>
   <!-- Hero's Journey - Bonus Abilities resource  -->
   <thing
     id="resHJSel"

@@ -36,15 +36,24 @@
 	<value id="NoHeroJou"/>      <!-- Disallow Hero's Journey selections -->
     <value id="RaceSelect"/>     <!-- Racial Ability selected through Helper -->     
     <value id="RaceEdgeB"/>      <!-- Bonus Racial Edge -->     
-    <value id="RaceHindB"/>      <!-- Bonus Racial Hinderence -->     
+    <value id="RaceHindB"/>      <!-- Bonus Racial Hindrance -->     
     <value id="FrameSel"/>       <!-- Framework Ability selected through Helper -->     
     <value id="HJSelect"/>       <!-- Hero's Journey option selected through Helper -->     
     <value id="TKnoSkill"/>      <!-- Tag for selected Tramadore Knowledge Skill -->     
     <value id="SpellSkill"/>     <!-- Tag the Hero's Spellcasting skill -->   
     <value id="MARS"/>           <!-- indicates a M.A.R.S framework -->   
-    <value id="HHEquip"/>        <!-- indicates a specific Edge for Headhunter (Mars Cyber Techno Warrior) equipment -->   
+    <value id="HHEquip"/>        <!-- indicates a specific Edge for Headhunter (Mars Cyber Techno Warrior) equipment -->     
+    <value id="UsesISP"/>        <!-- indicates power points as ISP -->       
+    <value id="UsesPPE"/>        <!-- indicates power points as PPE -->       
+    <value id="StartGear"/>      <!-- indicates starting gear framework ability -->   
     </group>
-
+	
+  <!-- Power Group tags - Used for tagging powers valid for selection in various choosers, etc. -->
+  <group
+    id="PowerGroup">
+    <value id="grpSRMinMe"/>       <!-- Mind Melter powers  -->     
+    </group>
+	
   <!-- Hero's Journey -->
   <group
     id="RiftsHJ"

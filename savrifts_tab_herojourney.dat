@@ -52,7 +52,7 @@
       component="none"
       showtemplate="hjChsPick"
       choosetemplate="SimpleItem"
-	  candidatepick="ehExprHelp"
+	  candidatepick="ehExprHlp1"
 	  candidatefield="ehHJExp"
 	  headertemplate="hjChsPick"
 	  addpick="resHJSel">
@@ -62,7 +62,7 @@
       <autotag group="thing" tag="skipprereq"/>
       <description/>
       <additem><![CDATA[      
-        @text &= hero.child[ehExprHelp].field[ehHJAdd].text
+        @text &= hero.child[ehExprHlp1].field[ehHJAdd].text
         ]]></additem>
       </table_dynamic>
     </portal>
@@ -80,7 +80,7 @@
 	  isheader="yes">
       <label>
       	<labeltext><![CDATA[
-  	       @text = hero.child[ehExprHelp].field[ehHJHdr].text
+  	       @text = hero.child[ehExprHlp1].field[ehHJHdr].text
       	   ]]></labeltext>
         </label>
       </portal>
@@ -365,7 +365,7 @@
       portal[hjChsTbl1].width = width
 	  
       portal[hjChsTbl1].visible = 0
-	  if (hero.child[ehExprHelp].field[ehHJExp].isempty = 0) then
+	  if (hero.child[ehExprHlp1].field[ehHJExp].isempty = 0) then
 	    portal[hjChsTbl1].visible = 1
 		endif
 

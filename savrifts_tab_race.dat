@@ -45,7 +45,7 @@
       component="none"
       showtemplate="raChsPick"
       choosetemplate="SimpleItem"
-	  candidatepick="ehExprHelp"
+	  candidatepick="ehExprHlp1"
 	  candidatefield="ehRaceExp"
 	  headertemplate="raChsPick"
 	  addpick="resRaceSel">
@@ -54,7 +54,7 @@
       <autotag group="Rifts" tag="RaceSelect"/>
       <description/>
       <additem><![CDATA[      
-        @text &= hero.child[ehExprHelp].field[ehRaceAdd].text
+        @text &= hero.child[ehExprHlp1].field[ehRaceAdd].text
         ]]></additem>
       </table_dynamic>
     </portal>
@@ -72,7 +72,7 @@
 	  isheader="yes">
       <label>
       	<labeltext><![CDATA[
-  	       @text = hero.child[ehExprHelp].field[ehRaceHdr].text
+  	       @text = hero.child[ehExprHlp1].field[ehRaceHdr].text
       	   ]]></labeltext>
         </label>
       </portal>
@@ -439,7 +439,7 @@
       portal[raRaceAbil].visible = 1
       portal[raRaceProp].visible = 1
 	  portal[raChsTbl1].visible = 0
-	  if (hero.child[ehExprHelp].field[ehRaceExp].isempty = 0) then
+	  if (hero.child[ehExprHlp1].field[ehRaceExp].isempty = 0) then
 	    portal[raChsTbl1].visible = 1
 		endif
       

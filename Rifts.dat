@@ -4,6 +4,25 @@
     <info_author>Coordinator: TCArknight (Thomas Clegg)
 Contributors: Salcor, Father Morpheus</info_author>
     <info_history><![CDATA[History
+2/11/18
+New: 
+Seperate PPE, ISP Tracker
+Add second choose table to Framework tab to allow for two different types or selections
+Bootstrap second Expression helper
+Rename initial Expression helper
+
+Fixed: 
+M.A.R.S - Rogue Scholar not allowing selection of Knowledge Skills
+NG-S2 Survival Pack updated to allow storage in other containers.
+
+Framework: M.A.R.S - Personal Option
+Framework: M.A.R.S - Power Armor Soldier
+Framework: M.A.R.S - Psi-Operator
+Framework: M.A.R.S - Robot Armor Soldier
+Framework: M.A.R.S - Rogue Scholar
+Framework: M.A.R.S - Vagabond
+Framework: M.A.R.S - Wilderness Scout
+
 1/29/18
 Added: Adjustment for Fortune/Glory points
 Added: Adjustment for Hero's Journey points
@@ -60,7 +79,9 @@ xx-xx-xx
 TCA: Fixed Storm-Fouled Senses Script timing
 TCA: changed SSASkills script to use childfound for trSFStrain]]></info_history>
     <info_todo>Cybernetics - built-in weapons
-Fennodi - adjust starting powers based on Arcane Framework</info_todo>
+Fennodi - adjust starting powers based on Arcane Framework
+
+Frameworks - Random Starting credits</info_todo>
     </fileinfo>
   <thing id="fg1Close" name="A Mighty Weapon (Close)" description="Your hero may choose any single weapon from the Close Combat—Personal sections." compset="Fortune" summary="Select a Close Combat weapon." uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -632,9 +653,9 @@ header &= hero.child[resHJSel].field[resSummary].text
 chooser = "EdgeType.Background & !Arcane.? & !BreedAdv.?"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehHJAdd].text = additem
-hero.child[ehExprHelp].field[ehHJExp].text = chooser
-hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehHJAdd].text = additem
+hero.child[ehExprHlp1].field[ehHJExp].text = chooser
+hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="exp12Trav" name="Exp. and Wis.: Travelling" description="He’s traveled far and wide, and he knows a lot about the world that could come in handy. Your character gains a +2 on any Common Knowledge rolls related to geography and understanding the people and places of North America. He also gains a +2 on Survival and Streetwise checks in North America." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -669,9 +690,9 @@ header &= hero.child[resHJSel].field[resSummary].text
 chooser = "EdgeType.Profession"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehHJAdd].text = additem
-hero.child[ehExprHelp].field[ehHJExp].text = chooser
-hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehHJAdd].text = additem
+hero.child[ehExprHlp1].field[ehHJExp].text = chooser
+hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="exp17Wild" name="Exp. and Wis.: Wild Card" description="There are moments when everything comes together and an opportunity presents itself. You’re hero knows how to make the most of just such a moment; choose one Wild Card Edge, regardless of requirements." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -689,9 +710,9 @@ header &= hero.child[resHJSel].field[resSummary].text
 chooser = "EdgeType.Wildcard"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehHJAdd].text = additem
-hero.child[ehExprHelp].field[ehHJExp].text = chooser
-hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehHJAdd].text = additem
+hero.child[ehExprHlp1].field[ehHJExp].text = chooser
+hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="mag1Soul" name="Mag. and Mys.: Soul Drain" description="There are times to put it all on the line, no matter the cost. Your character is always prepared to do just that, thanks to having the Soul Drain Edge. Techno-Wizards gain +5 PPE instead." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -932,9 +953,9 @@ header &= hero.child[resHJSel].field[resSummary].text
 chooser = "EdgeType.Profession"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehHJAdd].text = additem
-hero.child[ehExprHelp].field[ehHJExp].text = chooser
-hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehHJAdd].text = additem
+hero.child[ehExprHlp1].field[ehHJExp].text = chooser
+hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="tra8Wood" name="Training: Woodsman" description="While the cities of {i}Savage Rifts®{/i} are deadly in their own right, your hero understands the dangers of the wilderness in ways few ever grasp. He has the Woodsman Edge and gains one die increase each in Survival and Tracking." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -1012,9 +1033,9 @@ header &= hero.child[resHJSel].field[resSummary].text
 chooser = "EdgeType.Combat"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehHJAdd].text = additem
-hero.child[ehExprHelp].field[ehHJExp].text = chooser
-hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehHJAdd].text = additem
+hero.child[ehExprHlp1].field[ehHJExp].text = chooser
+hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="tra17Ace" name="Training: Ace" description="Though lots of folks can jump behind a wheel or grab a stick, your hero understands the nuances of guiding a machine effectively through the worst conditions. She gains the Ace Edge (or Combat Ace, if she already has Ace), as well as a free die type increase in her choice of Boating, Driving, or Piloting." compset="HeroJrny">
     <fieldval field="usrCandid1" value="thingid.skBoating|thingid.skDriving|thingid.skPiloting"/>
@@ -1045,9 +1066,9 @@ header &= hero.child[resHJSel].field[resSummary].text
 chooser = "EdgeType.Wildcard"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehHJAdd].text = additem
-hero.child[ehExprHelp].field[ehHJExp].text = chooser
-hero.child[ehExprHelp].field[ehHJHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehHJAdd].text = additem
+hero.child[ehExprHlp1].field[ehHJExp].text = chooser
+hero.child[ehExprHlp1].field[ehHJHdr].text = header]]></eval>
     </thing>
   <thing id="und1Rep" name="Underworld: McGyver" description="When all else fails, your hero knows how to take any available resources and juryrig her way into or out of situations. She has the McGyver Edge, and she gains a die type in Repair." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -1637,15 +1658,14 @@ perform #traitroll[skThrowing,-,2,"Storm-Fouled Senses"]
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="8"/>
     <tag group="DashTacCon" tag="Basics"/>
-    <tag group="DashTacCon" tag="Traits"/>
-    <tag group="DashTacCon" tag="Combat"/>
+    <tag group="Hide" tag="Trait"/>
+    <eval phase="Render" priority="500">field[trtMaximum].value = #trkmax[trkPower]</eval>
     </thing>
   <thing id="trSRPPE" name="PPE" compset="Trait" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="explicit" tag="7"/>
-    <tag group="DashTacCon" tag="Combat"/>
     <tag group="DashTacCon" tag="Basics"/>
-    <tag group="DashTacCon" tag="Traits"/>
+    <tag group="Hide" tag="Trait"/>
     </thing>
   <thing id="setSRifts" name="Rifts" compset="SetAdjust" uniqueness="unique">
     <fieldval field="setGrpTerm" value="Iconic Framework"/>
@@ -1656,10 +1676,22 @@ perform #traitroll[skThrowing,-,2,"Storm-Fouled Senses"]
     <tag group="Hero" tag="GroupUse"/>
     <tag group="Hero" tag="GroupReq"/>
     <eval phase="PreTraits" priority="2000">perform hero.assign[Hero.ShowLang]
-      if (hero.tagis[Hero.SmartsLang] = 1) then
-        #resmax[resLang] -= 1
-        #resleft[resLang] -= 1
-        endif</eval>
+if (hero.tagis[Hero.SmartsLang] = 1) then
+  #resmax[resLang] -= 1
+  #resleft[resLang] -= 1
+  endif</eval>
+    <eval phase="Render" priority="5001" index="2">~Hide Power Point Tracker if not hidden already
+if (hero.child[trkPower].tagis[Hide.Tracker] = 0) then
+  perform hero.child[trkPower].assign[Hide.Tracker]
+  endif</eval>
+    <eval phase="Final" priority="10000" index="3"><![CDATA[~Reveal PPE and ISP tracker as appropriate and set the values
+if (hero.tagis[Rifts.UsesISP] <> 0) then
+  perform hero.child[trkISP].delete[Hide.Tracker]
+  #trkmax[trkISP] = #trkmax[trkPower]
+  endif
+if (hero.tagis[Rifts.UsesPPE] <> 0) then
+  perform hero.child[trkPPE].delete[Hide.Tracker]
+  endif]]></eval>
     </thing>
   <thing id="racSRDnorr" name="D&apos;Norr" description="Though not supernaturally connected to evil in any way, the D’Norr are more colloquially referred to as “Devilmen” due to their distinctive appearance. Otherwise looking similar to humans, their heads and faces give them the moniker. They have an elongated cranium dotted with tiny spines extending up and back from the forehead (dark red for males, purple for females), and two small horns above the brow. Their overall skin tone is tan-red, and the males have a series of tiny spines on their chins. All have dark blue eyes and pointed ears. \n\nD’Norr are known, by those willing to know them, as intelligent, compassionate, and drawn to nonviolent pursuits and social interaction. Many seek a pacifist’s path, at least as much as possible in such a dangerous world. Most seek out new experiences, new people, and new ideas. Due to their open nature and sensitivity, they are more susceptible to moments and sights of true horror but have a natural affinity for magic." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -1691,9 +1723,9 @@ header &= hero.child[resRaceSel].field[resSummary].text
 chooser = "BreedAdv.?"
 
 ~set up chooser expressions for Breed Advantages
-hero.child[ehExprHelp].field[ehRaceAdd].text = additem
-hero.child[ehExprHelp].field[ehRaceExp].text = chooser
-hero.child[ehExprHelp].field[ehRaceHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehRaceAdd].text = additem
+hero.child[ehExprHlp1].field[ehRaceExp].text = chooser
+hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="racSRFenno" name="Fennodi" description="Called the “Quiet Walkers” by the Shoshone, the Fennodi are another race of generally peaceful D-Bees who prefer tending to herds of livestock on the prairies or similar outdoor pursuits. Pale gray and tan, with tiny black dots for eyes on the sides of their heads (embedded in small, mobile flaps that confuse others into thinking they are ears), the Fennodi have an effective 280-degree range of vision. Whisker-like fins on the sides of their jaws act as noses, giving them a wholly alien appearance to most humans. They’re very slender and tall, averaging seven feet in height.\n\nFennodi are naturally psionic, with a set of powers indicative of their primarily peaceful nature (though they can certainly learn other powers). Most are encountered carrying the crescent Nymbu staff (a sacred traditional item representing travel and peace). Most Fennodi are practitioners of the Art of Nodox, a martial art focusing on avoidance and defense. Players of this D-Bee wanting to know the martial art should take Edges benefiting defense such as Martial Artist, Block, and Dodge." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -1726,9 +1758,9 @@ header &= hero.child[resRaceSel].field[resSummary].text
 chooser = "(Hindrance.hinConfide|Hindrance.hinHeroic)"
 
 ~set up chooser expressions for Breed Advantages
-hero.child[ehExprHelp].field[ehRaceAdd].text = additem
-hero.child[ehExprHelp].field[ehRaceExp].text = chooser
-hero.child[ehExprHelp].field[ehRaceHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehRaceAdd].text = additem
+hero.child[ehExprHlp1].field[ehRaceExp].text = chooser
+hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="racSRLynSr" name="Lyn-Srial" description="Lyn-Srial are humanoids with four arms, bird-like heads, gleaming scales, and wings like a bat. Other races usually call them “Golden Ones” for their shining appearance or “Sky-Knights” due to their drive to help those in need. The Lyn-Srial are a serene people of artists, philosophers, and healers who would rather build communities than engage in combat, but who cannot abide evil. Lyn-Srial find spiritual magic appealing typically becoming Cloudweavers or Mystics (Cloudweavers use the M.A.R.S Personal Concept Option, taking AB (Miracles) and Master of Magic with trappings of air, wind, light, and the environment)." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2254,11 +2286,11 @@ validif (rolls = 0)]]></evalrule>
     <bootstrap thing="fcSRCrMag"></bootstrap>
     <bootstrap thing="fcSRCrNeAc"></bootstrap>
     <bootstrap thing="fcSRCrUnPs"></bootstrap>
-    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
-    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
     <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
     <evalrule phase="Validate" priority="5000" message="Three HJ rolls required from Body Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training, and Underworld &amp; Black Ops Tables." summary="Not enough rolls on required HJ Tables."><![CDATA[var rolls as number
 
@@ -2445,25 +2477,12 @@ perform hero.assign[Rifts.MARS]
     <evalrule phase="Final" priority="1000" message="Must have 4 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 4)]]></evalrule>
     </thing>
   <thing id="grpSRMarsC" name="M.A.R.S. (Cybernetic Techno-Warrior)" description="Also called a Headhunter and usually operating as a mercenary, heavily focused on improving his value via cybernetics.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+    <fieldval field="shortname" value="Headhunter"/>
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="edgSRUpgra">
       <autotag group="thing" tag="skipprereq"/>
       </bootstrap>
-    <eval phase="Render" priority="10000"><![CDATA[var header as string
-var chooser as string
-var additem as string
-
-additem = "Add Gear"
-header = "Gear: "
-header &= hero.child[resFraSel].field[resSummary].text
-
-chooser = "Rifts.HHEquip"
-
-~set up chooser expressions
-hero.child[ehExprHelp].field[ehFrameAdd].text = additem
-hero.child[ehExprHelp].field[ehFrameExp].text = chooser
-hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
 perform hero.assign[Rifts.MARS]
@@ -2471,8 +2490,22 @@ perform hero.assign[Rifts.MARS]
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4
 
-~set resFraSel
-#resmax[resFraSel] += 1</eval>
+~set resFraSel1
+#resmax[resFraSel1] += 1</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Gear"
+header = "Gear: "
+header &= hero.child[resFraSel1].field[resSummary].text
+
+chooser = "component.Edge & Rifts.StartGear & Rifts.HHEquip"
+
+~set up chooser expressions
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     <evalrule phase="Final" priority="1000" message="Must have 6 Strain worth of Cybernetics."><![CDATA[validif (#trait[trSFStrain] >= 6)]]></evalrule>
     </thing>
   <thing id="grpSRMarsD" name="M.A.R.S. (Merc Soldier)" description="Though they like to be paid, it’s not always about the money. This package also applies to anyone with a strong military or security background.\n\nNOTES:  When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
@@ -2482,21 +2515,21 @@ perform hero.assign[Rifts.MARS]
     <eval phase="PreTraits" priority="5000" index="4">~This package gains 5 skill points
 #resmax[resSkill] += 5
 
-~set resFraSel to selection
-#resmax[resFraSel] += 2</eval>
+~set resFraSel1 to selection
+#resmax[resFraSel1] += 2</eval>
     <eval phase="Render" priority="10000" index="5"><![CDATA[var header as string
 var chooser as string
 var additem as string
 
 additem = "Add Combat Edge"
 header = "Combat Edge: "
-header &= hero.child[resFraSel].field[resSummary].text
+header &= hero.child[resFraSel1].field[resSummary].text
 
 chooser = "EdgeType.Combat"
 ~set up chooser expressions for bonus edges
-hero.child[ehExprHelp].field[ehFrameAdd].text = additem
-hero.child[ehExprHelp].field[ehFrameExp].text = chooser
-hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
 perform hero.assign[Rifts.MARS]
@@ -2518,9 +2551,41 @@ foreach pick in hero where "component.Armor"
 
 validif (MyArmor >= 1)]]></evalrule>
     </thing>
-  <thing id="grpSRMarsH" name="M.A.R.S. (Psi-Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsH" name="M.A.R.S. (Psi-Operator)" description="A variation on the Operator concept, these agents focus on psionic abilities.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
+    <bootstrap thing="faSRMARSPs"></bootstrap>
+    <bootstrap thing="faSRPsiRep"></bootstrap>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
+perform hero.assign[Rifts.FortGlory]
+	  perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Psionics d6
+#traitcreation[skPsionics] += 1</eval>
+    </thing>
+  <thing id="grpSRMarsI" name="M.A.R.S. (Robot Armor Pilot)" description="It’s a good idea to become familiar with the Vehicle rules when selecting this package.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="MARS"/>
+    <bootstrap thing="edgSRPAJo"></bootstrap>
+    <bootstrap thing="skPiloting"></bootstrap>
+    <bootstrap thing="faSRSelRA"></bootstrap>
+    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 2
+perform hero.assign[Rifts.FortGlory]
+perform hero.assign[Rifts.MARS]
+#resmax[resFortune] += 2</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Piloting d6
+#traitcreation[skPiloting] += 1
+hero.childfound[resSkill].field[resSpent].value -= 1</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4</eval>
+    </thing>
+  <thing id="grpSRMarsG" name="M.A.R.S. (Power Armor Soldier)" description="This combat specialist wears a suit of exceptionally powerful combat armor.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="MARS"/>
+    <bootstrap thing="edgSRPAJo"></bootstrap>
+    <bootstrap thing="faSRSelPA"></bootstrap>
     <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
 #resmax[resAdvance] +=4</eval>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
@@ -2528,27 +2593,7 @@ perform hero.assign[Rifts.FortGlory]
 	  perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
     </thing>
-  <thing id="grpSRMarsI" name="M.A.R.S. (Robot Armor Pilot)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <tag group="Rifts" tag="MARS"/>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-	  perform hero.assign[Rifts.MARS]
-#resmax[resFortune] += 3</eval>
-    </thing>
-  <thing id="grpSRMarsG" name="M.A.R.S. (Power Armor Soldier)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <tag group="Rifts" tag="MARS"/>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
-    <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
-perform hero.assign[Rifts.FortGlory]
-	  perform hero.assign[Rifts.MARS]
-#resmax[resFortune] += 3</eval>
-    </thing>
-  <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsE" name="M.A.R.S. (Operator)" description="This package unites technical and mechanical mastery with the possession of a very useful vehicle.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="edgAce"></bootstrap>
@@ -2577,26 +2622,46 @@ var additem as string
 
 additem = "Choose Vehicle"
 header = "Vehicle: "
-header &= hero.child[resFraSel].field[resSummary].text
+header &= hero.child[resFraSel1].field[resSummary].text
 
 chooser = "thingid.vhSRMoATV|thingid.vhSRNG357H"
 
 ~set up chooser expressions
-hero.child[ehExprHelp].field[ehFrameAdd].text = additem
-hero.child[ehExprHelp].field[ehFrameExp].text = chooser
-hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     </thing>
-  <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="If none of the classic OCC packages works for what you want, simply use this package’s benefits to structure a framework to your liking.\n\n* Begin with +5 skill points.\n* Begin with two Edges of your choice, ignoring Rank requirements.\n* Make one additional roll on the M.A.R.S. Fortune &amp; Glory Table.\n* Begin with the starting gear of any one Iconic Framework of your choosing.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
+    <bootstrap thing="faSRSkill5"></bootstrap>
+    <bootstrap thing="faSREdges2"></bootstrap>
+    <bootstrap thing="faSRExFaGR"></bootstrap>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
-	  perform hero.assign[Rifts.MARS]
+perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4
+
+~set Starting Gear choices
+#resmax[resFraSel2] += 1</eval>
+    <eval phase="Render" priority="10000" index="4"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Gear"
+header = "Starting Gear: "
+header &= hero.child[resFraSel2].field[resSummary].text
+
+chooser = "component.Edge & Rifts.StartGear"
+
+~set up chooser expressions
+hero.child[ehExprHlp2].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp2].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp2].field[ehFrameHdr].text = header]]></eval>
     </thing>
-  <thing id="grpSRMarsJ" name="M.A.R.S. (Rogue Scholar)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsJ" name="M.A.R.S. (Rogue Scholar)" description="Dedicated to uncovering the mysteries and truths of the past, Rogue Scholars risk worse than censure at the hands of the Coalition and others who refuse to see things beyond their view. This also covers the Rogue Scientist concept, simply select the appropriate Knowledge skills.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <fieldval field="shortname" value="Rogue Scholar"/>
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
@@ -2604,54 +2669,105 @@ perform hero.assign[Rifts.FortGlory]
     <bootstrap thing="skInvest"></bootstrap>
     <bootstrap thing="skStreet"></bootstrap>
     <bootstrap thing="edgScholar"></bootstrap>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW320LaPi" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <eval phase="Render" priority="10000" index="4"><![CDATA[~Set Framework chooser for Powers
+var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Knowledge Skill"
+header = "Knowledge Skills: "
+header &= hero.child[resFraSel1].field[resSummary].text
+
+chooser = "component.Skill & Skill.skKnow?"
+
+~set up chooser expressions
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
-	  perform hero.assign[Rifts.MARS]
+perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
-    <eval phase="PreTraits" priority="5000"><![CDATA[~This package gains 5 skill points
+    <eval phase="PreTraits" priority="5000" index="3"><![CDATA[#resmax[resXP] += 20
+#resmax[resAdvance] +=4
+
+~This package gains 5 skill points
 #resmax[resSkill] += 5
 
-~This will offset the cost:
-perform #resspent[resSkill,-,4,"Rogue Scholar"]
+~Select two knowledge skills
+#resmax[resFraSel1] += 2
+foreach pick in hero from Skill where "Rifts.FrameSel"
+  eachpick.field[trtCreate].value += 2
+  nexteach
 
-~This will increase the Skill
-foreach pick in hero where "thingid.skStreet"
-  eachpick.field[trtBonus].value += 2
-nexteach
-foreach pick in hero where "thingid.skInvest"
-  eachpick.field[trtBonus].value += 2
-nexteach
-
-foreach pick in hero where "thingid.skKnowHist"
-  eachpick.field[trtBonus].value += 2
-nexteach
-foreach pick in hero where "thingid.skKnowPoli"
-  eachpick.field[trtBonus].value += 2
-nexteach]]>
+~Investigate d8, Streetwise d8
+#traitcreation[skStreet] += 2
+#traitcreation[skInvest] += 2
+hero.childfound[resSkill].field[resSpent].value -= 4]]>
       <before name="Calc trtFinal"/>
       </eval>
     </thing>
-  <thing id="grpSRMarsL" name="M.A.R.S. (Wilderness Scout)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsL" name="M.A.R.S. (Wilderness Scout)" description="A ranger/scout for the post-Rifts world who is an expert in traveling and living in the places between civilizations.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
+    <bootstrap thing="edgFleetFt">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="edgWoodsmn">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <bootstrap thing="skSurvival"></bootstrap>
+    <bootstrap thing="skTracking"></bootstrap>
+	<autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
 	  perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
+#resmax[resAdvance] +=4
+
+~1 die type to VIgor
+#traitcreation[attrVig] += 1
+
+~Notice d6, Survival d8, Tracking d8
+#traitcreation[skNotice] += 1
+#traitcreation[skSurvival] += 2
+#traitcreation[skTracking] += 2
+hero.childfound[resSkill].field[resSpent].value -= 3</eval>
     </thing>
-  <thing id="grpSRMarsK" name="M.A.R.S. (Vagabond)" description="NOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsK" name="M.A.R.S. (Vagabond)" description="The ultimate wanderer, explorer, and Renaissance person, the Vagabond is also a true survivor.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
-    <eval phase="PreTraits" priority="5000" index="3">#resmax[resXP] += 20
-#resmax[resAdvance] +=4</eval>
+    <bootstrap thing="faSRGifted"></bootstrap>
+    <bootstrap thing="edgHrdKil">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="edgLuck">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <eval phase="Setup" priority="5000" index="2">#resmax[resHeroJrn] += 3
 perform hero.assign[Rifts.FortGlory]
 	  perform hero.assign[Rifts.MARS]
 #resmax[resFortune] += 3</eval>
+    <eval phase="PreTraits" priority="5000" index="3">~Begin as Seasoned
+#resmax[resXP] += 20
+#resmax[resAdvance] +=4
+
+~This package gains 5 skill points
+#resmax[resSkill] += 5</eval>
     </thing>
   <thing id="grpSRBurst" name="Burster" description="{b}{i}THE BURSTER HERO’S JOURNEY (FOUR ROLLS){/b}{/i}\nBursters gain three rolls on the {/b}Experience &amp; Wisdom{/b} Table or the {b}Psionics{/b} Table. \n\nBursters gain one additional roll on any table except {b}Cybernetics{/b} or anything to do with magic." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -3191,7 +3307,7 @@ validif (rolls >=3)]]></evalrule>
     <fieldval field="grCost" value="3000"/>
     <fieldval field="gearWeight" value="30"/>
     <usesource source="SavRiftC"/>
-    <tag group="thing" tag="holder_top"/>
+    <tag group="thing" tag="holder"/>
     <tag group="GearType" tag="Adventure"/>
     </thing>
   <thing id="eqPsiMndSh" name="Psionic Mind Shield (TW)" description="Usually embedded within a helmet, this apparatus provides +4 on opposed rolls against psionic powers and a +4 Armor versus damaging psionic powers.  Unfortunately, the wearer cannot benefit from benevolent psionic effects, such as telepathy.  This system costs 3 Power Points per hour it&apos;s active." compset="Equipment">
@@ -5354,26 +5470,26 @@ if (field[abilActive].value <> 0) then
 ~  myCount += 1
 ~  nexteach
 	  
-~perform #resspent[resFraSel,+,myCount,field[name].text]]]></eval>
+~perform #resspent[resFraSel1,+,myCount,field[name].text]]]></eval>
     <eval phase="PreTraits" priority="5000" index="3">~Fighting D8
 #traitcreation[skFighting] += 2
 
 ~set resRaceEdge to selection
-#resmax[resFraSel] += 2</eval>
+#resmax[resFraSel1] += 2</eval>
     <eval phase="Render" priority="10000"><![CDATA[var header as string
 var chooser as string
 var additem as string
 
 additem = "Add Combat Edge"
 header = "Combat Edge: "
-header &= hero.child[resFraSel].field[resSummary].text
+header &= hero.child[resFraSel1].field[resSummary].text
 
 chooser = "EdgeType.Combat"
 
 ~set up chooser expressions for Breed Advantages
-hero.child[ehExprHelp].field[ehFrameAdd].text = additem
-hero.child[ehExprHelp].field[ehFrameExp].text = chooser
-hero.child[ehExprHelp].field[ehFrameHdr].text = header]]></eval>
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     </thing>
   <thing id="SRGrpReq" name="Savage Rifts Settings" compset="Mechanics" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -6220,7 +6336,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <usesource source="CoFieldMan"/>
     <tag group="GearType" tag="Adventure"/>
     </thing>
-  <thing id="edgSREqCoC" name="Equipment: Combat Cyborg" description="Equipment as a Combat Cyborg" compset="Edge">
+  <thing id="edgSREqCoC" name="Starting Gear: Combat Cyborg" description="NG-56 Light Ion Pistol\nMini Rail Gun\nChain Greatsword\n\n1d4 × 1,000 credits" compset="Edge">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
     <tag group="Helper" tag="FreeEdge"/>
@@ -6228,11 +6344,12 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="User" tag="CreateOnly"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="Rifts" tag="HHEquip"/>
-    <autoadd thing="wpChainGS" portal="arMelee"></autoadd>
+    <tag group="Rifts" tag="StartGear"/>
     <autoadd thing="wpNG56LtIo" portal="arRange"></autoadd>
     <autoadd thing="wpMinRailG" portal="arSpecial"></autoadd>
+    <autoadd thing="wpChainGS" portal="arMelee"></autoadd>
     </thing>
-  <thing id="edgSREqCra" name="Equipment: Crazy" description="Equipment as a Crazy" compset="Edge">
+  <thing id="edgSREqCra" name="Starting Gear: Crazy" description="SFD Huntsman Lightweight Personal Armor\nWilk’s 237 Laser Pistol\nWilk’s 447 Laser Rifle\nVibro-Sword\nNG-S2 Survival Pack\n2d6 × 100 credits." compset="Edge">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
     <tag group="Helper" tag="FreeEdge"/>
@@ -6240,13 +6357,14 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="User" tag="CreateOnly"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="Rifts" tag="HHEquip"/>
-    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <tag group="Rifts" tag="StartGear"/>
     <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
     <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
     </thing>
-  <thing id="edgSREqJui" name="Equipment: Juicer" description="Equipment as a Juicer" compset="Edge">
+  <thing id="edgSREqJui" name="Starting Gear: Juicer" description="Juicer Assassin Plate Armor\nWilk’s 320 Laser Pistol\nJA-9 Variable Laser Rifle\nVibro-Sword,\nNG-S2 Survival Pack\n\n4d6 × 100 credits" compset="Edge">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
     <tag group="Helper" tag="FreeEdge"/>
@@ -6254,11 +6372,52 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="User" tag="CreateOnly"/>
     <tag group="EdgeType" tag="Background"/>
     <tag group="Rifts" tag="HHEquip"/>
-    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    <tag group="Rifts" tag="StartGear"/>
     <autoadd thing="wpW320LaPi" portal="arRange"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <autoadd thing="wpJA9VaLaR" portal="arRange"></autoadd>
     <autoadd thing="armSRJuicA" portal="arDefense"></autoadd>
+    <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
+    </thing>
+  <thing id="edgSREqCyK" name="Starting Gear: Cyber-Knight" description="Cyber-Knight Medium Armor\nWilk’s 320 Laser Pistol\nNG-L5 Laser Rifle\nNG-S2 Survival Pack\nOne silver cross\n6× wooden stakes\n\n2d6 × 100 credits." compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="StartGear"/>
+    <autoadd thing="eqCross" portal="grGear"></autoadd>
+    <autoadd thing="eqCustom" portal="grGear">
+      <assignval field="grUserName" value="Wooden Stake"/>
+      <assignval field="stackQty" value="6"/>
+      </autoadd>
+    <autoadd thing="armSRCybK" portal="arDefense"></autoadd>
+    <autoadd thing="wpW320LaPi" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    </thing>
+  <thing id="edgSREqGlB" name="Starting Gear: Glitter Boy" description="Huntsman Lightweight Personal Armor\nWilk’s 227 Pulse Laser Pistol\nNG-S2 Survival Pack\n\n4d6 × 100 credits." compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="StartGear"/>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpW227PLaP" portal="arRange"></autoadd>
+    </thing>
+  <thing id="edgSREqBur" name="Starting Gear: Burster" description="NG-33 Laser Pistol\nNG-S2 Survival Pack\n\n4d6 × 100 credits." compset="Edge">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Helper" tag="FreeEdge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    <tag group="Rifts" tag="StartGear"/>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
     </thing>
   <thing id="vhSRNGV67" name="NG-V67 Gunwolf" description="An intimidating combat robot bristling with weapons, the Gunwolf was designed to fight demons and monsters from the Rifts. The Gunwolf’s name comes from its distinctive wolf-like head. The Gunwolf’s jaw is lined with silver-plated teeth, its hands armed with razor-sharp claws (precluding the robot from carrying any hand-held weaponry), and its forearm-mounted rail gun is typically loaded with specially designed rounds combining wood and silver. The tips of these rail guns have spikes to be used in close combat as well. In addition to the standard robot features, the Gunwolf has a thermal-imaging system, infrared and ultraviolet optics, infared searchlights, and a multi-camera system with one in each eye socket, one on each forearm, two in the chest sensor cluster, one on each chest missile launcher, and two in the back, providing the crew with a wide range of vision around the robot. Possibly the most unique system on the NG-V61 is the “Wolf’s Howl,” a scrambler system emitting disruptive pulse waves at various subsonic and ultrasonic frequencies simultaneously. The howl not only interferes with electronic communications and sensor systems, it creates a disorienting and painful sound. This ear-splitting noise is particularly effective against creatures with enhanced hearing. (38 million credits)" compset="Walker">
     <fieldval field="vhCrew" value="2"/>
@@ -6302,7 +6461,6 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Print" tag="NoPrint"/>
     <tag group="User" tag="CreateOnly"/>
     <tag group="EdgeType" tag="Background"/>
-    <tag group="Rifts" tag="HHEquip"/>
     <autoadd thing="vhSRNG357H" portal="grVehicle"></autoadd>
     </thing>
   <thing id="edgSREqATV" name="ATV" description="Start with a Mountaineer ATV." compset="Edge">
@@ -6312,7 +6470,6 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Print" tag="NoPrint"/>
     <tag group="User" tag="CreateOnly"/>
     <tag group="EdgeType" tag="Background"/>
-    <tag group="Rifts" tag="HHEquip"/>
     <autoadd thing="vhSRMoATV" portal="grVehicle"></autoadd>
     </thing>
   <thing id="vhSRNG357H" name="NG-357 Magnum-Turbo Hovercycle" description="If the NG-150 is a street rocket, the NG-357 is its massive hog of a cousin. Heavy, tough, and powerful, the Magnum-Turbo is particularly popular with cyborgs, juicers, crazies, and similar types. The electric engine provides a maximum range of 500 miles, with a maximum altitude of 100 feet, before a night’s recharge is required. The powerful engines are distributed in a way that enables the cycle to handle drops from up to 400 feet. (375,000 credits for the electric model; 1.3 million credits for a nuclear engine)." compset="Vehicle">
@@ -6374,7 +6531,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="vhSRArmStr" tag="12"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpMedRailG"></bootstrap>
       <bootstrap thing="wpMdMisLau">
@@ -6402,7 +6559,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="vhSRArmStr" tag="12"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpMdMisLau">
         <assignval field="stackQty" value="2"/>
@@ -6429,7 +6586,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="10"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpSRHTMG"></bootstrap>
       <bootstrap thing="wpLtRailGu"></bootstrap>
@@ -6510,7 +6667,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="10"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <child entity="LoadOut">
@@ -6537,7 +6694,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="10"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <tag group="Vehicle" tag="AirDefRad"/>
@@ -6565,7 +6722,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="10"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <child entity="LoadOut">
@@ -6593,7 +6750,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="10"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <tag group="Vehicle" tag="HvyArmor"/>
     <tag group="Vehicle" tag="FusionPow"/>
     <child entity="LoadOut">
@@ -6623,7 +6780,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="12"/>
     <tag group="Vehicle" tag="Radar"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpVhMnMsLa">
         <assignval field="stackQty" value="2"/>
@@ -6647,7 +6804,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="12"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpHvyRailG"></bootstrap>
       <bootstrap thing="wpVhMnMsLa">
@@ -6673,7 +6830,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="11"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpMdIonCan">
         <assignval field="stackQty" value="2"/>
@@ -6718,7 +6875,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="NightVis"/>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpWIGL20GL"></bootstrap>
       <bootstrap thing="wpHvyRailG"></bootstrap>
@@ -6749,7 +6906,7 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Targeting"/>
     <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="12"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpHvyRailG">
         <assignval field="stackQty" value="2"/>
@@ -7197,9 +7354,9 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <tag group="Vehicle" tag="Radar"/>
     <tag group="Vehicle" tag="SensorSuit"/>
     <tag group="Vehicle" tag="Targeting"/>
-    <tag group="VehEra" tag="Future"/>
+    <tag group="VehEra" tag="RiftsEra"/>
     <tag group="vhSRArmStr" tag="12"/>
-    <tag group="VehType" tag="Walker"/>
+    <tag group="VehType" tag="RobotAr"/>
     <child entity="LoadOut">
       <bootstrap thing="wpSRQTROG"></bootstrap>
       <bootstrap thing="wpSRELSTNR"></bootstrap>
@@ -7293,6 +7450,7 @@ else
       <bootstrap thing="wpLtLasCan"></bootstrap>
       <bootstrap thing="wpLtLasCan"></bootstrap>
       <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      <bootstrap thing="modPAStren"></bootstrap>
       </child>
     </thing>
   <thing id="vhNGX9" name="NG-X9 Samson" description="One of the, if not the most common, suit of power armor in North America, the NG-X9 Samson PA is one of the best selling pieces of Northern Gun equipment on the market.\n\nWith a built in Light Rail gun, 2 x Rocket Launchers (One in each forearm) and Knuckle Blades for punching, it is easy to see how the NG-X9 became so popular." compset="PowerAr" summary="Perhaps the most common PA in North America." holdable="no">
@@ -7774,13 +7932,169 @@ else
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="WeaponType" tag="SFVehMelee"/>
     </thing>
-  <preclude id="edgNoMercy" source="SavRiftC"/>
-  <preclude id="edgRich" source="SavRiftC"/>
-  <preclude id="edgRich2" source="SavRiftC"/>
+  <thing id="faSRSkill5" name="+5 Skill Points" description="+5 Skill Points" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#resmax[resSkill] += 5</eval>
+    </thing>
+  <thing id="faSREdges2" name="Two Edges of Choice" description="Begin with two Edges of your choice, ignoring Rank requirements." compset="FraAbility" summary="Two Edges of choice.">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000" index="3">~set resFraSel1 to selection
+#resmax[resFraSel1] += 2</eval>
+    <eval phase="Render" priority="10000"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Edges"
+header = "Edge: "
+header &= hero.child[resFraSel1].field[resSummary].text
+
+chooser = "EdgeType.?"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
+    </thing>
+  <thing id="faSRExFaGR" name="Extra Fortune and Glory roll" description="Additional Fortune and Glory roll." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#resmax[resFortune] += 1</eval>
+    </thing>
+  <thing id="faSRSelPA" name="Selected Power Armor" description="Select any one suit of Power Armor. If you choose the Ulti-Max, take one less roll on the M.A.R.S. Fortune &amp; Glory Table." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">~set resFraSel1 to selection
+#resmax[resFraSel1] += 1</eval>
+    <eval phase="Initialize" index="2"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add PA"
+header = "Power Armor: "
+header &= hero.child[resFraSel1].field[resSummary].text
+
+chooser = "VehType.PowerAr"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
+    </thing>
+  <thing id="faSRSelRA" name="Selected Robot Armor" description="Select any one suit of Robot Armor." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">~set resFraSel1 to selection
+#resmax[resFraSel1] += 1</eval>
+    <eval phase="Initialize" index="2"><![CDATA[var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Robot Armor"
+header = "Robot Armor: "
+header &= hero.child[resFraSel1].field[resSummary].text
+
+chooser = "VehType.RobotAr"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
+    </thing>
+  <thing id="faSRMARSPs" name="Psionic" description="Begin with Psionics d6, 10 ISP, and Arcane Background (Psionics). Select three powers from the Mind Melter’s list." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powBanish"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powBlast"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powBurrow"/>
+    <tag group="PowerDeny" tag="powBurst"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powLightOb"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powQuick"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powSpeed"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powSumAlly"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <bootstrap thing="edgArcPsi"></bootstrap>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <eval phase="Initialize"><![CDATA[~Tag hero as using ISP
+perform hero.assign[Rifts.UsesISP]
+
+~Tag hero as using Mind Melter powers
+perform hero.assign[PowerGroup.grpSRMinMe]
+
+~Set Framework chooser for Powers
+var header as string
+var chooser as string
+var additem as string
+
+additem = "Add Power"
+header = "Powers: "
+header &= hero.child[resFraSel1].field[resSummary].text
+
+chooser = "component.Power & PowerGroup.grpSRMinMe"
+
+~set up chooser expressions for Breed Advantages
+hero.child[ehExprHlp1].field[ehFrameAdd].text = additem
+hero.child[ehExprHlp1].field[ehFrameExp].text = chooser
+hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
+    <eval phase="PreTraits" priority="500" index="2">~set resFraSel1 to selection
+#resmax[resFraSel1] += 3</eval>
+    <eval phase="Initialize" priority="2100" index="3">perform forward[PowerDeny.?]</eval>
+    </thing>
+  <thing id="faSRPsiRep" name="Psi Repair" description="Begin with Repair d8 and the Mr. Fix It Edge (substituting Psionics for Weird Science)." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgMrFixIt">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="skRepair"></bootstrap>
+    <bootstrap thing="edgGadget">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <eval phase="PreTraits" priority="5000">~Repair d8
+#traitcreation[skRepair] += 2
+hero.childfound[resSkill].field[resSpent].value -= 2</eval>
+    </thing>
+  <thing id="faSRGifted" name="Gifted" description="Make all unskilled checks at d4 (instead of d4−2)." compset="FraAbility" summary="Make all unskilled checks at d4 (not d4-2)">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="eqSRSurvTe" name="Survival Tent" description="Two person tent, insulated against up to -40 degrees Fahrenheit.  \n\nIt has water collection capabilities, capturing ambient humidity and evaporating water from occupants, thus extending water supplies by 20%." compset="Equipment">
+    <usesource source="SavRiftC"/>
+    <tag group="GearType" tag="Shelter"/>
+    </thing>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
   <preclude id="cybAquatic" source="SavRiftC"/>
   <preclude id="edgNoble" source="SavRiftC"/>
-  <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <preclude id="edgNoMercy" source="SavRiftC"/>
+  <preclude id="edgRich" source="SavRiftC"/>
+  <preclude id="edgRich2" source="SavRiftC"/>
+  <extthing thing="powBarrier" group="PowerGroup" tag="grpSRMinMe"/>
   <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="powArmor" group="PowerGroup" tag="grpSRMinMe"/>
   </document>

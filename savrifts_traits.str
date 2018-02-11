@@ -260,7 +260,7 @@
 		myCount += 1
 		nexteach
 	  
-	perform #resspent[resFraSel,+,myCount,field[name].text]
+	perform #resspent[resFraSel1,+,myCount,field[name].text]
 		]]></eval>
 		
 	<eval phase="PreTraits" priority="1000" index="3"><![CDATA[

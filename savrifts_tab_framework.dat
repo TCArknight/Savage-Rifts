@@ -41,24 +41,45 @@
     style="tblNormal">
     <table_dynamic
       component="none"
-      showtemplate="fraChsPick"
+      showtemplate="fraChsPic1"
       choosetemplate="SimpleItem"
-	  candidatepick="ehExprHelp"
+	  candidatepick="ehExprHlp1"
 	  candidatefield="ehFrameExp"
-	  headertemplate="fraChsPick"
-	  addpick="resFraSel">
+	  headertemplate="fraChsPic1"
+	  addpick="resFraSel1">
       <list>Rifts.FrameSel</list>
       <autotag group="Helper" tag="FreeEdge"/>
       <autotag group="Rifts" tag="FrameSel"/>
       <description/>
       <additem><![CDATA[      
-        @text &= hero.child[ehExprHelp].field[ehFrameAdd].text
+        @text &= hero.child[ehExprHlp1].field[ehFrameAdd].text
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="fraChsTbl2"
+    style="tblNormal">
+    <table_dynamic
+      component="none"
+      showtemplate="fraChsPic2"
+      choosetemplate="SimpleItem"
+	  candidatepick="ehExprHlp2"
+	  candidatefield="ehFrameExp"
+	  headertemplate="fraChsPic2"
+	  addpick="resFraSel2">
+      <list>Rifts.FrameSel</list>
+      <autotag group="Helper" tag="FreeEdge"/>
+      <autotag group="Rifts" tag="FrameSel"/>
+      <description/>
+      <additem><![CDATA[      
+        @text &= hero.child[ehExprHlp2].field[ehFrameAdd].text
         ]]></additem>
       </table_dynamic>
     </portal>
 	
   <template
-    id="fraChsPick"
+    id="fraChsPic1"
     name="Chooser Pick"
     compset="Simple"
     marginhorz="3"
@@ -70,7 +91,7 @@
 	  isheader="yes">
       <label>
       	<labeltext><![CDATA[
-  	       @text = hero.child[ehExprHelp].field[ehFrameHdr].text
+  	       @text = hero.child[ehExprHlp1].field[ehFrameHdr].text
       	   ]]></labeltext>
         </label>
       </portal>
@@ -170,6 +191,121 @@
 
 		]]></header>
 		</template>
+
+  <template
+    id="fraChsPic2"
+    name="Chooser Pick"
+    compset="Simple"
+    marginhorz="3"
+    marginvert="2">
+
+	<portal
+      id="hdrText"
+      style="lblTitle"
+	  isheader="yes">
+      <label>
+      	<labeltext><![CDATA[
+  	       @text = hero.child[ehExprHlp2].field[ehFrameHdr].text
+      	   ]]></labeltext>
+        </label>
+      </portal>
+	  
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="name">
+        </label>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if we've been assigned a non-default width for use when showing things, adopt
+      ~that width now
+      if (ispick = 0) then
+        var size as number
+        size = tagvalue[SimpleItem.width?]
+        if (size > 0) then
+          width = size
+          endif
+        endif
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~center the other portals vertically
+      perform portal[name].centervert
+      perform portal[delete].centervert
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~if we're showing a thing, the info and delete buttons are irrelevant, since
+      ~we should be showing within a chooser, in which case there's nothing to
+      ~delete and we have the description already visible
+      var edge as number
+      if (ispick = 0) then
+        portal[info].visible = 0
+        portal[delete].visible = 0
+        edge = width
+      else
+        edge = portal[info].left - 5
+        endif
+
+      ~position the name on the left and let it use all available space
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,edge)
+
+      ~center the name if requested or this is a show-only thing
+      if (tagis[SimpleItem.CenterName] + tagis[thing.showonly] <> 0) then
+        perform portal[name].centerhorz
+        endif
+
+      ~if this is an auto-added pick, change its font to indicate that fact
+      if (ispick + !candelete >= 2) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+	  <header><![CDATA[
+		~our header height is the height of our labels
+		height = portal[name].height
+
+		~each of our header labels has the same width as the corresponding data beneath
+		portal[hdrText].width = width
+
+		~align all header labels at the bottom of the header region
+		perform portal[hdrText].alignedge[bottom,0]
+
+		]]></header>
+		</template>
+
   <template
     id="fraAbiPick"
     name="Framework Ability Pick"
@@ -669,6 +805,7 @@
     <portalref portal="fraAbility" />
     <portalref portal="fraComp" />
     <portalref portal="fraChsTbl1" />
+    <portalref portal="fraChsTbl2" />
 
     <!-- This script sizes and positions the layout and its child visual elements. -->
     <position><![CDATA[
@@ -681,8 +818,12 @@
       portal[fraAbility].visible = 1
       portal[fraComp].visible = 1
       portal[fraChsTbl1].visible = 0
-	  if (hero.child[ehExprHelp].field[ehFrameExp].isempty = 0) then
+	  if (hero.child[ehExprHlp1].field[ehFrameExp].isempty = 0) then
 	    portal[fraChsTbl1].visible = 1
+		endif
+      portal[fraChsTbl2].visible = 0
+	  if (hero.child[ehExprHlp2].field[ehFrameExp].isempty = 0) then
+	    portal[fraChsTbl2].visible = 1
 		endif
 		
       ~position and size the table to span the full layout; it will only use the
@@ -690,6 +831,7 @@
       perform portal[fraAbility].autoplace
       perform portal[fraComp].autoplace[10]
       perform portal[fraChsTbl1].autoplace[10]
+      perform portal[fraChsTbl2].autoplace[10]
       
       ]]></position>
 

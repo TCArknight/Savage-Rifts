@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+
+  <!-- ISP / PPE Trackers so the user can manage the expenditure of power points -->
+  <thing
+    id="trkISP"
+    name="ISP"
+    compset="Tracker">
+
+    <!-- Automatically add the tracker to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Resetting the tracker sets the value to the maximum -->
+    <tag group="Helper" tag="ResetMax"/>
+
+    <!-- Hide the tracker unless we actually have a need for it -->
+    <tag group="Hide" tag="Tracker"/>
+    </thing>
+
+  <thing
+    id="trkPPE"
+    name="PPE"
+    compset="Tracker">
+
+    <!-- Automatically add the tracker to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Resetting the tracker sets the value to the maximum -->
+    <tag group="Helper" tag="ResetMax"/>
+
+    <!-- Hide the tracker unless we actually have a need for it -->
+    <tag group="Hide" tag="Tracker"/>
+    </thing>
+  </document>

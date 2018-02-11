@@ -50,12 +50,12 @@
     <!-- Make sure that we don't have too many hindrances selected -->
     <evalrule index="1" phase="Validate" priority="8000" message="Selections required." summary="Issue with Framework options."><![CDATA[
 
-      validif (#resleft[resFraSel] = 0)
+      validif (#resleft[resFraSel1] = 0)
 
       ~mark associated tabs as invalid
       container.panelvalid[framework] = 0
 	  
-	  if (#resleft[resFraSel] > 0) then
+	  if (#resleft[resFraSel1] > 0) then
 	    @message = "Not enough Framework selections made."
 	  else
 	    @message = "Too many Framework selections made."
