@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the assortment of adjustments that can be applied to actors
+      for the game system. The behaviors of adjustments are varied and configured via
+      the assignment of tags. Additionally, many adjustments can target a type of trait
+      that the user can select, so fields are used to constrain the valid options. The
+      actual net effect of each adjustment is applied via the script associated with
+      the adjustment. All of these scripts are applied at a timing of Setup/8000 to
+      ensure that they occur at an appropriate point in the overall evaluation cycle.
+
+      The visual behavior of each adjustment is controlled via the various "AdjustShow"
+      tags that are assigned, such as whether to show an incrementer and/or a menu for
+      user selection. The "Helper.UserAdjust" tag is used to identify an adjustment
+      that is controllable by the user. Suitable "InPlay" tags are assigned to control
+      whether an adjustment can be permanent or temporary, governing where the actual
+      adjustment appears for selection and how its effects are applied.
+-->
+
+<document signature="Hero Lab Data">
+
+  <thing
+    id="adjFortGlo"
+    name="Fortune and Glory"
+    compset="Adjustment"
+    description="Select this adjustment to increase/decrease the number of Fortune and Glory selections.">
+    <tag group="AdjustShow" tag="Increment"/>
+    <tag group="Helper" tag="UserAdjust"/>
+    <tag group="InPlay" tag="PermOK"/>
+    <eval phase="Setup" priority="8000">
+      <before name="Calc trtFinal"/><![CDATA[
+      if (tagis[Helper.Activated] <> 0) then
+        #resmax[resFortune] += field[adjUser].value
+        endif
+      ]]></eval>
+    </thing>
+
+  <thing
+    id="adjHeroJrn"
+    name="Hero's Journey"
+    compset="Adjustment"
+    description="Select this adjustment to increase/decrease the number of Hero's Journey selections.">
+    <tag group="AdjustShow" tag="Increment"/>
+    <tag group="Helper" tag="UserAdjust"/>
+    <tag group="InPlay" tag="PermOK"/>
+    <eval phase="Setup" priority="8000">
+      <before name="Calc trtFinal"/><![CDATA[
+      if (tagis[Helper.Activated] <> 0) then
+        #resmax[resHeroJrn] += field[adjUser].value
+        endif
+      ]]></eval>
+    </thing>
+  </document>
