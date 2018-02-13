@@ -4,6 +4,13 @@
     <info_author>Coordinator: TCArknight (Thomas Clegg)
 Contributors: Salcor, Father Morpheus</info_author>
     <info_history><![CDATA[History
+2/12/18
+New:
+Framework: Ley-Line Walker
+Framework: Mind Melter
+Framework: Shifter
+Framework: Techno-Wizard
+
 2/11/18
 New: 
 Seperate PPE, ISP Tracker
@@ -1200,6 +1207,18 @@ perform #traitroll[skFaith,-,IntBonus,"Strain"]
 perform #traitroll[skSpellcst,-,IntBonus,"Strain"]
 perform #traitroll[skPsionics,-,IntBonus,"Strain"]]]></eval>
     </thing>
+  <thing id="powMPClair" name="World Scry" description="Clairvoyance allows the caster to sense people, places, and things outside of normal perception. The Range varies depending on the Arcane skill roll. A success gives the caster a Range equal to her Spirit ×10 in miles, and a raise increases that to Spirit ×100 miles. Walls, doors, and other barriers do not hamper clairvoyance in any way, though magical barriers may block it at the GM’s discretion. While it’s active, the user of this power can shift the point of observation to anywhere within her Range as a free action.\n\nWhen using clairvoyance, the caster chooses a single sense (usually sight) to project. For each additional 1 PP she spends at casting, she may add an additional sense; this does not affect maintenance costs." compset="Power" summary="Mega Power version of Clairvoyance" uniqueness="unique">
+    <fieldval field="powPoints" value="3+"/>
+    <fieldval field="powRange" value="Varies"/>
+    <fieldval field="powLength" value="3"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <fieldval field="powPrtLen" value="3"/>
+    <fieldval field="powPrtRng" value="Varies"/>
+    <fieldval field="powPrtPts" value="3+"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
   <thing id="powSRClair" name="Clairvoyance" description="Clairvoyance allows the caster to sense people, places, and things outside of normal perception. The Range varies depending on the Arcane skill roll. A success gives the caster a Range equal to her Spirit ×10 in miles, and a raise increases that to Spirit ×100 miles. Walls, doors, and other barriers do not hamper clairvoyance in any way, though magical barriers may block it at the GM’s discretion. While it’s active, the user of this power can shift the point of observation to anywhere within her Range as a free action.\n\nWhen using clairvoyance, the caster chooses a single sense (usually sight) to project. For each additional 1 PP she spends at casting, she may add an additional sense; this does not affect maintenance costs." compset="Power" summary="Sense things outside of normal perception." uniqueness="unique">
     <fieldval field="powPoints" value="3+"/>
     <fieldval field="powRange" value="Varies"/>
@@ -1211,6 +1230,18 @@ perform #traitroll[skPsionics,-,IntBonus,"Strain"]]]></eval>
     <fieldval field="powPrtPts" value="3+"/>
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPIllus" name="Deadly Illusion" description="Illusion makes a single target see something that isn’t there, or else see things differently than they actually are. The caster’s arcane skill roll is opposed by the target’s Spirit; a success means the target perceives the illusion as real with all of her senses, but each direct interaction with the illusion (an attack, directly touching it, or being impeded by the image in some way) grants the target an additional opposed roll to realize it’s not real. With a raise by the caster, the target is convinced the illusion is real for as long as it’s maintained.\n\nIllusory attacks can never actually wound a target, though they can cause her to become Shaken. Such attacks are made with the caster’s arcane skill but resolved like any Fighting, Shooting, Throwing, or similar roll. Passive illusions, like a wall, take little effort to maintain. The Power Point cost must be met, but only normal maintenance penalties apply. Active illusions, such as a black cat or phantom enemies, require constant concentration. The caster must expend an action each round spent maintaining such active illusions. This power only works on sapient beings. It is useless against animals, robots, or mindless creatures." compset="Power" summary="Mega Power version of Illustion" uniqueness="unique">
+    <fieldval field="powPoints" value="3"/>
+    <fieldval field="powRange" value="Smarts"/>
+    <fieldval field="powLength" value="3"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <fieldval field="powPrtLen" value="3"/>
+    <fieldval field="powPrtRng" value="Smarts"/>
+    <fieldval field="powPrtPts" value="3"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
     </thing>
   <thing id="powSRIllus" name="Illusion" description="Illusion makes a single target see something that isn’t there, or else see things differently than they actually are. The caster’s arcane skill roll is opposed by the target’s Spirit; a success means the target perceives the illusion as real with all of her senses, but each direct interaction with the illusion (an attack, directly touching it, or being impeded by the image in some way) grants the target an additional opposed roll to realize it’s not real. With a raise by the caster, the target is convinced the illusion is real for as long as it’s maintained.\n\nIllusory attacks can never actually wound a target, though they can cause her to become Shaken. Such attacks are made with the caster’s arcane skill but resolved like any Fighting, Shooting, Throwing, or similar roll. Passive illusions, like a wall, take little effort to maintain. The Power Point cost must be met, but only normal maintenance penalties apply. Active illusions, such as a black cat or phantom enemies, require constant concentration. The caster must expend an action each round spent maintaining such active illusions. This power only works on sapient beings. It is useless against animals, robots, or mindless creatures." compset="Power" summary="See something that isn’t there." uniqueness="unique">
     <fieldval field="powPoints" value="3"/>
@@ -1251,7 +1282,7 @@ perform #traitroll[skPsionics,-,IntBonus,"Strain"]]]></eval>
     <tag group="Print" tag="NoPrint" name="NoPrint" abbrev="NoPrint"/>
     <tag group="EdgeType" tag="Power" name="Power" abbrev="Power"/>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[if (hero.tagis[Edge.edgSRMPsi1] <> 0) then
+    <eval phase="PreTraits" priority="6000"><![CDATA[if (hero.tagis[Edge.edgSRMPsi1] <> 0) then
       #trkmax[trkPower] += 10
  else
       #trkmax[trkPower] += 5
@@ -2286,11 +2317,11 @@ validif (rolls = 0)]]></evalrule>
     <bootstrap thing="fcSRCrMag"></bootstrap>
     <bootstrap thing="fcSRCrNeAc"></bootstrap>
     <bootstrap thing="fcSRCrUnPs"></bootstrap>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
     <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
-    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
-    <autoadd thing="wpW237LaPi" portal="arRange"></autoadd>
     <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
     <evalrule phase="Validate" priority="5000" message="Three HJ rolls required from Body Armor, Close Combat Weapons, Psionics, Ranged Weapons, Training, and Underworld &amp; Black Ops Tables." summary="Not enough rolls on required HJ Tables."><![CDATA[var rolls as number
 
@@ -2722,7 +2753,7 @@ hero.childfound[resSkill].field[resSpent].value -= 4]]>
     <bootstrap thing="skNotice"></bootstrap>
     <bootstrap thing="skSurvival"></bootstrap>
     <bootstrap thing="skTracking"></bootstrap>
-	<autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
+    <autoadd thing="wpW447LaRi" portal="arRange"></autoadd>
     <autoadd thing="wpVibroSwo" portal="arMelee"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
@@ -2803,10 +2834,63 @@ validif (rolls >=3)]]></evalrule>
   <thing id="grpSRMinMe" name="Mind Melter" description="{b}{i}THE MIND MELTER HERO’S JOURNEY (THREE ROLLS){/i}{/b}\nMind Melters get two rolls on any of the following tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Experience &amp; Wisdom{/b}, or {b}Psionics{/b}.\n\nThey also get one additional roll on any table except {b}Cybernetics{/b} or {b}Magic{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <bootstrap thing="arcMindMel"></bootstrap>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <bootstrap thing="faSREXPAWR"></bootstrap>
+    <bootstrap thing="faSRMSTPSI"></bootstrap>
+    <bootstrap thing="faSRMMNTRS"></bootstrap>
+    <bootstrap thing="fcSRMMLTOD"></bootstrap>
+    <bootstrap thing="fcSRBRCybe"></bootstrap>
+    <bootstrap thing="fcSRMMENY"></bootstrap>
+    <bootstrap thing="fcSRMMFR"></bootstrap>
+    <autoadd thing="armSRHunts" portal="arDefense"></autoadd>
+    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 4</eval>
+    <eval phase="PreTraits" priority="5000" index="2">#traitcreation[skPsionics] += 2</eval>
+    <evalrule phase="Validate" priority="5000" message="Three HJ rolls from Enchanted Items &amp; Mystic Gadgets, Experience &amp; Wisdom, and Psionics" summary="Not enought rolls on required HJ tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Magic and Mysticism or Cybernetics" summary="Too many rolls on perscribed tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.MagMys]
+rolls += hero.tagcount[RiftsHJ.Cyber]
+
+validif (rolls = 0)</evalrule>
     </thing>
   <thing id="grpSRLeyLi" name="Ley Line Walker" description="{b}{i}THE LEY LINE WALKER HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nWalkers gain three rolls on any of the following tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Education{/b}, {b}Experience &amp; Wisdom{/b}, and {b}Magic &amp; Mysticism{/b}.\n\nThey also get two rolls on any table of their choice, except for {b}Psionics{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="arcLeyLine"></bootstrap>
+    <bootstrap thing="faSRLLWARB"></bootstrap>
+    <bootstrap thing="faSREXPAWR"></bootstrap>
+    <bootstrap thing="faSRLLMAGM"></bootstrap>
+    <bootstrap thing="faSRLLREJV"></bootstrap>
+    <bootstrap thing="faSRLLSNSE"></bootstrap>
+    <bootstrap thing="faSRLLTRNS"></bootstrap>
+    <bootstrap thing="faSRLLWLKG"></bootstrap>
+    <bootstrap thing="faSRMSTMGC"></bootstrap>
+    <bootstrap thing="fcSRLLWCYB"></bootstrap>
+    <bootstrap thing="fcSRLLWDSC"></bootstrap>
+    <bootstrap thing="fcLLWEnemy"></bootstrap>
+    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="armSRLLWL" portal="arDefense"></autoadd>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls = 0)</evalrule>
+    <evalrule phase="Validate" priority="5000" index="13" message="Three HJ rolls from Enchanted Items &amp; Mystic Gadgets, Education, Experience and Wisdom, and Magic &amp; Mysticism" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.Edu]
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+validif (rolls >= 3)]]></evalrule>
     </thing>
   <thing id="grpSRMysti" name="Mystic" description="{b}{i}THE MYSTIC HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nMystics gain three rolls on any of these tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Experience &amp; Wisdom{/b}, {b}Magic &amp; Mysticism{/b}.\n\nThey gain two more rolls on any table except Cybernetics.{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2816,6 +2900,19 @@ validif (rolls >=3)]]></evalrule>
   <thing id="grpSRTecWi" name="Techno-Wizard" description="{b}{i}THE TECHNO-WIZARD HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nTechno-Wizards gain three rolls on the following tables: {b}Education{/b}, {b}Enchanted Items &amp; Mystic Gadgets{/b}, and {b}Magic &amp; Mysticism{/b}.\n\nTechno-Wizards gain two rolls on any table except {b}Psionics.{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <bootstrap thing="arcTechWiz"></bootstrap>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls = 0)</evalrule>
+    <evalrule phase="Validate" priority="5000" message="hree HJ rolls from Enchanted Items &amp; Mystic Gadgets, Education, and Magic &amp; Mysticism" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.Edu]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+validif (rolls >= 3)]]></evalrule>
     </thing>
   <thing id="grpSRFlaWi" name="Flame Wind Dragon Hatchling" description="{b}{i}THE DRAGON’S HERO’S JOURNEY (TWO ROLLS){/b}{/i}\nDue to their very young starting age, as well as their enormous raw power, Dragon Hatchlings only gain two rolls on the Hero’s Journey Tables. They are restricted to {b}Education{/b}, {b}Psionics{/b}, and {b}Training{/b}, each of which represents something imprinted on the dragon’s psyche from a parent at birth." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2882,7 +2979,7 @@ validif (rolls >=3)]]></evalrule>
     <fieldval field="arcPowers" value="5"/>
     <fieldval field="arcPoints" value="20"/>
     <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="MindMelter" name="Mind Melter" abbrev="Mind Melter"/>
+    <tag group="Arcane" tag="Psionics"/>
     <tag group="PowerDeny" tag="powAnalyze"/>
     <tag group="PowerDeny" tag="powBanish"/>
     <tag group="PowerDeny" tag="powBanishE"/>
@@ -2982,7 +3079,7 @@ validif (rolls >=3)]]></evalrule>
     <tag group="PowerDeny" tag="powSuppLyc"/>
     <tag group="PowerDeny" tag="powTelepat"/>
     <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="LeyLineWal" name="Ley Line Walker" abbrev="Ley Line Walker"/>
+    <tag group="Arcane" tag="arvcmagiv"/>
     <bootstrap thing="drwMagic"></bootstrap>
     </thing>
   <thing id="arcMystMir" name="Mystic Miracles" description="As channelers of spiritual energy, Mystics have Arcane Background (Miracles) and can choose any Trappings for their powers except Necromantic.  Mystics begin with four starting powers and 15 PPE.  They also have the Mysticism skill at d8 (which counts as Faith for all other Edge requirements)." compset="Arcane">
@@ -3145,7 +3242,7 @@ validif (rolls >=3)]]></evalrule>
     <tag group="PowerDeny" tag="powSuppLyc"/>
     <tag group="PowerDeny" tag="powTelepat"/>
     <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="TechnoWiza" name="Techno-Wizard" abbrev="Techno-Wizard"/>
+    <tag group="Arcane" tag="WeirdSci"/>
     <bootstrap thing="drwWeird"></bootstrap>
     </thing>
   <thing id="eqBioAnlKt" name="Bio-Analysis Kit" description="Specifically designed to handle situations where biological systems are comprised via disease, toxins, and related conditions, this tackle-box sized kit contains a miniature bio-analysis machine and a miniature &quot;lab&quot; that can be used to quickly concoct antidotes and treatments.  It requires a Healing skill of at least d4 to use; anyone with Knowledge (Science) gains a +1 using this system, or a +2 if they specialize in Chemistry or Biology." compset="Equipment">
@@ -6451,8 +6548,36 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
       <bootstrap thing="wpSFFlameH"></bootstrap>
       </child>
     </thing>
-  <thing id="grpSRShift" name="Shifter" compset="Group" summary="A magical specialist focused on Summoning and controlling Rifts." uniqueness="unique">
+  <thing id="grpSRShift" name="Shifter" description="{b}{i}THE SHIFTER HERO’S JOURNEY (FIVE ROLLS){/i}{/b}\n\nShifters gain three rolls on any of the following tables: Enchanted Items &amp; Mystic Gadgets, Education, Experience &amp; Wisdom, and Magic &amp; Mysticism.\n\nThey also get two rolls on any table of their choice, except Psionics." compset="Group" summary="A magical specialist focused on Summoning and controlling Rifts." uniqueness="unique">
     <usesource source="SavRiftC"/>
+    <bootstrap thing="faSRSFTARC"></bootstrap>
+    <bootstrap thing="faSRSFTBDS"></bootstrap>
+    <bootstrap thing="faSRSFTDMS"></bootstrap>
+    <bootstrap thing="faSREXPAWR"></bootstrap>
+    <bootstrap thing="edgSRMoM"></bootstrap>
+    <bootstrap thing="faSRSFTMSM"></bootstrap>
+    <bootstrap thing="faSRSFTPPE"></bootstrap>
+    <bootstrap thing="faSRSFTRFM"></bootstrap>
+    <bootstrap thing="fcSRSHCRPT"></bootstrap>
+    <bootstrap thing="fcSRLLWCYB"></bootstrap>
+    <bootstrap thing="fcSRSHFENY"></bootstrap>
+    <autoadd thing="armSRAdvS" portal="arDefense"></autoadd>
+    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
+    <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls = 0)</evalrule>
+    <evalrule phase="Validate" priority="5000" message="Three HJ rolls from Enchanted Items &amp; Mystic Gadgets, Education, Experience and Wisdom, and Magic &amp; Mysticism" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.Edu]
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+validif (rolls >= 3)]]></evalrule>
     </thing>
   <thing id="edgSREqHCy" name="Hovercycle" description="Start with a NG-357 Magnum-Turbo Hovercycle." compset="Edge">
     <usesource source="SavRiftC"/>
@@ -7932,6 +8057,1080 @@ else
     <tag group="Weapon" tag="HvyWeapon"/>
     <tag group="WeaponType" tag="SFVehMelee"/>
     </thing>
+  <thing id="fcSRLLWCYB" name="Cybernetics" description="Cybernetics are not an option for Ley Line Walker, as such devices interfere with their powers." compset="FraComp" summary="Unable to use Cybernetics.">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#traitbonus[trSFStrnMx] -= 4</eval>
+    </thing>
+  <thing id="fcLLWEnemy" name="Ley Line Walker Enemies" description="As with all wielders of magic, Ley Line Walkers are “shoot-on-sight” targets for Coalition forces. Any who refuse to swear fealty to Lord Dunscon may consider the True Federation to be hostile territory as well." compset="FraComp" summary="Mages have a lot of enemies">
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Federation of Magic"/>
+      </bootstrap>
+    </thing>
+  <thing id="fcSRLLWDSC" name="Disconnected" description="Ley Line Walkers constantly deal with the strange, alien, and inhuman. This makes them more than a bit difficult to deal with for the average person. The Walker has a −2 Charisma penalty in most social situations." compset="FraComp" summary="Ley Line Walkers are just don&apos;t fit in">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#traitbonus[trCharisma] -= 2</eval>
+    </thing>
+  <thing id="faSREXPAWR" name="Expanded Awareness" description="The character can use detect arcana at will, with no cost to PPE/ISP as a free action." compset="FraAbility" summary="The character is aware of the supernatural realm">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="powDTARC"></bootstrap>
+    </thing>
+  <thing id="faSRLLMAGM" name="Ley Line Magic Mastery" description="Like all arcane casters, Ley Line Walkers can draw extra PPE from ley lines, though\nthey do so with greater advantage. As a free action, they can roll their Spellcasting skill\nto draw PPE from a line at a distance of Spirit × 3, and they multiply their current\nmaximum PPE by ×3 while at that distance or closer." compset="FraAbility" summary="The Ley Line Walker is the master of Ley Lines">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRLLREJV" name="Ley Line Rejuvenation" description="While on a ley line, a Walker gains a natural healing roll once per day." compset="FraAbility" summary="A Ley Line Walker on a Ley Line heals faster">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRLLSNSE" name="Ley Line Sense" description="Ley Line Walkerccan sense a ley line within 10 miles, and she can automatically tell how powerful it is, in what directions it flows, where it meets other ley lines at nexus points, and other aspects as might apply (such as if a huge amount of its energy is being siphoned for some other purpose). \n\nShe can also sense any nearby Rifts within 10 miles, and she can automatically sense the eruption of a new Rift, or one opening anew, within 50 miles." compset="FraAbility" summary="A Ley Line Walker can automatically sense nearby ley lines">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRLLTRNS" name="Ley Line Transmission" description="Walkers are able to send and receive spoken messages along ley lines, at any distance. This can be a wide broadcast that anyone along the line can hear, or it can be directed to a single recipient (who needs to be on the line and expecting the message)." compset="FraAbility" summary="A Ley Line Walker can use a Ley Line to send messages">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRLLWLKG" name="Ley Line Walking" description="A Ley Line Walker can, as her name implies, walk the line as though walking across level ground. She can fly a t twice her Pace, at an altitude as high as 1,000 feet." compset="FraAbility" summary="A Ley Line Walker on a ley line can fly">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRMSTMGC" name="Master of Magic" description="This spellcaster has Mega Powers for her spells, and begins with the Master of Magic Edge, gaining Mega Powers for all known spells, and also starts with the Rapid\nRecharge Edge." compset="FraAbility" summary="A Master of Magic is a powerful spellcaster">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRMoM"></bootstrap>
+    <bootstrap thing="edgRapRch"></bootstrap>
+    </thing>
+  <thing id="edgSRLLOSP" name="Ley Line Observation Sphere" description="Some Walkers are able to conjure up a glowing bluish-white sphere the size of a\nsoccer ball, which they can send anywhere up or down a ley line. It travels at 30 mph\nand has a range of one mile, acting as a focus point for the Walker to use any of her\nsenses to observe what’s around the ball as though she were standing there (she cannot cast her powers through it, however). Using the sphere counts as an action, imposing a −2 multi-action penalty on any other actions while active." compset="Edge" summary="A magical drone on the ley lines">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="User" tag="Activation"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRLeyLi"/>
+    </thing>
+  <thing id="edgSRLLPH" name="Ley Line Phasing" description="Some Walkers become so intricately tied to the lines that they are capable of phasing\ninto the energies for an instant, transporting to any other point along the line in the\nblink of an eye.\n\nLey Line Walkers with this Edge may take a full round to concentrate (taking no other\nactions, not even free actions), and on the next round they can teleport flawlessly to any other point along the same line. Though it costs no PPE, the Walker must make a Vigor check or suffer a Fatigue level (requiring four hours to recover). Each subsequent\nuse of this ability imposes a cumulative −2 penalty to the Vigor check until the Walker\nhas a full night’s rest. Ley Line Phasing cannot be used to transport others, but see\nLey Line Gate, below." compset="Edge" summary="The ability to teleport along a ley line">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="grpSRLeyLi"/>
+    </thing>
+  <thing id="edgLLGATE" name="Ley Line Gate" description="A truly powerful Ley Line Walker ability, the hero can carry up to his Smarts die\nin passengers when he phases to another location on the line. Carrying passengers,\neven just one, imposes an additional −2 penalty to his Vigor check to resist Fatigue." compset="Edge" summary="The ability to create a doorway along a Ley Line">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="3"/>
+    <tag group="EdgeType" tag="Iconic"/>
+    <pickreq thing="edgSRLLPH"/>
+    </thing>
+  <thing id="fcSRMMLTOD" name="A Little Odd" description="Though hardly as far gone as a Crazy, Mind Melters tend to be a little different due to the nature of their powers. Each Mind Melter begins with the Quirk Hindrance." compset="FraComp" summary="Mind Melters are a little different">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinQuirk"></bootstrap>
+    </thing>
+  <thing id="fcSRMMENY" name="Mind Melter Enemies" description="Mind Melters are shot on sight by all Coalition troops, then shot again to be certain they’re dead. True Federation folks also tend to hate them." compset="FraComp" summary="Psionics have a lot of enemies">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Federation of Magic"/>
+      </bootstrap>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    </thing>
+  <thing id="fcSRMMFR" name="Feared" description="Though it’s possible to hide his true nature, if the general populace discovers the presence of a Mind Melter, they tend to be very nervous— and possibly outright terrified. Mind Melters suffer a −2 Charisma when dealing with those who fear them." compset="FraComp" summary="Every Fears a power they don&apos;t understand">
+    <usesource source="SavRiftC"/>
+    <eval phase="PreTraits" priority="5000">#traitbonus[trCharisma] -= 2</eval>
+    </thing>
+  <thing id="faSRMSTPSI" name="Master Psionic" description="Mind Melters receive the Major Psionic and Master Psionic edges for free." compset="FraAbility" summary="This character is a master of psionic powers">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRMPsi1"></bootstrap>
+    <bootstrap thing="edgSRMPsi2"></bootstrap>
+    </thing>
+  <thing id="faSRMMNTRS" name="Mental Resistance" description="A Mind Melter has powerful defenses against the psionic powers of others. He has +4 to all checks to resist psionic effects, and +4 armor against psionic damage. This does stack with Arcane Resistance." compset="FraAbility" summary="Powerful mental defenses">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRSHCRPT" name="Corruption" description="Many of the entities a Shifter might bring forth (with summon ally or force multiplication) have strong wills and a desire to corrupt the being who summons them. Each time the Shifter uses either power with a being the Game Master feels is evil\nor corrupt in nature, she might call for an opposed Spirit check between the being and the Shifter. If the being wins, the Shifter gains a point of Corruption. Future Spirit contests with other evil summoned beings suffer a penalty equal to the Shifter’s current Corruption; when a Shifter gains a number of Corruption points equal to \nhalf his Spirit die type, he’s become a slave to darker external powers (and no longer a playable character)." compset="FraComp" summary="Playing with dark forces leaves a mark">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRSHFENY" name="Shifter Enemies" description="As with all wielders of magic, Shifters are “shoot-on-sight” targets for Coalition forces. Any who refuse to swear fealty to Lord Dunscon may consider the True Federation to be hostile territory as well." compset="FraComp" summary="Mages have a lot of enemies">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Federation of Magic"/>
+      </bootstrap>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    </thing>
+  <thing id="faSRSFTBDS" name="Bind the Summoned" description="A Shifter can bind one or more summoned beings to his service for an extended period\nof time. He does this by reducing his maximum PPE by the amount needed to originally summon the creature. The creature remains bound to his service until he releases it or\nthe summoned entity is Incapacitated (in either case, returning the creature to its home dimension). Shifters may only have one bound entity per Rank (one at Novice, two at Seasoned). For example, a Seasoned Shifter could have two summoned allies, each\ncosting 4 PPE to summon, bound to him; his maximum PPE is reduced by 8 until he releases the entities or they are Incapacitated. At that point, he recovers his PPE normally. Bound allies are treated as though they were summoned with a raise, which grants them the Hardy ability." compset="FraAbility" summary="A Shifter specializes in summoning creatures from the Rifts">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRSFTDMS" name="Dimension Sense" description="With a successful Notice roll, a Shifter can determine relevant information about a dimension he is in or one he views through a Rift. This includes hostile environmental\nconditions, how closely related the dimension is to Rifts Earth, and whether or not it’s a temporal shift." compset="FraAbility" summary="A Shifter can sense the reality on the other side of a Rift">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRSFTPPE" name="PPE Manipulation" description="All Shifters have the drain Power Points power (and the PPE thief Mega Power) automatically." compset="FraAbility" summary="A Shifter requires large amounts of PPE">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="powDrainPP"></bootstrap>
+    </thing>
+  <thing id="faSRSFTMSM" name="Master Summoner" description="All Shifters gain the summon ally power automatically, and the duration for them is 5 minutes (1/5 minutes). This duration extends to the Mega Power version, force\nmultiplication." compset="FraAbility" summary="A Shifter is a master of summoning creatures">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="powSumAlly"></bootstrap>
+    </thing>
+  <thing id="faSRSFTRFM" name="Rift Mastery" description="Shifters gain a +4 on all efforts to open and manipulate Rifts (see Characters, Ley Lines, and Rifts in the Savage Rifts® Game Master’s Handbook). They also gain +2 when using the banish Power." compset="FraAbility" summary="A Shifter specialize in knowledge and manipulation of Rifts">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="faSRSFTARC" name="Shifter Arcane Background" description="Shifters are Masters of Magic, have the Arcane Background (Magic), and choose\nfrom the following list of powers: armor, banish, barrier, blast, bolt, burrow, burst, conceal arcana, damage field, darksight, deflection, dispel, drain Power Points, entangle, environmental protection, farsight, fear, intangibility, invisibility, light/obscure, quickness, slow, smite, speak language, speed, stun, summon ally, teleport, and warrior’s gift. \n\nThey can choose any Trappings available for their powers." compset="FraAbility" summary="Shifters are arcane spellcasters">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="skSpellcst"></bootstrap>
+    <bootstrap thing="arcSRSHFR"></bootstrap>
+    <eval phase="PreTraits" priority="5000" index="2">#traitcreation[trSRPPE] += 15</eval>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skSpellcst] += 2</eval>
+    </thing>
+  <thing id="arcSRSHFR" name="Shifter" description="The study of the arcane is essential to a Shifter’s success, and all Shifters are \npowerful spellcasters. While they don’t possess the same variety of spell knowledge\ntheir counterparts among other disciplines might, they don’t hurt for essential power,\neither. Shifters train in techniques for both diminishing the power of their opponents\nand turning that power against them.\n\nShifters are mighty spellcasters, starting with three powers of their choice (as well as\nspecific ones, listed below). They begin with a Spellcasting skill of d8 and 15 PPE." compset="Arcane" summary="The Shifter is uses magic">
+    <fieldval field="arcPowers" value="3"/>
+    <fieldval field="arcPoints" value="15"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Arcane" tag="arvcmagiv"/>
+    <tag group="PowerDeny" tag="powETAMPVS"/>
+    <tag group="PowerDeny" tag="powETARRER"/>
+    <tag group="PowerDeny" tag="powETAWTMI"/>
+    <tag group="PowerDeny" tag="powDLAim"/>
+    <tag group="PowerDeny" tag="powAcAFort"/>
+    <tag group="PowerDeny" tag="powStAFoe"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powOzAnger"/>
+    <tag group="PowerDeny" tag="powSKAnimH"/>
+    <tag group="PowerDeny" tag="powStAnima"/>
+    <tag group="PowerDeny" tag="powDRAquat"/>
+    <tag group="PowerDeny" tag="powFGArcPr"/>
+    <tag group="PowerDeny" tag="powWWArcRe"/>
+    <tag group="PowerDeny" tag="powStAShie"/>
+    <tag group="PowerDeny" tag="powSSSiphn"/>
+    <tag group="PowerDeny" tag="powGLArm"/>
+    <tag group="PowerDeny" tag="powSKArmor"/>
+    <tag group="PowerDeny" tag="pow50Armor"/>
+    <tag group="PowerDeny" tag="powHEBackw"/>
+    <tag group="PowerDeny" tag="powKGBPoly"/>
+    <tag group="PowerDeny" tag="powETBanis"/>
+    <tag group="PowerDeny" tag="powStBlBan"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powSKBanis"/>
+    <tag group="PowerDeny" tag="pow50Barri"/>
+    <tag group="PowerDeny" tag="powGLBarr"/>
+    <tag group="PowerDeny" tag="powSKBarri"/>
+    <tag group="PowerDeny" tag="powSSBLust"/>
+    <tag group="PowerDeny" tag="powSSBless"/>
+    <tag group="PowerDeny" tag="powGLBstFr"/>
+    <tag group="PowerDeny" tag="pow50Beast"/>
+    <tag group="PowerDeny" tag="powSKBeast"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="pow50Becal"/>
+    <tag group="PowerDeny" tag="powETBindE"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powGLBlast"/>
+    <tag group="PowerDeny" tag="pow50Blast"/>
+    <tag group="PowerDeny" tag="powStBlBla"/>
+    <tag group="PowerDeny" tag="powAOBlas1"/>
+    <tag group="PowerDeny" tag="powAOBlas2"/>
+    <tag group="PowerDeny" tag="powAOBlas3"/>
+    <tag group="PowerDeny" tag="powStBless"/>
+    <tag group="PowerDeny" tag="powStBlBle"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powNCBless"/>
+    <tag group="PowerDeny" tag="pow50Blind"/>
+    <tag group="PowerDeny" tag="powBlind"/>
+    <tag group="PowerDeny" tag="powStBlBli"/>
+    <tag group="PowerDeny" tag="powSSFlash"/>
+    <tag group="PowerDeny" tag="powSSBlock"/>
+    <tag group="PowerDeny" tag="powOzBlur"/>
+    <tag group="PowerDeny" tag="powDNBolst"/>
+    <tag group="PowerDeny" tag="pow50Bolt"/>
+    <tag group="PowerDeny" tag="powGLBolt"/>
+    <tag group="PowerDeny" tag="powAOBolt1"/>
+    <tag group="PowerDeny" tag="powAOBolt2"/>
+    <tag group="PowerDeny" tag="powAOBolt3"/>
+    <tag group="PowerDeny" tag="powStBTrai"/>
+    <tag group="PowerDeny" tag="powGLBoost"/>
+    <tag group="PowerDeny" tag="powTrait"/>
+    <tag group="PowerDeny" tag="powSKBoost"/>
+    <tag group="PowerDeny" tag="powSSBridg"/>
+    <tag group="PowerDeny" tag="powSKBurro"/>
+    <tag group="PowerDeny" tag="pow50Burro"/>
+    <tag group="PowerDeny" tag="powGLBurr"/>
+    <tag group="PowerDeny" tag="powGLBurst"/>
+    <tag group="PowerDeny" tag="powOzCantr"/>
+    <tag group="PowerDeny" tag="powStCantr"/>
+    <tag group="PowerDeny" tag="powOzChame"/>
+    <tag group="PowerDeny" tag="powSSChGlo"/>
+    <tag group="PowerDeny" tag="powWWChane"/>
+    <tag group="PowerDeny" tag="powHECharm"/>
+    <tag group="PowerDeny" tag="powAcCThor"/>
+    <tag group="PowerDeny" tag="powSRClair"/>
+    <tag group="PowerDeny" tag="powStClair"/>
+    <tag group="PowerDeny" tag="powClairvo"/>
+    <tag group="PowerDeny" tag="powStCArca"/>
+    <tag group="PowerDeny" tag="powSSConSo"/>
+    <tag group="PowerDeny" tag="powNCConce"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powSSConfM"/>
+    <tag group="PowerDeny" tag="pow50Confu"/>
+    <tag group="PowerDeny" tag="powFGConfu"/>
+    <tag group="PowerDeny" tag="powFConfus"/>
+    <tag group="PowerDeny" tag="powConfusi"/>
+    <tag group="PowerDeny" tag="powNCConse"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powOzCWeat"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powETCreTa"/>
+    <tag group="PowerDeny" tag="powStCDisp"/>
+    <tag group="PowerDeny" tag="powStCurse"/>
+    <tag group="PowerDeny" tag="powETCurse"/>
+    <tag group="PowerDeny" tag="powOzCurse"/>
+    <tag group="PowerDeny" tag="powSKCurse"/>
+    <tag group="PowerDeny" tag="powDLCurse"/>
+    <tag group="PowerDeny" tag="powAcCurse"/>
+    <tag group="PowerDeny" tag="powStBlCur"/>
+    <tag group="PowerDeny" tag="powRpCoLHe"/>
+    <tag group="PowerDeny" tag="powRpCoLSi"/>
+    <tag group="PowerDeny" tag="powRpCoMis"/>
+    <tag group="PowerDeny" tag="powRPCoSWe"/>
+    <tag group="PowerDeny" tag="powRpCotBF"/>
+    <tag group="PowerDeny" tag="powRpCotBe"/>
+    <tag group="PowerDeny" tag="powRpCotES"/>
+    <tag group="PowerDeny" tag="powRpCotEN"/>
+    <tag group="PowerDeny" tag="powRpCotIn"/>
+    <tag group="PowerDeny" tag="powRpCotMa"/>
+    <tag group="PowerDeny" tag="powRpCotOu"/>
+    <tag group="PowerDeny" tag="powRpCotSP"/>
+    <tag group="PowerDeny" tag="powRPCotWS"/>
+    <tag group="PowerDeny" tag="pow50DamgF"/>
+    <tag group="PowerDeny" tag="powDamagFF"/>
+    <tag group="PowerDeny" tag="powStBlDFe"/>
+    <tag group="PowerDeny" tag="powWWDange"/>
+    <tag group="PowerDeny" tag="powETDTLif"/>
+    <tag group="PowerDeny" tag="powDRDarkv"/>
+    <tag group="PowerDeny" tag="powSSDeflt"/>
+    <tag group="PowerDeny" tag="pow50Defle"/>
+    <tag group="PowerDeny" tag="powGLDefl"/>
+    <tag group="PowerDeny" tag="powSKDefle"/>
+    <tag group="PowerDeny" tag="powStDAban"/>
+    <tag group="PowerDeny" tag="powSSDemBo"/>
+    <tag group="PowerDeny" tag="powGLDet"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powStDDisp"/>
+    <tag group="PowerDeny" tag="powOzDDoor"/>
+    <tag group="PowerDeny" tag="powDisguis"/>
+    <tag group="PowerDeny" tag="pow50Dispe"/>
+    <tag group="PowerDeny" tag="powSKDispe"/>
+    <tag group="PowerDeny" tag="powGLDisp"/>
+    <tag group="PowerDeny" tag="powDivinat"/>
+    <tag group="PowerDeny" tag="powStBlDiv"/>
+    <tag group="PowerDeny" tag="powStESTDi"/>
+    <tag group="PowerDeny" tag="powStDInsp"/>
+    <tag group="PowerDeny" tag="powStBlDIn"/>
+    <tag group="PowerDeny" tag="powETDrBSS"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powStDTouc"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powAcETran"/>
+    <tag group="PowerDeny" tag="powHEEMP"/>
+    <tag group="PowerDeny" tag="powSSChoke"/>
+    <tag group="PowerDeny" tag="powSSDelug"/>
+    <tag group="PowerDeny" tag="powGLElem"/>
+    <tag group="PowerDeny" tag="pow50ElemM"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powSKElemA"/>
+    <tag group="PowerDeny" tag="powSKElemE"/>
+    <tag group="PowerDeny" tag="powSKElemF"/>
+    <tag group="PowerDeny" tag="powSKElemW"/>
+    <tag group="PowerDeny" tag="pow50ElemP"/>
+    <tag group="PowerDeny" tag="powSSEmpat"/>
+    <tag group="PowerDeny" tag="powFGEmpat"/>
+    <tag group="PowerDeny" tag="powSKEnchW"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powOzEnrag"/>
+    <tag group="PowerDeny" tag="powGLEntan"/>
+    <tag group="PowerDeny" tag="powSKEntan"/>
+    <tag group="PowerDeny" tag="powFGEntan"/>
+    <tag group="PowerDeny" tag="pow50Entan"/>
+    <tag group="PowerDeny" tag="powSKEnvir"/>
+    <tag group="PowerDeny" tag="powGLEnvir"/>
+    <tag group="PowerDeny" tag="powDLEnvPr"/>
+    <tag group="PowerDeny" tag="powDLExorc"/>
+    <tag group="PowerDeny" tag="arcEyeStkr"/>
+    <tag group="PowerDeny" tag="powETFamil"/>
+    <tag group="PowerDeny" tag="powAcFarse"/>
+    <tag group="PowerDeny" tag="pow50Farsi"/>
+    <tag group="PowerDeny" tag="powGLFear"/>
+    <tag group="PowerDeny" tag="powWWFear"/>
+    <tag group="PowerDeny" tag="powSKFear"/>
+    <tag group="PowerDeny" tag="powSSFeral"/>
+    <tag group="PowerDeny" tag="powAcFFrom"/>
+    <tag group="PowerDeny" tag="powKGFoFor"/>
+    <tag group="PowerDeny" tag="pow50Fly"/>
+    <tag group="PowerDeny" tag="powSKFly"/>
+    <tag group="PowerDeny" tag="powGLFly"/>
+    <tag group="PowerDeny" tag="powFly"/>
+    <tag group="PowerDeny" tag="powETForge"/>
+    <tag group="PowerDeny" tag="powETFECT"/>
+    <tag group="PowerDeny" tag="powDNFurRL"/>
+    <tag group="PowerDeny" tag="powDLGambl"/>
+    <tag group="PowerDeny" tag="powSSGzMat"/>
+    <tag group="PowerDeny" tag="powSKGhost"/>
+    <tag group="PowerDeny" tag="powStGInsp"/>
+    <tag group="PowerDeny" tag="powStBlGIn"/>
+    <tag group="PowerDeny" tag="powSSGlwPt"/>
+    <tag group="PowerDeny" tag="powSSGBlnd"/>
+    <tag group="PowerDeny" tag="powSSTouch"/>
+    <tag group="PowerDeny" tag="powETGrEdg"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powSKGrave"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powETGrSpk"/>
+    <tag group="PowerDeny" tag="powStGCurs"/>
+    <tag group="PowerDeny" tag="powStBlGCu"/>
+    <tag group="PowerDeny" tag="pow50GrHea"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGLHeal2"/>
+    <tag group="PowerDeny" tag="powStGLBat"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powWWGuard"/>
+    <tag group="PowerDeny" tag="powOzHarde"/>
+    <tag group="PowerDeny" tag="powETHarSh"/>
+    <tag group="PowerDeny" tag="pow50Havoc"/>
+    <tag group="PowerDeny" tag="powHavoc"/>
+    <tag group="PowerDeny" tag="powSSHlHul"/>
+    <tag group="PowerDeny" tag="pow50Heal"/>
+    <tag group="PowerDeny" tag="powHealing"/>
+    <tag group="PowerDeny" tag="powGLHeal1"/>
+    <tag group="PowerDeny" tag="powDLHunch"/>
+    <tag group="PowerDeny" tag="powFGIllus"/>
+    <tag group="PowerDeny" tag="powSRIllus"/>
+    <tag group="PowerDeny" tag="powIllusio"/>
+    <tag group="PowerDeny" tag="powStIllus"/>
+    <tag group="PowerDeny" tag="powOzIllus"/>
+    <tag group="PowerDeny" tag="powAcIllus"/>
+    <tag group="PowerDeny" tag="powWWArcR2"/>
+    <tag group="PowerDeny" tag="powStIAban"/>
+    <tag group="PowerDeny" tag="powRpIBeas"/>
+    <tag group="PowerDeny" tag="powDLInspi"/>
+    <tag group="PowerDeny" tag="powOzIAtta"/>
+    <tag group="PowerDeny" tag="powozIChar"/>
+    <tag group="PowerDeny" tag="powOzIHeal"/>
+    <tag group="PowerDeny" tag="powOzIInit"/>
+    <tag group="PowerDeny" tag="powOzIMove"/>
+    <tag group="PowerDeny" tag="powOzISkil"/>
+    <tag group="PowerDeny" tag="powOzICour"/>
+    <tag group="PowerDeny" tag="powSSEnhSp"/>
+    <tag group="PowerDeny" tag="powSSGrSpa"/>
+    <tag group="PowerDeny" tag="powSKInvis"/>
+    <tag group="PowerDeny" tag="powGLInvis"/>
+    <tag group="PowerDeny" tag="powStJet"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powStBlJet"/>
+    <tag group="PowerDeny" tag="powETKnowl"/>
+    <tag group="PowerDeny" tag="powETLHPA"/>
+    <tag group="PowerDeny" tag="powSSLdyFu"/>
+    <tag group="PowerDeny" tag="powSSLGuid"/>
+    <tag group="PowerDeny" tag="powOzLeap"/>
+    <tag group="PowerDeny" tag="powStLeger"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powOzLevit"/>
+    <tag group="PowerDeny" tag="powFGLevit"/>
+    <tag group="PowerDeny" tag="powSSLfFea"/>
+    <tag group="PowerDeny" tag="powStLight"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powSKLight"/>
+    <tag group="PowerDeny" tag="powGLLight"/>
+    <tag group="PowerDeny" tag="powStBlLig"/>
+    <tag group="PowerDeny" tag="pow50LitOb"/>
+    <tag group="PowerDeny" tag="powAcLObje"/>
+    <tag group="PowerDeny" tag="powStLBatt"/>
+    <tag group="PowerDeny" tag="powOzLockU"/>
+    <tag group="PowerDeny" tag="powETLBSac"/>
+    <tag group="PowerDeny" tag="powStLTrai"/>
+    <tag group="PowerDeny" tag="powGLLow"/>
+    <tag group="PowerDeny" tag="powStBlLTr"/>
+    <tag group="PowerDeny" tag="pow50Mend"/>
+    <tag group="PowerDeny" tag="powStMend"/>
+    <tag group="PowerDeny" tag="powStMEye"/>
+    <tag group="PowerDeny" tag="powSSMindR"/>
+    <tag group="PowerDeny" tag="powMindRea"/>
+    <tag group="PowerDeny" tag="powDNMindR"/>
+    <tag group="PowerDeny" tag="powDLMindR"/>
+    <tag group="PowerDeny" tag="powSSMinRi"/>
+    <tag group="PowerDeny" tag="powHEMindl"/>
+    <tag group="PowerDeny" tag="powFGMindl"/>
+    <tag group="PowerDeny" tag="powHEMindW"/>
+    <tag group="PowerDeny" tag="powFGMindw"/>
+    <tag group="PowerDeny" tag="powETMMTRP"/>
+    <tag group="PowerDeny" tag="powNCMostB"/>
+    <tag group="PowerDeny" tag="powHEMutat"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powDNNumb"/>
+    <tag group="PowerDeny" tag="powSSOakAr"/>
+    <tag group="PowerDeny" tag="powFGObjRe"/>
+    <tag group="PowerDeny" tag="powSSObjRe"/>
+    <tag group="PowerDeny" tag="powAcORead"/>
+    <tag group="PowerDeny" tag="powSKObscu"/>
+    <tag group="PowerDeny" tag="pow50Obscu"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powStObscu"/>
+    <tag group="PowerDeny" tag="powGLObsc"/>
+    <tag group="PowerDeny" tag="powETOpGat"/>
+    <tag group="PowerDeny" tag="powETPnTrn"/>
+    <tag group="PowerDeny" tag="powOzParal"/>
+    <tag group="PowerDeny" tag="powStPhant"/>
+    <tag group="PowerDeny" tag="powETPluCl"/>
+    <tag group="PowerDeny" tag="powWWPolte"/>
+    <tag group="PowerDeny" tag="powWWPosse"/>
+    <tag group="PowerDeny" tag="powStPostc"/>
+    <tag group="PowerDeny" tag="powAcPNiga"/>
+    <tag group="PowerDeny" tag="powSSProbe"/>
+    <tag group="PowerDeny" tag="powAcProbe"/>
+    <tag group="PowerDeny" tag="powDNProte"/>
+    <tag group="PowerDeny" tag="powDLProte"/>
+    <tag group="PowerDeny" tag="SFBPsiMigh"/>
+    <tag group="PowerDeny" tag="pow50Pumme"/>
+    <tag group="PowerDeny" tag="powPummel"/>
+    <tag group="PowerDeny" tag="powOzPPatc"/>
+    <tag group="PowerDeny" tag="powPuppet"/>
+    <tag group="PowerDeny" tag="powSKPuppe"/>
+    <tag group="PowerDeny" tag="powGLPupp"/>
+    <tag group="PowerDeny" tag="pow50Quake"/>
+    <tag group="PowerDeny" tag="powStQuake"/>
+    <tag group="PowerDeny" tag="powGLQuick"/>
+    <tag group="PowerDeny" tag="powozRChar"/>
+    <tag group="PowerDeny" tag="powOzRDead"/>
+    <tag group="PowerDeny" tag="powOzRSTho"/>
+    <tag group="PowerDeny" tag="powWWReape"/>
+    <tag group="PowerDeny" tag="powAcRDraf"/>
+    <tag group="PowerDeny" tag="powStRendi"/>
+    <tag group="PowerDeny" tag="powOzResto"/>
+    <tag group="PowerDeny" tag="powDLSanct"/>
+    <tag group="PowerDeny" tag="powStSDesp"/>
+    <tag group="PowerDeny" tag="powStBlSDi"/>
+    <tag group="PowerDeny" tag="powWWSeanc"/>
+    <tag group="PowerDeny" tag="pow50Settl"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSKShape"/>
+    <tag group="PowerDeny" tag="powGLShape"/>
+    <tag group="PowerDeny" tag="powIZWTSC"/>
+    <tag group="PowerDeny" tag="powStSilen"/>
+    <tag group="PowerDeny" tag="powOzSilen"/>
+    <tag group="PowerDeny" tag="powStBlSil"/>
+    <tag group="PowerDeny" tag="powETSCPNC"/>
+    <tag group="PowerDeny" tag="powOzSleep"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powHESlowB"/>
+    <tag group="PowerDeny" tag="powSlumber"/>
+    <tag group="PowerDeny" tag="powSKSlumb"/>
+    <tag group="PowerDeny" tag="pow50Smite"/>
+    <tag group="PowerDeny" tag="powSKSMite"/>
+    <tag group="PowerDeny" tag="powGLSmite"/>
+    <tag group="PowerDeny" tag="powSSSAngr"/>
+    <tag group="PowerDeny" tag="pow50Speak"/>
+    <tag group="PowerDeny" tag="powSKSpeak"/>
+    <tag group="PowerDeny" tag="powGLSpeak"/>
+    <tag group="PowerDeny" tag="pow50Speed"/>
+    <tag group="PowerDeny" tag="powGLSpeed"/>
+    <tag group="PowerDeny" tag="powSKSpiri"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powDNSpiSh"/>
+    <tag group="PowerDeny" tag="powSKSpirW"/>
+    <tag group="PowerDeny" tag="powAcSqual"/>
+    <tag group="PowerDeny" tag="powETSTBAE"/>
+    <tag group="PowerDeny" tag="powAcSWoun"/>
+    <tag group="PowerDeny" tag="pow50Storm"/>
+    <tag group="PowerDeny" tag="powStStorm"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="pow50Stun"/>
+    <tag group="PowerDeny" tag="powGLStun"/>
+    <tag group="PowerDeny" tag="powFGStun"/>
+    <tag group="PowerDeny" tag="pow50Succo"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powDLSucco"/>
+    <tag group="PowerDeny" tag="powStBlSuc"/>
+    <tag group="PowerDeny" tag="powStBlSAl"/>
+    <tag group="PowerDeny" tag="powSKSummB"/>
+    <tag group="PowerDeny" tag="powStSCoho"/>
+    <tag group="PowerDeny" tag="powStBlSCo"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powETSumDe"/>
+    <tag group="PowerDeny" tag="pow50SumEl"/>
+    <tag group="PowerDeny" tag="powSSSumEl"/>
+    <tag group="PowerDeny" tag="powStSLegi"/>
+    <tag group="PowerDeny" tag="powStBlSLe"/>
+    <tag group="PowerDeny" tag="powOzSMWea"/>
+    <tag group="PowerDeny" tag="powSSSumMa"/>
+    <tag group="PowerDeny" tag="powSSSumMu"/>
+    <tag group="PowerDeny" tag="powSKSummS"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powETSumSw"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="pow50Telek"/>
+    <tag group="PowerDeny" tag="powTelekin"/>
+    <tag group="PowerDeny" tag="powGLTelek"/>
+    <tag group="PowerDeny" tag="powHETelSq"/>
+    <tag group="PowerDeny" tag="powSSTelep"/>
+    <tag group="PowerDeny" tag="powStTelep"/>
+    <tag group="PowerDeny" tag="powTelepat"/>
+    <tag group="PowerDeny" tag="powSRTelep"/>
+    <tag group="PowerDeny" tag="powGLTelep"/>
+    <tag group="PowerDeny" tag="powSKTempe"/>
+    <tag group="PowerDeny" tag="powETOraCu"/>
+    <tag group="PowerDeny" tag="powSKTrans"/>
+    <tag group="PowerDeny" tag="powAcTrans"/>
+    <tag group="PowerDeny" tag="powAcTElem"/>
+    <tag group="PowerDeny" tag="powAcTWeap"/>
+    <tag group="PowerDeny" tag="poDLTrinke"/>
+    <tag group="PowerDeny" tag="powSKUndea"/>
+    <tag group="PowerDeny" tag="powSSUnGif"/>
+    <tag group="PowerDeny" tag="powETURDRN"/>
+    <tag group="PowerDeny" tag="powWWVehic"/>
+    <tag group="PowerDeny" tag="powSKViper"/>
+    <tag group="PowerDeny" tag="powSKVisio"/>
+    <tag group="PowerDeny" tag="powDLVisQu"/>
+    <tag group="PowerDeny" tag="powSSVceWi"/>
+    <tag group="PowerDeny" tag="pow50WallW"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powETWard"/>
+    <tag group="PowerDeny" tag="powSSWrdSh"/>
+    <tag group="PowerDeny" tag="powOzWDead"/>
+    <tag group="PowerDeny" tag="pow50WtrWk"/>
+    <tag group="PowerDeny" tag="powSSWidCl"/>
+    <tag group="PowerDeny" tag="powStWWalk"/>
+    <tag group="PowerDeny" tag="powDLWildW"/>
+    <tag group="PowerDeny" tag="powSSWndWl"/>
+    <tag group="PowerDeny" tag="powDLWinds"/>
+    <tag group="PowerDeny" tag="powSKWithe"/>
+    <tag group="PowerDeny" tag="pow50Zephy"/>
+    <tag group="PowerDeny" tag="powSKZombi"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <tag group="PowerDeny" tag="powGLZombi"/>
+    <tag group="PowerDeny" tag="pPRFear"/>
+    <tag group="PowerDeny" tag="pRPBlast"/>
+    <tag group="PowerDeny" tag="pRPFly"/>
+    <tag group="PowerDeny" tag="pRPGrHeal"/>
+    <tag group="PowerDeny" tag="pRPHealing"/>
+    <tag group="PowerDeny" tag="pRPInvis"/>
+    <tag group="PowerDeny" tag="pRPLight"/>
+    <tag group="PowerDeny" tag="pRPObscure"/>
+    <tag group="PowerDeny" tag="pRPPuppet"/>
+    <tag group="PowerDeny" tag="pRPQuick"/>
+    <tag group="PowerDeny" tag="pRPSpeed"/>
+    <tag group="PowerDeny" tag="pRPTrait"/>
+    <tag group="PowerDeny" tag="pRPZombie"/>
+    <tag group="PowerDeny" tag="pSSBlast"/>
+    <tag group="PowerDeny" tag="pSSBoostTr"/>
+    <tag group="PowerDeny" tag="pSSFear"/>
+    <tag group="PowerDeny" tag="pSSFly"/>
+    <tag group="PowerDeny" tag="pSSGrHeal"/>
+    <tag group="PowerDeny" tag="pSSGrowShr"/>
+    <tag group="PowerDeny" tag="pSSInvis"/>
+    <tag group="PowerDeny" tag="pSSLight"/>
+    <tag group="PowerDeny" tag="pSSObscure"/>
+    <tag group="PowerDeny" tag="pSSPuppet"/>
+    <tag group="PowerDeny" tag="pSSQuick"/>
+    <tag group="PowerDeny" tag="pSSSpeed"/>
+    <tag group="PowerDeny" tag="pSSZombie"/>
+    <tag group="PowerDeny" tag="powAlterSe"/>
+    <tag group="PowerDeny" tag="powAnaFoe"/>
+    <tag group="PowerDeny" tag="powAngPea"/>
+    <tag group="PowerDeny" tag="powAniTree"/>
+    <tag group="PowerDeny" tag="powBaldBre"/>
+    <tag group="PowerDeny" tag="powBatSong"/>
+    <tag group="PowerDeny" tag="powBdyGrd"/>
+    <tag group="PowerDeny" tag="powBecalm"/>
+    <tag group="PowerDeny" tag="powBellow"/>
+    <tag group="PowerDeny" tag="powBerserk"/>
+    <tag group="PowerDeny" tag="powBless"/>
+    <tag group="PowerDeny" tag="powBlindFl"/>
+    <tag group="PowerDeny" tag="powBodygua"/>
+    <tag group="PowerDeny" tag="powBridge"/>
+    <tag group="PowerDeny" tag="powCallLig"/>
+    <tag group="PowerDeny" tag="powChaAura"/>
+    <tag group="PowerDeny" tag="powChampF"/>
+    <tag group="PowerDeny" tag="powColDest"/>
+    <tag group="PowerDeny" tag="powConWeat"/>
+    <tag group="PowerDeny" tag="powConfMin"/>
+    <tag group="PowerDeny" tag="powConsecr"/>
+    <tag group="PowerDeny" tag="powCorpsSe"/>
+    <tag group="PowerDeny" tag="powDampBac"/>
+    <tag group="PowerDeny" tag="powDarkvis"/>
+    <tag group="PowerDeny" tag="powDeciph"/>
+    <tag group="PowerDeny" tag="powEQuake"/>
+    <tag group="PowerDeny" tag="powEaglSig"/>
+    <tag group="PowerDeny" tag="powEnhaUnd"/>
+    <tag group="PowerDeny" tag="powFeast"/>
+    <tag group="PowerDeny" tag="powFogClou"/>
+    <tag group="PowerDeny" tag="powFortune"/>
+    <tag group="PowerDeny" tag="powFrzPtrn"/>
+    <tag group="PowerDeny" tag="powGftBatt"/>
+    <tag group="PowerDeny" tag="powGrZombi"/>
+    <tag group="PowerDeny" tag="powGravSpk"/>
+    <tag group="PowerDeny" tag="powGravesp"/>
+    <tag group="PowerDeny" tag="powGrowSh"/>
+    <tag group="PowerDeny" tag="powGuidHan"/>
+    <tag group="PowerDeny" tag="powHBanish"/>
+    <tag group="PowerDeny" tag="powHBlast"/>
+    <tag group="PowerDeny" tag="powHConfus"/>
+    <tag group="PowerDeny" tag="powHFarsig"/>
+    <tag group="PowerDeny" tag="powHFear"/>
+    <tag group="PowerDeny" tag="powHFly"/>
+    <tag group="PowerDeny" tag="powHGrHeal"/>
+    <tag group="PowerDeny" tag="powHGrowth"/>
+    <tag group="PowerDeny" tag="powHHealin"/>
+    <tag group="PowerDeny" tag="powHInvis"/>
+    <tag group="PowerDeny" tag="powHLight"/>
+    <tag group="PowerDeny" tag="powHObscur"/>
+    <tag group="PowerDeny" tag="powHPuppet"/>
+    <tag group="PowerDeny" tag="powHQuick"/>
+    <tag group="PowerDeny" tag="powHSlumbe"/>
+    <tag group="PowerDeny" tag="powHSpeed"/>
+    <tag group="PowerDeny" tag="powHSuccor"/>
+    <tag group="PowerDeny" tag="powHTrait"/>
+    <tag group="PowerDeny" tag="powHWallWa"/>
+    <tag group="PowerDeny" tag="powHWarrio"/>
+    <tag group="PowerDeny" tag="powHZombie"/>
+    <tag group="PowerDeny" tag="powHeatMas"/>
+    <tag group="PowerDeny" tag="powHypTran"/>
+    <tag group="PowerDeny" tag="powIgnite"/>
+    <tag group="PowerDeny" tag="powInsight"/>
+    <tag group="PowerDeny" tag="powKnockdo"/>
+    <tag group="PowerDeny" tag="powKnowAli"/>
+    <tag group="PowerDeny" tag="powLeaping"/>
+    <tag group="PowerDeny" tag="powLocate"/>
+    <tag group="PowerDeny" tag="powLock"/>
+    <tag group="PowerDeny" tag="powMimic"/>
+    <tag group="PowerDeny" tag="powMindRid"/>
+    <tag group="PowerDeny" tag="powMirrorS"/>
+    <tag group="PowerDeny" tag="powMishap"/>
+    <tag group="PowerDeny" tag="powMostBle"/>
+    <tag group="PowerDeny" tag="powNegArca"/>
+    <tag group="PowerDeny" tag="powNightma"/>
+    <tag group="PowerDeny" tag="powOpen"/>
+    <tag group="PowerDeny" tag="powPRFear"/>
+    <tag group="PowerDeny" tag="powPetrify"/>
+    <tag group="PowerDeny" tag="powPoisTou"/>
+    <tag group="PowerDeny" tag="powPrecogn"/>
+    <tag group="PowerDeny" tag="powProBlas"/>
+    <tag group="PowerDeny" tag="powPurify"/>
+    <tag group="PowerDeny" tag="powQuake"/>
+    <tag group="PowerDeny" tag="powRPArmor"/>
+    <tag group="PowerDeny" tag="powRPBarri"/>
+    <tag group="PowerDeny" tag="powRPBindD"/>
+    <tag group="PowerDeny" tag="powRPBlast"/>
+    <tag group="PowerDeny" tag="powRPBleed"/>
+    <tag group="PowerDeny" tag="powRPBlkBl"/>
+    <tag group="PowerDeny" tag="powRPBolt"/>
+    <tag group="PowerDeny" tag="powRPBurrw"/>
+    <tag group="PowerDeny" tag="powRPChnFa"/>
+    <tag group="PowerDeny" tag="powRPDeflc"/>
+    <tag group="PowerDeny" tag="powRPDetct"/>
+    <tag group="PowerDeny" tag="powRPDispl"/>
+    <tag group="PowerDeny" tag="powRPEleme"/>
+    <tag group="PowerDeny" tag="powRPEmpSm"/>
+    <tag group="PowerDeny" tag="powRPEntng"/>
+    <tag group="PowerDeny" tag="powRPEnvir"/>
+    <tag group="PowerDeny" tag="powRPFly"/>
+    <tag group="PowerDeny" tag="powRPGrHea"/>
+    <tag group="PowerDeny" tag="powRPHeal"/>
+    <tag group="PowerDeny" tag="powRPInvis"/>
+    <tag group="PowerDeny" tag="powRPLight"/>
+    <tag group="PowerDeny" tag="powRPNiteI"/>
+    <tag group="PowerDeny" tag="powRPObscu"/>
+    <tag group="PowerDeny" tag="powRPPenta"/>
+    <tag group="PowerDeny" tag="powRPPuppt"/>
+    <tag group="PowerDeny" tag="powRPQuick"/>
+    <tag group="PowerDeny" tag="powRPResur"/>
+    <tag group="PowerDeny" tag="powRPRstPu"/>
+    <tag group="PowerDeny" tag="powRPRuneR"/>
+    <tag group="PowerDeny" tag="powRPShdTo"/>
+    <tag group="PowerDeny" tag="powRPShrod"/>
+    <tag group="PowerDeny" tag="powRPSmite"/>
+    <tag group="PowerDeny" tag="powRPSmkGh"/>
+    <tag group="PowerDeny" tag="powRPSpeed"/>
+    <tag group="PowerDeny" tag="powRPSplTr"/>
+    <tag group="PowerDeny" tag="powRPSptCa"/>
+    <tag group="PowerDeny" tag="powRPSumBn"/>
+    <tag group="PowerDeny" tag="powRPSumSh"/>
+    <tag group="PowerDeny" tag="powRPTelep"/>
+    <tag group="PowerDeny" tag="powRPTrait"/>
+    <tag group="PowerDeny" tag="powRPZomb"/>
+    <tag group="PowerDeny" tag="powRaiseDe"/>
+    <tag group="PowerDeny" tag="powRefuge"/>
+    <tag group="PowerDeny" tag="powRegen"/>
+    <tag group="PowerDeny" tag="powResur"/>
+    <tag group="PowerDeny" tag="powSacrifi"/>
+    <tag group="PowerDeny" tag="powSanctua"/>
+    <tag group="PowerDeny" tag="powSentry"/>
+    <tag group="PowerDeny" tag="powSlowed"/>
+    <tag group="PowerDeny" tag="powSphereM"/>
+    <tag group="PowerDeny" tag="powStorm"/>
+    <tag group="PowerDeny" tag="powStrUnde"/>
+    <tag group="PowerDeny" tag="powSumElem"/>
+    <tag group="PowerDeny" tag="powSummBea"/>
+    <tag group="PowerDeny" tag="powSummDem"/>
+    <tag group="PowerDeny" tag="powSummEle"/>
+    <tag group="PowerDeny" tag="powSummHer"/>
+    <tag group="PowerDeny" tag="powTempest"/>
+    <tag group="PowerDeny" tag="powTongTie"/>
+    <tag group="PowerDeny" tag="powTranspa"/>
+    <tag group="PowerDeny" tag="powViperWe"/>
+    <tag group="PowerDeny" tag="powViperWp"/>
+    <tag group="PowerDeny" tag="powVoiceWi"/>
+    <tag group="PowerDeny" tag="powWallBla"/>
+    <tag group="PowerDeny" tag="powWanderS"/>
+    <tag group="PowerDeny" tag="powWaterWa"/>
+    <tag group="PowerDeny" tag="powWeakenU"/>
+    <tag group="PowerDeny" tag="powWeaponI"/>
+    <tag group="PowerDeny" tag="powWhirlwi"/>
+    <tag group="PowerDeny" tag="powWildSte"/>
+    <tag group="PowerDeny" tag="powWish"/>
+    <tag group="PowerDeny" tag="powWndSens"/>
+    <tag group="PowerDeny" tag="powZephyr"/>
+    <tag group="PowerDeny" tag="powZoneSil"/>
+    <tag group="PowerDeny" tag="powfcBlind"/>
+    <tag group="PowerDeny" tag="powStDArca"/>
+    <bootstrap thing="drwMagic"></bootstrap>
+    </thing>
+  <thing id="arcMYSDMP" name="Mystic Dual Arcane Background Miracles/Psionics" compset="Arcane" summary="The Mystic is both a powerful Mage and Psionic">
+    <usesource source="SavRiftC"/>
+    <tag group="Arcane" tag="Miracles"/>
+    </thing>
+  <thing id="powDTARC" name="Detect Arcana" description="{i}Detect/conceal arcana{/i} allows a character to sense supernatural persons, objects, or effects within sight. This includes invisible foes, enchantments on people or items, mad science devices, and so on.\n\nThe power can also be reversed to conceal a single supernatural item, being, or effect. This has the same cost, but the duration is much longer — 1 hour with a maintenance cost of 1 per hour. When used in this way, those who wish to see through the ruse with detect arcana use their arcane skill roll as an opposed roll against the concealer’s skill (rolled anew each time detect arcana is cast). The detecting character may only attempt to see through concealed powers once per fresh casting." compset="Power" summary="Detect a single supernatural target" uniqueness="unique">
+    <fieldval field="powPoints" value="2"/>
+    <fieldval field="powRange" value="Sight"/>
+    <fieldval field="powLength" value="3 or 1 hour"/>
+    <fieldval field="powMaint" value="1/round or 1/hour"/>
+    <fieldval field="powTraps" value="Waving hands, whispered words"/>
+    <fieldval field="powPrtLen" value="3,1hr"/>
+    <fieldval field="powPrtMain" value="1/?"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="Powers" tag="Standard" name="Standard arcane power" abbrev="Standard arcane power"/>
+    </thing>
+  <thing id="powCnArc" name="Conceal Arcana" description="{i}Detect/conceal arcana{/i} allows a character to sense supernatural persons, objects, or effects within sight. This includes invisible foes, enchantments on people or items, mad science devices, and so on.\n\nThe power can also be reversed to conceal a single supernatural item, being, or effect. This has the same cost, but the duration is much longer — 1 hour with a maintenance cost of 1 per hour. When used in this way, those who wish to see through the ruse with detect arcana use their arcane skill roll as an opposed roll against the concealer’s skill (rolled anew each time detect arcana is cast). The detecting character may only attempt to see through concealed powers once per fresh casting." compset="Power" summary="Conceal a single supernatural target" uniqueness="unique">
+    <fieldval field="powPoints" value="2"/>
+    <fieldval field="powRange" value="Sight"/>
+    <fieldval field="powLength" value="3 or 1 hour"/>
+    <fieldval field="powMaint" value="1/round or 1/hour"/>
+    <fieldval field="powTraps" value="Waving hands, whispered words"/>
+    <fieldval field="powPrtLen" value="3,1hr"/>
+    <fieldval field="powPrtMain" value="1/?"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="Powers" tag="Standard" name="Standard arcane power" abbrev="Standard arcane power"/>
+    </thing>
+  <thing id="powMPArm" name="Greater Armor" description="Success grants the recipient +5 MDC armor, a raise grants +10 MDC armor." compset="Power" summary="Tthe Mega Power Greater Armor">
+    <fieldval field="powPoints" value="5"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="3"/>
+    <fieldval field="powPrtPts" value="5"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="3"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPBTHrD" name="Banish the Horde" description="The caster targets all summoned entities within a Large Burst Template. For example,\na mob brought from another plane could be dismissed. Each target rolls its own opposed Spirit check to resist. of demons could be sent back to their hellish realm, or a group of elementals" compset="Power" summary="Mega power of Banish">
+    <fieldval field="powPoints" value="6"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="6"/>
+    <fieldval field="powPrtRng" value="Smarts x 2"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    </thing>
+  <thing id="powMPSTWAL" name="Stalwart Walls" description="In addition to the base 10 Toughness of barrier, this Mega Power adds 12 M.D.C.\nArmor to each summoned section." compset="Power" summary="The Mega Power version of Barrier">
+    <fieldval field="powPoints" value="2/section"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="3 (1/section/rnd)"/>
+    <fieldval field="powPrtPts" value="2/section"/>
+    <fieldval field="powPrtRng" value="Smart x 2"/>
+    <fieldval field="powPrtLen" value="3 (1/section/rnd)"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPEXBF" name="Exalted Beast Friend" description="This Mega Power extends the Range and Duration of the beast friend power, and allows\nthe caster to affect magical and mythical beasts. Such creatures must still have only\nanimal intelligence to be influenced\n\nThe cost to control a creature depends on its Size. The base cost is 3, plus twice its\nSize for creatures with a Size greater than 0. A great white shark (Size +4) costs 3 plus\n8 (2 × 4), or 11 points. A roc (Size +8) costs 19 Power Points to control.\n\nSwarms may also be controlled. Small swarms cost 3, Mediums 5, and Large 8.\nThus a single rat costs 3 to control, as does a small swarm of the creatures." compset="Power" summary="The Mega Power version of Beast Friend">
+    <fieldval field="powPoints" value="+2"/>
+    <fieldval field="powRange" value="Smarts x 1,000 yards"/>
+    <fieldval field="powLength" value="30 minutes"/>
+    <fieldval field="powPrtPts" value="+2"/>
+    <fieldval field="powPrtRng" value="Smarts x 1,000 yards"/>
+    <fieldval field="powPrtLen" value="30 minutes"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPBLST" name="Greater Blast" description="By adding +4 Power Points to the casting cost of blast, the damage dice are increased\nfrom d6 to d10. Greater blast inflicts Mega Damage like the base power." compset="Power" summary="The Mega Power version of Blast">
+    <fieldval field="powPoints" value="+4"/>
+    <fieldval field="powRange" value="36/72/144"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="+4"/>
+    <fieldval field="powPrtRng" value="36/72/144"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPBLND" name="Greater Blind" description="Adding +2 to the casting cost of blind increases the penalties to resist the power\nto −4, or −6 with a raise." compset="Power" summary="The Mega Power version of Blind">
+    <fieldval field="powPoints" value="+2"/>
+    <fieldval field="powRange" value="18/36/72"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="+2"/>
+    <fieldval field="powPrtRng" value="18/36/72"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPBLT" name="Onslaught" description="The caster can throw up to four 3d6 bolts for two Power Points each, or a single 6d6\nbolt for 4 Power Points. In either case, the damage is Mega Damage." compset="Power" summary="The Mega Power version of Bolt">
+    <fieldval field="powPoints" value="2-8 or 4"/>
+    <fieldval field="powRange" value="18/36/72"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="2-8 or 4"/>
+    <fieldval field="powPrtRng" value="18/36/72"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPBTLW" name="Greater Boost/Lower Trait" description="This Mega Power doubles the power’s effect; two die types for a success, four with\na raise." compset="Power" summary="The Mega Power version of Boost/Lower Trait">
+    <fieldval field="powPoints" value="4"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powPrtPts" value="4"/>
+    <fieldval field="powPrtRng" value="Smarts x 2"/>
+    <fieldval field="powPrtLen" value="3 round"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPBRRW" name="Greater Burrow" description="The distance covered by the burrow power is expanded to Smarts × 20 each round!" compset="Power" summary="The Mega Power version of Burrow">
+    <fieldval field="powPoints" value="6"/>
+    <fieldval field="powRange" value="Smarts x 20"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powPrtPts" value="6"/>
+    <fieldval field="powPrtRng" value="Smarts x 20"/>
+    <fieldval field="powPrtLen" value="3 round"/>
+    <fieldval field="powMaint" value="2/round"/>
+    <fieldval field="powPrtMain" value="2/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPBRST" name="Greater Burst" description="Use of this Mega Power enhances the burst power to 3d12, Mega Damage." compset="Power" summary="The Mega Power version of Burst">
+    <fieldval field="powPoints" value="4"/>
+    <fieldval field="powRange" value="Cone Template"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="4"/>
+    <fieldval field="powPrtRng" value="Cone Template"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPCNFS" name="Greater Confusion" description="The caster can affect up to 10 targets instead of only five. He must still spend 1\nPower Point per target." compset="Power" summary="The Mega Power version of Confusion">
+    <fieldval field="powPoints" value="1 per Target"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="1 per Target"/>
+    <fieldval field="powPrtRng" value="Smarts x 2"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPDMFLD" name="Exalted Damage Field" description="This Mega Power gives the caster two options. She can have a damage field of\n2d8, Mega Damage, or 2d10 with a raise. Alternately, she can extend the damage field \nto a Medium Burst Template, centered on herself. In the latter case, it affects anyone in\nthat area each round. The caster is immune to her own damage. On the rounds after she casts it, the damage is rolled at the end of her turn." compset="Power" summary="The Mega Power version of Damage Field">
+    <fieldval field="powPoints" value="8"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powPrtPts" value="8"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="3 rounds"/>
+    <fieldval field="powMaint" value="2/round"/>
+    <fieldval field="powPrtMain" value="2/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPDRKST" name="Exalted Darksight" description="Exalted darksight makes it virtually impossible to impair the target’s vision in\nany way. Blind does not work on him, nor does any form of obscure or other lighting\npenalties. He can also see anyone using the invisibility power." compset="Power" summary="The Mega Power version of Darksight">
+    <fieldval field="powPoints" value="2"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="1 Hour "/>
+    <fieldval field="powMaint" value="1/Hour"/>
+    <fieldval field="powPrtPts" value="2"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="1 Hour"/>
+    <fieldval field="powPrtMain" value="1/Hour"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPDFLT" name="Greater Deflection" description="This Mega Power version of deflection grants a −4 effect on a success, or −6 on a raise." compset="Power" summary="The Mega Power version of Deflection">
+    <fieldval field="powPoints" value="4"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtPts" value="4"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="3 rounds"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPDSPL" name="Exalted Dispel" description="This is the ultimate directed dispel power, able to undo any active power currently\nactive in a Large Burst Template. It can also dampen enchantments on items within the\narea, shutting them down for 1d6 minutes. When used against items, the casting roll\nis against a base 4 instead of opposed; the GM should feel free to impose penalties for\nparticularly powerful items (−2 for a major item, −4 for an artifact, or even −6 for a true\nrelic of great power)." compset="Power" summary="The Mega Powers version of Dispel">
+    <fieldval field="powPoints" value="6"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="Instant (1d6 minutes)"/>
+    <fieldval field="powPrtPts" value="6"/>
+    <fieldval field="powPrtRng" value="Smarts x 2"/>
+    <fieldval field="powPrtLen" value="Instant (1D6 minutes)"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPDIVNT" name="Communion" description="Success with this Mega Power grants a single answer of one to three sentences,\nwhile a raise grants the equivalent of a paragraph or more (at the GM’s discretion).\nA raise might even mean a full, interactive conversation with an appropriate entity." compset="Power" summary="The Mega Power version of Divination">
+    <fieldval field="powPoints" value="10"/>
+    <fieldval field="powRange" value="Self"/>
+    <fieldval field="powLength" value="1 minute"/>
+    <fieldval field="powPrtPts" value="10"/>
+    <fieldval field="powPrtRng" value="Self"/>
+    <fieldval field="powPrtLen" value="1 minute"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPDRPPE" name="PPE Thief" description="When using this Mega Power variant of drain Power Points, the dice are doubled for\nthe amount drained (2d6+1, or 2d8+2 with a raise). Furthermore, drained PPE/ISP is gained by the caster (if of a type she uses). This replenishes spent Power Points but cannot raise the caster above her normal maximum." compset="Power" summary="The Mega Power version of Drain Power Points">
+    <fieldval field="powPoints" value="9"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="9"/>
+    <fieldval field="powPrtRng" value="Smarts x 2"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="3"/>
+    </thing>
+  <thing id="powMPELPRT" name="One with the Elements" description="Casting this Mega Power version of elemental manipulation dramatically increases\nits Range and Duration. Each use of the power counts as an action." compset="Power" summary="The Mega Powers version of Elemental Protection">
+    <fieldval field="powPoints" value="2"/>
+    <fieldval field="powRange" value="Smarts x 3"/>
+    <fieldval field="powLength" value="1 Hour"/>
+    <fieldval field="powMaint" value="1/Hour"/>
+    <fieldval field="powPrtPts" value="2"/>
+    <fieldval field="powPrtRng" value="Smarts x 3"/>
+    <fieldval field="powPrtLen" value="1 Hour"/>
+    <fieldval field="powPrtMain" value="1/Hour"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPEntgl" name="Greater Entangle" description="Using this Mega Power version means targets are fully entangled on a success. A raise means attempts to escape are made at −4." compset="Power" summary="The Mega Power version of Entangle">
+    <fieldval field="powPoints" value="+2"/>
+    <fieldval field="powRange" value="Smarts x 2"/>
+    <fieldval field="powLength" value="Special"/>
+    <fieldval field="powPrtPts" value="+2"/>
+    <fieldval field="powPrtRng" value="Smarts x 2"/>
+    <fieldval field="powPrtLen" value="Special"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPEnVPr" name="Life Support" description="Life Support expands the effects of environmental protection to protect against all\nnegative environmental effects." compset="Power" summary="The Mega Power version of Environmental Protection">
+    <fieldval field="powPoints" value="4"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="1 Hour"/>
+    <fieldval field="powMaint" value="1/Hour"/>
+    <fieldval field="powPrtPts" value="4"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="1 Hour"/>
+    <fieldval field="powPrtMain" value="1/Hour"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPFRSGT" name="Greater Farsight" description="Greater farsight removes all penalties for Range, and like the normal version, doubles\nrange increments on a raise." compset="Power" summary="The Mega Power version of Farsight">
+    <fieldval field="powPoints" value="6"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtPts" value="6"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="3 rounds"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPFEAR" name="Greater Fear" description="Using this Mega Power causes targets to suffer a −2 to resist fear, or a −4 with a raise." compset="Power" summary="The Mega Power version of Fear">
+    <fieldval field="powPoints" value="4"/>
+    <fieldval field="powRange" value="Smarts x 3"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="4"/>
+    <fieldval field="powPrtRng" value="Smarts x 3"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="powMPFLY" name="Swift Fly" description="Swift Flight increases the target’s flying speed. For 8 Power Points, the recipient\nflies at 4 × Pace and is −1 to be hit by ranged attacks. For 10 PPs, the recipient flies at\n8 × Pace and is −2 to be hit by ranged attacks. These penalties do not stack with similar effects, like deflection; use the higher benefit." compset="Power" summary="The Mega Power version of Fly">
+    <fieldval field="powPoints" value="8 or 10"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtPts" value="8 or 10"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="3 rounds"/>
+    <fieldval field="powPrtMain" value="1/round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    </thing>
+  <thing id="powMPGRTHL" name="Resurrection" description="Possibly the most powerful—and controversial—spell effect in the world,\nresurrection brings a spirit back to her dead body, then returns her to life. The time and\nenergy involved is massive, the risks are literally life-threatening, and there’s only\never one chance for the spell to work for a given being.\n\nTo return the dead to life, the caster must make a skill roll with a penalty based on\nhow long the target has been dead. Less than an hour is the easiest at −2, a day is −4,\nup to one month is −6, within a year is −8, and anyone dead longer than a year is at −10.\n\nIt takes 2d6 hours to cast the spell (time of death is considered from when casting\nbegins), and if the caster fails the roll, death claims him for his hubris and he dies!\n\nFortunately, the caster can seek aid from others who can make a cooperative roll\nusing the same Arcane Skill as the primary character. These aides do not need to have\ngreater healing and can only provide up to the normal +4 bonus maximum. Characters\nwho make the cooperative roll do not die on a failure but are Incapacitated by Fatigue, and each level can only be recovered by eight hours of rest.\n\nA resurrected character returns to life Incapacitated with three wounds and a\npermanent injury from her cause of death. The damage and injury could be healed with\nuse of the greater healing power as normal." compset="Power" summary="The Mega Power version of Greater Healing">
+    <fieldval field="powPoints" value="30"/>
+    <fieldval field="powRange" value="Touch"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="30"/>
+    <fieldval field="powPrtRng" value="Touch"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    </thing>
+  <thing id="powMPGRSHK" name="Tiny Yet Mighty" description="When using shrink with this Mega Power enhancement, the caster empowers the\ntarget to retain his Strength and Toughness while small. For growth, spending +2 Power Points extends the casting Range, just as for shrink." compset="Power" summary="The Mega Power version of Growth/Shrink">
+    <fieldval field="powPoints" value="+2"/>
+    <fieldval field="powRange" value="Smarts x 3"/>
+    <fieldval field="powLength" value="3 rounds"/>
+    <fieldval field="powMaint" value="1/round"/>
+    <fieldval field="powPrtPts" value="+2"/>
+    <fieldval field="powPrtRng" value="Smarts x 3"/>
+    <fieldval field="powPrtLen" value="3 Rounds"/>
+    <fieldval field="powPrtMain" value="1/Round"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPHAVC" name="Greater Havoc" description="Greater havoc enhances the penalties to resist to −2, or −4 with a raise. Furthermore,\ntargets are knocked back a total of 3d6&quot; and automatically Shaken, regardless of hitting an object." compset="Power" summary="The Mega Power version of Havoc">
+    <fieldval field="powPoints" value="+2"/>
+    <fieldval field="powRange" value="Smarts x 3"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="+2"/>
+    <fieldval field="powPrtRng" value="Smarts x 3"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    </thing>
+  <thing id="powMPHLNG" name="Mass Healing" description="The healing power can be cast on all allies within Spirit × 2 of the caster. Ignore\nindividual wound penalties of the treated and apply a flat −2 instead. The power is\nselective; the caster chooses who is affected." compset="Power" summary="The Mega Power version of Healing">
+    <fieldval field="powPoints" value="6"/>
+    <fieldval field="powRange" value="Special"/>
+    <fieldval field="powLength" value="Instant"/>
+    <fieldval field="powPrtPts" value="6"/>
+    <fieldval field="powPrtRng" value="Special"/>
+    <fieldval field="powPrtLen" value="Instant"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    </thing>
+  <thing id="faSRLLWARB" name="Ley Line Walker Arcane Background" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="skSpellcst"></bootstrap>
+    <bootstrap thing="arcLeyLine"></bootstrap>
+    <eval phase="Setup" priority="5000" index="2">#traitcreation[skSpellcst] += 2</eval>
+    <eval phase="Setup" priority="5000">#traitcreation[trSRPPE] += 15</eval>
+    </thing>
+  <thing id="fcSRDVDPD" name="Device Dependant" description="As with any Weird Scientist, a Techno-Wizard must have her gizmos for her powers or parts to use Arcane Machinist. She must have gear and tools to make her magic work" compset="FraComp" summary="The character must have a device to use their powers">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRGRHDGK" name="Gearhead Geek" description="The Techno-Wizard relationship with technology and machinery results in odd behaviors. Some talk, hum, or sing to their gear, while others paint sigils, runes,\nand arcane diagrams all over their machines. However it manifests, every Techno-Wizard has a Quirk Hindrance of this kind." compset="FraComp" summary="This character REALLY likes machines">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinQuirk"></bootstrap>
+    </thing>
+  <thing id="faSRTWRQKN" name="Required Knowledge" description="A combination of intense study, practical experience, and intuitive understanding makes the Techno-Wizard an expert in a number of fields. They begin with the following\nskills for free: Knowledge (Arcana) d6, Knowledge (Engineering) d6, Knowledge (Science) d6, and Repair d6." compset="FraAbility" summary="A Techno-Wizards has to meet some standards">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="skKnowArca"></bootstrap>
+    <bootstrap thing="skKnowEng"></bootstrap>
+    <bootstrap thing="skKnowScie"></bootstrap>
+    <bootstrap thing="skRepair"></bootstrap>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skKnowArca] += 2
+#traitcreation[skKnowEng] += 2
+#traitcreation[skKnowScie] += 2
+#traitcreation[skRepair] += 2</eval>
+    </thing>
   <thing id="faSRSkill5" name="+5 Skill Points" description="+5 Skill Points" compset="FraAbility">
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="5000">#resmax[resSkill] += 5</eval>
@@ -8086,15 +9285,129 @@ hero.childfound[resSkill].field[resSpent].value -= 2</eval>
     <usesource source="SavRiftC"/>
     <tag group="GearType" tag="Shelter"/>
     </thing>
+  <thing id="faSRPsiMM" name="Psionics" description="Mind Melter begins with a great knowledge and understanding of psionics. He begins with five powers from the list above, 20 ISP, and a d8 Psionics skill." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powBanish"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powBlast"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powBurrow"/>
+    <tag group="PowerDeny" tag="powBurst"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powLightOb"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powQuick"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powSpeed"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powSumAlly"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <bootstrap thing="edgArcPsi"></bootstrap>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <eval phase="Initialize">~Tag hero as using ISP
+perform hero.assign[Rifts.UsesISP]
+
+~Tag hero as using Mind Melter powers
+perform hero.assign[PowerGroup.grpSRMinMe]</eval>
+    <eval phase="Initialize" priority="2100" index="3">perform forward[PowerDeny.?]</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Psionics d8
+#traitcreation[skPsionics] += 2
+hero.childfound[resSkill].field[resSpent].value -= 1
+
+#resmax[resPowers] += 2</eval>
+    </thing>
+  <thing id="faSRMMMaPs" name="Major Psionic" description="Mind Melters have the Major Psionic Edge and can spend 2 ISP to gain a +1 with any Psionic skill roll, or 4 ISP for a +2 (paid before the roll is made). These effects are doubled when on a ley line. Each time they take the Power Points Edge, they gain +10 ISP (instead of 5)." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powBanish"/>
+    <tag group="PowerDeny" tag="powBanishE"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powBlast"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powBurrow"/>
+    <tag group="PowerDeny" tag="powBurst"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powLightOb"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powQuick"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powSpeed"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powSumAlly"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <bootstrap thing="edgSRMPsi1">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <eval phase="Setup" priority="1000">perform hero.childfound[edgSRMPsi1].assign[Hide.Special]</eval>
+    </thing>
+  <thing id="faSRExpAwa" name="Expanded Awareness" description="Mind Melters can use detect arcana at will, as a free action.\n" compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="powSRDetAW"></bootstrap>
+    <eval phase="PreTraits" priority="5000">perform #resspent[resPowers,-,1,field[name].text]</eval>
+    </thing>
+  <thing id="powSRDetAW" name="Detect Arcana (At Will)" description="\n{i}Detect/conceal arcana{/i} allows a character to sense supernatural persons, objects, or effects within sight. This includes invisible foes, enchantments on people or items, mad science devices, and so on.\n\nThe power can also be reversed to conceal a single supernatural item, being, or effect. This has the same cost, but the duration is much longer — 1 hour with a maintenance cost of 1 per hour. When used in this way, those who wish to see through the ruse with detect arcana use their arcane skill roll as an opposed roll against the concealer’s skill (rolled anew each time detect arcana is cast). The detecting character may only attempt to see through concealed powers once per fresh casting." compset="Power" summary="Sense supernatural persons, objects, or effects within sight; Conceal a single supernatural target">
+    <fieldval field="powRange" value="Sight"/>
+    <fieldval field="powLength" value="At Will"/>
+    <fieldval field="powTraps" value="Waving hands, whispered words"/>
+    <fieldval field="powPoints" value="0"/>
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    </thing>
+  <preclude id="edgNoMercy" source="SavRiftC"/>
+  <preclude id="edgRich" source="SavRiftC"/>
+  <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
   <preclude id="cybAdrenal" source="SavRiftC"/>
   <preclude id="cybAquatic" source="SavRiftC"/>
   <preclude id="edgNoble" source="SavRiftC"/>
-  <preclude id="edgNoMercy" source="SavRiftC"/>
-  <preclude id="edgRich" source="SavRiftC"/>
-  <preclude id="edgRich2" source="SavRiftC"/>
-  <extthing thing="powBarrier" group="PowerGroup" tag="grpSRMinMe"/>
   <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
-  <extthing thing="powArmor" group="PowerGroup" tag="grpSRMinMe"/>
   </document>
