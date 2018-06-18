@@ -2730,7 +2730,7 @@ perform hero.assign[Rifts.MARS]
 
 ~Select two knowledge skills
 #resmax[resFraSel1] += 2
-foreach pick in hero from Skill where "Rifts.FrameSel"
+foreach pick in hero from Skill where "Rifts.FrameSel1"
   eachpick.field[trtCreate].value += 2
   nexteach
 

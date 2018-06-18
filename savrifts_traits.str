@@ -197,21 +197,28 @@
 	  
     <field
       id="ehFrameAdd"
-      name="Racial AddItem Header"
+      name="Framework AddItem Header"
       type="derived"
 	  maxlength="500">
 	  </field>
 	  
     <field
       id="ehFrameHdr"
-      name="Racial Expression Header"
+      name="Framework Expression Header"
       type="derived"
 	  maxlength="500">
 	  </field>
-
+	  
+    <field
+      id="ehFrameCst"
+      name="Framework Expression Cost"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
     <field
       id="ehFrameExp"
-      name="Racial Property Expression"
+      name="Framework Expression"
       type="derived"
 	  maxlength="500">
 	  </field>
@@ -256,11 +263,25 @@
 
 	~consume additional resource slots
 	var myCount as number
-	foreach pick in hero where "Rifts.FrameSel"
-		myCount += 1
-		nexteach
-	  
-	perform #resspent[resFraSel1,+,myCount,field[name].text]
+	var myComp as number
+	
+	myCount = 0
+	myComp = tagvalue[thingid.ehExprHlp?]
+	
+	if (myComp = 1) then
+		foreach pick in hero where "Rifts.FrameSel1"
+			myCount += 1
+			nexteach
+	
+		perform #resspent[resFraSel1,+,myCount,field[name].text]
+	elseif (myComp = 2) then
+		foreach pick in hero where "Rifts.FrameSel2"
+			myCount += 1
+			nexteach
+	
+		perform #resspent[resFraSel2,+,myCount,field[name].text]
+	endif
+
 		]]></eval>
 		
 	<eval phase="PreTraits" priority="1000" index="3"><![CDATA[

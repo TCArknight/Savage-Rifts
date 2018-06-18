@@ -47,9 +47,9 @@
 	  candidatefield="ehFrameExp"
 	  headertemplate="fraChsPic1"
 	  addpick="resFraSel1">
-      <list>Rifts.FrameSel</list>
+      <list>Rifts.FrameSel1</list>
       <autotag group="Helper" tag="FreeEdge"/>
-      <autotag group="Rifts" tag="FrameSel"/>
+      <autotag group="Rifts" tag="FrameSel1"/>
       <description/>
       <additem><![CDATA[      
         @text &= hero.child[ehExprHlp1].field[ehFrameAdd].text
@@ -68,9 +68,9 @@
 	  candidatefield="ehFrameExp"
 	  headertemplate="fraChsPic2"
 	  addpick="resFraSel2">
-      <list>Rifts.FrameSel</list>
+      <list>Rifts.FrameSel2</list>
       <autotag group="Helper" tag="FreeEdge"/>
-      <autotag group="Rifts" tag="FrameSel"/>
+      <autotag group="Rifts" tag="FrameSel2"/>
       <description/>
       <additem><![CDATA[      
         @text &= hero.child[ehExprHlp2].field[ehFrameAdd].text

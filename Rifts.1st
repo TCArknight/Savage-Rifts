@@ -37,7 +37,8 @@
     <value id="RaceSelect"/>     <!-- Racial Ability selected through Helper -->     
     <value id="RaceEdgeB"/>      <!-- Bonus Racial Edge -->     
     <value id="RaceHindB"/>      <!-- Bonus Racial Hindrance -->     
-    <value id="FrameSel"/>       <!-- Framework Ability selected through Helper -->     
+    <value id="FrameSel1"/>      <!-- Framework Ability selected through Helper 1--> 
+    <value id="FrameSel2"/>      <!-- Framework Ability selected through Helper 2-->    
     <value id="HJSelect"/>       <!-- Hero's Journey option selected through Helper -->     
     <value id="TKnoSkill"/>      <!-- Tag for selected Tramadore Knowledge Skill -->     
     <value id="SpellSkill"/>     <!-- Tag the Hero's Spellcasting skill -->   
