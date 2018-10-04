@@ -460,7 +460,7 @@
     marginhorz="5"
     marginvert="5"
     order="115">
-    <live>!Rifts.HRaceTab</live>
+    <live>!Rifts.HideRacialTab</live>
     <layoutref layout="racial"/>
     <position><![CDATA[
       ]]></position>

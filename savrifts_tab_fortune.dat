@@ -136,7 +136,7 @@
     marginhorz="5"
     marginvert="5"
     order="130">
-    <live>source.SavRiftC &amp; Rifts.FortGlory</live>
+    <live>source.SavRiftC &amp; Rifts.FortuneAndGlory</live>
     <layoutref layout="fortglory"/>
     <position><![CDATA[
       ]]></position>
