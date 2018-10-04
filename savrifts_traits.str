@@ -290,7 +290,7 @@
 
 	~consume additional resource slots
 	var myCount as number
-	foreach pick in hero where "Rifts.HJSelect"
+	foreach pick in hero where "Rifts.HeroJourneySel"
 		myCount += 1
 		nexteach
 	  

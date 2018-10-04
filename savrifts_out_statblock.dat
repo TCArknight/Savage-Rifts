@@ -212,7 +212,7 @@
         call sbtrackres
 
         ~output Fortune and Glory selections
-		if (hero.tagis[Rifts.FortGlory] <> 0) then
+		if (hero.tagis[Rifts.FortuneAndGlory] <> 0) then
 		  append @newline
           append @boldon & "Fortune and Glory: " & @boldoff & @newline
           tagexpr = "component.Fortune"
@@ -220,10 +220,12 @@
 		  endif
 		
         ~output Hero's Journey selections
-		append @newline
-        append @boldon & "Hero's Journey: " & @boldoff & @newline
-        tagexpr = "component.HeroJrny"
-        call sbherojrny
+		if (hero.tagis[RiftsHJ.?] <> 0) then
+		  append @newline
+          append @boldon & "Hero's Journey: " & @boldoff & @newline
+          tagexpr = "component.HeroJrny"
+          call sbherojrny
+		  endif
 		
         ~output NPC details if this character is a NPC - if any field for any
         ~of the three blocks of text is set, output that block

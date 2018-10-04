@@ -56,9 +56,9 @@
 	  candidatefield="ehHJExp"
 	  headertemplate="hjChsPick"
 	  addpick="resHJSel">
-      <list>Rifts.HJSelect</list>
+      <list>Rifts.HeroJourneySel</list>
 	  <autotag group="Helper" tag="FreeEdge"/>
-      <autotag group="Rifts" tag="HJSelect"/>
+      <autotag group="Rifts" tag="HeroJourneySel"/>
       <autotag group="thing" tag="skipprereq"/>
       <description/>
       <additem><![CDATA[      
@@ -390,7 +390,7 @@
     marginhorz="5"
     marginvert="5"
     order="130">
-    <live>source.SavRiftC &amp; !Rifts.NoHeroJou</live>
+    <live>source.SavRiftC &amp; !Rifts.NoHerosJourney</live>
     <layoutref layout="herojourn"/>
     <position><![CDATA[
       ]]></position>
