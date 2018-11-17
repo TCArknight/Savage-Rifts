@@ -1248,71 +1248,6 @@ perform #traitroll[skSpellcst,-,IntBonus,"Strain"]
 perform #traitroll[skPsionics,-,IntBonus,"Strain"]
 perform #traitadjust[trSFStrain,-,IntBonus,"Strain"]]]></eval>
     </thing>
-  <thing id="powSRMPWDS" name="Clairvoyance (World Scry)" description="Clairvoyance allows the caster to sense people, places, and things outside of normal perception. The Range varies depending on the Arcane skill roll. A success gives the caster a Range equal to her Spirit ×10 in miles, and a raise increases that to Spirit ×100 miles. Walls, doors, and other barriers do not hamper clairvoyance in any way, though magical barriers may block it at the GM’s discretion. While it’s active, the user of this power can shift the point of observation to anywhere within her Range as a free action.\n\nWhen using clairvoyance, the caster chooses a single sense (usually sight) to project. For each additional 1 PP she spends at casting, she may add an additional sense; this does not affect maintenance costs.\n\n{b}World Scry Mega Power{b/}\nThe Mega Power version of {i}Clairvoyance{i/} increases the Range to Spirit x 1,000 miles.  A raise increase that to anywhere on the planet.  It cost 6 Power Points, +1 per additional sense the caster wishes to project." compset="Power" summary="Sense things outside of normal perception." uniqueness="unique">
-    <fieldval field="powPoints" value="3+ (6+)"/>
-    <fieldval field="powRange" value="Varies"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <fieldval field="powPrtLen" value="3"/>
-    <fieldval field="powPrtRng" value="Varies"/>
-    <fieldval field="powPrtPts" value="3+"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powSRClair" name="Clairvoyance" description="Clairvoyance allows the caster to sense people, places, and things outside of normal perception. The Range varies depending on the Arcane skill roll. A success gives the caster a Range equal to her Spirit ×10 in miles, and a raise increases that to Spirit ×100 miles. Walls, doors, and other barriers do not hamper clairvoyance in any way, though magical barriers may block it at the GM’s discretion. While it’s active, the user of this power can shift the point of observation to anywhere within her Range as a free action.\n\nWhen using clairvoyance, the caster chooses a single sense (usually sight) to project. For each additional 1 PP she spends at casting, she may add an additional sense; this does not affect maintenance costs." compset="Power" summary="Sense things outside of normal perception." uniqueness="unique">
-    <fieldval field="powPoints" value="3+"/>
-    <fieldval field="powRange" value="Varies"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <fieldval field="powPrtLen" value="3"/>
-    <fieldval field="powPrtRng" value="Varies"/>
-    <fieldval field="powPrtPts" value="3+"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    <tag group="PowerGroup" tag="MindMelter"/>
-    </thing>
-  <thing id="powMPIllus" name="Deadly Illusion" description="Illusion makes a single target see something that isn’t there, or else see things differently than they actually are. The caster’s arcane skill roll is opposed by the target’s Spirit; a success means the target perceives the illusion as real with all of her senses, but each direct interaction with the illusion (an attack, directly touching it, or being impeded by the image in some way) grants the target an additional opposed roll to realize it’s not real. With a raise by the caster, the target is convinced the illusion is real for as long as it’s maintained.\n\nIllusory attacks can never actually wound a target, though they can cause her to become Shaken. Such attacks are made with the caster’s arcane skill but resolved like any Fighting, Shooting, Throwing, or similar roll. Passive illusions, like a wall, take little effort to maintain. The Power Point cost must be met, but only normal maintenance penalties apply. Active illusions, such as a black cat or phantom enemies, require constant concentration. The caster must expend an action each round spent maintaining such active illusions. This power only works on sapient beings. It is useless against animals, robots, or mindless creatures." compset="Power" summary="Mega Power version of Illustion" uniqueness="unique">
-    <fieldval field="powPoints" value="3"/>
-    <fieldval field="powRange" value="Smarts"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <fieldval field="powPrtLen" value="3"/>
-    <fieldval field="powPrtRng" value="Smarts"/>
-    <fieldval field="powPrtPts" value="3"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powSRIllus" name="Illusion" description="Illusion makes a single target see something that isn’t there, or else see things differently than they actually are. The caster’s arcane skill roll is opposed by the target’s Spirit; a success means the target perceives the illusion as real with all of her senses, but each direct interaction with the illusion (an attack, directly touching it, or being impeded by the image in some way) grants the target an additional opposed roll to realize it’s not real. With a raise by the caster, the target is convinced the illusion is real for as long as it’s maintained.\n\nIllusory attacks can never actually wound a target, though they can cause her to become Shaken. Such attacks are made with the caster’s arcane skill but resolved like any Fighting, Shooting, Throwing, or similar roll. Passive illusions, like a wall, take little effort to maintain. The Power Point cost must be met, but only normal maintenance penalties apply. Active illusions, such as a black cat or phantom enemies, require constant concentration. The caster must expend an action each round spent maintaining such active illusions. This power only works on sapient beings. It is useless against animals, robots, or mindless creatures." compset="Power" summary="See something that isn’t there." uniqueness="unique">
-    <fieldval field="powPoints" value="3"/>
-    <fieldval field="powRange" value="Smarts"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <fieldval field="powPrtLen" value="3"/>
-    <fieldval field="powPrtRng" value="Smarts"/>
-    <fieldval field="powPrtPts" value="3"/>
-    <fieldval field="powTraps" value="Real imaginations"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    <tag group="PowerGroup" tag="MindMelter"/>
-    </thing>
-  <thing id="powSRTelep" name="Telepathy" description="Telepathy is used to communicate mentally with other people. If the target is willing, a simple success is all that is needed. Otherwise, the roll is opposed by the target’s Spirit. Success allows communication with the target. Only those thoughts and images the participants wish to send can be sensed; anything more requires mind reading.\n\nIf the caster cannot see the target, they must know and be able to identify the intended recipient in some reasonable fashion; their roll suffers a −4 penalty. Once telepathic contact is established, it may be maintained up to one mile away." compset="Power" summary="Communicate mentally with other people." uniqueness="unique">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="Sight"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <fieldval field="powPrtLen" value="3"/>
-    <fieldval field="powPrtRng" value="Sight"/>
-    <fieldval field="powPrtPts" value="2"/>
-    <fieldval field="powTraps" value="Concentrating look"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    <tag group="PowerGroup" tag="MindMelter"/>
-    </thing>
   <thing id="edgSRMajorPsionic" name="Major Psionic" description="A greater control of mind, body, and spirit combined with the overwhelming power available on Rifts Earth means this hero can do much more with her inner strength. Major Psionics double their base ISP, and they gain +10 ISP (instead of the usual +5) from the Power Points Edge.\n\nMajor Psionics may also:\n\nSpend 2 ISP when rolling their Psionics skill to gain a +1 to the roll, or 4 ISP for +2.\n\nSpend 1 ISP to double the Range of a power, or 2 ISP to multiply the base range ×10. This ability does not affect powers that have Range of Self or Touch.\n\nThe two effects can be combined, but the decision to spend ISP for either must be made before the roll.\n\nWhile on a ley line, all above bonuses are doubled in effect." compset="Edge" summary="Do more with inner strength" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="1" name="Seasoned" abbrev="Seasoned"/>
@@ -1550,7 +1485,7 @@ nexteach]]>
       <before name="Calc trtFinal"/>
       </eval>
     <pickreq thing="edgSRMasterPsi"/>
-    <pickreq thing="powSRTelep"/>
+    <pickreq thing="powSRTelepathy"/>
     </thing>
   <thing id="edgSRCAce" name="Combat Ace" description="Integrating vehicle operation with weapons control in one fluid moment of expertise, the pilot with this Edge ignores the multi-action penalty for making a Boating, Driving, or Piloting check and firing a weapon on the same round." compset="Edge" summary="No MAP for firing a weapon and driving." uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2060,7 +1995,7 @@ if (field[abilActive].value <> 0) then
     <bootstrap thing="edgArcPsi"></bootstrap>
     <bootstrap thing="powSRArmor"></bootstrap>
     <bootstrap thing="powIntangi"></bootstrap>
-    <bootstrap thing="powSRTelep"></bootstrap>
+    <bootstrap thing="powSRTelepathy"></bootstrap>
     </thing>
   <thing id="rpSRVisAcu" name="Visual Acuity" description="The Fennodi’s wider range of vision provides +2 to sight-based Notice checks." compset="RacialProp">
     <usesource source="SavRiftC"/>
@@ -2883,7 +2818,7 @@ perform hero.assign[Rifts.FortuneAndGlory]
     <tag group="PowerGiveG" tag="powSmite"/>
     <tag group="PowerGiveG" tag="powStun"/>
     <tag group="PowerGiveG" tag="powTelekin"/>
-    <tag group="PowerGiveG" tag="powSRTelep"/>
+    <tag group="PowerGiveG" tag="powSRTelepathy"/>
     <bootstrap thing="faSRBRFRMS"></bootstrap>
     <bootstrap thing="faSRBRFRWL"></bootstrap>
     <bootstrap thing="fcSRBRPYRO"></bootstrap>
@@ -3067,33 +3002,6 @@ validif (rolls = 0)]]></evalrule>
     <tag group="Weapon" tag="NoRecoil"/>
     <tag group="Weapon" tag="SemiAuto"/>
     <tag group="WeaponType" tag="FutRange"/>
-    </thing>
-  <thing id="powClairvo" name="Clairvoyance" description="Clairvoyance allows the caster to sense people, places, and things outside of normal perceptions.  The Range varies depending on the Aracane skill roll.  A success gives the caster a Range equal to her Spirit x10 in miles, and a raise increases that to Spirit x100 miles.  Walls, doors, and other barriers do not hamper clairvoyance in any way, though magical barriers may block it at the GM&apos;s discretion.  While it&apos;s active, the user of this power can shift the point of observation to anywhere within her Range as a free action.\nWhen using clairvoyance, the caster chooses a single sense (usually sight) to project.  For each additional 1 PP she spends at casting, she may add an additional sense; this does not affect maintenance costs." compset="Power">
-    <fieldval field="powPoints" value="3+"/>
-    <fieldval field="powRange" value="Varies"/>
-    <fieldval field="powLength" value="3 (1/round)"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powTraps" value="A distant look, a meditative contemplation, or eyes that suddenly start glowing"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powIllusio" name="Illusion" description="Illusion makes a single target see something that isn&apos;t there, or else see things differently than they actually are.  The caster&apos;s arcane skill roll is opposed by the target&apos;s Spirit; a success means the target perceives the illusion as real with all of her senses, but each direct interaction with the illusion (an attack, directly touching it, or being impeded by the image in some way) grants the target an additional opposed roll to realize it&apos;s not real.  With a rase by the caster, the target is convinced the illusion is real for as long as it&apos;s maintained.\nIllusory attacks can&apos;t actually wound a target but can cause the perception of damage.  Such &quot;attacks&quot; are made with the caster&apos;s arcane skill opposed by the target&apos;s Spirit with a success causing a Shaken.\nPassive illusions, like a wall, take little effort to maintain.  The Power Point cost must be met, but only normal maintenance penalties apply.  Active illusions, such as a black cat or attacking enemies (see above), require constant conentration.  The caster must use an action each round spent maintaining such illusions.  This power only works on sapient beings.  It is useless against animals, robots, or mindless creatures." compset="Power">
-    <fieldval field="powPoints" value="3"/>
-    <fieldval field="powRange" value="Smarts"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powTraps" value="Real imaginations"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powTelepat" name="Telepathy" description="Telepathy is used to communicate mentally with other people.  If the target is willing, a simple success is all that is needed.  Otherwise, the roll is opposed by the target&apos;s Spirit.  Success allows communication with the target.  Only those thoughts anc images the participants wish to send can be sensed; anything more requires mind reading.\nIf the caster cannot see the target, they must know and be able to indentify the intended recipient in some reasonble fashion; their roll suffers a -4 penalty.  Once telepathic contact is established, it may be maintained up to one mile away.\nEach conversation established via telepathy counts as a separate power for purposes of maintenance penalties.  Telepathy can be used to speak with entities with whom you do not share a language; communication is based on thoughts and images.  However, this form of communication can be difficult and basic in nature.  The stranger the being (spirits, monsters, or beings from entirely different realms), the more complicated even the most basic communication can be." compset="Power">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="One mile"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powTraps" value="Concentrating look"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
     </thing>
   <thing id="arcLeyLine" name="Ley Line Walker" description="Ley Line Walkers are the definitive wielders of magic in the world.  As Masters of Magic, Ley Line Walkers have the Mega Power option for any spells they know, and may choose an Trappings for their powers except Necromantic." compset="Arcane">
     <fieldval field="arcPowers" value="5"/>
@@ -8133,7 +8041,7 @@ else
     </thing>
   <thing id="faSREXPAWR" name="Expanded Awareness" description="The character can use detect arcana at will, with no cost to PPE/ISP as a free action." compset="FraAbility" summary="The character is aware of the supernatural realm">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="powDTARC"></bootstrap>
+    <bootstrap thing="powSRDetect"></bootstrap>
     </thing>
   <thing id="faSRLLMAGM" name="Ley Line Magic Mastery" description="Like all arcane casters, Ley Line Walkers can draw extra PPE from ley lines, though they do so with greater advantage. As a free action, they can roll their Spellcasting skill to draw PPE from a line at a distance of Spirit × 3, and they multiply their current maximum PPE by ×3 while at that distance or closer." compset="FraAbility" summary="The Ley Line Walker is the master of Ley Lines">
     <usesource source="SavRiftC"/>
@@ -8318,7 +8226,7 @@ else
     <tag group="PowerDeny" tag="powWWChane"/>
     <tag group="PowerDeny" tag="powHECharm"/>
     <tag group="PowerDeny" tag="powAcCThor"/>
-    <tag group="PowerDeny" tag="powSRClair"/>
+    <tag group="PowerDeny" tag="powSRClairvoy"/>
     <tag group="PowerDeny" tag="powStClair"/>
     <tag group="PowerDeny" tag="powClairvo"/>
     <tag group="PowerDeny" tag="powStCArca"/>
@@ -8458,7 +8366,7 @@ else
     <tag group="PowerDeny" tag="powGLHeal1"/>
     <tag group="PowerDeny" tag="powDLHunch"/>
     <tag group="PowerDeny" tag="powFGIllus"/>
-    <tag group="PowerDeny" tag="powSRIllus"/>
+    <tag group="PowerDeny" tag="powSRIllusion"/>
     <tag group="PowerDeny" tag="powIllusio"/>
     <tag group="PowerDeny" tag="powStIllus"/>
     <tag group="PowerDeny" tag="powOzIllus"/>
@@ -8628,7 +8536,7 @@ else
     <tag group="PowerDeny" tag="powSSTelep"/>
     <tag group="PowerDeny" tag="powStTelep"/>
     <tag group="PowerDeny" tag="powTelepat"/>
-    <tag group="PowerDeny" tag="powSRTelep"/>
+    <tag group="PowerDeny" tag="powSRTelepathy"/>
     <tag group="PowerDeny" tag="powGLTelep"/>
     <tag group="PowerDeny" tag="powSKTempe"/>
     <tag group="PowerDeny" tag="powETOraCu"/>
@@ -8862,326 +8770,6 @@ else
     <usesource source="SavRiftC"/>
     <tag group="Arcane" tag="Miracles"/>
     </thing>
-  <thing id="powDTARC" name="Detect Arcana" description="{i}Detect/conceal arcana{/i} allows a character to sense supernatural persons, objects, or effects within sight. This includes invisible foes, enchantments on people or items, mad science devices, and so on.\n\nThe power can also be reversed to conceal a single supernatural item, being, or effect. This has the same cost, but the duration is much longer — 1 hour with a maintenance cost of 1 per hour. When used in this way, those who wish to see through the ruse with detect arcana use their arcane skill roll as an opposed roll against the concealer’s skill (rolled anew each time detect arcana is cast). The detecting character may only attempt to see through concealed powers once per fresh casting." compset="Power" summary="Detect a single supernatural target" uniqueness="unique">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="Sight"/>
-    <fieldval field="powLength" value="3 or 1 hour"/>
-    <fieldval field="powMaint" value="1/round or 1/hour"/>
-    <fieldval field="powTraps" value="Waving hands, whispered words"/>
-    <fieldval field="powPrtLen" value="3,1hr"/>
-    <fieldval field="powPrtMain" value="1/?"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <tag group="Powers" tag="Standard" name="Standard arcane power" abbrev="Standard arcane power"/>
-    </thing>
-  <thing id="powCnArc" name="Conceal Arcana" description="{i}Detect/conceal arcana{/i} allows a character to sense supernatural persons, objects, or effects within sight. This includes invisible foes, enchantments on people or items, mad science devices, and so on.\n\nThe power can also be reversed to conceal a single supernatural item, being, or effect. This has the same cost, but the duration is much longer — 1 hour with a maintenance cost of 1 per hour. When used in this way, those who wish to see through the ruse with detect arcana use their arcane skill roll as an opposed roll against the concealer’s skill (rolled anew each time detect arcana is cast). The detecting character may only attempt to see through concealed powers once per fresh casting." compset="Power" summary="Conceal a single supernatural target" uniqueness="unique">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="Sight"/>
-    <fieldval field="powLength" value="3 or 1 hour"/>
-    <fieldval field="powMaint" value="1/round or 1/hour"/>
-    <fieldval field="powTraps" value="Waving hands, whispered words"/>
-    <fieldval field="powPrtLen" value="3,1hr"/>
-    <fieldval field="powPrtMain" value="1/?"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <tag group="Powers" tag="Standard" name="Standard arcane power" abbrev="Standard arcane power"/>
-    </thing>
-  <thing id="powSRMegaArmor" name="Armor (Greater Armor)" description="{b}Mega Power: Armor{/b}\n\nSuccess grants the recipient +5 MDC armor, a raise grants +10 MDC armor." compset="Power" summary="Confers 5 or 10 points of MDC Armor">
-    <fieldval field="powPoints" value="5"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powPrtPts" value="5"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    <eval phase="Setup" priority="5100">~negate power slot cost
-perform #resspent[resPowers,-,1,field[name].text]</eval>
-    </thing>
-  <thing id="powSRMegaBanish" name="Banish (Banish the Horde)" description="{b}Mega Power: Banish{/b}\n\nThe caster targets all summoned entities within a Large Burst Template. For example, a mob brought from another plane could be dismissed. Each target rolls its own opposed Spirit check to resist. of demons could be sent back to their hellish realm, or a group of elementals" compset="Power" summary="Successful opposed Arcane skill vs target&apos;s Spirit results in Shaken, Banished on a Raise for all in Large Burst Template">
-    <fieldval field="powPoints" value="6"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="6"/>
-    <fieldval field="powPrtRng" value="Smarts x 2"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="2"/>
-    <eval phase="Setup" priority="5100">~negate power slot cost
-perform #resspent[resPowers,-,1,field[name].text]</eval>
-    </thing>
-  <thing id="powMPSTWAL" name="Stalwart Walls" description="In addition to the base 10 Toughness of barrier, this Mega Power adds 12 M.D.C.\nArmor to each summoned section." compset="Power" summary="The Mega Power version of Barrier">
-    <fieldval field="powPoints" value="2/section"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="3 (1/section/rnd)"/>
-    <fieldval field="powPrtPts" value="2/section"/>
-    <fieldval field="powPrtRng" value="Smart x 2"/>
-    <fieldval field="powPrtLen" value="3 (1/section/rnd)"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPEXBF" name="Exalted Beast Friend" description="This Mega Power extends the Range and Duration of the beast friend power, and allows\nthe caster to affect magical and mythical beasts. Such creatures must still have only\nanimal intelligence to be influenced\n\nThe cost to control a creature depends on its Size. The base cost is 3, plus twice its\nSize for creatures with a Size greater than 0. A great white shark (Size +4) costs 3 plus\n8 (2 × 4), or 11 points. A roc (Size +8) costs 19 Power Points to control.\n\nSwarms may also be controlled. Small swarms cost 3, Mediums 5, and Large 8.\nThus a single rat costs 3 to control, as does a small swarm of the creatures." compset="Power" summary="The Mega Power version of Beast Friend">
-    <fieldval field="powPoints" value="+2"/>
-    <fieldval field="powRange" value="Smarts x 1,000 yards"/>
-    <fieldval field="powLength" value="30 minutes"/>
-    <fieldval field="powPrtPts" value="+2"/>
-    <fieldval field="powPrtRng" value="Smarts x 1,000 yards"/>
-    <fieldval field="powPrtLen" value="30 minutes"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPBLST" name="Greater Blast" description="By adding +4 Power Points to the casting cost of blast, the damage dice are increased\nfrom d6 to d10. Greater blast inflicts Mega Damage like the base power." compset="Power" summary="The Mega Power version of Blast">
-    <fieldval field="powPoints" value="+4"/>
-    <fieldval field="powRange" value="36/72/144"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="+4"/>
-    <fieldval field="powPrtRng" value="36/72/144"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powMPBLND" name="Greater Blind" description="Adding +2 to the casting cost of blind increases the penalties to resist the power\nto −4, or −6 with a raise." compset="Power" summary="The Mega Power version of Blind">
-    <fieldval field="powPoints" value="+2"/>
-    <fieldval field="powRange" value="18/36/72"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="+2"/>
-    <fieldval field="powPrtRng" value="18/36/72"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPBLT" name="Onslaught" description="The caster can throw up to four 3d6 bolts for two Power Points each, or a single 6d6\nbolt for 4 Power Points. In either case, the damage is Mega Damage." compset="Power" summary="The Mega Power version of Bolt">
-    <fieldval field="powPoints" value="2-8 or 4"/>
-    <fieldval field="powRange" value="18/36/72"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="2-8 or 4"/>
-    <fieldval field="powPrtRng" value="18/36/72"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPBTLW" name="Greater Boost/Lower Trait" description="This Mega Power doubles the power’s effect; two die types for a success, four with\na raise." compset="Power" summary="The Mega Power version of Boost/Lower Trait">
-    <fieldval field="powPoints" value="4"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powPrtPts" value="4"/>
-    <fieldval field="powPrtRng" value="Smarts x 2"/>
-    <fieldval field="powPrtLen" value="3 round"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPBRRW" name="Greater Burrow" description="The distance covered by the burrow power is expanded to Smarts × 20 each round!" compset="Power" summary="The Mega Power version of Burrow">
-    <fieldval field="powPoints" value="6"/>
-    <fieldval field="powRange" value="Smarts x 20"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powPrtPts" value="6"/>
-    <fieldval field="powPrtRng" value="Smarts x 20"/>
-    <fieldval field="powPrtLen" value="3 round"/>
-    <fieldval field="powMaint" value="2/round"/>
-    <fieldval field="powPrtMain" value="2/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPBRST" name="Greater Burst" description="Use of this Mega Power enhances the burst power to 3d12, Mega Damage." compset="Power" summary="The Mega Power version of Burst">
-    <fieldval field="powPoints" value="4"/>
-    <fieldval field="powRange" value="Cone Template"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="4"/>
-    <fieldval field="powPrtRng" value="Cone Template"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPCNFS" name="Greater Confusion" description="The caster can affect up to 10 targets instead of only five. He must still spend 1\nPower Point per target." compset="Power" summary="The Mega Power version of Confusion">
-    <fieldval field="powPoints" value="1 per Target"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="1 per Target"/>
-    <fieldval field="powPrtRng" value="Smarts x 2"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPDMFLD" name="Exalted Damage Field" description="This Mega Power gives the caster two options. She can have a damage field of\n2d8, Mega Damage, or 2d10 with a raise. Alternately, she can extend the damage field \nto a Medium Burst Template, centered on herself. In the latter case, it affects anyone in\nthat area each round. The caster is immune to her own damage. On the rounds after she casts it, the damage is rolled at the end of her turn." compset="Power" summary="The Mega Power version of Damage Field">
-    <fieldval field="powPoints" value="8"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powPrtPts" value="8"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="3 rounds"/>
-    <fieldval field="powMaint" value="2/round"/>
-    <fieldval field="powPrtMain" value="2/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powMPDRKST" name="Exalted Darksight" description="Exalted darksight makes it virtually impossible to impair the target’s vision in\nany way. Blind does not work on him, nor does any form of obscure or other lighting\npenalties. He can also see anyone using the invisibility power." compset="Power" summary="The Mega Power version of Darksight">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="1 Hour "/>
-    <fieldval field="powMaint" value="1/Hour"/>
-    <fieldval field="powPrtPts" value="2"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="1 Hour"/>
-    <fieldval field="powPrtMain" value="1/Hour"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPDFLT" name="Greater Deflection" description="This Mega Power version of deflection grants a −4 effect on a success, or −6 on a raise." compset="Power" summary="The Mega Power version of Deflection">
-    <fieldval field="powPoints" value="4"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtPts" value="4"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="3 rounds"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPDSPL" name="Exalted Dispel" description="This is the ultimate directed dispel power, able to undo any active power currently\nactive in a Large Burst Template. It can also dampen enchantments on items within the\narea, shutting them down for 1d6 minutes. When used against items, the casting roll\nis against a base 4 instead of opposed; the GM should feel free to impose penalties for\nparticularly powerful items (−2 for a major item, −4 for an artifact, or even −6 for a true\nrelic of great power)." compset="Power" summary="The Mega Powers version of Dispel">
-    <fieldval field="powPoints" value="6"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="Instant (1d6 minutes)"/>
-    <fieldval field="powPrtPts" value="6"/>
-    <fieldval field="powPrtRng" value="Smarts x 2"/>
-    <fieldval field="powPrtLen" value="Instant (1D6 minutes)"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powMPDIVNT" name="Communion" description="Success with this Mega Power grants a single answer of one to three sentences,\nwhile a raise grants the equivalent of a paragraph or more (at the GM’s discretion).\nA raise might even mean a full, interactive conversation with an appropriate entity." compset="Power" summary="The Mega Power version of Divination">
-    <fieldval field="powPoints" value="10"/>
-    <fieldval field="powRange" value="Self"/>
-    <fieldval field="powLength" value="1 minute"/>
-    <fieldval field="powPrtPts" value="10"/>
-    <fieldval field="powPrtRng" value="Self"/>
-    <fieldval field="powPrtLen" value="1 minute"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPDRPPE" name="PPE Thief" description="When using this Mega Power variant of drain Power Points, the dice are doubled for\nthe amount drained (2d6+1, or 2d8+2 with a raise). Furthermore, drained PPE/ISP is gained by the caster (if of a type she uses). This replenishes spent Power Points but cannot raise the caster above her normal maximum." compset="Power" summary="The Mega Power version of Drain Power Points">
-    <fieldval field="powPoints" value="9"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="9"/>
-    <fieldval field="powPrtRng" value="Smarts x 2"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="3"/>
-    </thing>
-  <thing id="powMPELPRT" name="One with the Elements" description="Casting this Mega Power version of elemental manipulation dramatically increases\nits Range and Duration. Each use of the power counts as an action." compset="Power" summary="The Mega Powers version of Elemental Protection">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="Smarts x 3"/>
-    <fieldval field="powLength" value="1 Hour"/>
-    <fieldval field="powMaint" value="1/Hour"/>
-    <fieldval field="powPrtPts" value="2"/>
-    <fieldval field="powPrtRng" value="Smarts x 3"/>
-    <fieldval field="powPrtLen" value="1 Hour"/>
-    <fieldval field="powPrtMain" value="1/Hour"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPEntgl" name="Greater Entangle" description="Using this Mega Power version means targets are fully entangled on a success. A raise means attempts to escape are made at −4." compset="Power" summary="The Mega Power version of Entangle">
-    <fieldval field="powPoints" value="+2"/>
-    <fieldval field="powRange" value="Smarts x 2"/>
-    <fieldval field="powLength" value="Special"/>
-    <fieldval field="powPrtPts" value="+2"/>
-    <fieldval field="powPrtRng" value="Smarts x 2"/>
-    <fieldval field="powPrtLen" value="Special"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPEnVPr" name="Life Support" description="Life Support expands the effects of environmental protection to protect against all\nnegative environmental effects." compset="Power" summary="The Mega Power version of Environmental Protection">
-    <fieldval field="powPoints" value="4"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="1 Hour"/>
-    <fieldval field="powMaint" value="1/Hour"/>
-    <fieldval field="powPrtPts" value="4"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="1 Hour"/>
-    <fieldval field="powPrtMain" value="1/Hour"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPFRSGT" name="Greater Farsight" description="Greater farsight removes all penalties for Range, and like the normal version, doubles\nrange increments on a raise." compset="Power" summary="The Mega Power version of Farsight">
-    <fieldval field="powPoints" value="6"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtPts" value="6"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="3 rounds"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powMPFEAR" name="Greater Fear" description="Using this Mega Power causes targets to suffer a −2 to resist fear, or a −4 with a raise." compset="Power" summary="The Mega Power version of Fear">
-    <fieldval field="powPoints" value="4"/>
-    <fieldval field="powRange" value="Smarts x 3"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="4"/>
-    <fieldval field="powPrtRng" value="Smarts x 3"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
-  <thing id="powMPFLY" name="Swift Fly" description="Swift Flight increases the target’s flying speed. For 8 Power Points, the recipient\nflies at 4 × Pace and is −1 to be hit by ranged attacks. For 10 PPs, the recipient flies at\n8 × Pace and is −2 to be hit by ranged attacks. These penalties do not stack with similar effects, like deflection; use the higher benefit." compset="Power" summary="The Mega Power version of Fly">
-    <fieldval field="powPoints" value="8 or 10"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtPts" value="8 or 10"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="3 rounds"/>
-    <fieldval field="powPrtMain" value="1/round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="2"/>
-    </thing>
-  <thing id="powMPGRTHL" name="Resurrection" description="Possibly the most powerful—and controversial—spell effect in the world,\nresurrection brings a spirit back to her dead body, then returns her to life. The time and\nenergy involved is massive, the risks are literally life-threatening, and there’s only\never one chance for the spell to work for a given being.\n\nTo return the dead to life, the caster must make a skill roll with a penalty based on\nhow long the target has been dead. Less than an hour is the easiest at −2, a day is −4,\nup to one month is −6, within a year is −8, and anyone dead longer than a year is at −10.\n\nIt takes 2d6 hours to cast the spell (time of death is considered from when casting\nbegins), and if the caster fails the roll, death claims him for his hubris and he dies!\n\nFortunately, the caster can seek aid from others who can make a cooperative roll\nusing the same Arcane Skill as the primary character. These aides do not need to have\ngreater healing and can only provide up to the normal +4 bonus maximum. Characters\nwho make the cooperative roll do not die on a failure but are Incapacitated by Fatigue, and each level can only be recovered by eight hours of rest.\n\nA resurrected character returns to life Incapacitated with three wounds and a\npermanent injury from her cause of death. The damage and injury could be healed with\nuse of the greater healing power as normal." compset="Power" summary="The Mega Power version of Greater Healing">
-    <fieldval field="powPoints" value="30"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="30"/>
-    <fieldval field="powPrtRng" value="Touch"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="2"/>
-    </thing>
-  <thing id="powMPGRSHK" name="Tiny Yet Mighty" description="When using shrink with this Mega Power enhancement, the caster empowers the\ntarget to retain his Strength and Toughness while small. For growth, spending +2 Power Points extends the casting Range, just as for shrink." compset="Power" summary="The Mega Power version of Growth/Shrink">
-    <fieldval field="powPoints" value="+2"/>
-    <fieldval field="powRange" value="Smarts x 3"/>
-    <fieldval field="powLength" value="3 rounds"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powPrtPts" value="+2"/>
-    <fieldval field="powPrtRng" value="Smarts x 3"/>
-    <fieldval field="powPrtLen" value="3 Rounds"/>
-    <fieldval field="powPrtMain" value="1/Round"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powMPHAVC" name="Greater Havoc" description="Greater havoc enhances the penalties to resist to −2, or −4 with a raise. Furthermore,\ntargets are knocked back a total of 3d6&quot; and automatically Shaken, regardless of hitting an object." compset="Power" summary="The Mega Power version of Havoc">
-    <fieldval field="powPoints" value="+2"/>
-    <fieldval field="powRange" value="Smarts x 3"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="+2"/>
-    <fieldval field="powPrtRng" value="Smarts x 3"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="1"/>
-    </thing>
-  <thing id="powMPHLNG" name="Mass Healing" description="The healing power can be cast on all allies within Spirit × 2 of the caster. Ignore\nindividual wound penalties of the treated and apply a flat −2 instead. The power is\nselective; the caster chooses who is affected." compset="Power" summary="The Mega Power version of Healing">
-    <fieldval field="powPoints" value="6"/>
-    <fieldval field="powRange" value="Special"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powPrtPts" value="6"/>
-    <fieldval field="powPrtRng" value="Special"/>
-    <fieldval field="powPrtLen" value="Instant"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    </thing>
   <thing id="faSRLLWARB" name="Ley Line Walker Arcane Background" compset="FraAbility">
     <usesource source="SavRiftC"/>
     <bootstrap thing="skSpellcst"></bootstrap>
@@ -9346,63 +8934,17 @@ hero.childfound[resSkill].field[resSpent].value -= 1
     </thing>
   <thing id="faSRExpAwa" name="Expanded Awareness" description="Mind Melters can use detect arcana at will, as a free action.\n" compset="FraAbility">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="powSRDetAW"></bootstrap>
+    <bootstrap thing="powSRDetectAW"></bootstrap>
     <eval phase="PreTraits" priority="5000">perform #resspent[resPowers,-,1,field[name].text]</eval>
     </thing>
-  <thing id="powSRDetAW" name="Detect Arcana (At Will)" description="\n{i}Detect/conceal arcana{/i} allows a character to sense supernatural persons, objects, or effects within sight. This includes invisible foes, enchantments on people or items, mad science devices, and so on.\n\nThe power can also be reversed to conceal a single supernatural item, being, or effect. This has the same cost, but the duration is much longer — 1 hour with a maintenance cost of 1 per hour. When used in this way, those who wish to see through the ruse with detect arcana use their arcane skill roll as an opposed roll against the concealer’s skill (rolled anew each time detect arcana is cast). The detecting character may only attempt to see through concealed powers once per fresh casting." compset="Power" summary="Sense supernatural persons, objects, or effects within sight; Conceal a single supernatural target">
-    <fieldval field="powRange" value="Sight"/>
-    <fieldval field="powLength" value="At Will"/>
-    <fieldval field="powTraps" value="Waving hands, whispered words"/>
-    <fieldval field="powPoints" value="0"/>
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    </thing>
-  <thing id="powSRArmor" name="Armor" description="{i}Armor{/i} creates a field of magical protection around a character or an actual shell of some sort, effectively giving the target Armor. Success grants the recipient 2 points of Armor. A raise grants 4 points of Armor.\n\nWhether the {i}armor{/i} is visible or not depends largely on the trapping." compset="Power" summary="Confers 2 or 4 points of Armor">
-    <fieldval field="powPoints" value="2"/>
-    <fieldval field="powRange" value="Touch"/>
-    <fieldval field="powLength" value="3"/>
-    <fieldval field="powMaint" value="1/round"/>
-    <fieldval field="powTraps" value="A mystical glow, hardened skin, ethereal armor, a mass of insects or worms, densening"/>
-    <fieldval field="powPrtMain" value="1/r"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <tag group="PowerGroup" tag="MindMelter" name="MindMelter" abbrev="MindMelter"/>
-    <tag group="Powers" tag="Standard" name="Standard arcane power" abbrev="Standard arcane power"/>
-    <bootstrap thing="powSRMegaArmor">
-      <containerreq phase="Initialize" priority="1000">hero#Rifts.MegaPowerValid</containerreq>
-      </bootstrap>
-    </thing>
-  <thing id="powSRBanish" name="Banish" description="Whether ghosts, elementals, or demons, banish removes them all. This power can affect any creature that is not native to the current plane of existence (GM’s determination).\n\nThis spell is an opposed roll of the caster’s arcane skill versus the target’s Spirit. On a success, the target is Shaken. On a raise, it is sent to its proper plane of existence.\n\nIf the target is a Wild Card, each casting of banish causes a wound instead. If the target already has three wounds, it is then banished to its native plane—but it is not slain." compset="Power" summary="Successful opposed Arcane skill vs target&apos;s Spirit results in Shaken, Banished on a Raise">
-    <fieldval field="powPoints" value="3"/>
-    <fieldval field="powRange" value="Smarts"/>
-    <fieldval field="powLength" value="Instant"/>
-    <fieldval field="powTraps" value="Holy items, arcane symbols, handful of salt."/>
-    <fieldval field="powPrtRng" value="Sma"/>
-    <fieldval field="powPrtLen" value="Inst"/>
-    <tag group="MinRank" tag="2" name="Veteran" abbrev="Veteran"/>
-    <tag group="Powers" tag="Standard" name="Standard arcane power" abbrev="Standard arcane power"/>
-    <bootstrap thing="powSRMegaBanish">
-      <containerreq phase="Initialize" priority="1000">hero#Rifts.MegaPowerValid</containerreq>
-      </bootstrap>
-    </thing>
-  <preclude id="edgRich2" source="SavRiftC"/>
-  <preclude id="edgPwrPts" source="SavRiftC"/>
-  <preclude id="cybAdrenal" source="SavRiftC"/>
+
+	<preclude id="cybAdrenal" source="SavRiftC"/>
   <preclude id="cybAquatic" source="SavRiftC"/>
   <preclude id="edgNoble" source="SavRiftC"/>
   <preclude id="edgNoMercy" source="SavRiftC"/>
   <preclude id="edgRich" source="SavRiftC"/>
-  <preclude id="powArmor" source="SavRiftC"/>
-  <preclude id="powBanish" source="SavRiftC"/>
-  <extthing thing="powBolt" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powConfusi" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDamageF" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDarksig" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDeflect" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDisguis" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDispel" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDivinat" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDrainPP" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powEntang" group="PowerGroup" tag="MindMelter"/>
+  <preclude id="edgRich2" source="SavRiftC"/>
+  <preclude id="edgPwrPts" source="SavRiftC"/>
   <extthing thing="powEnviron" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powFarsigh" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powFear" group="PowerGroup" tag="MindMelter"/>
@@ -9425,4 +8967,14 @@ hero.childfound[resSkill].field[resSpent].value -= 1
   <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
   <extthing thing="powBarrier" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powBlind" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powBolt" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powConfusi" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDamageF" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDarksig" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDeflect" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDisguis" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDispel" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDivinat" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDrainPP" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powEntang" group="PowerGroup" tag="MindMelter"/>
   </document>
