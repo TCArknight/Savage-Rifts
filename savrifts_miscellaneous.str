@@ -6,6 +6,57 @@
 
 <document signature="Hero Lab Structure">
 
+    <!-- Arcane component
+        Encapsulates management of arcane backgrounds (e.g. Magic, Psionics, etc.).
+        Arcane backgrounds track the initial number of powers and power points
+        conferred. They also bootstrap the appropriate arcane skill.
+  -->
+  <component
+    id="Arcane2"
+    name="Secondary Arcane Background"
+    autocompset="no">
+
+    <!-- Number of powers -->
+    <field
+      id="arcPowers2"
+      name="Number of Powers"
+      type="static">
+      </field>
+
+    <!-- Number of power points -->
+    <field
+      id="arcPoints2"
+      name="Number of Power Points"
+      type="static">
+      </field>
+
+    <!-- Forward the type of arcane background to the actor -->
+    <!-- RDS The Super Powers Companion Arcane Background works a little differently and does not use the HasArcBack tag -->
+    <eval index="1" phase="Initialize" priority="2100"><![CDATA[
+      if (tagis[Arcane.SPCGroup] = 0) then
+        perform hero.assign[Rifts.HasSecondaryAB]
+		perform hero.assign[Rifts.UsesSecondaryPP]
+        endif
+      perform forward[Arcane.?]
+      ~RDS SWD This allows Powers to be associated to Arcane Backgrounds from either end
+      perform forward[PowerDeny.?]
+      ]]></eval>
+
+    <!-- Add the arcane powers and points appropriately -->
+    <eval index="2" phase="Setup" priority="5000" name="Set Secondary Arcane Power Points"><![CDATA[
+      #resmax[resPowers2] += field[arcPowers2].value
+      #trkmax[trkPower2] += field[arcPoints2].value
+      ]]></eval>
+
+    <!-- If this is not Weird Science, make the Power Points tracker visible -->
+    <eval index="3" phase="Render" priority="5000"><![CDATA[
+      if (tagis[Arcane.WeirdSci] = 0) then
+        perform hero.child[trkPower2].delete[Hide.Tracker]
+        endif
+      ]]></eval>
+
+    </component>
+
   <component
     id="Fortune"
     name="Fortune and Glory"
@@ -79,6 +130,11 @@
     </component>
 
 	<!-- Transact - all transactions utilize this compset -->
+  <!-- Arcane2 - all secondary arcane backgrounds utilize this compset -->
+  <compset
+    id="Arcane2">
+    <compref component="Arcane2"/>
+    </compset>
   <compset
     id="Fortune">
     <compref component="Fortune"/>

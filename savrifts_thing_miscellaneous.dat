@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document signature="Hero Lab Data">
+  <!-- Powers resource to track the number of arcane powers granted to the character -->
+  <thing
+    id="resPowers2"
+    name="Secondary Arcane Powers"
+    compset="Resource"
+    panellink="arcane2">
+    <fieldval field="resObject" value="Arcane Power"/>
 
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+    <!-- Show this resource as associated with character creation details -->
+    <tag group="Helper" tag="Creation"/>
+    <tag group="explicit" tag="6"/>
+
+    <!-- We only worry about tracking powers for characters with arcane backgrounds -->
+    <containerreq phase="Initialize" priority="2200">
+      Arcane.?
+      </containerreq>
+
+    </thing>
+	
+  <!-- Power points tracker so the user can manage the expenditure of power points -->
+  <thing
+    id="trkPower2"
+    name="Secondary Power Points"
+    compset="Tracker">
+
+    <!-- Automatically add the tracker to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Resetting the tracker sets the value to the maximum -->
+    <tag group="Helper" tag="ResetMax"/>
+
+    <!-- Hide the tracker unless we actually have a need for it -->
+    <tag group="Hide" tag="Tracker"/>
+    </thing>
+	
   <!-- ISP / PPE Trackers so the user can manage the expenditure of power points -->
   <thing
     id="trkISP"
@@ -30,5 +66,18 @@
 
     <!-- Hide the tracker unless we actually have a need for it -->
     <tag group="Hide" tag="Tracker"/>
+    </thing>
+
+  <thing
+    id="trkTWGadgets"
+    name="TW Gadgets"
+    compset="Tracker">
+
+    <!-- Automatically add the tracker to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- Hide the tracker unless we actually have a need for it -->
+    <tag group="Hide" tag="Tracker"/>
+	
     </thing>
   </document>

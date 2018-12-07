@@ -3,11 +3,28 @@
   <fileinfo>
     <info_author>Coordinator: TCArknight (Thomas Clegg)
 Contributors: Salcor, Father Morpheus</info_author>
-    <info_history><![CDATA[Known Issues:
+    <info_history><![CDATA[
+Known Issues:
 - Fleet-Footed: Combat edge and not Background Edge (bug in core SW data)
-- Master Psionic Edge: Mega-Power versions of known powers not available
 
-History
+History:
+
+12/07/18
+New:
+Added new tag Helper.Domain skill to specific Knowledge skills
+Added Helper.Domain skill tag to zSkills, zSkillsDom portals as well as the position script for zSkillPick template for proper display on Extended character sheet in the zSkillsDom portal
+Added Arcane2 as the Secondary Arcane Background component
+Added Secondary Arcane tab (savrifts_tab_arcane2.dat) for display of powers associated with the new secondary background
+Added secondary pool of Power points and tracker for secondary ABs
+
+Fixed:
+Arcane powers bootstrap Mega-Power versions for display when Rifts.MegaPowerValid tag present on Hero
+Framework: Mystic - proper handling of primary and secondary ABs, Framework Abilities and Complications
+Framework: Techno-Wizard - fixed Framework abilities, complications
+Power Point Tracker now displays PPE/ISP as appropriate
+Cyberknight now doesn't begin with having spent skill points for Fighting and Arcane (Psionics) skills
+HJ - Education: Politics gives +2 to Persuasion
+
 10/04/18
 Fixed:
 Tag/Thing Id strings lengths updated for new Herolab Version 8.7
@@ -507,7 +524,10 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     <bootstrap thing="skKnowPoli"></bootstrap>
     <eval phase="PreTraits" priority="5000">~Knowledge (Politics) d8
 #traitcreation[skKnowPoli] += 2
-hero.childfound[resSkill].field[resSpent].value -= 1</eval>
+hero.childfound[resSkill].field[resSpent].value -= 1
+
+perform #traitroll[skPersuade,+,2,"Education: Politics"]
+</eval>
     </thing>
   <thing id="ed12Comm" name="Education: Command" description="The world was ended in war, reborn in war, and war remains the most prevalent truth of the age. Your character understands this better than anyone, and he gains a d8 in Knowledge (Battle) to prove it. He also has the Command Edge (or one Leadership Edge of her choice if she already has Command)." compset="HeroJrny">
     <usesource source="SavRiftC"/>
@@ -1264,10 +1284,10 @@ perform #traitadjust[trSFStrain,-,IntBonus,"Strain"]]]></eval>
     <tag group="EdgeType" tag="Power" name="Power" abbrev="Power"/>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
     <eval phase="PreTraits" priority="6000"><![CDATA[if (hero.tagis[Edge.edgSRMajorPsionic] <> 0) then
-      #trkmax[trkPower] += 10
- else
-      #trkmax[trkPower] += 5
-endif]]>
+  #trkmax[trkPower] += 10
+else
+  #trkmax[trkPower] += 5
+  endif]]>
       <before name="Calc trtFinal"/>
       </eval>
     <evalrule phase="Validate" priority="5000" message="May only be taken once per rank" summary="May only be taken once per rank"><![CDATA[
@@ -1497,19 +1517,10 @@ nexteach]]>
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="1"/>
     <tag group="EdgeType" tag="Profession"/>
+    <eval phase="Initialize">perform hero.assign[Rifts.MegaPowerValid]</eval>
     <pickreq thing="edgArcPsi" ispreclude="yes"/>
-    <exprreq message="Arcane Background (Any) required."><![CDATA[hero.tagis[Hero.HasArcBack] <> 0]]></exprreq>
     <exprreq message="Smarts d8 required."><![CDATA[#trait[attrSma] >= 4]]></exprreq>
-    <prereq message="Arcane Skill of d8 required.">
-      <validate><![CDATA[~go through all arcane skills and check for d8 (Spellcasting)
-foreach pick in hero from Skill where "Arcane.?"
-  validif (eachpick.field[trtFinal].value >= 4)
-  nexteach
-
-if (@ispick <> 0) then
-  altpick.linkvalid = 0
-  endif]]></validate>
-      </prereq>
+    <exprreq message="Arcane Background (Any) required."><![CDATA[hero.tagis[Hero.HasArcBack] <> 0]]></exprreq>
     <prereq message="Knowledge (Arcana) d6 required.">
       <validate><![CDATA[~go through all knowledge skills and find an "Arcana" one, then check for d8
 
@@ -1520,6 +1531,16 @@ foreach pick in hero where "thingid.skKnow"
   if (compare(lowercase(eachpick.field[domDomain].text),"arcana") = 0) then
     validif (eachpick.field[trtFinal].value >= 3)
     endif
+  nexteach
+
+if (@ispick <> 0) then
+  altpick.linkvalid = 0
+  endif]]></validate>
+      </prereq>
+    <prereq message="Arcane Skill of d8 required.">
+      <validate><![CDATA[~go through all arcane skills and check for d8 (Spellcasting)
+foreach pick in hero from Skill where "Arcane.?"
+  validif (eachpick.field[trtFinal].value >= 4)
   nexteach
 
 if (@ispick <> 0) then
@@ -1699,26 +1720,25 @@ if (hero.tagis[Hero.SmartsLang] = 1) then
   #resmax[resLang] -= 1
   #resleft[resLang] -= 1
   endif</eval>
-    <eval phase="Render" priority="10000" index="2"><![CDATA[if (#trkmax[trkPower] <> 0) then
-  if (hero.tagis[Rifts.UsesPPE] = 0) then
-    perform hero.child[trSRPPE].delete[Hide.Trait]
-  elseif (hero.tagis[Rifts.UsesISP] = 0) then
-    perform hero.child[trSRISP].delete[Hide.Trait]
-    endif
-  endif]]></eval>
     <eval phase="Initialize" index="3"><![CDATA[~If Super Strength, tag hero for encumb/Load Limit as if using SPC2
 doneif (hero.tagis[Rifts.SuperStrength] <> 0)
 
 perform hero.assign[Hero.UsingSPC]]]></eval>
-    <eval phase="Setup" priority="500" index="4"><![CDATA[~Reveal PPE and ISP tracker as appropriate and set the values
+    <eval phase="Render" priority="5000" index="4"><![CDATA[~Reveal PPE and ISP tracker as appropriate and set the values
 if (hero.tagis[Rifts.UsesISP] <> 0) then
-  perform hero.child[trkISP].delete[Hide.Tracker]
-  #trkmax[trkISP] = #trkmax[trkPower]
+  hero.child[trkPower].field[livename].text = "ISP"
   endif
 
 if (hero.tagis[Rifts.UsesPPE] <> 0) then
-  perform hero.child[trkPPE].delete[Hide.Tracker]
-  #trkmax[trkPPE] = #trkmax[trkPower]
+  hero.child[trkPower].field[livename].text = "PPE"
+  endif
+
+if (hero.tagis[Rifts.UsesSecISP] <> 0) then
+  hero.child[trkPower2].field[livename].text = "ISP"
+  endif
+
+if (hero.tagis[Rifts.UsesSecPPE] <> 0) then
+  hero.child[trkPower2].field[livename].text = "PPE"
   endif]]></eval>
     </thing>
   <thing id="racSRDnorr" name="D&apos;Norr" description="Though not supernaturally connected to evil in any way, the D’Norr are more colloquially referred to as “Devilmen” due to their distinctive appearance. Otherwise looking similar to humans, their heads and faces give them the moniker. They have an elongated cranium dotted with tiny spines extending up and back from the forehead (dark red for males, purple for females), and two small horns above the brow. Their overall skin tone is tan-red, and the males have a series of tiny spines on their chins. All have dark blue eyes and pointed ears. \n\nD’Norr are known, by those willing to know them, as intelligent, compassionate, and drawn to nonviolent pursuits and social interaction. Many seek a pacifist’s path, at least as much as possible in such a dangerous world. Most seek out new experiences, new people, and new ideas. Due to their open nature and sensitivity, they are more susceptible to moments and sights of true horror but have a natural affinity for magic." compset="Race" uniqueness="unique">
@@ -2384,7 +2404,7 @@ validif (rolls = 0)]]></evalrule>
     <bootstrap thing="faSRGBFYTn"></bootstrap>
     <bootstrap thing="faSRGBMHF"></bootstrap>
     <bootstrap thing="faSRGBArm"></bootstrap>
-    <bootstrap thing="fcSRGBENMY"></bootstrap>
+    <bootstrap thing="fcSRGBEnemies"></bootstrap>
     <bootstrap thing="fcSRGBST2F"></bootstrap>
     <bootstrap thing="fcSRGBSHNY"></bootstrap>
     <bootstrap thing="fcSRGBCLOF"></bootstrap>
@@ -2805,20 +2825,20 @@ perform hero.assign[Rifts.FortuneAndGlory]
   <thing id="grpSRBurst" name="Burster" description="{b}{i}THE BURSTER HERO’S JOURNEY (FOUR ROLLS){/b}{/i}\nBursters gain three rolls on the {/b}Experience &amp; Wisdom{/b} Table or the {b}Psionics{/b} Table. \n\nBursters gain one additional roll on any table except {b}Cybernetics{/b} or anything to do with magic." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="PowerGiveG" tag="powSRArmor"/>
-    <tag group="PowerGiveG" tag="powBarrier"/>
-    <tag group="PowerGiveG" tag="powBlind"/>
-    <tag group="PowerGiveG" tag="powTrait"/>
-    <tag group="PowerGiveG" tag="powBurst"/>
-    <tag group="PowerGiveG" tag="powDarksig"/>
-    <tag group="PowerGiveG" tag="powDeflect"/>
-    <tag group="PowerGiveG" tag="powDetect"/>
-    <tag group="PowerGiveG" tag="powFarsigh"/>
-    <tag group="PowerGiveG" tag="powFly"/>
-    <tag group="PowerGiveG" tag="powLightOb"/>
-    <tag group="PowerGiveG" tag="powSmite"/>
-    <tag group="PowerGiveG" tag="powStun"/>
-    <tag group="PowerGiveG" tag="powTelekin"/>
     <tag group="PowerGiveG" tag="powSRTelepathy"/>
+    <tag group="PowerGiveG" tag="powSRBarrier"/>
+    <tag group="PowerGiveG" tag="powSRBlind"/>
+    <tag group="PowerGiveG" tag="powSRTrait"/>
+    <tag group="PowerGiveG" tag="powSRBurst"/>
+    <tag group="PowerGiveG" tag="powSRDarksight"/>
+    <tag group="PowerGiveG" tag="powSRDeflect"/>
+    <tag group="PowerGiveG" tag="powSRDetect"/>
+    <tag group="PowerGiveG" tag="powSRFarsight"/>
+    <tag group="PowerGiveG" tag="powSRFly"/>
+    <tag group="PowerGiveG" tag="powSRLightOb"/>
+    <tag group="PowerGiveG" tag="powSRSmite"/>
+    <tag group="PowerGiveG" tag="powSRStun"/>
+    <tag group="PowerGiveG" tag="powSRTelekin"/>
     <bootstrap thing="faSRBRFRMS"></bootstrap>
     <bootstrap thing="faSRBRFRWL"></bootstrap>
     <bootstrap thing="fcSRBRPYRO"></bootstrap>
@@ -2834,12 +2854,6 @@ perform hero.assign[Rifts.FortuneAndGlory]
     <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 4</eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Three HJ rolls from Experience and Wisdom or Psionics, and one from any except Cybernetics or Magic-Related" summary="Not enough rolls from required HJ tables"><![CDATA[var rolls as number
-
-rolls += hero.tagcount[RiftsHJ.ExpWis]
-rolls += hero.tagcount[RiftsHJ.Psi]
-
-validif (rolls >=3)]]></evalrule>
     <evalrule phase="Validate" priority="5000" index="21" message="Cannot have any rolls from Magic, or Cybernetics related tables" summary="Too many rolls on Magic or Cybernetics related HJ tables">var rolls as number
 
 rolls += hero.tagcount[RiftsHJ.EncMys]
@@ -2847,11 +2861,16 @@ rolls += hero.tagcount[RiftsHJ.MagMys]
 rolls += hero.tagcount[RiftsHJ.Cyber]
 
 validif (rolls = 0)</evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Three HJ rolls from Experience and Wisdom or Psionics, and one from any except Cybernetics or Magic-Related" summary="Not enough rolls from required HJ tables"><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls >=3)]]></evalrule>
     </thing>
   <thing id="grpSRMinMe" name="Mind Melter" description="{b}{i}THE MIND MELTER HERO’S JOURNEY (THREE ROLLS){/i}{/b}\nMind Melters get two rolls on any of the following tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Experience &amp; Wisdom{/b}, or {b}Psionics{/b}.\n\nThey also get one additional roll on any table except {b}Cybernetics{/b} or {b}Magic{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="skPsionics"></bootstrap>
-    <bootstrap thing="faSREXPAWR"></bootstrap>
+    <bootstrap thing="faSRExpAwa"></bootstrap>
     <bootstrap thing="faSRMasterPsionic"></bootstrap>
     <bootstrap thing="faSRMMNTRS"></bootstrap>
     <bootstrap thing="fcSRMMLTOD"></bootstrap>
@@ -2880,28 +2899,61 @@ validif (rolls = 0)</evalrule>
     </thing>
   <thing id="grpSRLeyLi" name="Ley Line Walker" description="{b}{i}THE LEY LINE WALKER HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nWalkers gain three rolls on any of the following tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Education{/b}, {b}Experience &amp; Wisdom{/b}, and {b}Magic &amp; Mysticism{/b}.\n\nThey also get two rolls on any table of their choice, except for {b}Psionics{/b}." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="faSRLLWARB"></bootstrap>
-    <bootstrap thing="faSREXPAWR"></bootstrap>
+    <tag group="PowerGiveG" tag="powSRArmor"/>
+    <tag group="PowerGiveG" tag="powSRBanish"/>
+    <tag group="PowerGiveG" tag="powSRBarrier"/>
+    <tag group="PowerGiveG" tag="powSRBlast"/>
+    <tag group="PowerGiveG" tag="powSRBlind"/>
+    <tag group="PowerGiveG" tag="powSRBolt"/>
+    <tag group="PowerGiveG" tag="powSRTrait"/>
+    <tag group="PowerGiveG" tag="powSRBurrow"/>
+    <tag group="PowerGiveG" tag="powSRBurst"/>
+    <tag group="PowerGiveG" tag="powSRConfusi"/>
+    <tag group="PowerGiveG" tag="powSRDamageF"/>
+    <tag group="PowerGiveG" tag="powSRDarksight"/>
+    <tag group="PowerGiveG" tag="powSRDeflect"/>
+    <tag group="PowerGiveG" tag="powSRDisguise"/>
+    <tag group="PowerGiveG" tag="powSRDispel"/>
+    <tag group="PowerGiveG" tag="powSRDrainPP"/>
+    <tag group="PowerGiveG" tag="powSREntangle"/>
+    <tag group="PowerGiveG" tag="powSREnviron"/>
+    <tag group="PowerGiveG" tag="powSRFarsight"/>
+    <tag group="PowerGiveG" tag="powSRFear"/>
+    <tag group="PowerGiveG" tag="powSRFly"/>
+    <tag group="PowerGiveG" tag="powSRGrowShr"/>
+    <tag group="PowerGiveG" tag="powSRHavoc"/>
+    <tag group="PowerGiveG" tag="powSRHealing"/>
+    <tag group="PowerGiveG" tag="powSRIntangi"/>
+    <tag group="PowerGiveG" tag="powSRInvis"/>
+    <tag group="PowerGiveG" tag="powSRLightOb"/>
+    <tag group="PowerGiveG" tag="powSRPummel"/>
+    <tag group="PowerGiveG" tag="powSRQuick"/>
+    <tag group="PowerGiveG" tag="powSRSlow"/>
+    <tag group="PowerGiveG" tag="powSRSlumber"/>
+    <tag group="PowerGiveG" tag="powSRSmite"/>
+    <tag group="PowerGiveG" tag="powSRSpeakLang"/>
+    <tag group="PowerGiveG" tag="powSRSpeed"/>
+    <tag group="PowerGiveG" tag="powSRStun"/>
+    <tag group="PowerGiveG" tag="powSRSumAlly"/>
+    <tag group="PowerGiveG" tag="powSRTelekin"/>
+    <tag group="PowerGiveG" tag="powSRTelepor"/>
+    <tag group="PowerGiveG" tag="powSRWallWlk"/>
+    <tag group="PowerGiveG" tag="powSRWarrior"/>
+    <bootstrap thing="fcLLWEnemy"></bootstrap>
+    <bootstrap thing="faSRMagicAB"></bootstrap>
+    <bootstrap thing="faSRExpAwa"></bootstrap>
     <bootstrap thing="faSRLLMAGM"></bootstrap>
     <bootstrap thing="faSRLLREJV"></bootstrap>
     <bootstrap thing="faSRLLSNSE"></bootstrap>
     <bootstrap thing="faSRLLTRNS"></bootstrap>
     <bootstrap thing="faSRLLWLKG"></bootstrap>
-    <bootstrap thing="faSRMSTMGC"></bootstrap>
+    <bootstrap thing="faSRMasterMagic"></bootstrap>
     <bootstrap thing="fcSRLLWCYB"></bootstrap>
     <bootstrap thing="fcSRLLWDSC"></bootstrap>
-    <bootstrap thing="fcLLWEnemy"></bootstrap>
-    <bootstrap thing="drwMagic"></bootstrap>
+    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
     <autoadd thing="armSRLLWL" portal="arDefense"></autoadd>
-    <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
     <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
-    <eval phase="Initialize" priority="1000" index="2">perform hero.assign[Rifts.UsesPPE]</eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
-
-rolls += hero.tagcount[RiftsHJ.Psi]
-
-validif (rolls = 0)</evalrule>
     <evalrule phase="Validate" priority="5000" index="13" message="Three HJ rolls from Enchanted Items &amp; Mystic Gadgets, Education, Experience and Wisdom, and Magic &amp; Mysticism" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
 
 rolls += hero.tagcount[RiftsHJ.EncMys]
@@ -2910,21 +2962,124 @@ rolls += hero.tagcount[RiftsHJ.ExpWis]
 rolls += hero.tagcount[RiftsHJ.MagMys]
 
 validif (rolls >= 3)]]></evalrule>
-    </thing>
-  <thing id="grpSRMysti" name="Mystic" description="{b}{i}THE MYSTIC HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nMystics gain three rolls on any of these tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Experience &amp; Wisdom{/b}, {b}Magic &amp; Mysticism{/b}.\n\nThey gain two more rolls on any table except Cybernetics.{/b}." compset="Group" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="arcMystMir"></bootstrap>
-    <bootstrap thing="arcMystPsi"></bootstrap>
-    </thing>
-  <thing id="grpSRTecWi" name="Techno-Wizard" description="{b}{i}THE TECHNO-WIZARD HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nTechno-Wizards gain three rolls on the following tables: {b}Education{/b}, {b}Enchanted Items &amp; Mystic Gadgets{/b}, and {b}Magic &amp; Mysticism{/b}.\n\nTechno-Wizards gain two rolls on any table except {b}Psionics.{/b}." compset="Group" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="arcTechWiz"></bootstrap>
-    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
     <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
 
 rolls += hero.tagcount[RiftsHJ.Psi]
 
 validif (rolls = 0)</evalrule>
+    </thing>
+  <thing id="grpSRMysti" name="Mystic" description="{b}{i}THE MYSTIC HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nMystics gain three rolls on any of these tables: {b}Enchanted Items &amp; Mystic Gadgets{/b}, {b}Experience &amp; Wisdom{/b}, {b}Magic &amp; Mysticism{/b}.\n\nThey gain two more rolls on any table except Cybernetics.{/b}." compset="Group" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerGiveG" tag="powSRArmor"/>
+    <tag group="PowerGiveG" tag="powSRBanish"/>
+    <tag group="PowerGiveG" tag="powSRBarrier"/>
+    <tag group="PowerGiveG" tag="powSRBeastFr"/>
+    <tag group="PowerGiveG" tag="powSRBlast"/>
+    <tag group="PowerGiveG" tag="powSRBlind"/>
+    <tag group="PowerGiveG" tag="powSRBolt"/>
+    <tag group="PowerGiveG" tag="powSRTrait"/>
+    <tag group="PowerGiveG" tag="powSRBurrow"/>
+    <tag group="PowerGiveG" tag="powSRBurst"/>
+    <tag group="PowerGiveG" tag="powSRClairvoy"/>
+    <tag group="PowerGiveG" tag="powSRConfusi"/>
+    <tag group="PowerGiveG" tag="powSRDamageF"/>
+    <tag group="PowerGiveG" tag="powSRDarksight"/>
+    <tag group="PowerGiveG" tag="powSRDeflect"/>
+    <tag group="PowerGiveG" tag="powSRDispel"/>
+    <tag group="PowerGiveG" tag="powSREntangle"/>
+    <tag group="PowerGiveG" tag="powSREnviron"/>
+    <tag group="PowerGiveG" tag="powSRFarsight"/>
+    <tag group="PowerGiveG" tag="powSRFear"/>
+    <tag group="PowerGiveG" tag="powSRFly"/>
+    <tag group="PowerGiveG" tag="powSRGrHealing"/>
+    <tag group="PowerGiveG" tag="powSRGrowShr"/>
+    <tag group="PowerGiveG" tag="powSRHavoc"/>
+    <tag group="PowerGiveG" tag="powSRHealing"/>
+    <tag group="PowerGiveG" tag="powSRIntangi"/>
+    <tag group="PowerGiveG" tag="powSRInvis"/>
+    <tag group="PowerGiveG" tag="powSRLightOb"/>
+    <tag group="PowerGiveG" tag="powSRPummel"/>
+    <tag group="PowerGiveG" tag="powSRQuick"/>
+    <tag group="PowerGiveG" tag="powSRShape"/>
+    <tag group="PowerGiveG" tag="powSRSlow"/>
+    <tag group="PowerGiveG" tag="powSRSlumber"/>
+    <tag group="PowerGiveG" tag="powSRSmite"/>
+    <tag group="PowerGiveG" tag="powSRSpeakLang"/>
+    <tag group="PowerGiveG" tag="powSRSpeed"/>
+    <tag group="PowerGiveG" tag="powSRStun"/>
+    <tag group="PowerGiveG" tag="powSRSuccor"/>
+    <tag group="PowerGiveG" tag="powSRSumAlly"/>
+    <tag group="PowerGiveG" tag="powSRWallWlk"/>
+    <tag group="PowerGiveG" tag="powSRWarrior"/>
+    <bootstrap thing="faSRMysticPsionic"></bootstrap>
+    <bootstrap thing="faSRMasterMagic"></bootstrap>
+    <bootstrap thing="faSRCosmicConf"></bootstrap>
+    <bootstrap thing="faSRMiraclesAB"></bootstrap>
+    <bootstrap thing="faSRMysticAware"></bootstrap>
+    <bootstrap thing="faSRSpiritChannel"></bootstrap>
+    <bootstrap thing="fcSRArcaneDuality"></bootstrap>
+    <bootstrap thing="fcSRMysCyber"></bootstrap>
+    <bootstrap thing="fcSRMysEnemies"></bootstrap>
+    <bootstrap thing="fcSRHigherStand"></bootstrap>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
+    <evalrule phase="Validate" priority="5000" message="Three HJ rolls from Enchanted Items &amp; Mystic Gadgets, Experience and Wisdom, and Magic &amp; Mysticism" summary="Not enough required rolls on the HJ Tables."><![CDATA[var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.EncMys]
+rolls += hero.tagcount[RiftsHJ.ExpWis]
+rolls += hero.tagcount[RiftsHJ.MagMys]
+
+validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Cybernetics related tables" summary="Too many rolls on the Cybernetics HJ Tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Cyber]
+
+validif (rolls = 0)</evalrule>
+    </thing>
+  <thing id="grpSRTecWi" name="Techno-Wizard" description="{b}{i}THE TECHNO-WIZARD HERO’S JOURNEY (FIVE ROLLS){/b}{/i}\nTechno-Wizards gain three rolls on the following tables: {b}Education{/b}, {b}Enchanted Items &amp; Mystic Gadgets{/b}, and {b}Magic &amp; Mysticism{/b}.\n\nTechno-Wizards gain two rolls on any table except {b}Psionics.{/b}." compset="Group" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="PowerGiveG" tag="powSRArmor"/>
+    <tag group="PowerGiveG" tag="powSRBarrier"/>
+    <tag group="PowerGiveG" tag="powSRBlast"/>
+    <tag group="PowerGiveG" tag="powSRClairvoy"/>
+    <tag group="PowerGiveG" tag="powSRConfusi"/>
+    <tag group="PowerGiveG" tag="powSRDamageF"/>
+    <tag group="PowerGiveG" tag="powSRDarksight"/>
+    <tag group="PowerGiveG" tag="powSRDeflect"/>
+    <tag group="PowerGiveG" tag="powSRDetect"/>
+    <tag group="PowerGiveG" tag="powSRDispel"/>
+    <tag group="PowerGiveG" tag="powSRDrainPP"/>
+    <tag group="PowerGiveG" tag="powSREntangle"/>
+    <tag group="PowerGiveG" tag="powSREnviron"/>
+    <tag group="PowerGiveG" tag="powSRFarsight"/>
+    <tag group="PowerGiveG" tag="powSRFly"/>
+    <tag group="PowerGiveG" tag="powSRHavoc"/>
+    <tag group="PowerGiveG" tag="powSRHealing"/>
+    <tag group="PowerGiveG" tag="powSRIntangi"/>
+    <tag group="PowerGiveG" tag="powSRInvis"/>
+    <tag group="PowerGiveG" tag="powSRLightOb"/>
+    <tag group="PowerGiveG" tag="powSRPummel"/>
+    <tag group="PowerGiveG" tag="powSRQuick"/>
+    <tag group="PowerGiveG" tag="powSRSlumber"/>
+    <tag group="PowerGiveG" tag="powSRSmite"/>
+    <tag group="PowerGiveG" tag="powSRSpeakLang"/>
+    <tag group="PowerGiveG" tag="powSRSpeed"/>
+    <tag group="PowerGiveG" tag="powSRStun"/>
+    <tag group="PowerGiveG" tag="powSRSuccor"/>
+    <tag group="PowerGiveG" tag="powSRTelekin"/>
+    <tag group="PowerGiveG" tag="powSRTelepor"/>
+    <tag group="PowerGiveG" tag="powSRWallWlk"/>
+    <tag group="PowerGiveG" tag="powSRWarrior"/>
+    <bootstrap thing="faSRWierdAB"></bootstrap>
+    <bootstrap thing="faSRArcMachinist"></bootstrap>
+    <bootstrap thing="trkTWGadgets"></bootstrap>
+    <bootstrap thing="faSRMachineMae"></bootstrap>
+    <bootstrap thing="faSRReqKnowledge"></bootstrap>
+    <bootstrap thing="fcSRDeviceDep"></bootstrap>
+    <bootstrap thing="fcSRTWEnemies"></bootstrap>
+    <bootstrap thing="fcSRGearheadGeek"></bootstrap>
+    <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5
+
+perform hero.childfound[trkTWGadgets].delete[Hide.Tracker]</eval>
     <evalrule phase="Validate" priority="5000" message="hree HJ rolls from Enchanted Items &amp; Mystic Gadgets, Education, and Magic &amp; Mysticism" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
 
 rolls += hero.tagcount[RiftsHJ.EncMys]
@@ -2932,6 +3087,11 @@ rolls += hero.tagcount[RiftsHJ.Edu]
 rolls += hero.tagcount[RiftsHJ.MagMys]
 
 validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls = 0)</evalrule>
     </thing>
   <thing id="grpSRFlaWi" name="Flame Wind Dragon Hatchling" description="{b}{i}THE DRAGON’S HERO’S JOURNEY (TWO ROLLS){/b}{/i}\nDue to their very young starting age, as well as their enormous raw power, Dragon Hatchlings only gain two rolls on the Hero’s Journey Tables. They are restricted to {b}Education{/b}, {b}Psionics{/b}, and {b}Training{/b}, each of which represents something imprinted on the dragon’s psyche from a parent at birth." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -3003,211 +3163,6 @@ validif (rolls = 0)]]></evalrule>
     <tag group="Weapon" tag="SemiAuto"/>
     <tag group="WeaponType" tag="FutRange"/>
     </thing>
-  <thing id="arcLeyLine" name="Ley Line Walker" description="Ley Line Walkers are the definitive wielders of magic in the world.  As Masters of Magic, Ley Line Walkers have the Mega Power option for any spells they know, and may choose an Trappings for their powers except Necromantic." compset="Arcane">
-    <fieldval field="arcPowers" value="5"/>
-    <fieldval field="arcPoints" value="15"/>
-    <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powBeastFr"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powClairvo"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDetect"/>
-    <tag group="PowerDeny" tag="powDivinat"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powGrHeal"/>
-    <tag group="PowerDeny" tag="powIllusio"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powMindRea"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="PowerDeny" tag="powPuppet"/>
-    <tag group="PowerDeny" tag="powShape"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powSuccor"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powTelepat"/>
-    <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="arvcmagiv"/>
-    <bootstrap thing="drwMagic"></bootstrap>
-    </thing>
-  <thing id="arcMystMir" name="Mystic Miracles" description="As channelers of spiritual energy, Mystics have Arcane Background (Miracles) and can choose any Trappings for their powers except Necromantic.  Mystics begin with four starting powers and 15 PPE.  They also have the Mysticism skill at d8 (which counts as Faith for all other Edge requirements)." compset="Arcane">
-    <fieldval field="arcPowers" value="4"/>
-    <fieldval field="arcPoints" value="15"/>
-    <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powSRBanishE"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDetect"/>
-    <tag group="PowerDeny" tag="powDisguis"/>
-    <tag group="PowerDeny" tag="powDivinat"/>
-    <tag group="PowerDeny" tag="powDrainPP"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powIllusio"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powMindRea"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="PowerDeny" tag="powPuppet"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powTelekin"/>
-    <tag group="PowerDeny" tag="powTelepat"/>
-    <tag group="PowerDeny" tag="powTelepor"/>
-    <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="Miracles"/>
-    <bootstrap thing="drwMagic"></bootstrap>
-    </thing>
-  <thing id="arcMystPsi" name="Mystic Psionics" description="Opening up the spirit seems to open up the mind for Mystics, who are also Minor Psionics.  They have Arcane Background (Psionics) as well.  Mystics begin with three powers and 10 ISP.  He also has a beginning Psionics skill of d6." compset="Arcane">
-    <fieldval field="arcPowers" value="3"/>
-    <fieldval field="arcPoints" value="10"/>
-    <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powSRArmor"/>
-    <tag group="PowerDeny" tag="powSRBanish"/>
-    <tag group="PowerDeny" tag="powSRBanishE"/>
-    <tag group="PowerDeny" tag="powBarrier"/>
-    <tag group="PowerDeny" tag="powBeastFr"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlast"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powBlind"/>
-    <tag group="PowerDeny" tag="powBolt"/>
-    <tag group="PowerDeny" tag="powTrait"/>
-    <tag group="PowerDeny" tag="powBurrow"/>
-    <tag group="PowerDeny" tag="powBurst"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powFConfus"/>
-    <tag group="PowerDeny" tag="powConfusi"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDamageF"/>
-    <tag group="PowerDeny" tag="powDamagFF"/>
-    <tag group="PowerDeny" tag="powDarksig"/>
-    <tag group="PowerDeny" tag="powDeflect"/>
-    <tag group="PowerDeny" tag="powDetect"/>
-    <tag group="PowerDeny" tag="powDisguis"/>
-    <tag group="PowerDeny" tag="powDispel"/>
-    <tag group="PowerDeny" tag="powDivinat"/>
-    <tag group="PowerDeny" tag="powDrainPP"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powEntang"/>
-    <tag group="PowerDeny" tag="powEnviron"/>
-    <tag group="PowerDeny" tag="powFarsigh"/>
-    <tag group="PowerDeny" tag="powFear"/>
-    <tag group="PowerDeny" tag="powFly"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powGrowShr"/>
-    <tag group="PowerDeny" tag="powHavoc"/>
-    <tag group="PowerDeny" tag="powIntangi"/>
-    <tag group="PowerDeny" tag="powInvis"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powLightOb"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="PowerDeny" tag="powPummel"/>
-    <tag group="PowerDeny" tag="powQuick"/>
-    <tag group="PowerDeny" tag="powShape"/>
-    <tag group="PowerDeny" tag="powSlow"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSlumber"/>
-    <tag group="PowerDeny" tag="powSmite"/>
-    <tag group="PowerDeny" tag="powSpeed"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powStun"/>
-    <tag group="PowerDeny" tag="powSumAlly"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powTelepor"/>
-    <tag group="PowerDeny" tag="powWallWlk"/>
-    <tag group="PowerDeny" tag="powWarrior"/>
-    <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="Psionics"/>
-    <bootstrap thing="drwPsionic"></bootstrap>
-    </thing>
-  <thing id="arcTechWiz" name="Techno-Wizard" description="Techno-Wizards are the Weird Science maestros of Rifts Earth.  Techno-Wizards begin with three powers, each in a gizmo of their own design as with all Weird Science types.  Unlike other Weird Scientists, Techno-Wizards have 15 PPE of their own and their gizmos have none.  Their PPE pool is used to activatge all of their own gizmos, as well as use Techno-Wizard devices.  These sorcerer-scientists start with the Techno-Wizardry skill at d8." compset="Arcane">
-    <fieldval field="arcPowers" value="3"/>
-    <fieldval field="arcPoints" value="15"/>
-    <usesource source="SavRiftC"/>
-    <tag group="PowerDeny" tag="powAnalyze"/>
-    <tag group="PowerDeny" tag="powSRBanish"/>
-    <tag group="PowerDeny" tag="powSRBanishE"/>
-    <tag group="PowerDeny" tag="powBeastFr"/>
-    <tag group="PowerDeny" tag="powBindEnt"/>
-    <tag group="PowerDeny" tag="powBlessCu"/>
-    <tag group="PowerDeny" tag="powConcent"/>
-    <tag group="PowerDeny" tag="powConsGrn"/>
-    <tag group="PowerDeny" tag="powCorpSen"/>
-    <tag group="PowerDeny" tag="powDisguis"/>
-    <tag group="PowerDeny" tag="powDivinat"/>
-    <tag group="PowerDeny" tag="powDrnYear"/>
-    <tag group="PowerDeny" tag="powDrainTo"/>
-    <tag group="PowerDeny" tag="powElement"/>
-    <tag group="PowerDeny" tag="powEnhUnde"/>
-    <tag group="PowerDeny" tag="powFear"/>
-    <tag group="PowerDeny" tag="powGrvShrd"/>
-    <tag group="PowerDeny" tag="powGrvSpk"/>
-    <tag group="PowerDeny" tag="powGrHeal"/>
-    <tag group="PowerDeny" tag="powGrowShr"/>
-    <tag group="PowerDeny" tag="powIllusio"/>
-    <tag group="PowerDeny" tag="powJet"/>
-    <tag group="PowerDeny" tag="powLegerde"/>
-    <tag group="PowerDeny" tag="powLight"/>
-    <tag group="PowerDeny" tag="powMindRea"/>
-    <tag group="PowerDeny" tag="powHRNiteM"/>
-    <tag group="PowerDeny" tag="powObscure"/>
-    <tag group="PowerDeny" tag="powPuppet"/>
-    <tag group="PowerDeny" tag="powShape"/>
-    <tag group="PowerDeny" tag="powSlow"/>
-    <tag group="PowerDeny" tag="powSluggis"/>
-    <tag group="PowerDeny" tag="powSpiShie"/>
-    <tag group="PowerDeny" tag="powStrDead"/>
-    <tag group="PowerDeny" tag="powSumAlly"/>
-    <tag group="PowerDeny" tag="powHRSumDe"/>
-    <tag group="PowerDeny" tag="powHRSumSp"/>
-    <tag group="PowerDeny" tag="powSuppLyc"/>
-    <tag group="PowerDeny" tag="powTelepat"/>
-    <tag group="PowerDeny" tag="powZombie"/>
-    <tag group="Arcane" tag="WeirdSci"/>
-    <bootstrap thing="drwWeird"></bootstrap>
-    </thing>
   <thing id="eqBioAnlKt" name="Bio-Analysis Kit" description="Specifically designed to handle situations where biological systems are comprised via disease, toxins, and related conditions, this tackle-box sized kit contains a miniature bio-analysis machine and a miniature &quot;lab&quot; that can be used to quickly concoct antidotes and treatments.  It requires a Healing skill of at least d4 to use; anyone with Knowledge (Science) gains a +1 using this system, or a +2 if they specialize in Chemistry or Biology." compset="Equipment">
     <fieldval field="grCost" value="7200"/>
     <fieldval field="gearWeight" value="5"/>
@@ -3240,54 +3195,66 @@ validif (rolls = 0)]]></evalrule>
     <usesource source="SavRiftC"/>
     <tag group="GearType" tag="Computers"/>
     </thing>
-  <thing id="skKnowArca" name="Knowledge (Arcana)" description="This skill includes understanding the princples of all magical and mystical powers, items, and creatures as well as dealing with ley lines and Rifts." compset="Skill" uniqueness="unique">
+  <thing id="skKnowArca" name="Knowledge: Arcana" description="This skill includes understanding the princples of all magical and mystical powers, items, and creatures as well as dealing with ley lines and Rifts." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnArc"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowBatt" name="Knowledge (Battle)" description="This skill includes understanding the princples of combat tactics and warfare." compset="Skill" uniqueness="unique">
+  <thing id="skKnowBatt" name="Knowledge: Battle" description="This skill includes understanding the princples of combat tactics and warfare." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnBat"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowComp" name="Knowledge (Computers)" description="Despite the lack of a global Internet, computers are a huge part of society, found in every major population center and on most machines and vehicles.  Most cities and urban centers have a decently robust intranet system.  Using computers is easy; this skill is for programming, building, and hacking into them." compset="Skill" uniqueness="unique">
+  <thing id="skKnowComp" name="Knowledge: Computers" description="Despite the lack of a global Internet, computers are a huge part of society, found in every major population center and on most machines and vehicles.  Most cities and urban centers have a decently robust intranet system.  Using computers is easy; this skill is for programming, building, and hacking into them." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnCom"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowCybr" name="Knowledge (Cybernetics)" description="Knowing how cybernetics work and how machines interact with biology are requirements for implanting hem in a living host." compset="Skill" uniqueness="unique">
+  <thing id="skKnowCybr" name="Knowledge: Cybernetics" description="Knowing how cybernetics work and how machines interact with biology are requirements for implanting hem in a living host." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnCyb"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowElec" name="Knowledge (Electronics)" description="This skill deals with using and modifying electronic systems and devices.  This includes communications equipment, sensors, and many of hte systems found on vehicles." compset="Skill" uniqueness="unique">
+  <thing id="skKnowElec" name="Knowledge: Electronics" description="This skill deals with using and modifying electronic systems and devices.  This includes communications equipment, sensors, and many of hte systems found on vehicles." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnElc"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowEng" name="Knowledge (Engineering)" description="The mechanical aspects of machines, as well as the nature and elements of physical structures, fall under this skill." compset="Skill" uniqueness="unique">
+  <thing id="skKnowEng" name="Knowledge: Engineering" description="The mechanical aspects of machines, as well as the nature and elements of physical structures, fall under this skill." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnEng"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowHist" name="Knowledge (History)" description="This is a useful skill to have any time a character in the post-apocalyptic era of Savage Rifts needs to know something of value and importance from years gone by, including potentially lost modern-day ideas." compset="Skill" uniqueness="unique">
+  <thing id="skKnowHist" name="Knowledge: History" description="This is a useful skill to have any time a character in the post-apocalyptic era of Savage Rifts needs to know something of value and importance from years gone by, including potentially lost modern-day ideas." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnHst"/>
+    <fieldval field="domDomain" value="History"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowMed" name="Knowledge (Medicine)" description="This can be an important partner skill to Healing, especially when dealing with very complicated surgeries such as detoxing Juicers." compset="Skill" uniqueness="unique">
+  <thing id="skKnowMed" name="Knowledge: Medicine" description="This can be an important partner skill to Healing, especially when dealing with very complicated surgeries such as detoxing Juicers." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnMed"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowPoli" name="Knowledge (Politics)" description="Understanding the innerworkings of factions like the Coalition States and the True Federation can be extremely helpful in strategy, planning, and dealing with governments." compset="Skill" uniqueness="unique">
+  <thing id="skKnowPoli" name="Knowledge: Politics" description="Understanding the innerworkings of factions like the Coalition States and the True Federation can be extremely helpful in strategy, planning, and dealing with governments." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnPol"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
-  <thing id="skKnowScie" name="Knowledge (Science)" description="A broad-based knowledge of physics, chemistry, and related disciplines can be valuable in many situations." compset="Skill" uniqueness="unique">
+  <thing id="skKnowScie" name="Knowledge: Science" description="A broad-based knowledge of physics, chemistry, and related disciplines can be valuable in many situations." compset="Skill" uniqueness="unique">
     <fieldval field="trtAbbrev" value="KnSci"/>
+    <fieldval field="domDomain" value="Science"/>
     <usesource source="SavRiftC"/>
+    <tag group="Helper" tag="DomainSkill" name="Display WIth Domain Skill Section"/>
     <link linkage="attribute" thing="attrSma"/>
     </thing>
   <thing id="eqCompFld2" name="Computer, Field II" description="A rugged operational version, capable of withstanding the shocks and jarring of running around and trying not to die in a Mega-Damage world.  Decks like this are graded I to IV, and the grade represents a bonus to any Knowledge (Computers) or Lockpicking rolls when in an opposed roll situation.  The bonus also applies to any Investigation rolls for recalling history or related research." compset="Equipment">
@@ -3415,23 +3382,6 @@ validif (rolls = 0)]]></evalrule>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,2,"Heavy Suit"]
         endif]]></eval>
-    </thing>
-  <thing id="edgArBkLLW" name="Arcane Background: Ley Line Walker" compset="Edge">
-    <fieldval field="shortname" value="Arcane Ley Line Walker"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="LeyLineWal" name="Ley Line Walker" abbrev="Ley Line Walker"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
-    <bootstrap thing="arcLeyLine"></bootstrap>
-    </thing>
-  <thing id="edgArBkTW" name="Arcane Background: Techno-Wizard" compset="Edge">
-    <fieldval field="edgCost" value="0"/>
-    <fieldval field="shortname" value="Arcane Techno-Wizard"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="TechnoWiza" name="Techno-Wizard" abbrev="Techno-Wizard"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
-    <bootstrap thing="arcTechWiz"></bootstrap>
     </thing>
   <thing id="wpBatFurBl" name="Battle Fury Blade (TW)" description="Battle Fury Blades are usually Claymore swords, but on occasion, a weapon of this type is made as a Flamberge, polearm or large battle axe. Regardless of its form, the weapon’s abilities are the same. It is deadly in battle, inflicting serious damage with every hit. However, its special ability, the Battle Fury, makes it fearsome beyond belief. Battle Fury weapons are always bright silver with designs etched into the blade. These weapons are a favorite of Battle Magi, Mystic Knights, Cyber-Knights and Juicers (particularly in sword form) who love to get into the thick of things in close combat.\nInstead of rounds, charges, standard fuel, electricity, or chemical batteries,\nTechno-Wizard (TW) items operate with a flow of energy and require an Arcane Background (or special ability) to use. Interestingly, the energy can be either PPE or ISP, meaning psionic characters are also able to make full use of TW gear. For the purposes of the equipment in this chapter, ISP = PPE on a one-to-one basis for power requirements. If a TW device suffers Technical Difficulties (page 122), only a Techno-Wizard can repair it, using the lower of his Techno-Wizardry or Repair skills. Unless stated otherwise, it costs 1 PP to power melee weapons for 3 rounds." compset="Melee">
     <fieldval field="wpDamage" value="Str+2d8"/>
@@ -5511,21 +5461,9 @@ if (field[abilActive].value <> 0) then
   <thing id="faSRCKInCT" name="Intense Combat Training" description="A Cyber-Knight begins play with Fighting d8 and two Combat Edges. The latter can be chosen without concern for Rank, but other requirements must be met." compset="FraAbility" summary="Fighting d8; Two Combat Edges">
     <usesource source="SavRiftC"/>
     <bootstrap thing="skFighting"></bootstrap>
-    <eval phase="Effects" priority="1000" index="2"><![CDATA[~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
-~doneif (origin.ishero = 0)
-
-~if this edge was not added by the user, skip it entirely
-~doneif (isuser = 0)
-
-~consume additional resource slots
-~var myCount as number
-~foreach pick in hero where "component.Edge & Rifts.FrameSel"
-~  myCount += 1
-~  nexteach
-	  
-~perform #resspent[resFraSel1,+,myCount,field[name].text]]]></eval>
     <eval phase="PreTraits" priority="5000" index="3">~Fighting D8
 #traitcreation[skFighting] += 2
+hero.childfound[resSkill].field[resSpent].value -= 1
 
 ~set resRaceEdge to selection
 #resmax[resFraSel1] += 2</eval>
@@ -5592,7 +5530,8 @@ hero.child[ehExprHlp1].field[ehFrameHdr].text = header]]></eval>
     <tag group="PowerDeny" tag="powZombie"/>
     <bootstrap thing="skPsionics"></bootstrap>
     <bootstrap thing="edgArcPsi"></bootstrap>
-    <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1</eval>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1
+hero.childfound[resSkill].field[resSpent].value -= 1</eval>
     </thing>
   <thing id="faSRPsSwCK" name="Psi-Sword" description="As a free action, Cyber-Knights can summon forth a blade of spirit and will. It may have any appearance but it does not change the effects. The Psi-Sword does Strength + Spirit ×2 damage with AP 6 (and no Strength minimum). For example, a Cyber-Knight with Strength d8 and Spirit d10 does 1d8+2d10 melee damage, AP 6, with his Psi-Sword. Alternately, the Cyber-Knight may split his Psi-Sword into two blades, one for each hand, doing the same damage, but each blade only gaining AP 2. For 2 ISP, the Cyber-Knight can make the blade inflict Mega Damage for as long as the blade is manifested.\n\n{b}Note:{/b} The In-Play tab selection is for whether Mega Damage is active for the Psi-Sword. Must manually spend 2 ISP then check the box to have the sword Special display the Mega Damage status." compset="FraAbility">
     <fieldval field="usrChkText" value="Split ?"/>
@@ -5782,7 +5721,7 @@ if (field[grIsEquip].value <> 0) then
   <thing id="fcSRGBHTMC" name="Highly Technical Machinery" description="The Glitter Boy Armor Systems are subject to the Technical Difficulties setting Rules." compset="FraComp">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="fcSRGBENMY" name="Glitter Boy Enemies" description="The Coalition view Glitter Boys as a major threat, and few in the Federation of Magic consider them friends either." compset="FraComp">
+  <thing id="fcSRGBEnemies" name="Enemies" description="The Coalition view Glitter Boys as a major threat, and few in the Federation of Magic consider them friends either." compset="FraComp">
     <usesource source="SavRiftC"/>
     <bootstrap thing="hinEnemy">
       <assignval field="domDomain" value="Federation of Magic"/>
@@ -6507,11 +6446,10 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
       </child>
     </thing>
   <thing id="grpSRShift" name="Shifter" description="{b}{i}THE SHIFTER HERO’S JOURNEY (FIVE ROLLS){/i}{/b}\n\nShifters gain three rolls on any of the following tables: Enchanted Items &amp; Mystic Gadgets, Education, Experience &amp; Wisdom, and Magic &amp; Mysticism.\n\nThey also get two rolls on any table of their choice, except Psionics." compset="Group" summary="A magical specialist focused on Summoning and controlling Rifts." uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="faSRSFTARC"></bootstrap>
+    <usesource source="SavGPlu"/>
     <bootstrap thing="faSRSFTBDS"></bootstrap>
     <bootstrap thing="faSRSFTDMS"></bootstrap>
-    <bootstrap thing="faSREXPAWR"></bootstrap>
+    <bootstrap thing="faSRExpAwa"></bootstrap>
     <bootstrap thing="edgSRMoM"></bootstrap>
     <bootstrap thing="faSRSFTMSM"></bootstrap>
     <bootstrap thing="faSRSFTPPE"></bootstrap>
@@ -6519,15 +6457,11 @@ hero.child[attrAgi].field[trtMaximum].value += 10</eval>
     <bootstrap thing="fcSRSHCRPT"></bootstrap>
     <bootstrap thing="fcSRLLWCYB"></bootstrap>
     <bootstrap thing="fcSRSHFENY"></bootstrap>
-    <autoadd thing="armSRAdvS" portal="arDefense"></autoadd>
+    <bootstrap thing="faSRSFTARC"></bootstrap>
     <autoadd thing="wpNG33LasP" portal="arRange"></autoadd>
     <autoadd thing="eqNGS2Surv" portal="grGear"></autoadd>
+    <autoadd thing="armSRAdvS" portal="arDefense"></autoadd>
     <eval phase="Setup" priority="5000">#resmax[resHeroJrn] += 5</eval>
-    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
-
-rolls += hero.tagcount[RiftsHJ.Psi]
-
-validif (rolls = 0)</evalrule>
     <evalrule phase="Validate" priority="5000" message="Three HJ rolls from Enchanted Items &amp; Mystic Gadgets, Education, Experience and Wisdom, and Magic &amp; Mysticism" summary="Not enough rolls on required HJ Tables"><![CDATA[var rolls as number
 
 rolls += hero.tagcount[RiftsHJ.EncMys]
@@ -6536,6 +6470,11 @@ rolls += hero.tagcount[RiftsHJ.ExpWis]
 rolls += hero.tagcount[RiftsHJ.MagMys]
 
 validif (rolls >= 3)]]></evalrule>
+    <evalrule phase="Validate" priority="5000" index="2" message="Cannot have any rolls from Psionics" summary="Too many rolls on Psionics HJ Tables">var rolls as number
+
+rolls += hero.tagcount[RiftsHJ.Psi]
+
+validif (rolls = 0)</evalrule>
     </thing>
   <thing id="edgSREqHCy" name="Hovercycle" description="Start with a NG-357 Magnum-Turbo Hovercycle." compset="Edge">
     <usesource source="SavRiftC"/>
@@ -8039,10 +7978,6 @@ else
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="5000">#traitbonus[trCharisma] -= 2</eval>
     </thing>
-  <thing id="faSREXPAWR" name="Expanded Awareness" description="The character can use detect arcana at will, with no cost to PPE/ISP as a free action." compset="FraAbility" summary="The character is aware of the supernatural realm">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="powSRDetect"></bootstrap>
-    </thing>
   <thing id="faSRLLMAGM" name="Ley Line Magic Mastery" description="Like all arcane casters, Ley Line Walkers can draw extra PPE from ley lines, though they do so with greater advantage. As a free action, they can roll their Spellcasting skill to draw PPE from a line at a distance of Spirit × 3, and they multiply their current maximum PPE by ×3 while at that distance or closer." compset="FraAbility" summary="The Ley Line Walker is the master of Ley Lines">
     <usesource source="SavRiftC"/>
     </thing>
@@ -8058,10 +7993,15 @@ else
   <thing id="faSRLLWLKG" name="Ley Line Walking" description="A Ley Line Walker can, as her name implies, walk the line as though walking across level ground. She can fly a t twice her Pace, at an altitude as high as 1,000 feet." compset="FraAbility" summary="A Ley Line Walker on a ley line can fly">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="faSRMSTMGC" name="Master of Magic" description="This spellcaster has Mega Powers for her spells, and begins with the Master of Magic Edge, gaining Mega Powers for all known spells, and also starts with the Rapid\nRecharge Edge." compset="FraAbility" summary="A Master of Magic is a powerful spellcaster">
+  <thing id="faSRMasterMagic" name="Master of Magic" description="This spellcaster has Mega Powers for her spells, and begins with the Master of Magic Edge, gaining Mega Powers for all known spells, and also starts with the Rapid Recharge Edge." compset="FraAbility" summary="A Master of Magic is a powerful spellcaster">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgSRMoM"></bootstrap>
-    <bootstrap thing="edgRapRch"></bootstrap>
+    <tag group="Hide" tag="Special"/>
+    <bootstrap thing="edgRapRch">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    <bootstrap thing="edgSRMoM">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
     </thing>
   <thing id="edgSRLLOSP" name="Ley Line Observation Sphere" description="Some Walkers are able to conjure up a glowing bluish-white sphere the size of a\nsoccer ball, which they can send anywhere up or down a ley line. It travels at 30 mph\nand has a range of one mile, acting as a focus point for the Walker to use any of her\nsenses to observe what’s around the ball as though she were standing there (she cannot cast her powers through it, however). Using the sphere counts as an action, imposing a −2 multi-action penalty on any other actions while active." compset="Edge" summary="A magical drone on the ley lines">
     <usesource source="SavRiftC"/>
@@ -8147,11 +8087,10 @@ else
     <eval phase="PreTraits" priority="5000" index="2">#traitcreation[trSRPPE] += 15</eval>
     <eval phase="PreTraits" priority="5000">#traitcreation[skSpellcst] += 2</eval>
     </thing>
-  <thing id="arcSRSHFR" name="Shifter" description="The study of the arcane is essential to a Shifter’s success, and all Shifters are \npowerful spellcasters. While they don’t possess the same variety of spell knowledge\ntheir counterparts among other disciplines might, they don’t hurt for essential power,\neither. Shifters train in techniques for both diminishing the power of their opponents\nand turning that power against them.\n\nShifters are mighty spellcasters, starting with three powers of their choice (as well as\nspecific ones, listed below). They begin with a Spellcasting skill of d8 and 15 PPE." compset="Arcane" summary="The Shifter is uses magic">
+  <thing id="arcSRSHFR" name="Shifter" description="The study of the arcane is essential to a Shifter’s success, and all Shifters are powerful spellcasters. While they don’t possess the same variety of spell knowledge their counterparts among other disciplines might, they don’t hurt for essential power, either. Shifters train in techniques for both diminishing the power of their opponents and turning that power against them.\n\nShifters are mighty spellcasters, starting with three powers of their choice (as well as\nspecific ones, listed below). They begin with a Spellcasting skill of d8 and 15 PPE." compset="Arcane" summary="The Shifter is uses magic">
     <fieldval field="arcPowers" value="3"/>
     <fieldval field="arcPoints" value="15"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="arvcmagiv"/>
+    <usesource source="SavGPlu"/>
     <tag group="PowerDeny" tag="powETAMPVS"/>
     <tag group="PowerDeny" tag="powETARRER"/>
     <tag group="PowerDeny" tag="powETAWTMI"/>
@@ -8754,46 +8693,23 @@ else
     <tag group="PowerDeny" tag="powZoneSil"/>
     <tag group="PowerDeny" tag="powfcBlind"/>
     <tag group="PowerDeny" tag="powStDArca"/>
+    <tag group="Arcane" tag="Magic"/>
     <bootstrap thing="drwMagic"></bootstrap>
     </thing>
-  <thing id="edgSRABMYS" name="Arcane Background: Mystic Dual" description="{b}Description:{/b}\nFor good or for evil, the character with this edge is a conduit of their chosen deity’s power. The mystic works in subtler ways than the manipulations of the more cerebral magical practitioners, but he is still a potent force in his own right.\n\nAs channelers of spiritual energy, Mystics have Arcane Background (Miracles)" compset="Edge" summary="Gain the Mystic arcane background" uniqueness="unique">
-    <fieldval field="shortname" value="Arcane Mystic"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="Miracles" name="Miracles" abbrev="Miracles"/>
-    <tag group="EdgeType" tag="Background"/>
-    <tag group="User" tag="CreateOnly"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <bootstrap thing="arcMYSDMP"></bootstrap>
-    <pickreq thing="grpSRMysti"/>
-    </thing>
-  <thing id="arcMYSDMP" name="Mystic Dual Arcane Background Miracles/Psionics" compset="Arcane" summary="The Mystic is both a powerful Mage and Psionic">
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="Miracles"/>
-    </thing>
-  <thing id="faSRLLWARB" name="Ley Line Walker Arcane Background" compset="FraAbility">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="skSpellcst"></bootstrap>
-    <bootstrap thing="arcLeyLine"></bootstrap>
-    <eval phase="Setup" priority="5000" index="2">#traitcreation[skSpellcst] += 2</eval>
-    <eval phase="Setup" priority="5000">#traitcreation[trSRPPE] += 15</eval>
-    </thing>
-  <thing id="fcSRDVDPD" name="Device Dependant" description="As with any Weird Scientist, a Techno-Wizard must have her gizmos for her powers or parts to use Arcane Machinist. She must have gear and tools to make her magic work" compset="FraComp" summary="The character must have a device to use their powers">
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="fcSRGRHDGK" name="Gearhead Geek" description="The Techno-Wizard relationship with technology and machinery results in odd behaviors. Some talk, hum, or sing to their gear, while others paint sigils, runes,\nand arcane diagrams all over their machines. However it manifests, every Techno-Wizard has a Quirk Hindrance of this kind." compset="FraComp" summary="This character REALLY likes machines">
+  <thing id="fcSRGearheadGeek" name="Gearhead Geek" description="The Techno-Wizard relationship with technology and machinery results in odd behaviors. Some talk, hum, or sing to their gear, while others paint sigils, runes,\nand arcane diagrams all over their machines. However it manifests, every Techno-Wizard has a Quirk Hindrance of this kind." compset="FraComp" summary="This character REALLY likes machines">
     <usesource source="SavRiftC"/>
     <bootstrap thing="hinQuirk"></bootstrap>
     </thing>
-  <thing id="faSRTWRQKN" name="Required Knowledge" description="A combination of intense study, practical experience, and intuitive understanding makes the Techno-Wizard an expert in a number of fields. They begin with the following\nskills for free: Knowledge (Arcana) d6, Knowledge (Engineering) d6, Knowledge (Science) d6, and Repair d6." compset="FraAbility" summary="A Techno-Wizards has to meet some standards">
+  <thing id="faSRReqKnowledge" name="Required Knowledge" description="A combination of intense study, practical experience, and intuitive understanding makes the Techno-Wizard an expert in a number of fields. They begin with the following\nskills for free: Knowledge (Arcana) d6, Knowledge (Engineering) d6, Knowledge (Science) d6, and Repair d6." compset="FraAbility" summary="A Techno-Wizards has to meet some standards">
     <usesource source="SavRiftC"/>
     <bootstrap thing="skKnowArca"></bootstrap>
     <bootstrap thing="skKnowEng"></bootstrap>
     <bootstrap thing="skKnowScie"></bootstrap>
     <bootstrap thing="skRepair"></bootstrap>
-    <eval phase="PreTraits" priority="5000">#traitcreation[skKnowArca] += 2
-#traitcreation[skKnowEng] += 2
-#traitcreation[skKnowScie] += 2
-#traitcreation[skRepair] += 2</eval>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skKnowArca] += 1
+#traitcreation[skKnowEng] += 1
+#traitcreation[skKnowScie] += 1
+#traitcreation[skRepair] += 1</eval>
     </thing>
   <thing id="faSRSkill5" name="+5 Skill Points" description="+5 Skill Points" compset="FraAbility">
     <usesource source="SavRiftC"/>
@@ -8911,7 +8827,9 @@ hero.childfound[resSkill].field[resSpent].value -= 2</eval>
     </thing>
   <thing id="faSRPsiMM" name="Arcane Background (Psionics)" description="Mind Melter begins with a great knowledge and understanding of psionics. He begins with five powers from the list above, 20 ISP, and a d8 Psionics skill." compset="FraAbility">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgArcPsi"></bootstrap>
+    <bootstrap thing="edgArcPsi">
+      <autotag group="Hide" tag="Special"/>
+      </bootstrap>
     <bootstrap thing="skPsionics"></bootstrap>
     <eval phase="Initialize">~Tag hero as using ISP
 perform hero.assign[Rifts.UsesISP]
@@ -8932,19 +8850,244 @@ hero.childfound[resSkill].field[resSpent].value -= 1
       </bootstrap>
     <eval phase="Setup" priority="1000">perform hero.childfound[edgSRMajorPsionic].assign[Hide.Special]</eval>
     </thing>
-  <thing id="faSRExpAwa" name="Expanded Awareness" description="Mind Melters can use detect arcana at will, as a free action.\n" compset="FraAbility">
+  <thing id="faSRExpAwa" name="Expanded Awareness" description="Character can use detect arcana at will, as a free action.\n" compset="FraAbility">
     <usesource source="SavRiftC"/>
     <bootstrap thing="powSRDetectAW"></bootstrap>
     <eval phase="PreTraits" priority="5000">perform #resspent[resPowers,-,1,field[name].text]</eval>
     </thing>
+  <thing id="faSRMagicAB" name="Arcane Background (Magic)" description="Ley Line Walker begins with a great knowledge and understanding of psionics. He begins with five powers from the list above, 15 PPE, and a d8 Spellcasting skill." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgArcMag">
+      <autotag group="Hide" tag="Special"/>
+      </bootstrap>
+    <bootstrap thing="skSpellcst"></bootstrap>
+    <eval phase="Initialize">~Tag hero as using ISP
+perform hero.assign[Rifts.UsesPPE]</eval>
+    <eval phase="Initialize" priority="2100" index="3">perform forward[PowerDeny.?]</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Spellcasting d8
+#traitcreation[skSpellcst] += 2
+hero.childfound[resSkill].field[resSpent].value -= 1
 
-	<preclude id="cybAdrenal" source="SavRiftC"/>
-  <preclude id="cybAquatic" source="SavRiftC"/>
-  <preclude id="edgNoble" source="SavRiftC"/>
-  <preclude id="edgNoMercy" source="SavRiftC"/>
+#resmax[resPowers] += 2
+#trkmax[trkPower] += 5</eval>
+    </thing>
+  <thing id="faSRWierdAB" name="Arcane Background (Wierd Science)" description="Techno-Wizards begin with three powers, each in a gizmo of their own design as with all Weird Science types. Unlike other Weird Scientists, Techno-Wizards have 15 PPE of their own and their gizmos have none. Their PPE pool is used to activate all of their own gizmos, as well as use Techno-Wizard (TW) devices. These sorcerer-scientists start with the Techno-Wizardry skill at d8 (which is equivalent to the Weird Science skill). Anyone who can use a TW device (page 76) can also use a Techno-Wizard’s gizmo, but must spend PPE/ISP to power it as usual. Gizmos are unique items and cease to function after 2d6 days without attention from their creator." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgArcSci">
+      <autotag group="Hide" tag="Special"/>
+      </bootstrap>
+    <bootstrap thing="skWeirdSci"></bootstrap>
+    <eval phase="Initialize" priority="2100" index="3">perform forward[PowerDeny.?]</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Spellcasting d8
+#traitcreation[skWeirdSci] += 2
+hero.childfound[resSkill].field[resSpent].value -= 1
+
+#trkmax[trkPower] += 5
+#resmax[resPowers] += 2</eval>
+    <eval phase="Initialize">~Tag hero as using ISP
+perform hero.assign[Rifts.UsesPPE]</eval>
+    </thing>
+  <thing id="faSRArcMachinist" name="Arcane Machinist" description="Techno-Wizards begin with a variant of the Gadgeteer Edge which grants enormous flexibility. As an action (instead of 1d20 minutes), the character produces a magical gadget replicating any power available to Techno-Wizards. \n\nTo make the device requires a successful Techno-Wizardry roll at −2 per Rank the power is above her own. The device has its own pool of PPE equal to half the Techno-Wizard’s normal maximum PPE pool (round down). With a raise, the device gets +5 PPE. The item can only be activated with its own PPE and once used up (or at the end of the session), the device burns out or otherwise becomes unusable. \n\nA Techno-Wizard can use Arcane Machinist up to half her Smarts die per session." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRGadgetTW">
+      <autotag group="thing" tag="skipprereq"/>
+      </bootstrap>
+    </thing>
+  <thing id="edgSRGadgetTW" name="Gadgeteer (TW)" description="A number of times per session (up to half the character&apos;s Smarts die per session), a Techno-Wizard can create a &quot;jury-rigged&quot; device from spare parts. \n\nAs an action, the character produces a magical gadget replicating any power available to Techno-Wizards. To make the device requires a successful Techno-Wizardry roll at −2 per Rank the power is above her own. The device has its own pool of PPE equal to half the Techno-Wizard’s normal maximum PPE pool (round down). With a raise, the device gets +5 PPE. The item can only be activated with its own PPE and once used up (or at the end of the session), the device burns out or otherwise becomes unusable." compset="Edge" summary="Create one-shot gizmo with half Power Points (1/sess)" uniqueness="unique">
+    <tag group="EdgeType" tag="Profession" name="Professional" abbrev="Professional"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <eval phase="Final">#trkmax[trkTWGadgets] += #trait[attrSma]</eval>
+    <pickreq thing="edgArcSci"/>
+    <exprreq message="Repair d8 required."><![CDATA[#traitfound[skRepair] >= 4]]></exprreq>
+    <exprreq message="Weird Science d8 required."><![CDATA[#traitfound[skWeirdSci] >= 4]]></exprreq>
+    <exprreq message="Smarts d8 required."><![CDATA[#trait[attrSma] >= 4]]></exprreq>
+    <prereq message="Two Scientific Knowledge skills at d6 required.">
+      <validate><![CDATA[
+        ~go through all knowledge skills and check for d6
+        ~Note: We cannot tell if a skill is scientific or not - that's up to the player.
+        var total as number
+        foreach pick in hero where "thingid.skKnow"
+          if (eachpick.field[trtFinal].value >= 3) then
+            total += 1
+            endif
+          nexteach
+        ~if we have at least two, we're valid
+        validif (total >= 2)
+        if (@ispick <> 0) then
+          altpick.linkvalid = 0
+          endif]]></validate>
+      </prereq>
+    </thing>
+  <thing id="fcSRTWCyber" name="Cybernetics" description="Despite their love of technology, even Techno-Wizards suffer penalties to their magic from implanted cybernetics" compset="FraComp" summary="Cybernetics even affect a techno-wizard...for now">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRDeviceDep" name="Device Dependent" description="As with any Weird Scientist, a Techno-Wizard must have her gizmos for her powers or parts to use Arcane Machinist. She must have gear and tools to make her magic work." compset="FraComp" summary="The Techno-Wizards requirers a physical device to use his/her magic">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRTWEnemies" name="Enemies" description="As with all wielders of magic, Techno-Wizards are “shoot-on-sight” targets for Coalition forces. Any who refuse to swear fealty to Lord Dunscon may consider the True Federation to be hostile territory as well." compset="FraComp" summary="Mages have a lot of enemies">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Federation of Magic"/>
+      </bootstrap>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    </thing>
+  <thing id="faSRMachineMae" name="Machine Maestro" description="Techno-Wizard can interface with any electronic or mechanical device by touch, gaining +2 to most (see below) non-combat Trait rolls where such are involved\n(bypassing security, picking locks, operating vehicles, using sensors.). When interfacing with an arcane (usually TW) device, the bonus increases to +4. For combat-related Trait rolls and the creation or repair of TW gizmos and devices, the bonuses lower to +1 and +2, respectively." compset="FraAbility" summary="Techno-Wizards are great with machines">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="edgSRMrFixIt" name="Mr. Fix It" description="The inventor adds +2 to his Repair rolls. With a raise, he halves the time normally required to fix something. This means that if a particular Repair job already states that a raise repairs it in half the time, a Mr. Fix It could finish the job in one-quarter the time with a raise." compset="Edge" summary="+2 Repair; Fixed in half time (quarter with raise)" uniqueness="unique">
+    <tag group="EdgeType" tag="Profession" name="Professional" abbrev="Professional"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[
+      if (field[abilActive].value <> 0) then
+        ~profesional bonus do not stack
+        perform #traitprof[skRepair,+,2,"Mr. Fix It"]
+        endif]]>
+      <before name="Calc trtFinal"/>
+      </eval>
+    <pickreq thing="edgSRGadgetTW"/>
+    <exprreq message="Smarts d10 required."><![CDATA[#trait[attrSma] >= 5]]></exprreq>
+    <exprreq message="Repair d8 required."><![CDATA[#traitfound[skRepair] >= 4]]></exprreq>
+    <exprreq message="Weird Science d8 required."><![CDATA[#traitfound[skWeirdSci] >= 4]]></exprreq>
+    </thing>
+  <thing id="racSRCyborg" name="Cyborg" description="Full Conversion Cyborgs are the race for the Combat Cyborg Iconic Framework" compset="Race" summary="The Full Conversion Cyborg" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="rpSRAUGMEN"></bootstrap>
+    <bootstrap thing="rpSRCYBGHV"></bootstrap>
+    <bootstrap thing="rpSRCYMMN"></bootstrap>
+    <bootstrap thing="rpSRAllTMP"></bootstrap>
+    <bootstrap thing="rpSRCYBIHA"></bootstrap>
+    <bootstrap thing="rpSRCYGRMT"></bootstrap>
+    <bootstrap thing="rpSRCYBSHD"></bootstrap>
+    </thing>
+  <thing id="faSRMiraclesAB" name="Arcane Background (Miracles)" description="Mystics begin with four starting powers (from the list above) and 15 PPE. They also have the Mysticism skill at d8 (which counts as Faith for all other Edge requirements)." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgArcMir">
+      <autotag group="Hide" tag="Special"/>
+      </bootstrap>
+    <bootstrap thing="skFaith">
+      <assignval field="livename" value="Mysticism"/>
+      </bootstrap>
+    <eval phase="Initialize">~Tag hero as using ISP
+perform hero.assign[Rifts.UsesPPE]</eval>
+    <eval phase="Initialize" priority="2100" index="3">perform forward[PowerDeny.?]</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Mysticism d8
+#traitcreation[skFaith] += 2
+hero.childfound[resSkill].field[resSpent].value -= 1
+
+#resmax[resPowers] += 2
+#trkmax[trkPower] += 5</eval>
+    </thing>
+  <thing id="arc2SRPsionics" name="Secondary Arcane Background (Psionics)" description="Arcane Skill: Psionics (Smarts)\nStarting Power Points: 10\nStarting Powers: 3" compset="Arcane2">
+    <fieldval field="arcPowers2" value="3"/>
+    <fieldval field="arcPoints2" value="10"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Arcane" tag="Psionics"/>
+    <tag group="Hide" tag="Special"/>
+    <bootstrap thing="drwPsionic"></bootstrap>
+    </thing>
+  <thing id="edgSRSecABPsi" name="Arcane Background: Psionics (Secondary)" description="{b}Note:{/b} This is the Edge your character must purchase to possess the &quot;Psionics&quot; arcane background and use psionic powers." compset="Edge" summary="Gain the Psionics arcane background" uniqueness="unique">
+    <fieldval field="shortname" value="Arcane Psionics"/>
+    <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="Arcane" tag="Psionics" name="Psionics" abbrev="Psionics"/>
+    <bootstrap thing="arc2SRPsionics"></bootstrap>
+    </thing>
+  <thing id="faSRMysticPsionic" name="Arcane Background (Psionics)" description="As a minor psionic, a Mystic begins with three powers (from the above list) and 10 ISP. He also has a beginning Psionics skill of d6." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="edgSRSecABPsi">
+      <autotag group="Hide" tag="Special"/>
+      </bootstrap>
+    <bootstrap thing="skPsionics">
+      <assignval field="livename" value="Psionics"/>
+      </bootstrap>
+    <eval phase="Initialize">~Tag hero as using ISP
+perform hero.assign[Rifts.UsesSecISP]</eval>
+    <eval phase="Initialize" priority="2100" index="3">perform forward[PowerDeny.?]</eval>
+    <eval phase="PreTraits" priority="5000" index="4">~Psionics D6
+#traitcreation[skPsionics] += 1
+hero.childfound[resSkill].field[resSpent].value -= 1</eval>
+    </thing>
+  <thing id="faSRCosmicConf" name="Cosmic Confluence" description="Not only do Mystics enjoy the unique capacity to possess two Arcane Backgrounds, they are able to interchange their ISP and PPE as needed. A Mystic can sacrifice two ISP to use as one PPE, and vice versa. Power Points shifted like this must be used at the moment they are exchanged, they cannot be shifted and then simply stored. For example, if a Mystic shifts 4 PPE in order to gain 2 ISP, he must immediately use those points of ISP to enact a psionic power." compset="FraAbility">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="edgSRPwrPtsSec" name="Power Points (Secondary)" description="Wizards, weird scientists, and other arcane types always want more power. This Edge grants them an additional 5 Power Points.{br}{br}Power Points may be selected more than once, but only once per Rank." compset="Edge" summary="Gain 5 Power Points">
+    <usesource source="SavRiftC"/>
+    <tag group="Print" tag="NoPrint" name="NoPrint" abbrev="NoPrint"/>
+    <tag group="EdgeType" tag="Power" name="Power" abbrev="Power"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <eval phase="PreTraits" priority="6000"><![CDATA[if (hero.tagis[Edge.edgSRMajorPsionic] <> 0) then
+  #trkmax[trkPower2] += 10
+else
+  #trkmax[trkPower2] += 5
+endif]]>
+      <before name="Calc trtFinal"/>
+      </eval>
+    <evalrule phase="Validate" priority="5000" message="May only be taken once per rank" summary="May only be taken once per rank"><![CDATA[
+      validif (herofield[acRank].value + 1 >= hero.tagcount[Edge.edgSRPwrPt])]]></evalrule>
+    <exprreq message="Arcane Background (Any) required."><![CDATA[hero.tagis[Hero.HasArcBack] <> 0]]></exprreq>
+    <exprreq message="Second arcane background required."><![CDATA[hero.tagis[Rifts.UsesSecondaryPP] <> 0]]></exprreq>
+    </thing>
+  <thing id="edgSRMajorPsiSec" name="Major Psionic" description="A greater control of mind, body, and spirit combined with the overwhelming power available on Rifts Earth means this hero can do much more with her inner strength. Major Psionics double their base ISP, and they gain +10 ISP (instead of the usual +5) from the Power Points Edge.\n\nMajor Psionics may also:\n\nSpend 2 ISP when rolling their Psionics skill to gain a +1 to the roll, or 4 ISP for +2.\n\nSpend 1 ISP to double the Range of a power, or 2 ISP to multiply the base range ×10. This ability does not affect powers that have Range of Self or Touch.\n\nThe two effects can be combined, but the decision to spend ISP for either must be made before the roll.\n\nWhile on a ley line, all above bonuses are doubled in effect." compset="Edge" summary="Do more with inner strength" uniqueness="unique">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1" name="Seasoned" abbrev="Seasoned"/>
+    <tag group="EdgeType" tag="Profession" name="Professional" abbrev="Professional"/>
+    <eval phase="PreTraits" priority="5000">#trkmax[trkPower2] *= 2</eval>
+    <pickreq thing="arc2SRPsionics"/>
+    <exprreq message="Spirit d8 required."><![CDATA[#trait[attrSpi] >= 4]]></exprreq>
+    <exprreq message="Psionics d8 required."><![CDATA[#traitfound[skPsionics] >= 4]]></exprreq>
+    <exprreq message="Smarts d6 required."><![CDATA[#trait[attrSma] >= 3]]></exprreq>
+    </thing>
+  <thing id="faSRMysticAware" name="Mystic Awareness" description="Mystics have powerful extrasensory perception and attunement, granting them the Alertness and Danger Sense Edges, as well as the use of detect/conceal arcana at will, costing no PPE or ISP, as a free action. They can also sense powerful supernatural beings with a Notice check, anywhere within line of sight\n" compset="FraAbility" summary="detect/conceal arcana at will; sense powerful supernatural being with Notice check in LOS.">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="powSRDetectAW"></bootstrap>
+    <eval phase="PreTraits" priority="5000">perform #resspent[resPowers,-,1,field[name].text]</eval>
+    </thing>
+  <thing id="faSRSpiritChannel" name="Spiritual Channel" description="\nConstantly in contact with spirits, and quite possibly with divine messengers of whatever faith the Mystic follows, he can use the divination power at will, costing no ISP or PPE. Each time he uses it, however, he must make a Vigor roll to resist becoming Fatigued. Each subsequent use of the power over the course of a day imposes a cumulative −1 penalty on the Vigor check, these penalties continue to stack until he gets a full night’s rest (eight hours). It is possible for a Mystic to Incapacitate himself with this ability. Fatigue levels gained from Spiritual Channel can only be recovered after eight hours of rest (succor cannot restore)." compset="FraAbility" summary="Divination at will. Requires Vigor check.">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="powSRDivinatAW"></bootstrap>
+    <eval phase="PreTraits" priority="5000">perform #resspent[resPowers,-,1,field[name].text]</eval>
+    </thing>
+  <thing id="fcSRArcaneDuality" name="Arcane Duality" description="Mystics get the Arcane Background Edge twice for two different types of powers, but whenever they take a Power Edge, they must choose whether it applies to magic or psionics. Mystics can take the Power Points Edge twice per Rank but only to gain PPE with one use and ISP with the other." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRMysCyber" name="Cybernetics" description="Mystics don’t normally allow cybernetic technology to mar their connection to the spirit realms. The rare, medically mandated necessity cause great disruption to the use of their gifts (−1 Mysticism skill per Strain)." compset="FraComp" summary="Cybernetics cause penalty to Mysticism skill.">
+    <usesource source="SavRiftC"/>
+    </thing>
+  <thing id="fcSRMysEnemies" name="Enemies" description="Mystics are equally illegal and reviled in the Coalition and the True Federation of Magic." compset="FraComp" summary="Mystics have a lot of enemies">
+    <usesource source="SavRiftC"/>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Federation of Magic"/>
+      </bootstrap>
+    <bootstrap thing="hinEnemy">
+      <assignval field="domDomain" value="Coalition"/>
+      </bootstrap>
+    </thing>
+  <thing id="fcSRHigherStand" name="Higher Standard" description="For no added benefit, a Mystic must take either Code of Honor or a Major Vow Hindrance to represent his particular spiritual path and cosmological belief system. He must hold to that or risk losing his Arcane Background (Miracles) powers." compset="FraComp">
+    <usesource source="SavRiftC"/>
+    </thing>
   <preclude id="edgRich" source="SavRiftC"/>
   <preclude id="edgRich2" source="SavRiftC"/>
   <preclude id="edgPwrPts" source="SavRiftC"/>
+  <preclude id="cybAdrenal" source="SavRiftC"/>
+  <preclude id="cybAquatic" source="SavRiftC"/>
+  <preclude id="edgNoble" source="SavRiftC"/>
+  <preclude id="edgNoMercy" source="SavRiftC"/>
+  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
+  <extthing thing="powBarrier" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powBlind" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powBolt" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powConfusi" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDamageF" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDarksig" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDeflect" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDisguis" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDispel" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDivinat" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDrainPP" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powEntang" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powEnviron" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powFarsigh" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powFear" group="PowerGroup" tag="MindMelter"/>
@@ -8963,18 +9106,4 @@ hero.childfound[resSkill].field[resSpent].value -= 1
   <extthing thing="powTelekin" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powTelepor" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powWarrior" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="skPsionics" group="Rifts" tag="SpellSkill"/>
-  <extthing thing="skSpellcst" group="Rifts" tag="SpellSkill"/>
-  <extthing thing="powBarrier" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powBlind" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powBolt" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powConfusi" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDamageF" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDarksig" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDeflect" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDisguis" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDispel" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDivinat" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDrainPP" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powEntang" group="PowerGroup" tag="MindMelter"/>
   </document>

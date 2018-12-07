@@ -163,7 +163,12 @@
         ~output arcane powers
         if (hero.haschild[Power] <> 0) then
           append @boldon & "Arcane Powers:" & @boldoff & @newline
-          foreach pick in hero from Power
+          foreach pick in hero from Power where "!Rifts.SecondaryPower"
+            append chr(149) & eachpick.field[name].text & ": "
+            append eachpick.field[summary].text & @newline
+            nexteach
+          append @boldon & "Secondary Arcane Powers:" & @boldoff & @newline
+          foreach pick in hero from Power where "Rifts.SecondaryPower"
             append chr(149) & eachpick.field[name].text & ": "
             append eachpick.field[summary].text & @newline
             nexteach

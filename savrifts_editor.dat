@@ -108,5 +108,34 @@
       <it_field field="frcoDomain"/>
       </inputthing>
   </editthing>
-  
+  <!-- Arcane editthing -->
+  <editthing
+    group="Rifts"
+    compset="Arcane2"
+    name="Secondary Arcane Backgrnd"
+    prefix="arc2"
+    description="The arcane background defines the basic details for when a character first gains the background.{br}If a drawback is possessed, it should be bootstrapped by this thing."
+    summary="Defines an arcane background that can be selected via a corresponding edge.">
+    <inputthing
+      name="Number of Powers"
+      helptext="Specify the number of arcane powers conferred by this background.">
+      <it_field field="arcPowers2"/>
+      </inputthing>
+    <inputthing
+      name="Starting Power Points"
+      helptext="Specify the number of starting Power Points conferred by this background.">
+      <it_field field="arcPoints2"/>
+      </inputthing>
+    <inputthing
+      name="Arcane Designation"
+      helptext="Specify the arcane designation for this background (e.g. Magic, Miracles, etc.).">
+      <it_tagpick group="Arcane" tag="?" require="yes" deftag="Magic" dynamic="yes"/>
+      </inputthing>
+    <!-- RDS SWD This enables the association of Arcane Powers to Arcane Backgrounds from either end of the equation -->
+    <inputthing
+      name="Invalid Powers"
+      helptext="Specify which Powers are NOT available to those with this Arcane Background.">
+      <it_taglist group="PowerDeny" tag="?" />
+      </inputthing>
+    </editthing>  
   </document>

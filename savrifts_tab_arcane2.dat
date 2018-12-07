@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Arcane" tab panel. This tab is where
+      the user selects and adjusts the arcane powers for the character.
+
+      All public visual elements used with this tab panel start with the prefix "ap"
+      to associate them with the tab. We use "ap" for "arcane powers" instead of
+      "ar", since "ar" is already in use for the "Armory" panel.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- apPowers portal
+        Presents a dynamic table where the user can add and adjust arcane powers for
+        the character.
+
+        We use the "SimpleItem" template for selecting arcane powers, since all we
+        need is basic information. We use a custom template for showing the selected
+        powers to allow display of the various fields of powers.
+
+        We use an "additem" script to highlight whether more powers can be selected.
+        This requires that we specify the "addthing" referenced in the script, which
+        is the resource for tracking arcane powers.
+
+        We use a "titlebar" script to replace the default title on the choose form
+        with something that includes the summary information as helpful feedback to
+        the user.
+
+        We use a "headertitle" script to place a suitable title above the table. The
+        title includes an indication of how many arcane powers have been chosen and
+        how many remain, with appropriate color highlighting to prompt the user.
+  -->
+  <!-- RDS SWD added a denytag to enable the association of Powers to Arcane Backgrounds from the AB end -->
+  <portal
+    id="apPowers2"
+    style="tblNormal">
+    <table_dynamic
+      component="Power"
+      showtemplate="apPower"
+      choosetemplate="SimpleItem"
+      addpick="resPowers2"
+      descwidth="350">
+      <list>Rifts.SecondaryPower</list>
+      <denytag usehero="yes" container="PowerDeny" thing="Power"/>
+      <titlebar><![CDATA[
+        @text = "Add a Secondary  Arcane Power - " & hero.child[resPowers2].field[resSummary].text
+        ]]></titlebar>
+      <description/>
+      <headertitle><![CDATA[
+        @text = "Secondary Arcane Powers -  " & hero.child[resPowers2].field[resSummary].text
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~get the color-highlighted "add" text
+        @text = field[resAddItem].text
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+
+  <!-- apHeader template
+        Displays summary information about the arcane background at the top of the
+        tab, such as total powers and total power points.
+  -->
+  <template
+    id="apHeader2"
+    name="Secondary Arcane Header"
+    compset="Actor">
+
+    <portal
+      id="info2"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          ~use a color that's is slightly less bright that the normal text for powers
+          @text = "{text clrtitle}Total Secondary Powers: " & #resmax[resPowers2]
+          ~insert a horizontal gap between the two values to space them nicely
+          @text &= "{horz 40} Total Secondary Power Points: " & #trkmax[trkPower2]
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on the tallest portal
+      height = portal[info2].height
+
+      ~our portal should be centered in the template
+      perform portal[info2].centerhorz
+      perform portal[info2].centervert
+      ]]></position>
+
+    </template>
+
+
+  <!-- apPower template
+        Displays a power within the table of arcane powers. In addition to the name,
+        details of the power are displayed, as well as the means to edit the actual
+        trappings for the power. Powers can also be deleted and have a mouse-over
+        info icon.
+  -->
+  <template
+    id="apPower2"
+    name="Secondary Power Pick"
+    compset="Power"
+    marginhorz="3"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="lblLrgLeft"
+      showinvalid="yes">
+      <label
+        field="name">
+        </label>
+      </portal>
+
+    <portal
+      id="original"
+      style="lblOldName">
+      <label>
+        <labeltext><![CDATA[
+          @text = "(" & field[thingname].text & ")"
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="details"
+      style="lblSmPower">
+      <label>
+        <labeltext><![CDATA[
+          ~RDS SWD this was modified to display Casting Modifiers and altered Durations for No Power Points
+          var castingmod as string
+          var castingno1 as number
+          var castingno2 as number
+          var length1 as number
+          var lengthall as number
+          var start2 as number
+          var length2 as number
+          var rawnumber1 as number
+          var rawnumber2 as number
+          var iteminfo as string
+          iteminfo = ""
+        
+          ~report the power point cost or casting modifier
+          if (hero.tagis[Hero.NoPowerPts] <> 0) then
+            ~ #-#
+            if (pos(field[powPoints].text,"-") > 0) then
+              length1 = pos(field[powPoints].text,"-")
+              start2 = pos(field[powPoints].text,"-") + 1
+              lengthall = length(field[powPoints].text)
+              length2 = lengthall - start2
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              rawnumber2 = right(field[powPoints].text,length2)
+              castingno2 = round(rawnumber2/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & " to -" & castingno2
+            ~ #/section
+            elseif (pos(lowercase(field[powPoints].text),"/section") > 0) then
+              length1 = pos(lowercase(field[powPoints].text),"/section")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = rawnumber1
+              castingmod = "-" & castingno1 & " per 2 sections"
+            ~ Special
+            elseif (pos(lowercase(field[powPoints].text),"special") > 0) then
+              castingmod = "Special"
+            ~ #/#
+            elseif (pos(field[powPoints].text,"/") > 0) then
+              length1 = pos(field[powPoints].text,"/")
+              start2 = pos(field[powPoints].text,"/") + 1
+              lengthall = length(field[powPoints].text)
+              length2 = lengthall - start2
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              rawnumber2 = right(field[powPoints].text,length2)
+              castingno2 = round(rawnumber2/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "/-" & castingno2
+            ~ #+
+            elseif (pos(field[powPoints].text,"+") > 0) then
+              length1 = pos(field[powPoints].text,"+")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "+"
+            ~ #/Corpse
+            elseif (pos(lowercase(field[powPoints].text),"/corpse") > 0) then
+              length1 = pos(lowercase(field[powPoints].text),"/corpse")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "/corpse"
+            ~ #
+            else
+              castingno1 = round(field[powPoints].text/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1
+              endif
+            @text = "Casting Modifier: " & castingmod
+          else
+            @text = "{/b}Points:{b} " & field[powPoints].text
+            endif
+          ~@text = "{/b}Points:{b} " & field[powPoints].text
+          @text &= "{horz 20}{/b}Range:{b} " & field[powRange].text
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="duration"
+      style="lblSmPower">
+      <label>
+        <labeltext><![CDATA[
+          ~report the duration and any maintenance cost (omitting if there is none)
+          if (hero.tagis[Hero.NoPowerPts] <> 0) then
+            if (compare(lowercase(field[powLength].text),"instant") = 0) then
+              @text &= "{/b}Duration:{b} " & field[powLength].text
+            elseif (compare(lowercase(field[powLength].text),"special") = 0) then
+              @text &= "{/b}Duration:{b} " & field[powLength].text
+            else
+              @text &= "{/b}Duration:{b} Maintained" & "{br}"
+              endif
+          else
+            @text = "{/b}Duration:{b} " & field[powLength].text
+            if (field[powMaint].isempty = 0) then
+              @text &= " (" & field[powMaint].text & ")"
+              endif
+            endif
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="trappings"
+      style="lblSmPower">
+      <label>
+        <labeltext><![CDATA[
+          @text = "{/b}Trappings:{b} "
+          if (field[powTraps].ischanged = 0) then
+            @text &= "{text clrwarning}Use button at right to specify"
+          else
+            @text &= field[powTraps].text
+            endif
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="lblmenu"
+      style="lblSmPower">
+      <label
+        text="Skill:">
+        </label>
+      </portal>
+
+    <portal
+      id="menu"
+      style="menuSmall">
+      <menu_things
+        field="powSkill"
+        component="Skill"
+        maxvisible="10"
+        defthing="skWeirdSci"
+        usepicks="thing">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="lblstorage"
+      style="lblSmPower">
+      <label
+        text="Points:">
+        </label>
+      </portal>
+
+    <portal
+      id="storage"
+      style="editNormal">
+      <edit
+        field="powStorage"
+        format="integer"
+        maxlength="2">
+        </edit>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <portal
+      id="trapedit"
+      style="actNotesSm"
+      tiptext="Click here to edit the trappings for the arcane power.">
+      <action
+        action="notes"
+        field="powTraps">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~determine if the menu portal and label should be visible or not
+      if (tagis[Helper.Gizmo] = 0) then
+        portal[lblmenu].visible = 0
+        portal[menu].visible = 0
+        endif
+
+      ~only show the power points edit field if this is a foreign gizmo
+      if (tagis[Helper.Foreign] = 0) then
+        portal[lblstorage].visible = 0
+        portal[storage].visible = 0
+        endif
+
+      ~set up our height based on our tallest vertical span, which is the three
+      ~portals for the power details, plus the menu if visible
+      height = portal[details].height + portal[duration].height + portal[trappings].height
+      if (portal[menu].visible <> 0) then
+        height += portal[menu].height + 1
+        endif
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~determine whether the original name needs to be shown (only if renamed)
+      portal[original].visible = !field[username].isempty
+
+      ~center the info and delete portals within the upper half of the template
+      var half as number
+      half = height / 2
+      portal[info].top = (half - portal[info].height) / 2
+      portal[delete].top = (half - portal[delete].height) / 2
+
+      ~center the trappings edit portal within the lower half of the template
+      ~Note: The info portal is big, so shift it down a little extra for better spacing.
+      portal[trapedit].top = half + (half - portal[trapedit].height) / 2 + 1
+
+      ~center the name vertically if we don't need the original name; otherwise,
+      ~position the two names above and below each other
+      if (portal[original].visible = 0) then
+        perform portal[name].centervert
+      else
+        portal[name].top = (half - portal[name].height) / 2 + 3
+        perform portal[original].alignrel[ttob,name,2]
+        endif
+
+      ~position the power details portals vertically
+      portal[details].top = 0
+      perform portal[duration].alignrel[ttob,details,0]
+      perform portal[trappings].alignrel[ttob,duration,0]
+
+      ~position the gizmo-related portals vertically
+      perform portal[menu].alignrel[ttob,trappings,1]
+      perform portal[lblmenu].centeron[vert,menu]
+      perform portal[lblstorage].centeron[vert,menu]
+      perform portal[storage].centeron[vert,menu]
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-6]
+
+      ~center the trappings edit portal between the info and delete buttons
+      var span as number
+      span = portal[delete].right - portal[info].left
+      portal[trapedit].left = portal[info].left + (span - portal[trapedit].width) / 2
+
+      ~position the name portals on the left and use a suitable amount of space
+      portal[name].left = 0
+      portal[name].width = 175
+      portal[original].left = 15
+      portal[original].width = portal[name].width - portal[original].left
+
+      ~position the details portals next to the name and use the remaining space
+      perform portal[details].alignrel[ltor,name,10]
+      portal[details].width = portal[info].left - portal[details].left - 10
+      portal[duration].left = portal[details].left
+      portal[duration].width = portal[details].width
+      portal[trappings].left = portal[details].left
+      portal[trappings].width = portal[details].width
+
+      ~position the gizmo-related portals horizontally
+      portal[lblmenu].left = portal[details].left
+      perform portal[menu].alignrel[ltor,lblmenu,3]
+      portal[menu].width = 135
+      perform portal[lblstorage].alignrel[ltor,menu,10]
+      perform portal[storage].alignrel[ltor,lblstorage,2]
+      portal[storage].width = 25
+
+      ~shrink the name portals if they don't fit, then re-align after the shrink
+      perform portal[name].sizetofit[32]
+      if (portal[original].visible = 0) then
+        perform portal[name].centervert
+      else
+        perform portal[original].sizetofit[32]
+        portal[name].top = (half - portal[name].height) / 2 + 3
+        perform portal[original].alignrel[ttob,name,2]
+        endif
+
+      ~if the menu is visible and nothing is chosen yet, flag it in red
+      if (portal[menu].visible <> 0) then
+        if (field[powSkill].ischosen = 0) then
+          perform portal[menu].setstyle[menuErrSm]
+          endif
+        endif
+      ]]></position>
+
+    </template>
+
+
+  <!-- arcane layout
+        This layout orchestrates the display of the visual elements that comprise
+        the Arcane tab. This amounts to a header at the top and a dynamic table
+        below where the user can add and adjust the arcane powers he wants.
+
+        The logic for this layout is similar to (albeit much simpler than) the
+        logic for the Basics tab. So please refer to the Basics tab for more details.
+  -->
+  <layout
+    id="arcane2">
+    <portalref portal="apPowers2" taborder="10"/>
+    <templateref template="apHeader2" thing="actor"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      ~position and size the template and table to span the full layout
+      perform template[apHeader2].autoplace
+      perform portal[apPowers2].autoplace[8]
+      ]]></position>
+
+    </layout>
+
+
+  <!-- arcane panel
+        This is the "Arcane" panel shown within Hero Lab. Since we want this panel
+        to appear after Edges and within the traits grouping, we assign it an
+        "order" of 140.
+
+        The logic for this panel is similar to the logic for the Basics panel, so
+        please refer to the Basics panel for more details.
+  -->
+  <!-- RDS SPC Prevent the SPC Super Powers from showing up here -->
+  <panel
+    id="arcane2"
+    name="Secondary Arcane"
+    marginhorz="5"
+    marginvert="5"
+    order="140">
+    <live><![CDATA[Rifts.HasSecondaryAB]]></live>
+    <layoutref layout="arcane2"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>

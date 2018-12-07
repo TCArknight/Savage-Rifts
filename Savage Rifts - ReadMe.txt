@@ -4,9 +4,24 @@ Fan Material from G+ Community
 
 Known Issues:
 - Fleet-Footed: Combat edge and not Background Edge (bug in core SW data)
-- Master Psionic Edge: Mega-Power versions of known powers not available
 
 History:
+12/08/18
+New:
+Added new tag Helper.Domain skill to specific Knowledge skills
+Added Helper.Domain skill tag to zSkills, zSkillsDom portals as well as the position script for zSkillPick template for proper display on Extended character sheet in the zSkillsDom portal
+Added Arcane2 as the Secondary Arcane Background component
+Added Secondary Arcane tab (savrifts_tab_arcane2.dat) for display of powers associated with the new secondary background
+Added secondary pool of Power points and tracker for secondary ABs
+
+Fixed:
+Arcane powers bootstrap Mega-Power versions for display when Rifts.MegaPowerValid tag present on Hero
+Framework: Mystic - proper handling of primary and secondary ABs, Framework Abilities and Complications
+Framework: Techno-Wizard - fixed Framework abilities, complications
+Power Point Tracker now displays PPE/ISP as appropriate
+Cyberknight now doesn't begin with having spent skill points for Fighting and Arcane (Psionics) skills
+HJ - Education: Politics gives +2 to Persuasion
+
 10/04/18
 Fixed:
 Tag/Thing Id strings lengths updated for new Herolab Version 8.7

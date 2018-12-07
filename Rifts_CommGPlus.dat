@@ -1,56 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document signature="Hero Lab Data">
-  <thing id="fcSRTWCYBR" name="Cybernetics" description="Despite their love of technology, even Techno-Wizards suffer penalties to their magic from implanted cybernetics" compset="FraComp" summary="Cybernetics even affect a techno-wizard...for now">
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="fcSRTWDVDP" name="Device Dependent" description="As with any Weird Scientist, a Techno-Wizard must have her gizmos for her powers or parts to use Arcane Machinist. She must have gear and tools to make her magic work." compset="FraComp" summary="The Techno-Wizards requirers a physical device to use his/her magic">
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="fcSRTWENMY" name="Techno-Wizard Enemies" description="As with all wielders of magic, Techno-Wizards are “shoot-on-sight” targets for Coalition forces. Any who refuse to swear fealty to Lord Dunscon may consider the True Federation to be hostile territory as well." compset="FraComp" summary="Mages have a lot of enemies">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="hinEnemy">
-      <assignval field="domDomain" value="Federation of Magic"/>
-      </bootstrap>
-    <bootstrap thing="hinEnemy">
-      <assignval field="domDomain" value="Coalition"/>
-      </bootstrap>
-    </thing>
-  <thing id="faSRTWFTMC" name="Fantasy and Microchips" description="Techno-Wizards are the Weird Science maestros of Rifts Earth. Their Arcane \nBackground grants them access to powers.  They  can choose any Trappings for their powersexcept Necromantic. \n\nTechno-Wizards use their personal PPE to power their devices. The skill they use for\ntheir art is called Techno-Wizardry, which is Smarts-based and counts as Weird Science for purposes of qualifying for Edges like Mr. Fix It. Techno-Wizards cannot take the normal Gadgeteer Edge, but they start with a variant for free\n\nTechno-Wizards begin with three powers, each in a gizmo of their own\ndesign as with all Weird Science types. Unlike other Weird Scientists, Techno-\nWizards have 15 PPE of their own and their gizmos have none. Their PPE\npool is used to activate all of their own gizmos, as well as use Techno-Wizard\n(TW) devices. These sorcerer-scientists start with the Techno-Wizardry skill\nat d8 (which is equivalent to the Weird Science skill)." compset="FraAbility" summary="I am a weird scientiest">
-    <bootstrap thing="edgArBkTW"></bootstrap>
-    <bootstrap thing="skSRTCHWZ"></bootstrap>
-    <eval phase="PreTraits" priority="5000"><![CDATA[perform #resspent[resSkill,-,1, "Fantasy and Microchips"]
-foreach pick in hero where "thingid.skSRTCHWZ"
-   eachpick.field[trtBonus].value += 2
-nexteach]]></eval>
-    <eval phase="PreTraits" priority="5000" index="2">#traitcreation[trSRPPE] += 15</eval>
-    </thing>
-  <thing id="skSRTCHWZ" name="Techno-Wizardry" compset="Skill" summary="Savage Rifts Version of Wierd Science">
-    <fieldval field="trtAbbrev" value="TechW"/>
-    <usesource source="SavRiftC"/>
-    <tag group="Arcane" tag="TechnoWiza"/>
-    <link linkage="attribute" thing="attrSma"/>
-    </thing>
-  <thing id="faSRARCMCH" name="Arcane Machinist" description="Techno-Wizards begin with a variant of the Gadgeteer Edge which grants enormous flexibility. As an action (instead of 1d20 minutes), the character produces a magical gadget replicating any power available to Techno-Wizards. To make the device requires a successful Techno-Wizardry roll at −2 per Rank the power is above her own. The device has its own pool of PPE equal to half the Techno-Wizard’s normal maximum PPE pool (round down). With a raise, the device gets +5 PPE. The item can only be activated with its own PPE and once used up (or at the end of the session), the device burns out or otherwise becomes unusable. A Techno-Wiz ard can use Arcane Machinist up to half her Smarts die per session.  Anyone who can use a TW device (page 76) can also use a Techno-Wizard’s gizmo, but must spend PPE/ISP to power it as usual. Gizmos are unique items and cease to function after 2d6 days without attention from their creator." compset="FraAbility" summary="Create magic gadgets on the fly">
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="faSRTWMCMS" name="Machine Maestro" description="Techno-Wizard can interface with any electronic or mechanical device by touch, gaining +2 to most (see below) non-combat Trait rolls where such are involved\n(bypassing security, picking locks, operating vehicles, using sensors.). When interfacing with an arcane (usually TW) device, the bonus increases to +4. For combat-related Trait rolls and the creation or repair of TW gizmos and devices, the bonuses lower to +1 and +2, respectively." compset="FraAbility" summary="Techno-Wizards are great with machines">
-    <usesource source="SavRiftC"/>
-    </thing>
-  <thing id="edgSRTWFI" name="Mr. Fix It" description="The inventor adds +2 to his Repair rolls. With a raise, he halves the time normally required to fix something. This means that if a particular Repair job already states that a raise repairs it in half the time, a Mr. Fix It could finish the job in one-quarter the time with a raise." compset="Edge" summary="+2 Repair; Fixed in half time (quarter with raise)" uniqueness="unique">
-    <tag group="EdgeType" tag="Profession" name="Professional" abbrev="Professional"/>
-    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <eval phase="PreTraits" priority="5000"><![CDATA[
-      if (field[abilActive].value <> 0) then
-        ~profesional bonus do not stack
-        perform #traitprof[skRepair,+,2,"Mr. Fix It"]
-        endif]]>
-      <before name="Calc trtFinal"/>
-      </eval>
-    <pickreq thing="edgArBkTW"/>
-    <exprreq message="Smarts d10 required."><![CDATA[#trait[attrSma] >= 5]]></exprreq>
-    <exprreq message="Repair d8 required."><![CDATA[#traitfound[skRepair] >= 4]]></exprreq>
-    <exprreq message="Weird Science d8 required."><![CDATA[#traitfound[skSRTCHWZ] >= 4]]></exprreq>
-    </thing>
+
   <thing id="edgSRSHFT" name="Arcane Background: Shifter" description="{b}Note:{/b} This is the Edge your character must purchase to possess the &quot;Shifter&quot; arcane background and cast spells." compset="Edge" summary="Gain the Shifter arcane background" uniqueness="unique">
     <fieldval field="shortname" value="Shifter"/>
     <usesource source="SavRiftC"/>
@@ -60,16 +10,7 @@ nexteach]]></eval>
     <bootstrap thing="arcSRSHFR"></bootstrap>
     <pickreq thing="grpSRShift"/>
     </thing>
-  <thing id="racSRCybor" name="Cyborg" description="Full Conversion Cyborgs are the race for the Combat Cyborg Iconic Framework" compset="Race" summary="The Full Conversion Cyborg" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="rpSRAUGMEN"></bootstrap>
-    <bootstrap thing="rpSRCYBGHV"></bootstrap>
-    <bootstrap thing="rpSRCYMMN"></bootstrap>
-    <bootstrap thing="rpSRAllTMP"></bootstrap>
-    <bootstrap thing="rpSRCYBIHA"></bootstrap>
-    <bootstrap thing="rpSRCYGRMT"></bootstrap>
-    <bootstrap thing="rpSRCYBSHD"></bootstrap>
-    </thing>
+
   <thing id="rpSRAUGMEN" name="Bionic Augmentation" compset="RacialProp" summary="The Full Conversion Cyborg is Powerful">
     <usesource source="SavRiftC"/>
     <eval phase="PreTraits" priority="5000">#traitcreation[attrAgi] += 2
@@ -1028,7 +969,6 @@ endif]]>
   <thing id="faSRMYFBM" name="Gotta Have Faith and a Beautiful Mind" description="As channelers of spiritual energy, Mystics have Arcane Background (Miracles), and\nThey can choose any Trappings for their powers except Necromantic. They also gain\naccess to a few special Trappings listed here: \n\nCelestial Silver: For any offensive effect, a celestial silver Trapping counts\nas both holy and silver for purposes of Weaknesses. For example, smite can\nbe cast on a weapon and it is a blessed silver weapon for the duration. This is\nextremely effective against vampires, among other things.\n\nCourage: Ongoing beneficial powers grant the recipient +2 on Spirit checks\nagainst Fear and Intimidation for an increase of +1 PPE, lasting the duration\nof the power. \n\nGift of Life: +2 to Faith roll for healing or greater healing but gain a Fatigue\nlevel which can only be restored with an hour of rest (succor cannot restore).\n\nHoly Presence: A beneficial power with a duration, cast by the Mystic on herself, grants her +2 Charisma and +2 on Intimidation checks, as she is surrounded by a holy aura. The glow makes her easier to see and target, giving foes +2 to attack and Notice rolls\nagainst her.\n\nHoly Ward: For a beneficial power with a duration cast on someone, the caster foregoes the usual raise effect in place of granting Arcane Resistance for the duration.\n\nSoul Blast: For direct damage powers, increase the base cost by 2 PPE to ignore all physical armor (including power and robot armor), but targets add half their Spirit to Toughness when determining the damage effect.\n\nOpening up the spirit seems to open up the mind for Mystics, who are also Minor\nPsionics. They have Arcane Background (Psionics) as well They may take the Major Psionic Edge, but the Master Psionic Edge is out of their reach, due to their other mystical powers." compset="FraAbility" summary="A Mystic is a powerfule miracle magic user and psionic">
     <fieldval field="shortname" value="Mystic Faith and Mind"/>
     <usesource source="SavRiftC"/>
-    <bootstrap thing="edgSRABMYS"></bootstrap>
     <bootstrap thing="skPsionics"></bootstrap>
     <bootstrap thing="skSRMYSTIC"></bootstrap>
     <eval phase="PreTraits" priority="5000">#traitcreation[skSRMYSTIC] += 2
@@ -1113,7 +1053,7 @@ hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
     <usesource source="SavRiftC"/>
     <tag group="EdgeType" tag="Profession" name="Professional" abbrev="Professional"/>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
-    <pickreq thing="edgSRABMYS"/>
+
     <exprreq message="Mysticism d6 required."><![CDATA[#traitfound[skSRMYSTIC] >= 3]]></exprreq>
     <exprreq message="Spirit d8 required."><![CDATA[#trait[attrSpi] >= 4]]></exprreq>
     </thing>
@@ -1702,7 +1642,7 @@ endif]]></validate>
     <bootstrap thing="faSRCMTMGC"></bootstrap>
     <bootstrap thing="faSRARCMRK"></bootstrap>
     <bootstrap thing="faSRCKFiBa"></bootstrap>
-    <bootstrap thing="faSRMSTMGC"></bootstrap>
+    <bootstrap thing="faSRMasterMagic"></bootstrap>
     <bootstrap thing="faSRCMMGTR"></bootstrap>
     <bootstrap thing="faSRTRNCSTR"></bootstrap>
     <bootstrap thing="fcSRCMBMGCY"></bootstrap>
@@ -1727,7 +1667,7 @@ rolls += hero.tagcount[RiftsHJ.MagMys]
 
 validif (rolls >= 3)]]></evalrule>
     <pickreq thing="racSRPsiSt" ispreclude="yes"/>
-    <pickreq thing="racSRCybor" ispreclude="yes"/>
+    <pickreq thing="racSRCyborg" ispreclude="yes"/>
     <pickreq thing="racSRDGHTC" ispreclude="yes"/>
     <pickreq thing="racSRQuiFl" ispreclude="yes"/>
     <pickreq thing="racSRGrack" ispreclude="yes"/>
