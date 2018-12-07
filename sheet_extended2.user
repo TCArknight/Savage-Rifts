@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- This file contains the definition of the second page of the extended character
+      sheet for output. The second page is handled as a spillover sheet that will
+      output any details that didn't fit on the first page. This is a technique that
+      you will likely use for whatever game system you choose to support.
+
+      The first page of the character sheet will be found in "sheet_extended1.dat".
+
+      The portals used to output the equipment below are the same ones used on the
+      first page of the character sheet. As such, those portals will be found in
+      the file that defines the first page.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- zAlly portal
+        This is a table of Allies for the actor. Allies use a compact text format
+        for display with their master. Users can easily print a full character
+        sheet for each ally if they prefer.
+  -->
+  <portal
+    id="zAlly"
+    style="outNormal">
+    <output_table
+      component="Ally"
+      showtemplate="zAllyPick"
+      showpicks="minion"
+      showsortset="_ActorSeq_"
+      varyheight="yes"
+      showgapy="25">
+      </output_table>
+    </portal>
+
+
+  <!-- zVehicle portal
+        This is a table of Vehicles for the actor. Vehicles use a compact text
+        format that is similar to allies.
+  -->
+  <portal
+    id="zVehicle"
+    style="outNormal">
+    <output_table
+      component="Vehicle"
+      showtemplate="zVehPick"
+      varyheight="yes"
+      showgapy="25">
+      </output_table>
+    </portal>
+
+
+  <!-- zAlly template
+        This template presents the contents of each ally. Each ally has its contents
+        shown separately in a compact format similar to a statblock.
+  -->
+  <template
+    id="zAllyPick"
+    name="Output Allies Table"
+    compset="Actor">
+
+    <portal
+      id="name"
+      style="outTitle">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = hero.actorname
+          if (empty(hero.miniontext) = 0) then
+            if (compare(hero.miniontext,@text) <> 0) then
+              @text &= " (" & hero.miniontext & ")"
+              endif
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="details"
+      style="outAlly">
+      <output_label>
+        <labeltext><![CDATA[
+          var txt as string
+          var ismore as number
+
+          ~output any notes for the ally
+          if (anchor.field[alySummary].isempty = 0) then
+            @text &= "{b}Notes:{/b} " & anchor.field[alySummary].text & "{br}"
+            endif
+
+          ~output any race
+          ismore = 0
+          if (!hero.tagis[Hero.NoRace] + hero.tagis[Hero.Creature] > 0) then
+            @text &= "{b}" & herofield[acRacePref].text & ":{/b} " & herofield[acRaceName].text
+            ismore = 1
+            endif
+
+          ~append the faction name (if any)
+          if (herofield[acFactName].isempty = 0) then
+            if (ismore <> 0) then
+              @text &= " ("
+            else
+              @text &= "{b}"
+              endif
+            @text &= herofield[acFactName].text
+            if (ismore <> 0) then
+              @text &= ")"
+            else
+              @text &= "{/b}"
+              endif
+            ismore = 1
+            endif
+
+          ~append the group name (if any)
+          if (herofield[acGrpName].isempty = 0) then
+            if (ismore <> 0) then
+              @text &= " ("
+            else
+              @text &= "{b}"
+              endif
+            @text &= herofield[acGrpName].text
+            if (ismore <> 0) then
+              @text &= ")"
+            else
+              @text &= "{/b}"
+              endif
+            ismore = 1
+            endif
+
+          ~output the rank and XP (only for non-creatures)
+          if (hero.tagis[Hero.Creature] = 0) then
+            if (ismore <> 0) then
+              @text &= "; "
+              endif
+            @text &= "{b}" & herofield[acRankName].text & "{/b} ("
+            @text &= herofield[acFinalXP].text & " XP)"
+            endif
+
+          ~insert a newline before continuing our output
+          @text &= "{br}"
+
+          ~use a hanging indent from here on out
+          @text &= "{indent -100}"
+
+          ~output attributes
+          @text &= "{b}Attributes:{/b} "
+          ismore = 0
+          foreach pick in hero from Attribute where "!Hide.Attribute"
+            if (ismore <> 0) then
+              @text &= ", "
+              endif
+            @text &= eachpick.field[trtAbbrev].text & " " & eachpick.field[trtDisplay].text
+            ismore = 1
+            nexteach
+          @text &= "{br}"
+
+          ~output derived traits
+          @text &= "{b}Traits:{/b} "
+          ismore = 0
+          foreach pick in hero from Derived where "!Hide.Trait" sortas explicit
+            if (ismore <> 0) then
+              @text &= ", "
+              endif
+            @text &= eachpick.field[trtAbbrev].text & " " & eachpick.field[trtDisplay].text
+            ismore = 1
+            nexteach
+          @text &= "{br}"
+
+          ~output special abilities (if any)
+          if (hero.haschild[Ability] <> 0) then
+            @text &= "{b}Abilities:{/b} "
+            ismore = 0
+            foreach pick in hero from Ability sortas SpecialTab
+              if (ismore <> 0) then
+                @text &= ", "
+                endif
+              @text &= eachpick.field[shortname].text
+              ismore = 1
+              nexteach
+            @text &= "{br}"
+            endif
+
+          ~output arcane powers (if any)
+          if (hero.haschild[Power] <> 0) then
+            @text &= "{b}Arcane Powers (" & #trkmax[trkPower] & "):{/b} "
+            ismore = 0
+            foreach pick in hero from Power
+              if (ismore <> 0) then
+                @text &= ", "
+                endif
+              @text &= eachpick.field[name].text
+              ismore = 1
+              nexteach
+            @text &= "{br}"
+            endif
+
+          ~output skills
+          @text &= "{b}Skills:{/b} "
+          ismore = 0
+          foreach pick in hero from Skill where "!Hide.Skill"
+            if (ismore <> 0) then
+              @text &= ", "
+              endif
+            @text &= eachpick.field[trtAbbrev].text
+            if (eachpick.tagis[User.NeedDomain] <> 0) then
+              @text &= " (" & eachpick.field[domDomain].text & ")"
+              endif
+            @text &= " " & eachpick.field[trtDisplay].text
+            ismore = 1
+            nexteach
+          @text &= "{br}"
+
+          ~output all Smarts-based languages
+          if (hero.tagis[Hero.SmartsLang] <> 0) then
+            ismore = 0
+            foreach pick in hero from Language sortas Domain
+              if (ismore = 0) then
+                @text &= "{b}Languages:{/b} "
+              else
+                @text &= ", "
+                endif
+              @text &= eachpick.field[domDomain].text
+              ismore = 1
+              nexteach
+            if (ismore <> 0) then
+              @text &= "{br}"
+              endif
+            endif
+
+          ~output weapons (if any)
+          if (hero.haschild[WeaponBase] <> 0) then
+            @text &= "{b}Weapons:{/b} "
+            ismore = 0
+            foreach pick in hero from WeaponBase sortas Armory
+              if (ismore <> 0) then
+                @text &= ", "
+                endif
+              @text &= eachpick.field[name].text
+              @text &= " " & eachpick.field[wpNetAtk].text
+              @text &= " (" & eachpick.field[wpShowDmg].text
+              if (eachpick.field[wpPiercing].value <> 0) then
+                @text &= ", AP" & eachpick.field[wpPiercing].text
+                endif
+              if (eachpick.tagis[component.WeapRange] <> 0) then
+                @text &= ", " & eachpick.field[wpRange].text
+                endif
+              @text &= ")"
+              ismore = 1
+              nexteach
+            @text &= "{br}"
+            endif
+
+          ~output armor and gear together (if any)
+          if (hero.haschild[Defense] + hero.haschild[Equipment] <> 0) then
+
+            ~output armor
+            ismore = 0
+            foreach pick in hero from Defense sortas Armory
+              if (ismore <> 0) then
+                @text &= ", "
+                endif
+              @text &= eachpick.field[name].text
+              @text &= " (" & signed(eachpick.field[defDefense].text)
+              if (eachpick.tagis[component.Shield] <> 0) then
+                if (eachpick.field[defParry].value <> 0) then
+                  @text &= ", Parry" & signed(eachpick.field[defParry].text)
+                  endif
+                endif
+              @text &= ")"
+              ismore = 1
+              nexteach
+
+            ~output gear
+            foreach pick in hero from Equipment
+              if (ismore <> 0) then
+                @text &= ", "
+                endif
+              @text &= eachpick.field[grStkName].text
+              ismore = 1
+              nexteach
+            @text &= "{br}"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="line"
+      style="oSeparator">
+      <output_separator
+        isvertical="no"/>
+      </portal>
+
+    <portal
+      id="tracking"
+      style="outAlly">
+      <output_label>
+        <labeltext><![CDATA[
+          var box as string
+          var gap as string
+
+          ~output mechanism for tracking health
+          gap = "{horz 50}"
+          @text &= "{b}Wounds:" & gap
+          if (herofield[acIsWild].value <> 0) then
+            @text &= "-1" & gap & "-2" & gap & "-3" & gap
+            endif
+          @text &= "INC"
+          @text &= "{horz 100}Fatigue:" & gap
+          @text &= "-1" & gap & "-2" & gap & "INC"
+          @text &= "{/b}{br}"
+
+          ~output boxes for tracking power points (if applicable)
+          if (hero.haschild[Power] <> 0) then
+            @text &= "{vert 5}"
+            @text &= "{b}Power:{/b}{horz 40}"
+            var i as number
+            var j as number
+            var limit as number
+            limit = #trkmax[trkPower] / 5
+            @text &= "{font Wingdings}"
+            for i = 1 to limit
+              for j = 1 to 4
+                @text &= chr(168)
+                next
+              @text &= "{size 44}" & chr(168) & "{size 36}"
+              next
+            @text &= "{revert}{br}"
+            endif
+
+          ~output boxes for tracking the ammo supply (if any ranged weapons)
+          if (hero.haschild[WeapRange] <> 0) then
+            @text &= "{vert 8}"
+            box = "{font Wingdings}{size 40}" & chr(168) & "{revert}"
+            gap = "{horz 65}"
+            @text &= "{b}Ammo:{/b}" & gap & "Full " & box & gap & "High " & box & gap & "Low " & box & gap & "Out " & box
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our name spans the entire width and is limited to a single line in height
+      portal[name].width = width
+      portal[name].lineheight = 1
+
+      ~position the details beneath the name, spanning the full width
+      perform portal[details].alignrel[ttob,name,10]
+      portal[details].width = width
+      perform portal[details].autoheight
+
+      ~position the line beneath the details, spanning the full width; we set the
+      ~height to double the border size so that no contents are visible and we
+      ~end up with simply a solid horizontal line
+      perform portal[line].alignrel[ttob,details,8]
+      portal[line].width = width
+
+      ~position the tracking beneath the line, spanning the full width
+      perform portal[tracking].alignrel[ttob,line,5]
+      portal[tracking].width = width
+      perform portal[tracking].autoheight
+
+      ~our final height is the bottom of the template contents
+      height = portal[tracking].bottom
+      ]]></position>
+    </template>
+
+
+  <!-- zVehicle template
+        This template presents the contents of each vehicle. Each vehicle has its
+        contents shown separately in a compact format similar to a statblock.
+  -->
+  <template
+    id="zVehPick"
+    name="Output Vehicles Table"
+    compset="Vehicle">
+
+    <portal
+      id="name"
+      style="outTitle">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="details"
+      style="outAlly">
+      <output_label>
+        <labeltext><![CDATA[
+          ~output the crew size
+          @text &= "{b}Crew:{/b} " & field[vhCrew].text & "{br}"
+
+          ~output the acceleration, speed, and climb for aircraft
+          @text &= "{b}Acceleration{/b}: " & field[vhAccel].text
+          @text &= "{horz 75}{b}Top Speed:{/b} " & field[vhTopSpeed].text
+          if (tagis[VehType.Aircraft] <> 0) then
+            @text &= "{horz 75}{b}Climb:{/b} " & field[vhClimb].text
+            endif
+          @text &= "{br}"
+
+          ~output the toughness and armor
+          @text &= "{b}Toughness{/b}: " & field[vhTough].text
+          @text &= "{horz 75}{b}Armor{/b}: " & field[vhArmor].text & "{br}"
+
+          ~if there is no child entity/gizmo, then there's nothing more to do
+          doneif (isentity = 0)
+
+          ~use a hanging indent from here on out
+          @text &= "{indent -150}"
+
+          ~there is a child entity/gizmo, so output the load-out
+          @text &= "{b}Weapons/Equipment:{/b}{br}"
+          foreach pick in gizmo
+            @text &= "{horz 10}" & chr(149) & " " & eachpick.field[name].text & ": "
+            @text &= eachpick.field[wpShowDmg].text & ", " & eachpick.field[wpRange].text
+            if (eachpick.field[wpNotes].isempty = 0) then
+              @text &= ", " & eachpick.field[wpNotes].text
+              endif
+            @text &= "{br}"
+            nexteach
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="line"
+      style="oSeparator">
+      <output_separator
+        isvertical="no"/>
+      </portal>
+
+    <portal
+      id="tracking"
+      style="outAlly">
+      <output_label>
+        <labeltext><![CDATA[
+          var gap as string
+
+          ~output mechanism for tracking damage
+          gap = "{horz 50}"
+          @text &= "{b}Damage:" & gap
+          @text &= "-1" & gap & "-2" & gap & "-3" & gap & "Wrecked"
+          @text &= "{/b}"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our name spans the entire width and is limited to a single line in height
+      portal[name].width = width
+      portal[name].lineheight = 1
+
+      ~position the details beneath the name, spanning the full width
+      perform portal[details].alignrel[ttob,name,10]
+      portal[details].width = width
+      perform portal[details].autoheight
+
+      ~position the line beneath the details, spanning the full width; we set the
+      ~height to double the border size so that no contents are visible and we
+      ~end up with simply a solid horizontal line
+      perform portal[line].alignrel[ttob,details,8]
+      portal[line].width = width
+
+      ~position the tracking beneath the line, spanning the full width
+      perform portal[tracking].alignrel[ttob,line,5]
+      portal[tracking].width = width
+      perform portal[tracking].autoheight
+
+      ~our final height is the bottom of the template contents
+      height = portal[tracking].bottom
+      ]]></position>
+    </template>
+
+
+  <!-- zExtended2 layout
+        This layout contains all the remaining armor, weapons, and gear for the
+        character. If not all of the equipment can fit on the first sheet, the gear
+        that remains is output on a spillover sheet. Spillover sheets continue to
+        print as long as data remains that has not yet been output. This layout is
+        designed so that it can be re-used for both the lefthand and righthand
+        columns on the same sheet. So this layout shows all the armor it can, until
+        it either runs out of armor or runs out of available space. Then it does
+        the same for weapons, and finally for gear.
+  -->
+  <layout
+    id="zExtended2">
+    <portalref portal="zProperty"/>
+    <portalref portal="zEdge"/>
+    <portalref portal="zHindrance"/>
+    <portalref portal="zCreature"/>
+    <portalref portal="zDrawback"/>
+    <portalref portal="zSPAttack"/>
+    <portalref portal="zPersonal"/>
+    <portalref portal="zPower"/>
+    <portalref portal="zPower2"/>
+    <portalref portal="zSPPower"/>
+    <portalref portal="oArmor"/>
+    <portalref portal="zMagicArmr"/>
+    <portalref portal="zWeapon"/>
+    <portalref portal="zMagicWeap"/>
+    <portalref portal="zGear"/>
+    <portalref portal="zMagicItem"/>
+    <portalref portal="zAlly"/>
+    <portalref portal="zVehicle"/>
+    <position><![CDATA[
+      ~hide and show appropriate portals for creatures and non-creatures
+      if (hero.tagis[Hero.Creature] = 0) then
+        portal[zCreature].visible = 0
+      else
+        portal[zEdge].visible = 0
+        endif
+
+      ~position the various tables in the desired sequence
+      perform portal[zProperty].autoplace
+      perform portal[zEdge].autoplace
+      perform portal[zHindrance].autoplace
+      perform portal[zCreature].autoplace
+      perform portal[zDrawback].autoplace
+      perform portal[zSPAttack].autoplace
+      perform portal[zPersonal].autoplace
+      perform portal[zPower].autoplace
+      perform portal[zPower2].autoplace
+      perform portal[zSPPower].autoplace
+      perform portal[zMagicArmr].autoplace
+      perform portal[oArmor].autoplace
+      perform portal[zMagicWeap].autoplace
+      perform portal[zWeapon].autoplace
+      perform portal[zMagicItem].autoplace
+      perform portal[zGear].autoplace
+
+      ~only include allies if the user has enabled them
+      if (hero.tagis[source.ShowAlly] = 0) then
+        portal[zAlly].visible = 0
+      else
+        perform portal[zAlly].autoplace
+        endif
+
+      ~only include vehicles if the user has enabled them
+      if (hero.tagis[source.ShowVeh] = 0) then
+        portal[zVehicle].visible = 0
+      else
+        perform portal[zVehicle].autoplace
+        endif
+
+      ~the height of the layout is the bottommost extent of the elements within
+      height = autoextent
+      ]]></position>
+    </layout>
+
+
+  <!-- extended2 sheet
+        This is the second and subsequent page of the character sheet. It is a
+        spillover sheet, so it is only printed when necessary and will continue to
+        print as long as it remains necessary. The role of a spillover sheet is to
+        output material that doesn't fit on previous pages, continuing to print
+        until all items have been output. For this example, we allow the armor,
+        weapons, and gear to spillover. However, spillover sheets are ideal for any
+        data that can vary in length, such as spell lists, special abilities, etc.
+        This particular sheet uses the same layout twice, using it for the left and
+        right columns of output. You can have different layouts on this sheet, just
+        like a standard character sheet, positioning them as you choose.
+  -->
+  <sheet
+    id="extended2"
+    name="Extended character sheet, page #2"
+    spillover="yes">
+    <layoutref layout="zExtended2" reference="left"/>
+    <layoutref layout="zExtended2" reference="right"/>
+    <position><![CDATA[
+      ~setup the gap to be used between the various sections of the character sheet
+      autogap = 40
+      scenevalue[sectiongap] = autogap
+
+      ~calculate the width of the two columns of the character sheet, leaving a
+      ~suitable center gap between them
+      var colwidth as number
+      colwidth = (width - 50) / 2
+
+      ~output the layout on the lefthand side with whatever information will fit
+      layout[left].width = colwidth
+      layout[left].height = height
+      perform layout[left].render
+
+      ~output the layout on the righthand side with whatever information will fit
+      layout[right].width = colwidth
+      layout[right].height = height
+      layout[right].left = width - colwidth
+      perform layout[right].render
+      ]]></position>
+    </sheet>
+
+
+  </document>

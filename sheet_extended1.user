@@ -1,0 +1,4249 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- This file contains the definition of the first page of the extended character
+      sheet for output. The character sheet has been carved into a simple two-column
+      presentation that is used by many game systems, with some information on the
+      left and other material on the right. You can use whatever overall layout you
+      prefer, using this sample as a guideline.
+
+      A variety of display techniques have been used on this one character sheet to
+      provide examples of how to present information in different ways. You will
+      likely choose one or two of these methods and use them exclusively within your
+      own data files, but this gives you various styles to choose from.
+
+      The second page of the character sheet will be found in "sheet_extended2.dat".
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- Hero Lab & Game System Logos
+        NOTE! These could be easily wrapped inside a template or used directly within
+              a layout, as we do here. Both methods are perfectly reasonable.
+  -->
+
+  <!-- zHLLogo portal - Hero Lab logo -->
+  <portal
+    id="zHLLogo"
+    style="outNormal">
+    <output_image
+      image="sheet_hllogo.bmp">
+      </output_image>
+    </portal>
+
+  <!-- zGameLogo portal - game system logo -->
+  <portal
+    id="zGameLogo"
+    style="outNormal">
+    <output_image
+      image="sheet_gamelogo.bmp">
+      </output_image>
+    </portal>
+
+
+  <!-- Hero and Player Info
+        NOTE! These could be easily wrapped inside a template or used directly within
+              a layout, as we do here. Both methods are perfectly reasonable.
+  -->
+
+  <!-- zHeroName portal - name of the actor -->
+  <portal
+    id="zHeroName"
+    style="outHeroNam">
+    <output_label>
+      <labeltext><![CDATA[
+        @text = hero.actorname
+        if (empty(@text) <> 0) then
+          @text = "- Unnamed Hero -"
+          endif
+        ]]></labeltext>
+      </output_label>
+    </portal>
+
+  <!-- zHeroInfo portal - details about the actor -->
+  <portal
+    id="zHeroInfo"
+    style="outNormal">
+    <output_label>
+      <labeltext><![CDATA[
+        ~track whether we've output any text yet
+        var istext as number
+
+        ~setup a more appropriate font size
+        @text &= "{size 36}"
+
+        ~start with the character's race
+        if (hero.tagis[Hero.NoRace] = 0) then
+          @text &= herofield[acRaceName].text
+          istext = 1
+          endif
+
+        ~append the faction name (if any)
+        if (herofield[acFactName].isempty = 0) then
+          if (istext <> 0) then
+            @text &= " ("
+            endif
+          @text &= herofield[acFactName].text
+          if (istext <> 0) then
+            @text &= ")"
+            endif
+          istext = 1
+          endif
+
+        ~RDS SWD append the group name (if any)
+        if (herofield[acGrpName].isempty = 0) then
+          if (istext <> 0) then
+            @text &= " ("
+            endif
+          @text &= herofield[acGrpName].text
+          if (istext <> 0) then
+            @text &= ")"
+            endif
+          istext = 1
+          endif
+
+        ~append the rank and XP (only for non-creatures)
+        if (hero.tagis[Hero.Creature] = 0) then
+          if (istext <> 0) then
+            @text &= "; "
+            endif
+          @text &= herofield[acRankName].text & "  ("
+          @text &= herofield[acFinalXP].text & " XP)"
+          istext = 1
+          endif
+
+        ~report any unspent advances
+        ~Note: We have to handle NPCs and non-NPCs differently.
+        var unused as number
+        if (hero.tagis[Hero.PC] = 1) then
+          unused = #resleft[resAdvance]
+        else
+          unused = herofield[acExtraAdv].value
+          endif
+        if (unused > 0) then
+          if (istext <> 0) then
+            @text &= "; "
+            endif
+          @text &= unused & " Advance(s)"
+          endif
+
+        ~sart a new line and turn off bold
+        @text &= "{br}{/b}"
+
+        ~append the gender, age, height, and weight
+        if (hero.child[mscPerson].field[perGender].value = 0) then
+          @text &= "Male"
+        else
+          @text &= "Female"
+          endif
+        @text &= "; Age: " & hero.child[mscPerson].field[perAge].text
+        @text &= "; Height: " & hero.child[mscPerson].field[perHeight].text
+        @text &= "; Weight: " & hero.child[mscPerson].field[perWeight].text
+
+        ~if languages are based on Smarts instead of taken as skills, list them
+        if (hero.tagis[Hero.SmartsLang] + hero.tagis[Hero.ShowLang] <> 0) then
+          var langs as string
+          foreach pick in hero from Language sortas Domain
+            langs = splice(langs,eachpick.field[domDomain].text,", ")
+            nexteach
+          if (empty(langs) <> 0) then
+            langs = "None"
+            endif
+          @text &= "{br}Languages: " & langs
+          endif
+        ]]></labeltext>
+      </output_label>
+    </portal>
+
+
+  <!-- zAttribute portal
+        This is a table of Attributes for the actor. Attributes use the same template
+        for both the contents and the header across the top. See the template for
+        more details on this.
+  -->
+  <portal
+    id="zAttribute"
+    style="outNormal">
+    <output_table
+      component="Attribute"
+      showtemplate="zAttrPick"
+      showsortset="explicit"
+      columns="2">
+      <list>!Hide.Attribute</list>
+      <headertitle><![CDATA[
+        @text = "Attributes"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zDerived portal
+        This is a table of Derived Traits for the actor. Only resistance and combat
+        traits are included in the list of derived traits within the character sheet.
+  -->
+  <portal
+    id="zDerived"
+    style="outNormal">
+    <output_table
+      component="Derived"
+      showtemplate="zDerivPick"
+      showsortset="explicit"
+      columns="2">
+      <list>!Hide.Trait</list>
+      <headertitle><![CDATA[
+        @text = "Derived Traits"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zStatus portal
+        This table contains the Encumbrance rating and Load Limit for the actor.
+  -->
+  <portal
+    id="zStatus"
+    style="outNormal">
+    <output_table
+      component="Resource"
+      showtemplate="zStatPick"
+      showsortset="explicit"
+      columns="2">
+      <list>Helper.Status</list>
+      </output_table>
+    </portal>
+
+
+  <!-- zAbility portal
+        This is a table of all Racial Abilities for the actor.
+  -->
+  <portal
+    id="zAbility"
+    style="outNormal">
+    <output_table
+      component="RaceAbil"
+      showtemplate="zAbilPick"
+	  varyheight="yes">
+      <list>!Print.NoPrint</list>
+      <headertitle><![CDATA[
+        @text = "Racial Abilities"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+  <!-- RDS SWD zProperties portal
+        This is a table of all Racial Properties for the actor.
+  -->
+  <portal
+    id="zProperty"
+    style="outNormal">
+    <output_table
+      component="RacialProp"
+      showtemplate="zAbilPick"
+	  varyheight="yes">
+      <list>!Print.NoPrint</list>
+      <headertitle><![CDATA[
+        @text = "Racial Properties"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+  <!-- zHindrance portal
+        This is a table of all Hindrances for the actor.
+  -->
+  <portal
+    id="zHindrance"
+    style="outNormal">
+    <output_table
+      component="Hindrance"
+      showtemplate="zAbilPick"
+	  varyheight="yes">
+      <list>!Print.NoPrint</list>
+      <headertitle><![CDATA[
+        @text = "Hindrances"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zEdge portal
+        This is a table of all Edges for the actor.
+  -->
+  <portal
+    id="zEdge"
+    style="outNormal">
+    <output_table
+      component="Edge"
+      showtemplate="zAbilPick"
+	  varyheight="yes">
+      <list>!Print.NoPrint</list>
+      <headertitle><![CDATA[
+        @text = "Edges"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zCreature portal
+        This is a table of all Creatuure Abilities for the actor.
+  -->
+  <portal
+    id="zCreature"
+    style="outNormal">
+    <output_table
+      component="Ability"
+      showtemplate="zAbilPick"
+	  varyheight="yes">
+      <list>!Print.NoPrint</list>
+      <headertitle><![CDATA[
+        @text = "Creature Abilities"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zInjury portal
+        This is a table of all Injuries for the actor.
+  -->
+  <portal
+    id="zInjury"
+    style="outNormal">
+    <output_table
+      component="Injury"
+      showtemplate="zInjury">
+      <headertitle><![CDATA[
+        @text = "Injuries"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zNoInjury portal
+        This is a label to indicate that there are no injuries for the actor.
+  -->
+  <portal
+    id="zNoInjury"
+    style="outNormal">
+    <output_label
+      text="-None-">
+      </output_label>
+    </portal>
+
+
+  <!-- zSkills portal
+        This is a table of all Skills for the actor.
+  -->
+  <portal
+    id="zSkills"
+    style="outNormal">
+    <output_table
+      component="Skill"
+      showtemplate="zSkillPick"
+      columns="2">
+      <list><![CDATA[
+        !User.NeedDomain & !Arcane.? & !Helper.DomainSkill
+        ]]></list>
+      <headertitle><![CDATA[
+        @text = "Skills"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zSkillsDom portal
+        This is a table of all skills with domains for the actor.
+  -->
+  <portal
+    id="zSkillsDom"
+    style="outNormal">
+    <output_table
+      component="Skill"
+      showtemplate="zSkillPick">
+      <list>User.NeedDomain | Helper.DomainSkill | Arcane.?</list>
+      </output_table>
+    </portal>
+
+
+  <!-- zPower portal
+        This is a table of all Powers for the actor.
+  -->
+  <portal
+    id="zPower"
+    style="outNormal">
+    <output_table
+      component="Power"
+      showtemplate="zPowerPick"
+      headertemplate="zPowerPick"
+      varyheight="yes">
+      <list>!Rifts.SecondaryPower</list>
+      </output_table>
+    </portal>
+
+  <!-- zPower2 portal
+        This is a table of all Secondary Powers for the actor.
+  -->
+  <portal
+    id="zPower2"
+    style="outNormal">
+    <output_table
+      component="Power"
+      showtemplate="zPower2Pick"
+      headertemplate="zPower2Pick"
+      varyheight="yes">
+      <list>Rifts.SecondaryPower</list>
+      </output_table>
+    </portal>
+
+  <!-- zDrawback portal
+        This is a table of all Drawbacks for the actor.
+  -->
+  <portal
+    id="zDrawback"
+    style="outNormal">
+    <output_table
+      component="Drawback"
+      showtemplate="zDrawPick">
+      <headertitle><![CDATA[
+        @text = "Arcane Drawbacks"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+  <!-- RDS SPC zSPPower portal
+        This is a table of all Super Powers for the actor.
+  -->
+  <portal
+    id="zSPPower"
+    style="outNormal">
+    <output_table
+      component="SPCPower"
+      showtemplate="zSPPwrPick"
+      headertemplate="zSPPwrPick"
+      varyheight="yes">
+      </output_table>
+    </portal>
+
+  <!-- RDS SPC zSPAttack portal
+        This is a table of all Super Powers for the actor.
+  -->
+  <portal
+    id="zSPAttack"
+    style="outNormal">
+    <output_table
+      component="SPCAtkPwr"
+      showtemplate="zSPAtkPick"
+      headertemplate="zSPAtkPick"
+      varyheight="yes">
+      <list><![CDATA[
+        SPCPwrType.Attack
+        ]]></list>
+      </output_table>
+    </portal>
+
+  <!-- zGear portal
+        This is a table of all Gear carried by the actor. The gear list needs to
+        exclude weapons and armor, since those are already listed in the separate
+        sections for those item types.
+  -->
+  <portal
+    id="zGear"
+    style="outNormal">
+    <output_table
+      component="Gear"
+      showtemplate="zGearPick"
+      columns="3">
+      <list><![CDATA[
+        !component.WeaponBase & !component.Defense & !Print.NoPrint & !component.MagicItem
+        ]]></list>
+      <headertitle><![CDATA[
+        var moneyvalue as number
+        var money as string
+        moneyvalue = herofield[acCashNet].value
+        call Money
+        @text = "Gear  (Cash: " & money & ")"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zMagicItem portal
+        This is a table of all Magic Miscellaneous Items carried by the actor. The gear list needs to
+        exclude weapons and armor, since those are already listed in the separate
+        sections for those item types.
+  -->
+  <portal
+    id="zMagicItem"
+    style="outNormal">
+    <output_table
+      component="MagicItem"
+      showtemplate="zMItemPick"
+      varyheight="yes">
+      <list><![CDATA[
+        !component.WeaponBase & !component.Defense & !Print.NoPrint
+        ]]></list>
+      <headertitle><![CDATA[
+        @text = "Magic Miscellaneous Items"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zArmor portal
+        This is a table of all Armor and Shields carried by the actor.
+  -->
+  <portal
+    id="zArmor"
+    style="outNormal">
+    <output_table
+      component="Defense"
+      showtemplate="zArmorPick"
+      showsortset="Armory">
+      <list><![CDATA[
+        !component.MagicItem
+        ]]></list>
+      <headertitle><![CDATA[
+        @text = "Armor"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zMagicArmor portal
+        This is a table of all Magic Armor and Shields carried by the actor.
+  -->
+  <portal
+    id="zMagicArmr"
+    style="outNormal">
+    <output_table
+      component="MagicItem"
+      showtemplate="zMArmrPick"
+      showsortset="Armory"
+      varyheight="yes">
+      <list><![CDATA[
+        component.Defense
+        ]]></list>
+      <headertitle><![CDATA[
+        @text = "Magic Armor"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zWeapon portal
+        This is a table of all Weapons carried by the actor. Weapons use the same
+        template for both the contents and the header across the top. See the
+        template for more details on this.
+  -->
+  <portal
+    id="zWeapon"
+    style="outNormal">
+    <output_table
+      component="WeaponBase"
+      showtemplate="zWeapPick"
+      headertemplate="zWeapPick"
+      showsortset="Armory"
+      varyheight="yes">
+      <list><![CDATA[
+        !component.MagicItem
+        ]]></list>
+      </output_table>
+    </portal>
+
+
+  <!-- zMagicWeap portal
+        This is a table of all Weapons carried by the actor. Weapons use the same
+        template for both the contents and the header across the top. See the
+        template for more details on this.
+  -->
+  <portal
+    id="zMagicWeap"
+    style="outNormal">
+    <output_table
+      component="MagicItem"
+      showtemplate="zMWeapPick"
+      headertemplate="zMWeapPick"
+      showsortset="Armory"
+      varyheight="yes">
+      <list><![CDATA[
+        component.WeaponBase
+        ]]></list>
+      </output_table>
+    </portal>
+
+
+  <!-- zAdjust portal
+        This is a table of all Activated Adjustments applied to the actor, which
+        includes all permanent adjustments, all activated abilities, and all activated
+        temporary adjustments. We use a two-column table layout for compactness.
+  -->
+  <portal
+    id="zAdjust"
+    style="outNormal">
+    <output_table
+      component="Adjustment"
+      showtemplate="zAdjPick"
+      columns="2">
+      <list><![CDATA[
+        Helper.Activated
+        ]]></list>
+      <headertitle><![CDATA[
+        @text = "Activated Adjustments"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zPersonal portal
+        This is a table in which we output the personal details (background) of the
+        character. We use a table so we can put the info on the first page if there
+        is room and easily spill it onto the second page if not.
+  -->
+  <portal
+    id="zPersonal"
+    style="outNormal">
+    <output_table
+      component="Personal"
+      showtemplate="zPersonal"
+      varyheight="yes">
+      <list><![CDATA[
+        !Helper.NoPersText & hero#source.ShowDetail
+        ]]></list>
+      <headertitle><![CDATA[
+        @text = "Background & Personal Details"
+        ]]></headertitle>
+      </output_table>
+    </portal>
+
+
+  <!-- zAttrPick template
+        This template presents the contents of each attribute. Each attribute has its
+        total value, base value, and any adjustments shown separately.
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zAttrPick"
+    name="Output Attributes Table"
+    compset="Attribute"
+    marginvert="0">
+
+    <portal
+      id="name"
+      style="outNameLg">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="value"
+      style="outValueLg">
+      <output_label>
+        <labeltext><![CDATA[
+          var dietype as number
+          var dietext as string
+          dietype = field[trtFinal].value
+          call OutputDie
+          @text = dietext
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="adjust"
+      style="outNameLg">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[trtNetRoll].value = 0) then
+            @text = ""
+          else
+            @text = signed(field[trtNetRoll].value)
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is driven by the tallest portal
+      height = portal[value].height
+      doneif (issizing <> 0)
+
+      ~center everything vertically within the template
+      perform portal[name].centervert
+      perform portal[value].centervert
+      perform portal[adjust].centervert
+      perform portal[dots].centervert
+
+      ~position everything horizontally
+      portal[name].left = 65
+      portal[value].left = 340
+      perform portal[adjust].alignrel[ltor,value,5]
+
+      ~extend the dots from the right of the name across to the value on the right
+      perform portal[dots].alignrel[ltor,name,0]
+      portal[dots].width = portal[value].left - 5 - portal[dots].left
+      ]]></position>
+
+    </template>
+
+
+  <!-- zDerivPick template
+        This template presents the various derived traits. Derived traits simply list
+        the name and final value for each. We use margins around the template to get
+        a large indent on either side and insert a little bit of vertical spacing.
+  -->
+  <template
+    id="zDerivPick"
+    name="Output Derived Traits Table"
+    compset="Trait"
+    marginhorz="25"
+    marginvert="8">
+
+    <portal
+      id="name"
+      style="outNameLg">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="shortname"
+      style="outNameLg">
+      <output_label
+        field="shortname">
+        </output_label>
+      </portal>
+
+    <portal
+      id="value"
+      style="outValueLg">
+      <output_label
+        field="trtDisplay">
+        </output_label>
+      </portal>
+
+    <portal
+      id="adjust"
+      style="outGreyBox">
+      <output_label
+        text=" ">
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is based on the tallest portal (they should all be the same)
+      height = portal[name].height
+      doneif (issizing <> 0)
+
+      ~setup appropriate widths for the various portals
+      portal[adjust].width = 100
+
+      ~center everything vertically
+      perform portal[name].centervert
+      perform portal[shortname].centervert
+      perform portal[value].centervert
+      perform portal[adjust].centervert
+      perform portal[dots].centervert
+
+      ~position everything horizontally
+      portal[name].left = 0
+      portal[shortname].left = 0
+      perform portal[adjust].alignedge[right,0]
+      perform portal[value].alignrel[rtol,adjust,-20]
+
+      ~extend the dots from the right of the name across to the value on the right
+      if (length(field[trtDisplay].text) > 4) then
+        portal[name].visible = 0
+        perform portal[dots].alignrel[ltor,shortname,0]
+      else
+        portal[shortname].visible = 0
+        perform portal[dots].alignrel[ltor,name,0]
+        endif
+
+      portal[dots].width = portal[value].left - 5 - portal[dots].left
+      ]]></position>
+
+    </template>
+
+
+  <!-- zStatPick template
+        This template presents status details of the actor, such as Encumbrance.
+  -->
+  <template
+    id="zStatPick"
+    name="Output Status Table"
+    compset="Resource"
+    marginhorz="25"
+    marginvert="0">
+
+    <portal
+      id="name"
+      style="outNameMed">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="value"
+      style="outNormRt">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = plaintext(field[resShort].text)
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is based on the tallest portal (they should all be the same)
+      height = portal[name].height
+      doneif (issizing <> 0)
+
+      ~center everything vertically
+      perform portal[name].centervert
+      perform portal[value].centervert
+      perform portal[dots].centervert
+
+      ~position everything horizontally
+      portal[name].left = 0
+      perform portal[value].alignedge[right,0]
+
+      ~extend the dots from the right of the name across to the value on the right
+      perform portal[dots].alignrel[ltor,name,0]
+      portal[dots].width = portal[value].left - 5 - portal[dots].left
+      ]]></position>
+
+    </template>
+
+
+  <!-- zAbilPick template
+        This template presents the Special Abilities, consisting of the prominent
+        name and the summary text in small letters next to it. We use a small margin
+        for vertical spacing between abilities.
+  -->
+  <template
+    id="zAbilPick"
+    name="Output Special Abilities Table"
+    compset="Ability"
+    marginvert="2">
+
+    <portal
+      id="details"
+      style="outMedLt">
+      <output_label>
+        <labeltext><![CDATA[
+          var major as string
+          if (tagis[component.Hindrance] <> 0) then
+            if (field[hinMajor].value <> 0) then
+              major = " {font Wingdings}" & chr(181) & "{revert}"
+              endif
+            endif
+          @text = field[shortname].text & major & "{/b}  {size 32}" & field[descript].text & "{br}{br}"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our details width spans the entire template width
+      portal[details].width = width
+
+	  ~set out portal height to automatically size as needed
+	  perform portal[details].autoheight
+	  
+      ~our height is the height of our portal
+      height = portal[details].bottom
+      ]]></position>
+    </template>
+
+
+  <!-- zSkillPick template
+        This template presents the list of Skills, showing just the name and value.
+        We use a large horizontal margin to center the skills nicely and a small
+        vertical margin to insert spacing between each skill.
+  -->
+  <template
+    id="zSkillPick"
+    name="Output Skills Table"
+    compset="Trait"
+    marginvert="0">
+
+    <portal
+      id="name"
+      style="outNameLg">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="value"
+      style="outValueLg">
+      <output_label>
+        <labeltext><![CDATA[
+          var dietype as number
+          var dietext as string
+          dietype = field[trtFinal].value
+          call OutputDie
+          @text = dietext
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="adjust"
+      style="outNameLg">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[trtNetRoll].value = 0) then
+            @text = ""
+          else
+            @text = signed(field[trtNetRoll].value)
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is driven by the tallest portal
+      height = portal[value].height
+      doneif (issizing <> 0)
+
+      ~position everything horizontally
+      if (tagis[User.NeedDomain] + tagis[Helper.DomainSkill] + tagis[Arcane.?] = 0) then
+        portal[name].left = 40
+        portal[value].left = 405
+      else
+        portal[name].left = 105
+        portal[value].left = 900
+        endif
+      perform portal[adjust].alignrel[ltor,value,5]
+
+      ~limit the name to the value portal edge
+      if (portal[name].right > portal[value].left - 10) then
+        portal[name].width = portal[value].left - portal[name].left - 10
+        endif
+
+      ~size the name to fit the available space and limit to one line
+      perform portal[name].sizetofit[36]
+      portal[name].lineheight = 1
+
+      ~extend the dots from the right of the name across to the value on the right
+      perform portal[dots].alignrel[ltor,name,0]
+      portal[dots].width = portal[value].left - 5 - portal[dots].left
+
+      ~center everything vertically within the template
+      perform portal[name].centervert
+      perform portal[value].centervert
+      perform portal[adjust].centervert
+      perform portal[dots].centervert
+      ]]></position>
+
+    </template>
+
+
+  <!-- zDrawPick template
+        This template outputs Drawbacks just like abilities, with a prominent name
+        and the summary text in small letters next to it.
+  -->
+  <template
+    id="zDrawPick"
+    name="Output Drawbacks Table"
+    compset="Drawback"
+    marginvert="2">
+
+    <portal
+      id="details"
+      style="outMedLt">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = field[name].text & "{/b}  {size 32}" & field[descript].text & "{br}{br}"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our details width spans the entire template width
+      portal[details].width = width
+
+      ~our height is the height of our portal
+      height = portal[details].bottom
+      ]]></position>
+    </template>
+
+
+  <!-- zPowerPick template
+        This template presents the arcane powers possessed by the character. Each
+        power lists its assorted facets, including drain, range, effect, and
+        duration.
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zPowerPick"
+    name="Output Powers Table"
+    compset="Power"
+    marginvert="2">
+	
+    <portal
+      id="name"
+      style="outMedLt">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="points"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          ~RDS SWD This has been extensively modified to allow for No Power Points
+          ~        It changes casting cost to a casting modifier and alters the duration
+          var castingmod as string
+          var castingno1 as number
+          var castingno2 as number
+          var length1 as number
+          var lengthall as number
+          var start2 as number
+          var length2 as number
+          var rawnumber1 as number
+          var rawnumber2 as number
+          if (hero.tagis[Hero.NoPowerPts] <> 0) then
+            ~ #-#
+            if (pos(field[powPoints].text,"-") > 0) then
+              length1 = pos(field[powPoints].text,"-")
+              start2 = pos(field[powPoints].text,"-") + 1
+              lengthall = length(field[powPoints].text)
+              length2 = lengthall - start2
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              rawnumber2 = right(field[powPoints].text,length2)
+              castingno2 = round(rawnumber2/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & " to -" & castingno2
+            ~ #/section
+            elseif (pos(lowercase(field[powPoints].text),"/section") > 0) then
+              length1 = pos(lowercase(field[powPoints].text),"/section")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = rawnumber1
+              castingmod = "-" & castingno1 & " per 2 sections"
+            ~ Special
+            elseif (pos(lowercase(field[powPoints].text),"special") > 0) then
+              castingmod = "Special"
+            ~ #/#
+            elseif (pos(field[powPoints].text,"/") > 0) then
+              length1 = pos(field[powPoints].text,"/")
+              start2 = pos(field[powPoints].text,"/") + 1
+              lengthall = length(field[powPoints].text)
+              length2 = lengthall - start2
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              rawnumber2 = right(field[powPoints].text,length2)
+              castingno2 = round(rawnumber2/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "/-" & castingno2
+            ~ #+
+            elseif (pos(field[powPoints].text,"+") > 0) then
+              length1 = pos(field[powPoints].text,"+")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "+"
+            ~ #/Corpse
+            elseif (pos(lowercase(field[powPoints].text),"/corpse") > 0) then
+              length1 = pos(lowercase(field[powPoints].text),"/corpse")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "/corpse"
+            ~ #
+            else
+              castingno1 = round(field[powPoints].text/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1
+              endif
+            @text = castingmod
+          else
+            if (field[powPrtPts].isempty = 0) then
+              @text = field[powPrtPts].text
+            else
+              @text = field[powPoints].text
+              endif
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="range"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[powPrtRng].isempty = 0) then
+            @text = field[powPrtRng].text
+          else
+            @text = field[powRange].text
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="duration"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          var maint as string
+          if (hero.tagis[Hero.NoPowerPts] <> 0) then
+            if (compare(lowercase(field[powLength].text),"instant") = 0) then
+              @text &= field[powLength].text
+            elseif (compare(lowercase(field[powLength].text),"special") = 0) then
+              @text &= field[powLength].text
+            else
+              @text &= "Maintained" & "{br}"
+              endif
+          else
+            if (field[powPrtMain].isempty = 0) then
+              maint = field[powPrtMain].text
+            else
+              maint = field[powMaint].text
+              endif
+            if (field[powPrtLen].isempty = 0) then
+              @text = field[powPrtLen].text
+            else
+              @text = field[powLength].text
+              endif
+            if (empty(maint) = 0) then
+              @text &= " (" & maint & ")"
+              endif
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="trapping"
+      style="outTinyLt">
+      <output_label
+        field="powTraps">
+        </output_label>
+      </portal>
+
+    <portal
+      id="summary"
+      style="outPower">
+      <output_label
+        field="descript"
+        ismultiline="yes">
+        </output_label>
+      </portal>
+
+    <!-- Portals used as the header -->
+    <portal
+      id="xhdrtitle"
+      style="outTitle"
+      isheader="yes">
+      <output_label>
+        <labeltext><![CDATA[
+		  @text = "Arcane Powers"
+		  if (hero.tagis[Rifts.UsesPPE] <> 0) then
+		    @text &= " (" & #trkmax[trkPower] & " PPE)"
+		  elseif (hero.tagis[Rifts.UsesISP] <> 0) then
+		    @text &= " (" & #trkmax[trkPower] & " ISP)"
+          else 
+		    @text &= " (" & #trkmax[trkPower] & " Points)"
+			endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrpoints"
+      style="outTiny"
+      isheader="yes">
+      <output_label>
+        <labeltext><![CDATA[
+        if (hero.tagis[Hero.NoPowerPts] <> 0) then
+          @text="Mod"
+        else
+          @text="Cost"
+          endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrrange"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Range">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrlength"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Dur/Maint">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrtrap"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Trappings">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~position all portals with the same baseline as the name; since they use a
+      ~smaller font, they will have a smaller height, so centering them will have
+      ~them appear to float up relative to the name
+      perform portal[points].alignrel[btob,name,0]
+      perform portal[range].alignrel[btob,name,0]
+      perform portal[duration].alignrel[btob,name,0]
+      perform portal[trapping].alignrel[btob,name,0]
+
+      ~establish suitable fixed widths for the various columns of data
+      portal[name].width = 300
+      portal[points].width = 150
+      portal[range].width = 150
+      portal[duration].width = 200
+
+      ~position everything horizontally
+      perform portal[points].alignrel[ltor,name,5]
+      perform portal[range].alignrel[ltor,points,5]
+      perform portal[duration].alignrel[ltor,range,5]
+      perform portal[trapping].alignrel[ltor,duration,5]
+
+      ~size the trappings portal to whatever space is left
+      portal[trapping].width = width - portal[trapping].left
+
+      ~size the summary portal to span the area excluding the name
+      portal[summary].left = portal[points].left
+      portal[summary].width = width - portal[summary].left
+      perform portal[summary].autoheight
+
+      ~position the summary portal beneath the other line of fields
+      perform portal[summary].alignrel[ttob,points,2]
+
+      ~our height is the base of the summary portal
+      height = portal[summary].bottom
+
+      ~size the name to fit the available space, then re-center after shrink
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].centervert
+      ]]></position>
+
+    <header><![CDATA[
+      ~our header height is the title plus a gap plus the header text
+      height = portal[xhdrtitle].height + 2 + portal[hdrpoints].height
+      doneif (issizing <> 0)
+
+      ~our title spans the entire width of the template
+      portal[xhdrtitle].width = width
+
+      ~each of our header labels has the same width as the corresponding data beneath
+      portal[hdrpoints].width = portal[points].width
+      portal[hdrrange].width = portal[range].width
+      portal[hdrlength].width = portal[duration].width
+      portal[hdrtrap].width = portal[trapping].width
+
+      ~center each header label on the corresponding data beneath
+      perform portal[hdrpoints].centeron[horz,points]
+      perform portal[hdrrange].centeron[horz,range]
+      perform portal[hdrlength].centeron[horz,duration]
+      perform portal[hdrtrap].centeron[horz,trapping]
+
+      ~align all header labels at the bottom of the header region
+      perform portal[hdrpoints].alignedge[bottom,0]
+      perform portal[hdrrange].alignedge[bottom,0]
+      perform portal[hdrlength].alignedge[bottom,0]
+      perform portal[hdrtrap].alignedge[bottom,0]
+      ]]></header>
+
+    </template>
+
+  <!-- zPower2Pick template
+        (like zPowerPick template)
+        This template presents the secondary arcane powers possessed by the character. 
+		Each power lists its assorted facets, including drain, range, effect, and
+        duration.
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zPower2Pick"
+    name="Output Sec. Powers Table"
+    compset="Power"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="outMedLt">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <portal
+      id="points"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          ~RDS SWD This has been extensively modified to allow for No Power Points
+          ~        It changes casting cost to a casting modifier and alters the duration
+          var castingmod as string
+          var castingno1 as number
+          var castingno2 as number
+          var length1 as number
+          var lengthall as number
+          var start2 as number
+          var length2 as number
+          var rawnumber1 as number
+          var rawnumber2 as number
+          if (hero.tagis[Hero.NoPowerPts] <> 0) then
+            ~ #-#
+            if (pos(field[powPoints].text,"-") > 0) then
+              length1 = pos(field[powPoints].text,"-")
+              start2 = pos(field[powPoints].text,"-") + 1
+              lengthall = length(field[powPoints].text)
+              length2 = lengthall - start2
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              rawnumber2 = right(field[powPoints].text,length2)
+              castingno2 = round(rawnumber2/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & " to -" & castingno2
+            ~ #/section
+            elseif (pos(lowercase(field[powPoints].text),"/section") > 0) then
+              length1 = pos(lowercase(field[powPoints].text),"/section")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = rawnumber1
+              castingmod = "-" & castingno1 & " per 2 sections"
+            ~ Special
+            elseif (pos(lowercase(field[powPoints].text),"special") > 0) then
+              castingmod = "Special"
+            ~ #/#
+            elseif (pos(field[powPoints].text,"/") > 0) then
+              length1 = pos(field[powPoints].text,"/")
+              start2 = pos(field[powPoints].text,"/") + 1
+              lengthall = length(field[powPoints].text)
+              length2 = lengthall - start2
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              rawnumber2 = right(field[powPoints].text,length2)
+              castingno2 = round(rawnumber2/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "/-" & castingno2
+            ~ #+
+            elseif (pos(field[powPoints].text,"+") > 0) then
+              length1 = pos(field[powPoints].text,"+")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "+"
+            ~ #/Corpse
+            elseif (pos(lowercase(field[powPoints].text),"/corpse") > 0) then
+              length1 = pos(lowercase(field[powPoints].text),"/corpse")
+              rawnumber1 = left(field[powPoints].text,length1)
+              castingno1 = round(rawnumber1/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1 & "/corpse"
+            ~ #
+            else
+              castingno1 = round(field[powPoints].text/herofield[acCastDiv].value,0,-1)
+              castingmod = "-" & castingno1
+              endif
+            @text = castingmod
+          else
+            if (field[powPrtPts].isempty = 0) then
+              @text = field[powPrtPts].text
+            else
+              @text = field[powPoints].text
+              endif
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="range"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[powPrtRng].isempty = 0) then
+            @text = field[powPrtRng].text
+          else
+            @text = field[powRange].text
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="duration"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          var maint as string
+          if (hero.tagis[Hero.NoPowerPts] <> 0) then
+            if (compare(lowercase(field[powLength].text),"instant") = 0) then
+              @text &= field[powLength].text
+            elseif (compare(lowercase(field[powLength].text),"special") = 0) then
+              @text &= field[powLength].text
+            else
+              @text &= "Maintained" & "{br}"
+              endif
+          else
+            if (field[powPrtMain].isempty = 0) then
+              maint = field[powPrtMain].text
+            else
+              maint = field[powMaint].text
+              endif
+            if (field[powPrtLen].isempty = 0) then
+              @text = field[powPrtLen].text
+            else
+              @text = field[powLength].text
+              endif
+            if (empty(maint) = 0) then
+              @text &= " (" & maint & ")"
+              endif
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="trapping"
+      style="outTinyLt">
+      <output_label
+        field="powTraps">
+        </output_label>
+      </portal>
+
+    <portal
+      id="summary"
+      style="outPower">
+      <output_label
+        field="descript"
+        ismultiline="yes">
+        </output_label>
+      </portal>
+
+    <!-- Portals used as the header -->
+    <portal
+      id="xhdrtitle"
+      style="outTitle"
+      isheader="yes">
+      <output_label>
+        <labeltext><![CDATA[
+		  @text = "Secondary Arcane Powers"
+		  if (hero.tagis[Rifts.UsesSecPPE] <> 0) then
+		    @text &= " (" & #trkmax[trkPower2] & " PPE)"
+		  elseif (hero.tagis[Rifts.UsesSecISP] <> 0) then
+		    @text &= " (" & #trkmax[trkPower2] & " ISP)"
+          else 
+		    @text &= " (" & #trkmax[trkPower2] & " Points)"
+			endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrpoints"
+      style="outTiny"
+      isheader="yes">
+      <output_label>
+        <labeltext><![CDATA[
+        if (hero.tagis[Hero.NoPowerPts] <> 0) then
+          @text="Mod"
+        else
+          @text="Cost"
+          endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrrange"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Range">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrlength"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Dur/Maint">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrtrap"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Trappings">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~position all portals with the same baseline as the name; since they use a
+      ~smaller font, they will have a smaller height, so centering them will have
+      ~them appear to float up relative to the name
+      perform portal[points].alignrel[btob,name,0]
+      perform portal[range].alignrel[btob,name,0]
+      perform portal[duration].alignrel[btob,name,0]
+      perform portal[trapping].alignrel[btob,name,0]
+
+      ~establish suitable fixed widths for the various columns of data
+      portal[name].width = 300
+      portal[points].width = 150
+      portal[range].width = 150
+      portal[duration].width = 200
+
+      ~position everything horizontally
+      perform portal[points].alignrel[ltor,name,5]
+      perform portal[range].alignrel[ltor,points,5]
+      perform portal[duration].alignrel[ltor,range,5]
+      perform portal[trapping].alignrel[ltor,duration,5]
+
+      ~size the trappings portal to whatever space is left
+      portal[trapping].width = width - portal[trapping].left
+
+      ~size the summary portal to span the area excluding the name
+      portal[summary].left = portal[points].left
+      portal[summary].width = width - portal[summary].left
+      perform portal[summary].autoheight
+
+      ~position the summary portal beneath the other line of fields
+      perform portal[summary].alignrel[ttob,points,2]
+
+      ~our height is the base of the summary portal
+      height = portal[summary].bottom
+
+      ~size the name to fit the available space, then re-center after shrink
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].centervert
+      ]]></position>
+
+    <header><![CDATA[
+      ~our header height is the title plus a gap plus the header text
+      height = portal[xhdrtitle].height + 2 + portal[hdrpoints].height
+      doneif (issizing <> 0)
+
+      ~our title spans the entire width of the template
+      portal[xhdrtitle].width = width
+
+      ~each of our header labels has the same width as the corresponding data beneath
+      portal[hdrpoints].width = portal[points].width
+      portal[hdrrange].width = portal[range].width
+      portal[hdrlength].width = portal[duration].width
+      portal[hdrtrap].width = portal[trapping].width
+
+      ~center each header label on the corresponding data beneath
+      perform portal[hdrpoints].centeron[horz,points]
+      perform portal[hdrrange].centeron[horz,range]
+      perform portal[hdrlength].centeron[horz,duration]
+      perform portal[hdrtrap].centeron[horz,trapping]
+
+      ~align all header labels at the bottom of the header region
+      perform portal[hdrpoints].alignedge[bottom,0]
+      perform portal[hdrrange].alignedge[bottom,0]
+      perform portal[hdrlength].alignedge[bottom,0]
+      perform portal[hdrtrap].alignedge[bottom,0]
+      ]]></header>
+
+    </template>
+
+  <!-- RDS SPC zSPPwrPick template
+        This template presents the SPC super powers possessed by the character. Each
+        power lists its assorted facets.
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zSPPwrPick"
+    name="Output Super Powers Table"
+    compset="SPCPower"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="outMedLt">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = field[name].text
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="nameext"
+      style="outNameSm">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[spcNameExt].isempty = 1) then
+            @text &= ""
+          elseif (field[spcNameEx2].isempty = 1) then
+            @text &= "[" & field[spcNameExt].text & "]"
+          else
+            @text &= "[" & field[spcNameExt].text & ", " & field[spcNameEx2].text & "]"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="points"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[spcPrtPts].isempty = 0) then
+            @text = field[spcPrtPts].text
+          else
+            @text = field[spcTotPts].text
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="level"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = field[spcLevel].text
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="range"
+      style="outTiny">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[spcPrtRng].isempty = 0) then
+            @text = field[spcPrtRng].text
+          else
+            @text = field[spcRange].text
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="trapping"
+      style="outNanoLt">
+      <output_label
+        field="spcTraps">
+        </output_label>
+      </portal>
+
+    <portal
+      id="summary"
+      style="outPower">
+      <output_label
+        ismultiline="yes">
+        <labeltext><![CDATA[
+          var lvldisplay as string
+          var lvlddesc as string
+          var dupcount as number
+          var prevmod as string
+          var clipped as number
+          var breakit as number
+          var ending as number
+          var firstpart as string
+          var lastpart as string
+          var multiplier as string
+          var ModList as string
+          var affected as string
+          
+          dupcount = 1
+          prevmod = ""
+          clipped = 0
+          breakit = 0
+          ending = 0
+          multiplier = ""
+          ModList = ""
+          affected = ""
+    
+          @text = field[descript].text
+          foreach pick in gizmo
+            if (eachpick.tagis[SPCPwrLvl.?] > 0) then
+              lvldisplay = eachpick.field[lvlPwrLvl].value
+              lvlddesc = eachpick.field[descript].text
+              @text &= "{br}{b}Level " & lvldisplay & " - {/b}" & lvlddesc
+              endif
+            nexteach
+
+          foreach pick in gizmo
+            if (eachpick.tagis[SPCPwrMod.?] > 0) then
+              if (compare(prevmod,eachpick.idstring) = 0) then
+                dupcount += 1
+                if (dupcount = 2) then
+                    breakit = lastpos(ModList," - ")
+                    ending = length(ModList)
+                    firstpart = mid(ModList,0,breakit)
+                    lastpart = mid(ModList,breakit,ending)
+                    ModList =  firstpart & " (x" & dupcount & ")" & lastpart
+                elseif (dupcount > 2) then
+                    breakit = lastpos(ModList," - ")
+                    clipped = breakit -5
+                    ending = length(ModList)
+                    firstpart = mid(ModList,0,clipped)
+                    lastpart = mid(ModList,breakit,ending)
+                    ModList =  firstpart & " (x" & dupcount & ")" & lastpart
+                    endif
+              else
+                prevmod = eachpick.idstring
+                dupcount = 1
+                if (empty(ModList) <> 0) then
+                  ModList = "{br}{b}" & eachpick.field[name].text & " - {/b}" & eachpick.field[descript].text
+                else
+                  ModList &= "{br}{b}" & eachpick.field[name].text & " - {/b}" & eachpick.field[descript].text
+                  endif
+                endif
+              endif
+            nexteach
+          @text &= ModList
+          if (field[spcNameExt].isempty = 1) then
+            @text &= ""
+          elseif (field[spcNameEx2].isempty = 1) then
+            affected = mid(field[name].text,6,length(field[name].text)) & ": "
+            @text &= "{br}{b}" & affected & field[spcNameExt].text & "{/b}"
+          else
+            if (compare(field[spcNameExt].text,field[spcNameEx2].text) = 0) then
+              affected = mid(field[name].text,6,length(field[name].text)) & ": "
+              @text &= "{br}{b}" & affected & field[spcNameExt].text & "(x2){/b}"
+            else
+              affected = mid(field[name].text,6,length(field[name].text)) & "s: "
+              @text &= "{br}{b}" & affected & field[spcNameExt].text & ", " & field[spcNameEx2].text & "{/b}"
+              endif
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+    
+    <!-- Portals to display the Power Level if present -->
+    <portal
+      id="pwrlevel"
+      style="outPower">
+      <output_label
+        ismultiline="yes">
+        <labeltext><![CDATA[
+          var lvldisplay as string
+          var lvlddesc as string
+          foreach pick in gizmo
+            if (eachpick.tagis[SPCPwrLvl.?] > 0) then
+              lvldisplay = eachpick.field[lvlPwrLvl].value
+              lvlddesc = eachpick.field[descript].text
+              @text = "{b}Level " & lvldisplay & " - {/b}" & lvlddesc
+              endif
+            nexteach
+        ]]></labeltext>
+      </output_label>
+      </portal>    
+    
+    <!-- Portals to display any applied Power Modifier -->
+    <portal
+      id="pwrmodify"
+      style="outPower">
+      <output_label
+        ismultiline="yes">
+        <labeltext><![CDATA[
+          var dupcount as number
+          var prevmod as string
+          var clipped as number
+          var breakit as number
+          var ending as number
+          var firstpart as string
+          var lastpart as string
+          var multiplier as string
+          var ModList as string
+          
+          dupcount = 1
+          prevmod = ""
+          clipped = 0
+          breakit = 0
+          ending = 0
+          multiplier = ""
+          ModList = ""
+    
+          foreach pick in gizmo
+            if (eachpick.tagis[SPCPwrMod.?] > 0) then
+              if (compare(prevmod,eachpick.idstring) = 0) then
+                dupcount += 1
+                if (dupcount = 2) then
+                    breakit = pos(ModList," - ")
+                    ending = length(ModList)
+                    firstpart = mid(ModList,0,breakit)
+                    lastpart = mid(ModList,breakit,ending)
+                    ModList =  firstpart & " (x" & dupcount & ")" & lastpart
+                elseif (dupcount > 2) then
+                    breakit = pos(ModList," - ")
+                    clipped = breakit -5
+                    ending = length(ModList)
+                    firstpart = mid(ModList,0,clipped)
+                    lastpart = mid(ModList,breakit,ending)
+                    ModList =  firstpart & " (x" & dupcount & ")" & lastpart
+                    endif
+              else
+                prevmod = eachpick.idstring
+                dupcount = 1
+                if (empty(ModList) <> 0) then
+                  ModList = "{b}" & eachpick.field[name].text & " - {/b}" & eachpick.field[descript].text
+                else
+                  ModList &= "{br}{b}" & eachpick.field[name].text & " - {/b}" & eachpick.field[descript].text
+                  endif
+                endif
+              endif
+            nexteach
+          @text = ModList
+          ]]></labeltext>
+        </output_label>
+      </portal>    
+
+    <!-- Portals used as the header -->
+    <portal
+      id="xhdrtitle"
+      style="outTitle"
+      isheader="yes">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "Super Powers (" & hero.child[resSPPower].field[resSpent].value & " Points)"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrpoints"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Cost">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrlevel"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Level">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrrange"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Range">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrtrap"
+      style="outTiny"
+      isheader="yes">
+      <output_label
+        text="Trappings">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      
+      if (field[spcLevel].value = 0) then
+        portal[level].visible = 0
+        endif
+
+      if (field[spcLevel].value = 0) then
+        portal[pwrlevel].visible = 0
+        endif
+
+~      if (gizmo.child[spcDetails].tagis[SPCPwrMod.?] = 0) then
+~        portal[pwrmodify].visible = 0
+~        endif
+
+    portal[pwrlevel].visible = 0
+    portal[pwrmodify].visible = 0
+    portal[nameext].visible = 0
+
+      ~position all portals with the same baseline as the name; since they use a
+      ~smaller font, they will have a smaller height, so centering them will have
+      ~them appear to float up relative to the name
+      perform portal[points].alignrel[btob,name,0]
+      perform portal[level].alignrel[btob,name,0]
+      perform portal[range].alignrel[btob,name,0]
+      perform portal[trapping].alignrel[btob,name,0]
+
+      ~establish suitable fixed widths for the various columns of data
+      portal[name].width = 300
+      portal[points].width = 100
+      portal[level].width = 100
+      portal[range].width = 250
+
+      ~position everything horizontally
+      perform portal[points].alignrel[ltor,name,5]
+      perform portal[level].alignrel[ltor,points,5]
+      perform portal[range].alignrel[ltor,level,5]
+      perform portal[trapping].alignrel[ltor,range,5]
+
+      ~size the trappings portal to whatever space is left
+      portal[trapping].width = width - portal[trapping].left
+
+      ~size the summary portal to span the area excluding the name
+      portal[summary].left = portal[points].left
+      portal[summary].width = width - portal[summary].left
+      perform portal[summary].autoheight
+
+      ~position the summary portal beneath the other line of fields
+      perform portal[summary].alignrel[ttob,points,2]
+
+      ~position the power level portal beneath the summary
+      portal[pwrlevel].left = portal[points].left
+      perform portal[pwrlevel].alignrel[ttob,summary,0]
+      perform portal[pwrlevel].autoheight
+
+      ~position the summary portal beneath the other line of fields
+      portal[pwrmodify].left = portal[points].left
+      perform portal[pwrmodify].alignrel[ttob,pwrlevel,0]
+      perform portal[pwrmodify].autoheight
+
+      ~our height is the base of the summary portal
+      height = portal[summary].bottom
+
+      ~size the name to fit the available space, then re-center after shrink
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].centervert
+      perform portal[nameext].alignrel[ttob,name,2]
+      ]]></position>
+
+    <header><![CDATA[
+      ~our header height is the title plus a gap plus the header text
+      height = portal[xhdrtitle].height + 2 + portal[hdrpoints].height
+      doneif (issizing <> 0)
+
+      ~our title spans the entire width of the template
+      portal[xhdrtitle].width = width
+
+      ~each of our header labels has the same width as the corresponding data beneath
+      portal[hdrpoints].width = portal[points].width
+      portal[hdrpoints].width = portal[level].width
+      portal[hdrrange].width = portal[range].width
+      portal[hdrtrap].width = portal[trapping].width
+
+      ~center each header label on the corresponding data beneath
+      perform portal[hdrpoints].centeron[horz,points]
+      perform portal[hdrlevel].centeron[horz,level]
+      perform portal[hdrrange].centeron[horz,range]
+      perform portal[hdrtrap].centeron[horz,trapping]
+
+      ~align all header labels at the bottom of the header region
+      perform portal[hdrpoints].alignedge[bottom,0]
+      perform portal[hdrlevel].alignedge[bottom,0]
+      perform portal[hdrrange].alignedge[bottom,0]
+      perform portal[hdrtrap].alignedge[bottom,0]
+      ]]></header>
+
+    </template>
+
+  <!-- zGearPick template
+        This template presents the basic gear possessed. Gear that is in quantities
+        other than one has the proper quantity listed next to it. We use a small
+        horizontal margin to indent everything slightly.
+  -->
+  <template
+    id="zGearPick"
+    name="Output Gear Table"
+    compset="Equipment"
+    marginhorz="5">
+
+    <portal
+      id="name"
+      style="outGear">
+      <output_label>
+        <labeltext><![CDATA[
+          if (stackable = 0) then
+            @text = ""
+          elseif (field[stackQty].value = 1) then
+            @text = ""
+          else
+            @text = field[stackQty].text & "x "
+            endif
+          @text &= field[shortname].text
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is the height of the tallest portal
+      height = portal[name].height
+      doneif (issizing <> 0)
+
+      ~limit the width of the name to the width of the template
+      if (portal[name].width > width) then
+        portal[name].width = width
+        endif
+
+      ~size the name to fit the available space, if needed
+      perform portal[name].sizetofit[30]
+
+      ~limit the name to a single line based on the updated font size
+      portal[name].lineheight = 1
+
+      ~align the name at the bottom of the template
+      perform portal[name].alignedge[bottom,0]
+      ]]></position>
+
+    </template>
+
+
+  <!-- zMItemPick template
+        This template presents the magic miscellaneous item possessed. We use a small
+        horizontal margin to indent everything slightly.
+  -->
+  <template
+    id="zMItemPick"
+    name="Misc Magic Item Table"
+    compset="Equipment"
+    marginvert="10">
+
+    <portal
+      id="name"
+      style="outMedLt">
+      <output_label
+      ismultiline="no">
+        <labeltext><![CDATA[
+          if (stackable = 0) then
+            @text = ""
+          elseif (field[stackQty].value = 1) then
+            @text = ""
+          else
+            @text = field[stackQty].text & "x "
+            endif
+          @text &= field[shortname].text
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <!-- Portal to display any magical abilities -->
+    <portal
+      id="summary"
+      style="outPower">
+      <output_label
+        ismultiline="yes">
+        <labeltext><![CDATA[
+        var iteminfo  as string
+        var magicinfo as string
+        var bonusinfo as string
+
+      if (field[miAttack].value <> 0) then
+        magicinfo &= "{horz 10}" & chr(149) & " Attack Bonus: "  & signed(field[miAttack].value)
+        endif
+      if (field[miDamage].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Damage Bonus: "  & signed(field[miDamage].value)
+        endif 
+      if (field[miParry].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Parry Bonus: "  & signed(field[miParry].value)
+        endif
+      if (field[miTough].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Toughness Bonus: "  & signed(field[miTough].value)
+        endif
+      if (field[miArmor].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Armor Bonus: "  & signed(field[miArmor].value)
+        endif
+      if (field[miArmor].value + field[miAttack].value + field[miDamage].value + field[miParry].value + field[miTough].value <> 0) then
+        magicinfo &= "{br}"
+        endif
+
+      foreach pick in gizmo where "miSkill.?"
+        bonusinfo = signed(eachpick.field[miSkBonus].value) & " "
+        if (eachpick.tagis[miSkNeeds.Domain] <> 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[miSkDomain].text & "): " & bonusinfo & eachpick.field[descript].text & "{br}"
+        else
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & ": " & bonusinfo & eachpick.field[descript].text & "{br}"
+          endif
+        nexteach
+      foreach pick in gizmo where "miEdge.?"
+        magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & " - " & eachpick.field[descript].text & "{br}"
+        nexteach
+      foreach pick in gizmo where "miPower.?"
+
+        if (eachpick.field[mipAttr].isempty = 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[mipAttr].text & ") - " & eachpick.field[descript].text & "{br}"
+        elseif (eachpick.field[mipDomain].isempty = 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[mipDomain].text & ") - " & eachpick.field[descript].text & "{br}"
+        else
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & " - " & eachpick.field[descript].text & "{br}"
+          endif
+        magicinfo &= "{horz 38}" & " Trappings: " & eachpick.field[mipTraps].text & "{br}" 
+        nexteach
+      ~magicinfo &= "{br}"
+
+      iteminfo &= magicinfo
+
+      if (field[miTraps].isempty = 0) then 
+          iteminfo &= "Trappings: " & field[miTraps].text & "{br}"
+          endif
+      
+      if (field[miNotes].isempty = 0) then 
+          iteminfo &= "Notes: " & field[miNotes].text & "{br}"
+          endif
+
+
+          @text = iteminfo
+          ]]></labeltext>
+        </output_label>
+      </portal>    
+
+    <position><![CDATA[
+      ~our height is the height of the tallest portal
+      ~~height = portal[name].height + portal[summary].height
+      ~~doneif (issizing <> 0)
+
+      ~limit the width of the name to the width of the template
+      if (portal[name].width > width) then
+        portal[name].width = width
+        endif
+
+      ~size the name to fit the available space, if needed
+      perform portal[name].sizetofit[30]
+
+      ~limit the name to a single line based on the updated font size
+      ~portal[name].lineheight = 1
+
+      ~align the name at the bottom of the template
+      portal[name].top = 0
+      ~alignedge[bottom,0]
+
+      ~size the summary portal to span the area excluding the name
+      ~position the summary portal beneath the other line of fields
+      portal[summary].left = 50
+      portal[summary].width = width - portal[summary].left -50
+      perform portal[summary].autoheight
+      ~portal[summary].height = 400
+
+      ~position the summary portal beneath the other line of fields
+      perform portal[summary].alignrel[ttob,name,2]
+
+      ~our height is the base of the summary portal
+      height = portal[summary].bottom
+~      height = portal[summary].height + portal[name].height
+      ]]></position>
+
+    </template>
+
+
+  <!-- zArmorPick template
+        This template presents the armor possessed, flagging equipped armor with a
+        suitable bitmap and armor that doesn't meet the minimum strength requirement
+        with a different bitmap.
+  -->
+  <template
+    id="zArmorPick"
+    name="Output Armor Table"
+    compset="Equipment"
+    marginvert="1">
+
+    <portal
+      id="equipped"
+      style="outNameMed">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{bmpscale 3 output_armor}"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="name"
+      style="outNameMed">
+      <output_label>
+        <labeltext><![CDATA[
+          ~start with the name and switch to a smaller, non-bold font for details
+          var temp as string
+          @text = field[name].text
+          @text &= "{size 36}{/b} ("
+
+          ~add the defense rating
+          @text &= field[defDefense].text
+
+          ~if this is a shield, include the parry rating (if non-zero)
+          if (tagis[component.Shield] <> 0) then
+            if (field[defParry].value <> 0) then
+              @text &= ", Parry: " & signed(field[defParry].value)
+              endif
+            endif
+
+          ~if this is armor, include the areas covered by the equipment
+          if (tagis[component.Armor] <> 0) then
+            temp = tagabbrevs[ArmorLoc.?,","]
+            if (empty(temp) = 0) then
+              @text &= ", Covers: " & temp
+              endif
+            endif
+
+          ~wrapup the details
+          @text &= ")"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is the height of the tallest portal
+      height = maximum(portal[name].height,portal[equipped].height)
+      doneif (issizing <> 0)
+
+      ~if the armor is not equipped, hide the bitmap
+      if (tagis[Equipped.Equipped] = 0) then
+        portal[equipped].visible = 0
+        endif
+
+      ~center all portals vertically
+      perform portal[equipped].centervert
+      perform portal[name].centervert
+
+      ~shift the "equipped" bitmap downward a little bit; this is because it is a
+      ~lone bitmap drawn via encoded text, and bitmaps are never drawn within the
+      ~descender portion of the text, which causes it to appear higher than we want it
+      portal[equipped].top += 4
+
+      ~align everything horizontally
+      perform portal[name].alignrel[ltor,equipped,5]
+      ]]></position>
+
+    </template>
+
+  <!-- zMArmrPick template
+        This template presents the armor possessed, flagging equipped armor with a
+        suitable bitmap and armor that doesn't meet the minimum strength requirement
+        with a different bitmap.
+  -->
+  <template
+    id="zMArmrPick"
+    name="Output Armor Table"
+    compset="Equipment"
+    marginvert="10">
+
+    <portal
+      id="equipped"
+      style="outNameMed">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{bmpscale 3 output_armor}"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="name"
+      style="outNameMed">
+      <output_label
+      ismultiline="no">
+        <labeltext><![CDATA[
+          ~start with the name and switch to a smaller, non-bold font for details
+          var temp as string
+          @text = field[name].text
+          @text &= "{size 36}{/b} ("
+
+          ~add the defense rating
+          @text &= field[defDefense].text
+
+          ~if this is a shield, include the parry rating (if non-zero)
+          if (tagis[component.Shield] <> 0) then
+            if (field[defParry].value <> 0) then
+              @text &= ", Parry: " & signed(field[defParry].value)
+              endif
+            endif
+
+          ~if this is armor, include the areas covered by the equipment
+          if (tagis[component.Armor] <> 0) then
+            temp = tagabbrevs[ArmorLoc.?,","]
+            if (empty(temp) = 0) then
+              @text &= ", Covers: " & temp
+              endif
+            endif
+
+          ~wrapup the details
+          @text &= ")"
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <!-- Portal to display any magical abilities -->
+    <portal
+      id="summary"
+      style="outPower">
+      <output_label
+        ismultiline="yes">
+        <labeltext><![CDATA[
+        var iteminfo  as string
+        var magicinfo as string
+        var bonusinfo as string
+
+      if (field[miAttack].value <> 0) then
+        magicinfo &= "{horz 10}" & chr(149) & " Attack Bonus: "  & signed(field[miAttack].value)
+        endif
+      if (field[miDamage].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Damage Bonus: "  & signed(field[miDamage].value)
+        endif 
+      if (field[miParry].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Parry Bonus: "  & signed(field[miParry].value)
+        endif
+      if (field[miTough].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Toughness Bonus: "  & signed(field[miTough].value)
+        endif
+      if (field[miArmor].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Armor Bonus: "  & signed(field[miArmor].value)
+        endif
+      if (field[miArmor].value + field[miAttack].value + field[miDamage].value + field[miParry].value + field[miTough].value <> 0) then
+        magicinfo &= "{br}"
+        endif
+
+      foreach pick in gizmo where "miSkill.?"
+        bonusinfo = signed(eachpick.field[miSkBonus].value) & " "
+        if (eachpick.tagis[miSkNeeds.Domain] <> 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[miSkDomain].text & "): " & bonusinfo & eachpick.field[descript].text & "{br}"
+        else
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & ": " & bonusinfo & eachpick.field[descript].text & "{br}"
+          endif
+        nexteach
+      foreach pick in gizmo where "miEdge.?"
+        magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & " - " & eachpick.field[descript].text & "{br}"
+        nexteach
+      foreach pick in gizmo where "miPower.?"
+
+        if (eachpick.field[mipAttr].isempty = 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[mipAttr].text & ") - " & eachpick.field[descript].text & "{br}"
+        elseif (eachpick.field[mipDomain].isempty = 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[mipDomain].text & ") - " & eachpick.field[descript].text & "{br}"
+        else
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & " - " & eachpick.field[descript].text & "{br}"
+          endif
+        magicinfo &= "{horz 38}" & " Trappings: " & eachpick.field[mipTraps].text & "{br}" 
+        nexteach
+      ~magicinfo &= "{br}"
+
+      iteminfo &= magicinfo
+
+      if (field[miTraps].isempty = 0) then 
+          iteminfo &= "Trappings: " & field[miTraps].text & "{br}"
+          endif
+      
+      if (field[miNotes].isempty = 0) then 
+          iteminfo &= "Notes: " & field[miNotes].text & "{br}"
+          endif
+
+          @text = iteminfo
+          ]]></labeltext>
+        </output_label>
+      </portal>    
+
+    <position><![CDATA[
+      ~our height is the height of the tallest portal
+      ~~height = portal[name].height + portal[summary].height 
+      ~~doneif (issizing <> 0)
+
+      ~if the armor is not equipped, hide the bitmap
+      if (tagis[Equipped.Equipped] = 0) then
+        portal[equipped].visible = 0
+        endif
+
+      ~center all portals vertically
+      perform portal[equipped].centervert
+      perform portal[name].centervert
+
+      ~shift the "equipped" bitmap downward a little bit; this is because it is a
+      ~lone bitmap drawn via encoded text, and bitmaps are never drawn within the
+      ~descender portion of the text, which causes it to appear higher than we want it
+      portal[equipped].top += 4
+
+      portal[name].top = 0
+
+      ~align everything horizontally
+      perform portal[name].alignrel[ltor,equipped,5]
+
+      ~size the summary portal to span the area excluding the name
+      portal[summary].left = 50
+      ~alignrel[ltor,name,2]
+      portal[summary].width = width - portal[summary].left -50
+      perform portal[summary].autoheight
+
+      ~position the summary portal beneath the other line of fields
+      perform portal[summary].alignrel[ttob,name,2]
+
+      ~our height is the base of the summary portal
+      height = portal[summary].bottom
+~      height = portal[summary].height + portal[name].height
+      ]]></position>
+
+    </template>
+
+
+
+  <!-- zWeapPick template
+        This template presents the weapons possessed by the character. Each weapon
+        lists its net attack value and damage, with ranged weapons including the
+        range details. Any weapon that doesn't satisfy the minimum strength requirement
+        is flagged with a suitable bitmap.
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zWeapPick"
+    name="Output Weapon Table"
+    compset="Weapon"
+    marginvert="2">
+
+    <portal
+      id="badstr"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{font Webdings}" & chr(120)
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="name"
+      style="outNameMed">
+      <output_label
+        field="shortname">
+        </output_label>
+      </portal>
+
+    <portal
+      id="special"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{font Wingdings}" & chr(171)
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="notes"
+      style="outTinyLt">
+      <output_label
+        field="wpNotes">
+        </output_label>
+      </portal>
+
+    <portal
+      id="attack"
+      style="outPlain">
+      <output_label
+        field="wpNetAtk">
+        </output_label>
+      </portal>
+
+    <portal
+      id="damage"
+      style="outPlain">
+      <output_label
+        field="wpShowDmg">
+        </output_label>
+      </portal>
+
+    <portal
+      id="ap"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[wpPiercing].value <> 0) then
+            @text = field[wpPiercing].text
+          else
+            @text = "-"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="range"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          if (tagis[component.WeapRange] <> 0) then
+            @text = field[wpRange].text
+          else
+            @text = "-"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <!-- Portals used as the header -->
+    <portal
+      id="hdrtitle"
+      style="outTitle"
+      isheader="yes">
+      <output_label
+        text="Weapons">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrattack"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Attack">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrdamage"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Damage">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrap"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="AP">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrrange"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Range">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is based on the tallest portal within
+      if (field[wpNotes].isempty = 0) then
+        height = portal[name].height + portal[notes].height + 5
+      else
+        height = portal[name].height + 5
+      endif
+      doneif (issizing <> 0)
+
+      ~place the name and indicators at the top, and the notes underneath
+      portal[name].top = 0
+      perform portal[badstr].alignrel[btob,name,0]
+      perform portal[special].alignrel[ttob,name,0]
+      perform portal[notes].alignrel[ttob,name,0]
+
+      ~position the other portals with the same baseline as the name; since they
+      ~use a smaller font, they will have a smaller height, so centering them will
+      ~make them appear to float up relative to the name
+      perform portal[attack].alignrel[btob,name,0]
+      perform portal[damage].alignrel[btob,name,0]
+      perform portal[ap].alignrel[btob,name,0]
+      perform portal[range].alignrel[btob,name,0]
+      perform portal[dots].alignrel[btob,name,0]
+
+      ~establish suitable fixed widths for the various columns of data
+      portal[attack].width = 135
+      portal[damage].width = 195
+      portal[ap].width = 50
+      portal[range].width = 225
+~      portal[notes].width = width
+
+      ~assign the name the remaining horizontal space
+      ~Note: We must also account for a gap of 5 between portals.
+      portal[name].width = width - 4 * 5
+      portal[name].width -= portal[attack].width + portal[damage].width
+      portal[name].width -= portal[ap].width + portal[range].width
+
+      ~position our columns now, except for the name
+      portal[attack].left = portal[name].right + 5
+      perform portal[damage].alignrel[ltor,attack,5]
+      perform portal[ap].alignrel[ltor,damage,5]
+      perform portal[range].alignrel[ltor,ap,5]
+
+      portal[special].left = portal[name].left + 10
+      portal[notes].left = portal[special].right
+
+      ~setup to track our position when positioning portals along the x-axis
+      var x as number
+      x = 0
+
+      ~if the weapon satisfies the minimum strength requirement, hide the bitmap,
+      ~else position it on the left
+      if (tagis[Helper.BadStrReq] = 0) then
+        portal[badstr].visible = 0
+      else
+        portal[badstr].left = 0
+        x = portal[badstr].right
+        endif
+
+      ~if there are no special details for the weapon, hide the bitmap
+      if (field[wpNotes].isempty = 1) then
+        portal[special].visible = 0
+        portal[notes].visible = 0
+        endif
+
+      ~shrink the space for the name based on the presence of the two bitmaps
+      portal[name].width -= portal[badstr].width * portal[badstr].visible
+
+~      portal[name].width -= portal[special].width * portal[special].visible
+
+      ~size the name to fit the available space, then reposition it at the baseline
+      ~Note: This is needed since smaller text will have the same top position.
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].alignrel[btob,attack,0]
+
+      ~recalculate the width of the name based on the sized font
+      ~Note: This is needed so we can determine the span for the row of dots.
+      ~Note: We must also cap the name portal to its previous width, just in case
+      ~       the "sizetofit" didn't shrink the name far enough to fully fit.
+      var limit as number
+      limit = portal[name].width
+      perform portal[name].autowidth
+      if (portal[name].width > limit) then
+        portal[name].width = limit
+        endif
+
+      ~position the name and special details indicator portals horizontally now
+      portal[name].left = x
+      x = portal[name].right
+
+~      if (portal[special].visible <> 0) then
+~        portal[special].left = x
+~        x = portal[special].right
+~        endif
+
+      ~extend the dots from the right of the name across to the attack portal
+      if (x > portal[attack].left - 10) then
+        portal[dots].visible = 0
+      else
+        portal[dots].left = x + 5
+        portal[dots].width = portal[attack].left - 5 - portal[dots].left
+        endif
+
+      ]]></position>
+
+    <header><![CDATA[
+      ~our header height is the title plus a gap plus the header text
+      height = portal[hdrtitle].height + 2 + portal[hdrattack].height
+      doneif (issizing <> 0)
+
+      ~our title spans the entire width of the template
+      portal[hdrtitle].width = width
+
+      ~each of our header labels has the same width as the corresponding data beneath
+      portal[hdrattack].width = portal[attack].width
+      portal[hdrdamage].width = portal[damage].width
+      portal[hdrap].width = portal[ap].width
+      portal[hdrrange].width = portal[range].width
+
+      ~center each header label on the corresponding data beneath
+      perform portal[hdrattack].centeron[horz,attack]
+      perform portal[hdrdamage].centeron[horz,damage]
+      perform portal[hdrap].centeron[horz,ap]
+      perform portal[hdrrange].centeron[horz,range]
+
+      ~align all header labels at the bottom of the header region
+      perform portal[hdrattack].alignedge[bottom,0]
+      perform portal[hdrdamage].alignedge[bottom,0]
+      perform portal[hdrap].alignedge[bottom,0]
+      perform portal[hdrrange].alignedge[bottom,0]
+      ]]></header>
+
+    </template>
+
+  <!-- RDS SPC zSPAtkPick template
+        This template presents the SPC attack powers possessed by the character. Each
+        power lists its assorted facets as they apply as weapons. Each lists its net 
+        attack value and damage, with ranged powers including the range details. 
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zSPAtkPick"
+    name="Attack Power Table"
+    compset="SPCPower"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="outMedLt">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = field[name].text
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="nameext"
+      style="outNameSm">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[spcNameExt].isempty = 1) then
+            @text &= ""
+          elseif (field[spcNameEx2].isempty = 1) then
+            @text &= "[" & field[spcNameExt].text & "]"
+          else
+            @text &= "[" & field[spcNameExt].text & ", " & field[spcNameEx2].text & "]"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="attack"
+      style="outPlain">
+      <output_label
+        field="spcNetAtk">
+        </output_label>
+      </portal>
+
+    <portal
+      id="damage"
+      style="outPlain">
+      <output_label
+        field="spcDamage">
+        </output_label>
+      </portal>
+
+    <portal
+      id="range"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[spcRange].isempty = 0) then
+            @text = field[spcRange].text
+          else
+            @text = "-"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <!-- Portals used as the header -->
+    <portal
+      id="hdrtitle"
+      style="outTitle"
+      isheader="yes">
+      <output_label
+        text="Attack Powers Summary">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrattack"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Attack">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrdamage"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Damage">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrrange"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Range">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is based on the tallest portal within
+      height = portal[name].height
+      doneif (issizing <> 0)
+
+      ~center the name and indicators vertically
+      perform portal[name].centervert
+
+      ~position the other portals with the same baseline as the name; since they
+      ~use a smaller font, they will have a smaller height, so centering them will
+      ~make them appear to float up relative to the name
+      perform portal[attack].alignrel[btob,name,0]
+      perform portal[damage].alignrel[btob,name,0]
+      perform portal[range].alignrel[btob,name,0]
+      perform portal[dots].alignrel[btob,name,0]
+
+      ~establish suitable fixed widths for the various columns of data
+      portal[attack].width = 135
+      portal[damage].width = 195
+      portal[range].width = 225
+
+      ~assign the name the remaining horizontal space
+      ~Note: We must also account for a gap of 5 between portals.
+      portal[name].width = width - 4 * 5
+      portal[name].width -= portal[attack].width + portal[damage].width
+      portal[name].width -= portal[range].width
+
+      ~position our columns now, except for the name
+      portal[attack].left = portal[name].right + 5
+      perform portal[damage].alignrel[ltor,attack,5]
+      perform portal[range].alignrel[ltor,damage,5]
+
+      ~setup to track our position when positioning portals along the x-axis
+      var x as number
+      x = 0
+
+      ~size the name to fit the available space, then reposition it at the baseline
+      ~Note: This is needed since smaller text will have the same top position.
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].alignrel[btob,attack,0]
+
+      ~recalculate the width of the name based on the sized font
+      ~Note: This is needed so we can determine the span for the row of dots.
+      ~Note: We must also cap the name portal to its previous width, just in case
+      ~       the "sizetofit" didn't shrink the name far enough to fully fit.
+      var limit as number
+      limit = portal[name].width
+      perform portal[name].autowidth
+      if (portal[name].width > limit) then
+        portal[name].width = limit
+        endif
+
+      ~position the name and special details indicator portals horizontally now
+      portal[name].left = x
+      x = portal[name].right
+
+      ~extend the dots from the right of the name across to the attack portal
+      if (x > portal[attack].left - 10) then
+        portal[dots].visible = 0
+      else
+        portal[dots].left = x + 5
+        portal[dots].width = portal[attack].left - 5 - portal[dots].left
+        endif
+
+      ]]></position>
+
+    <header><![CDATA[
+      ~our header height is the title plus a gap plus the header text
+      height = portal[hdrtitle].height + 2 + portal[hdrattack].height
+      doneif (issizing <> 0)
+
+      ~our title spans the entire width of the template
+      portal[hdrtitle].width = width
+
+      ~each of our header labels has the same width as the corresponding data beneath
+      portal[hdrattack].width = portal[attack].width
+      portal[hdrdamage].width = portal[damage].width
+      portal[hdrrange].width = portal[range].width
+
+      ~center each header label on the corresponding data beneath
+      perform portal[hdrattack].centeron[horz,attack]
+      perform portal[hdrdamage].centeron[horz,damage]
+      perform portal[hdrrange].centeron[horz,range]
+
+      ~align all header labels at the bottom of the header region
+      perform portal[hdrattack].alignedge[bottom,0]
+      perform portal[hdrdamage].alignedge[bottom,0]
+      perform portal[hdrrange].alignedge[bottom,0]
+      ]]></header>
+
+    </template>
+
+  <!-- zMWeapPick template
+        This template presents the weapons possessed by the character. Each weapon
+        lists its net attack value and damage, with ranged weapons including the
+        range details. Any weapon that doesn't satisfy the minimum strength requirement
+        is flagged with a suitable bitmap.
+
+        The template is also used as a header for the table. As such, the template
+        includes additional portals that are only used as part of the header (i.e.
+        they are designated by the "isheader" attribute). All header portals are
+        positioned via the "header" script, which is invoked AFTER the normal "position"
+        script. Header portals can therefore be positioned relative to non-header
+        portals, making it easy to align the header portals based on the actual content
+        portals.
+
+        NOTE! We CANNOT use a non-zero "marginhorz" attribute for the template to
+        apply an indent on each side. The titlebar inherits the same margin restriction
+        as the contents area, so the title would not span the full width. Consequently,
+        we manually indent everything on either side within the "position" script.
+  -->
+  <template
+    id="zMWeapPick"
+    name="Output Weapon Table"
+    compset="Weapon"
+    marginvert="10">
+
+    <portal
+      id="badstr"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{font Webdings}" & chr(120)
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="name"
+      style="outNameMed">
+      <output_label
+        field="shortname"
+        ismultiline="no">
+        </output_label>
+      </portal>
+
+    <portal
+      id="special"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{font Wingdings}" & chr(171)
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="attack"
+      style="outPlain">
+      <output_label
+        field="wpNetAtk">
+        </output_label>
+      </portal>
+
+    <portal
+      id="damage"
+      style="outPlain">
+      <output_label
+        field="wpShowDmg">
+        </output_label>
+      </portal>
+
+    <portal
+      id="ap"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          if (field[wpPiercing].value <> 0) then
+            @text = field[wpPiercing].text
+          else
+            @text = "-"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="range"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          if (tagis[component.WeapRange] <> 0) then
+            @text = field[wpRange].text
+          else
+            @text = "-"
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="dots"
+      style="outDots">
+      <output_dots>
+        </output_dots>
+      </portal>
+
+    <!-- Portals used as the header -->
+    <portal
+      id="hdrtitle"
+      style="outTitle"
+      isheader="yes">
+      <output_label
+        text="Magic Weapons">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrattack"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Attack">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrdamage"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Damage">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrap"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="AP">
+        </output_label>
+      </portal>
+
+    <portal
+      id="hdrrange"
+      style="outHeader"
+      isheader="yes">
+      <output_label
+        text="Range">
+        </output_label>
+      </portal>
+
+    <!-- Portal to display any magical abilities -->
+    <portal
+      id="summary"
+      style="outPower">
+      <output_label
+        ismultiline="yes">
+        <labeltext><![CDATA[
+        var iteminfo  as string
+        var magicinfo as string
+        var bonusinfo as string
+
+      if (field[miAttack].value <> 0) then
+        magicinfo &= "{horz 10}" & chr(149) & " Attack Bonus: "  & signed(field[miAttack].value)
+        endif
+      if (field[miDamage].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Damage Bonus: "  & signed(field[miDamage].value)
+        endif 
+      if (field[miParry].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Parry Bonus: "  & signed(field[miParry].value)
+        endif
+      if (field[miTough].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Toughness Bonus: "  & signed(field[miTough].value)
+        endif
+      if (field[miArmor].value <> 0) then
+        if (empty(magicinfo) = 0) then
+          magicinfo &= "; "
+          endif
+        magicinfo &= "{horz 10}" & chr(149) & " Armor Bonus: "  & signed(field[miArmor].value)
+        endif
+      if (field[miArmor].value + field[miAttack].value + field[miDamage].value + field[miParry].value + field[miTough].value > 0) then
+        magicinfo &= "{br}"
+        endif
+
+      foreach pick in gizmo where "miSkill.?"
+        bonusinfo = signed(eachpick.field[miSkBonus].value) & " "
+        if (eachpick.tagis[miSkNeeds.Domain] <> 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[miSkDomain].text & "): " & bonusinfo & eachpick.field[descript].text & "{br}"
+        else
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & ": " & bonusinfo & eachpick.field[descript].text & "{br}"
+          endif
+        nexteach
+      foreach pick in gizmo where "miEdge.?"
+        magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & " - " & eachpick.field[descript].text & "{br}"
+        nexteach
+      foreach pick in gizmo where "miPower.?"
+        if (eachpick.field[mipAttr].isempty = 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[mipAttr].text & ") - " & eachpick.field[descript].text & "{br}"
+        elseif (eachpick.field[mipDomain].isempty = 0) then
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & "(" & eachpick.field[mipDomain].text & ") - " & eachpick.field[descript].text & "{br}"
+        else
+          magicinfo &= "{horz 10}" &  chr(149) & " " & eachpick.field[name].text & " - " & eachpick.field[descript].text & "{br}"
+          endif
+        magicinfo &= "{horz 38}" & " Trappings: " & eachpick.field[mipTraps].text & "{br}" 
+        nexteach
+      ~magicinfo &= "{br}"
+
+      iteminfo &= magicinfo
+
+      if (field[miTraps].isempty = 0) then 
+          iteminfo &= "Trappings: " & field[miTraps].text & "{br}"
+          endif
+      
+      if (field[miNotes].isempty = 0) then 
+          iteminfo &= "Notes: " & field[miNotes].text & "{br}"
+          endif
+
+          @text = iteminfo
+          ]]></labeltext>
+        </output_label>
+      </portal>    
+
+    <position><![CDATA[
+      ~our height is based on the tallest portal within
+      ~height = portal[name].height + portal[summary].height + 2
+      ~doneif (issizing <> 0)
+
+      ~center the name and indicators vertically
+      perform portal[name].centervert
+      perform portal[badstr].centervert
+      perform portal[special].centervert
+      perform portal[special].alignrel[btob,name,0]
+~      portal[special].top = 5
+
+      portal[name].top = 0
+
+      ~position the other portals with the same baseline as the name; since they
+      ~use a smaller font, they will have a smaller height, so centering them will
+      ~make them appear to float up relative to the name
+      perform portal[attack].alignrel[btob,name,0]
+      perform portal[damage].alignrel[btob,name,0]
+      perform portal[ap].alignrel[btob,name,0]
+      perform portal[range].alignrel[btob,name,0]
+      perform portal[dots].alignrel[btob,name,0]
+
+      ~establish suitable fixed widths for the various columns of data
+      portal[attack].width = 135
+      portal[damage].width = 195
+      portal[ap].width = 50
+      portal[range].width = 225
+
+      ~assign the name the remaining horizontal space
+      ~Note: We must also account for a gap of 5 between portals.
+      portal[name].width = width - 4 * 5
+      portal[name].width -= portal[attack].width + portal[damage].width
+      portal[name].width -= portal[ap].width + portal[range].width
+
+      ~position our columns now, except for the name
+      portal[attack].left = portal[name].right + 5
+      perform portal[damage].alignrel[ltor,attack,5]
+      perform portal[ap].alignrel[ltor,damage,5]
+      perform portal[range].alignrel[ltor,ap,5]
+
+      ~setup to track our position when positioning portals along the x-axis
+      var x as number
+      x = 0
+
+      ~if the weapon satisfies the minimum strength requirement, hide the bitmap,
+      ~else position it on the left
+      if (tagis[Helper.BadStrReq] = 0) then
+        portal[badstr].visible = 0
+      else
+        portal[badstr].left = 0
+        x = portal[badstr].right
+        endif
+
+      ~if there are no special details for the weapon, hide the bitmap
+      if (field[wpNotes].isempty = 1) then
+        portal[special].visible = 0
+        endif
+
+      ~shrink the space for the name based on the presence of the two bitmaps
+      portal[name].width -= portal[badstr].width * portal[badstr].visible
+      portal[name].width -= portal[special].width * portal[special].visible
+
+      ~size the name to fit the available space, then reposition it at the baseline
+      ~Note: This is needed since smaller text will have the same top position.
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].alignrel[btob,attack,0]
+
+      ~recalculate the width of the name based on the sized font
+      ~Note: This is needed so we can determine the span for the row of dots.
+      ~Note: We must also cap the name portal to its previous width, just in case
+      ~       the "sizetofit" didn't shrink the name far enough to fully fit.
+      var limit as number
+      limit = portal[name].width
+      perform portal[name].autowidth
+      if (portal[name].width > limit) then
+        portal[name].width = limit
+        endif
+
+      ~position the name and special details indicator portals horizontally now
+      portal[name].left = x
+      x = portal[name].right
+      if (portal[special].visible <> 0) then
+        portal[special].left = x
+        x = portal[special].right
+        endif
+
+      ~extend the dots from the right of the name across to the attack portal
+      if (x > portal[attack].left - 10) then
+        portal[dots].visible = 0
+      else
+        portal[dots].left = x + 5
+        portal[dots].width = portal[attack].left - 5 - portal[dots].left
+        endif
+
+      ~size the summary portal to span the area excluding the name
+      portal[summary].left = 50
+      ~alignrel[ltor,name,2]
+      portal[summary].width = width - portal[summary].left - 50
+      perform portal[summary].autoheight
+      
+
+      ~position the summary portal beneath the other line of fields
+      perform portal[summary].alignrel[ttob,name,2]
+
+      ~our height is the base of the summary portal
+      height = portal[summary].bottom
+      ]]></position>
+
+    <header><![CDATA[
+      ~our header height is the title plus a gap plus the header text
+      height = portal[hdrtitle].height + 2 + portal[hdrattack].height
+      doneif (issizing <> 0)
+
+      ~our title spans the entire width of the template
+      portal[hdrtitle].width = width
+
+      ~each of our header labels has the same width as the corresponding data beneath
+      portal[hdrattack].width = portal[attack].width
+      portal[hdrdamage].width = portal[damage].width
+      portal[hdrap].width = portal[ap].width
+      portal[hdrrange].width = portal[range].width
+
+      ~center each header label on the corresponding data beneath
+      perform portal[hdrattack].centeron[horz,attack]
+      perform portal[hdrdamage].centeron[horz,damage]
+      perform portal[hdrap].centeron[horz,ap]
+      perform portal[hdrrange].centeron[horz,range]
+
+      ~align all header labels at the bottom of the header region
+      perform portal[hdrattack].alignedge[bottom,0]
+      perform portal[hdrdamage].alignedge[bottom,0]
+      perform portal[hdrap].alignedge[bottom,0]
+      perform portal[hdrrange].alignedge[bottom,0]
+      height = portal[hdrattack].bottom
+      ]]></header>
+
+    </template>
+
+
+  <!-- zAdjPick template
+        This template presents the activated adjustments for the character.
+  -->
+  <template
+    id="zAdjPick"
+    name="Output Adjustments Table"
+    compset="Adjustment"
+    marginhorz="10">
+
+    <portal
+      id="name"
+      style="outNormLt">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = field[adjName].text & ": " & field[adjSource].text
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is the vertical extent of our portals
+      height = portal[name].height
+      doneif (issizing <> 0)
+
+      ~size the name to fit the available space
+      portal[name].width = width
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].centervert
+      ]]></position>
+
+    </template>
+
+
+  <!-- zInjury template
+        This template presents the injuries for the character.
+  -->
+  <template
+    id="zInjury"
+    name="Output Injuries Table"
+    compset="Injury"
+    marginhorz="10">
+
+    <portal
+      id="name"
+      style="outNormLt">
+      <output_label
+        field="name">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~our height is the vertical extent of our portals
+      height = portal[name].height
+      doneif (issizing <> 0)
+
+      ~size the name to fit the available space
+      portal[name].width = width
+      perform portal[name].sizetofit[36]
+      perform portal[name].autoheight
+      perform portal[name].centervert
+      ]]></position>
+
+    </template>
+
+
+  <!-- zPortrait template
+        This template presents the character portrait, showing the first portrait
+        assigned to the character.
+  -->
+  <template
+    id="zPortrait"
+    name="Output Image"
+    compset="Actor">
+
+    <portal
+      id="image"
+      style="outNormal">
+      <output_image
+        field="acTacImage">
+        </output_image>
+      </portal>
+
+    <portal
+      id="imgBorder"
+      style="outCharImg">
+      <output_label
+        text=" ">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~if we don't have an image or character images are not included, set our
+      ~height to 0, hide the image, and get out
+      if (!hero.tagis[source.ShowImage] + !portal[image].isimage > 0) then
+        height = 0
+        portal[image].visible = 0
+        portal[imgBorder].visible = 0
+        done
+        endif
+
+      ~leave a margin of one pixel around all edges to draw our border
+      var margin as number
+      margin = 1
+      portal[image].left = margin
+      portal[image].top = margin
+      portal[image].width = width - margin * 2
+      portal[image].height = height - margin * 2
+
+      ~cap our height at a maximum of three inches
+      portal[image].height = minimum(portal[image].height,900)
+
+      ~optimally fit the image to the region available
+      perform portal[image].imagefit
+
+      ~center the image if it's narrower than the available width
+      perform portal[image].centerhorz
+
+      ~our full height is the bottom of the image plus our margin
+      height = portal[image].bottom + margin
+
+      ~set the border to span our full dimensions
+      portal[imgBorder].width = width
+      portal[imgBorder].height = height
+      ]]></position>
+
+    </template>
+
+
+  <!-- zCondition template
+        This template presents a place to track the character's condition, which
+        includes both health and power points.
+  -->
+  <template
+    id="zCondition"
+    name="Output Condition"
+    compset="Actor">
+
+    <portal
+      id="wounds"
+      style="outNameLg">
+      <output_label
+        text="Wounds">
+        </output_label>
+      </portal>
+
+    <portal
+      id="fatigue"
+      style="outNameLg">
+      <output_label
+        text="Fatigue">
+        </output_label>
+      </portal>
+
+    <portal
+      id="wound1"
+      style="outNameLg">
+      <output_label
+        text="-1">
+        </output_label>
+      </portal>
+
+    <portal
+      id="wound2"
+      style="outNameLg">
+      <output_label
+        text="-2">
+        </output_label>
+      </portal>
+
+    <portal
+      id="wound3"
+      style="outNameLg">
+      <output_label
+        text="-3">
+        </output_label>
+      </portal>
+
+    <portal
+      id="fatigue1"
+      style="outNameLg">
+      <output_label
+        text="-1">
+        </output_label>
+      </portal>
+
+    <portal
+      id="fatigue2"
+      style="outNameLg">
+      <output_label
+        text="-2">
+        </output_label>
+      </portal>
+
+    <portal
+      id="incapac"
+      style="outNameLg">
+      <output_label
+        text="INC">
+        </output_label>
+      </portal>
+
+    <portal
+      id="border1"
+      style="outGreyBox">
+      <output_label
+        text=" ">
+        </output_label>
+      </portal>
+
+    <portal
+      id="power"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          var i as number
+          var j as number
+          var k as number
+          @text = "{font Wingdings}"
+          for i = 1 to 2
+            for j = 1 to 3
+              for k = 1 to 4
+                @text &= chr(168) & "{horz 1}"
+                next
+              @text &= "{size 52}" & chr(168) & "{size 40}"
+              next
+            @text &= "{br}"
+            next
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <portal
+      id="border2"
+      style="outGreyBox">
+      <output_label
+        text=" ">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~leave a margin around all edges to draw our border
+      var margin as number
+      margin = 10
+
+      ~position the labels at the top
+      portal[wounds].top = margin
+      portal[fatigue].top = margin
+
+      ~position all health levels beneath the labels with a common baseline
+      perform portal[wound1].alignrel[ttob,wounds,10]
+      perform portal[wound2].alignrel[btob,wound1,0]
+      perform portal[wound3].alignrel[btob,wound1,0]
+      perform portal[fatigue1].alignrel[btob,wound1,0]
+      perform portal[fatigue2].alignrel[btob,wound1,0]
+      perform portal[incapac].alignrel[btob,wound1,0]
+
+      ~position the labels at the left and right edges
+      portal[wounds].left = margin
+      perform portal[fatigue].alignedge[right,-margin]
+
+      ~put the -1 levels at each end
+      portal[wound1].left = margin
+      perform portal[fatigue1].alignedge[right,-margin]
+
+      ~determine the remaining span over which the portals extend
+      var span as number
+      span = portal[fatigue1].left - portal[wound1].right
+
+      ~tally the total width of the remaining health level portals
+      var used as number
+      used = portal[wound2].width + portal[wound3].width
+      used += portal[fatigue2].width + portal[incapac].width
+
+      ~divvy up the remaining horizontal space into equal pieces and use as spacing
+      ~for positioning the various health level horizontally
+      var each as number
+      each = span - used
+      each = round(each / 5,0,0)
+      perform portal[wound2].alignrel[ltor,wound1,each]
+      perform portal[wound3].alignrel[ltor,wound2,each]
+      perform portal[fatigue2].alignrel[rtol,fatigue1,-each]
+
+      ~size and center the incapacitated cell in the remaining space
+      each = (portal[fatigue2].left - portal[wound3].right - portal[incapac].width) / 2
+      perform portal[incapac].alignrel[ltor,wound3,each]
+
+      ~set the first border to span the full dimensions of the health tracker
+      portal[border1].width = width
+      portal[border1].height = portal[wound1].bottom + margin
+
+      ~position and size the power level condition
+      perform portal[power].alignrel[ttob,border1,10 + margin]
+      portal[power].left = margin
+      portal[power].width = width - margin
+
+      ~set the first border to span the full dimensions of the power tracker
+      portal[border2].top = portal[power].top - margin
+      portal[border2].width = width
+      portal[border2].height = portal[power].height + margin * 2
+
+      ~our height is the bottom extent of the second border
+      height = portal[border2].bottom
+      ]]></position>
+
+    </template>
+
+
+  <!-- zValidate template
+        This template presents the validation report at the bottom of the sheet.
+  -->
+  <template
+    id="zValidate"
+    name="Output Validation"
+    compset="Actor">
+
+    <portal
+      id="border"
+      style="outValBox">
+      <output_label
+        text=" ">
+        </output_label>
+      </portal>
+
+    <portal
+      id="validate"
+      style="outValid">
+      <output_label>
+        <labeltext><![CDATA[
+
+          ~start with an opening that lists the number of issues
+          @text = "Validation Report (" & hero.errorcount & " issues):"
+
+          ~turn off bold and reduce the font size slightly
+          @text &= "{/b}{size 34} "
+
+          ~first we've got the validation report stream; if there's nothing to
+          ~report, indicate that fact
+          if (hero.errorcount = 0) then
+            @text &= "Nothing identified"
+          else
+            @text &= hero.errorlist
+            endif
+
+          ~if there are any activated abilities, report them
+          var active as string
+          var ismore as number
+          foreach pick in hero from Ability where "User.Activation & Helper.Activated & !Hide.InPlay"
+            if (ismore <> 0) then
+              active &= ", "
+              endif
+            active &= eachpick.field[name].text
+            ismore = 1
+            nexteach
+
+          ~append any active abilities to the report
+          if (empty(active) = 0) then
+            @text &= "; {b}Active:{/b} " & active
+            endif
+          ]]></labeltext>
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~limit the report to a maximum of 4 lines of details; if there are more than
+      ~4 lines, we assume the GM will be reviewing the character by hand
+      var maxlines as number
+      maxlines = 4
+
+      ~leave bit of a margin on the left and right sides for a gap from the border
+      portal[validate].width = width - 20
+
+      ~calculate the height of the validation report, limiting it appropriately
+      perform portal[validate].autoheight
+      if (portal[validate].height > portal[validate].fontheight * maxlines) then
+        portal[validate].lineheight = maxlines
+        endif
+
+      ~the border is the full width of the template and includes some padding at the
+      ~top and bottom for a vertical gap from the border
+      portal[border].width = width
+      portal[border].height = portal[validate].height + 12
+
+      ~our overall height is the height of the border
+      height = portal[border].height
+
+      ~center the validation report text within the template
+      perform portal[validate].centerhorz
+      perform portal[validate].centervert
+      ]]></position>
+    </template>
+
+
+  <!-- zPersonal template
+        This template presents the background and personal details for the character.
+  -->
+  <template
+    id="zPersonal"
+    name="Output Personal Details Table"
+    compset="Personal">
+
+    <portal
+      id="info"
+      style="outAlly">
+      <output_label
+        field="perInfo">
+        </output_label>
+      </portal>
+
+    <position><![CDATA[
+      ~size the name to fit the available space
+      portal[info].width = width
+      perform portal[info].autoheight
+
+      ~our height is the vertical extent of our portal
+      height = portal[info].textheight
+      ]]></position>
+
+    </template>
+
+
+  <!-- zLogos layout
+        This layout sizes and positions the Hero Lab and game system logos. The logos
+        can be either stacked or shown side-by-side, based on the global variable set
+        within the sheet script.
+  -->
+  <layout
+    id="zLogos">
+    <portalref portal="zHLLogo"/>
+    <portalref portal="zGameLogo"/>
+    <position><![CDATA[
+      var temp as number
+      var logogap as number
+      var scale as number
+
+      ~if our logos are stacked, scale them for stacked orientation
+      if (scenevalue[stacklogos] <> 0) then
+        logogap = 20
+        scale = 1.8
+
+      ~otherwise, scale our logos for side by side orientation
+      else
+        logogap = 40
+        temp = portal[zGameLogo].width + portal[zHLLogo].width
+        scale = (width - logogap) / temp
+        if (scale > 2.0) then
+          scale = 2.0
+          endif
+        endif
+
+      ~scale both logos appropriately
+      portal[zGameLogo].width *= scale
+      portal[zGameLogo].height *= scale
+      portal[zHLLogo].width *= scale
+      portal[zHLLogo].height *= scale
+
+      ~if our logos are stacked, position them properly
+      if (scenevalue[stacklogos] <> 0) then
+
+        ~position the logos horizontally
+        perform portal[zGameLogo].centerhorz
+        perform portal[zHLLogo].centerhorz
+
+        ~position the Hero Lab logo beneath the game system logo
+        perform portal[zHLLogo].alignrel[ttob,zGameLogo,logogap]
+
+        ~our total height is the bottom of the lower logo
+        height = portal[zHLLogo].bottom
+
+      ~ Otherwise, position them side by side
+      else
+
+        ~position the logos horizontally, centering them together in the space
+        temp = portal[zGameLogo].width + portal[zHLLogo].width
+        temp = (width - temp - logogap) / 2
+        portal[zGameLogo].left = temp
+        perform portal[zHLLogo].alignrel[ltor,zGameLogo,logogap]
+
+        ~our total height is the bottom of the tallest logo
+        height = maximum(portal[zHLLogo].height,portal[zGameLogo].height)
+
+        ~center the logos vertically
+        perform portal[zGameLogo].centervert
+        perform portal[zHLLogo].centervert
+        endif
+      ]]></position>
+    </layout>
+
+
+  <!-- zLeftSide layout
+        This layout is rendered down the left side of the sheet and contains the
+        name and description details for the character, as well as the table of
+        table of attributes, table of health/powers, and table of derived traits.
+  -->
+  <layout
+    id="zLeftSide">
+    <portalref portal="zHeroName"/>
+    <portalref portal="zHeroInfo"/>
+    <portalref portal="zAttribute"/>
+    <portalref portal="zDerived"/>
+    <portalref portal="zStatus"/>
+    <portalref portal="zSkills"/>
+    <portalref portal="zSkillsDom"/>
+    <portalref portal="zAbility"/>
+    <portalref portal="zProperty"/>
+    <portalref portal="zHindrance"/>
+    <portalref portal="zEdge"/>
+    <portalref portal="zCreature"/>
+    <portalref portal="zPersonal"/>
+    <position><![CDATA[
+      ~hide and show appropriate portals for creatures and non-creatures
+      if (hero.tagis[Hero.Creature] = 0) then
+        portal[zCreature].visible = 0
+      else
+        portal[zAbility].visible = 0
+        portal[zProperty].visible = 0
+        portal[zHindrance].visible = 0
+        portal[zEdge].visible = 0
+        endif
+
+      ~position the hero name at the top with the hero details beneath the name
+      perform portal[zHeroName].autoplace[0]
+      perform portal[zHeroInfo].autoplace[15]
+
+      ~position the tables next
+      perform portal[zAttribute].autoplace
+      perform portal[zDerived].autoplace
+      perform portal[zStatus].autoplace
+      perform portal[zSkills].autoplace
+      perform portal[zSkillsDom].autoplace[0]
+      perform portal[zAbility].autoplace
+      perform portal[zProperty].autoplace
+      perform portal[zHindrance].autoplace
+      perform portal[zEdge].autoplace
+      perform portal[zCreature].autoplace
+      perform portal[zPersonal].autoplace
+
+      ~our layout height is the extent of the elements within
+      height = autoextent
+      ]]></position>
+    </layout>
+
+
+  <!-- zArmory layout
+        This layout contains the tables of armor and weapons that appear in the
+        lefthand column of the character sheet. If the two tables are too large to
+        fit in the available space, they are truncated intelligently, with the
+        remaining gear appearing on a second spillover sheet.
+  -->
+  <layout
+    id="zArmory">
+    <portalref portal="zMagicArmr"/>
+    <portalref portal="zArmor"/>
+    <portalref portal="zMagicWeap"/>
+    <portalref portal="zWeapon"/>
+    <position><![CDATA[
+      ~position the armor table at the top and the weapon table beneath it
+      perform portal[zMagicArmr].autoplace
+      perform portal[zArmor].autoplace
+      perform portal[zMagicWeap].autoplace
+      perform portal[zWeapon].autoplace
+
+      ~if all equipment was shown, everything fits, so update height and we're done
+      if (portal[zWeapon].itemsleft = 0) then
+        if (portal[zMagicWeap].itemsleft = 0) then
+          if (portal[zArmor].itemsleft = 0) then
+            if (portal[zMagicArmr].itemsleft = 0) then
+              height = autoextent
+              done
+              endif
+            endif
+          endif
+        endif
+
+      ~if we got here, then there is more gear than will fit within the space, so
+      ~calculate the space that the two tables can use, including the gap between
+      var remain as number
+      var hlfremain as number
+      remain = height - scenevalue[sectiongap]
+
+      ~if the height the tables exceeds the available space, we need to divvy
+      ~up that space between the tables
+      if (portal[zArmor].height + portal[zWeapon].height + portal[zMagicArmr].height + portal[zMagicWeap].height > remain) then
+        ~if the armor table is less than half the space, limit the weapon table
+        ~to whatever space is leftover
+        if (portal[zArmor].height + portal[zMagicArmr].height < remain / 2) then
+          portal[zMagicWeap].height = remain - portal[zArmor].height - portal[zMagicArmr].height
+          portal[zWeapon].height = remain - portal[zArmor].height - portal[zMagicArmr].height - portal[zMagicWeap].height
+        ~if the weapon table is less than half the space, limit the armor table
+        ~to whatever space is leftover
+        elseif (portal[zWeapon].height + portal[zMagicWeap].height < remain / 2) then
+          portal[zMagicArmr].height = remain - portal[zWeapon].height - portal[zMagicWeap].height
+          portal[zArmor].height = remain - portal[zWeapon].height - portal[zMagicWeap].height - portal[zMagicArmr].height
+        ~otherwise, both tables are larger than half the space, so we need to limit
+        ~the height of both of them
+        ~NOTE! If we just divide the remaining amount by two and set both tables to
+        ~that height, we could end up with both tables being truncated by more than
+        ~a half item, with the combined height being a full item short of taking up
+        ~the full space. So we have to set the height of one table to half the
+        ~remaining space, then subtract that table's final height from our remaining
+        ~space, and finally set that as the height for the second table.
+        else
+          portal[zMagicWeap].height = minimum(portal[zMagicWeap].height,remain / 2)
+          portal[zWeapon].height = (remain / 2) - portal[zMagicWeap].height
+          portal[zMagicArmr].height = remain - (portal[zWeapon].height - portal[zMagicWeap].height)
+          portal[zArmor].height = (remain / 2) - portal[zMagicArmr].height
+          endif
+        endif
+
+      ~position the weapon table beneath the armor; if no armor, omit it
+      if (portal[zMagicArmr].itemsshown = 0) then
+        portal[zMagicArmr].visible = 0
+      else
+        portal[zArmor].top = portal[zMagicArmr].bottom + scenevalue[sectiongap]
+        endif
+
+      if (portal[zArmor].itemsshown = 0) then
+        portal[zArmor].visible = 0
+        if (portal[zMagicArmr].itemsshown <> 0) then
+          portal[zMagicWeap].top = portal[zMagicArmr].bottom + scenevalue[sectiongap]
+          endif
+      else
+        portal[zMagicWeap].top = portal[zArmor].bottom + scenevalue[sectiongap]
+        endif
+
+      if (portal[zMagicWeap].itemsshown = 0) then
+        portal[zMagicWeap].visible = 0
+        if (portal[zArmor].itemsshown <> 0) then
+          portal[zWeapon].top = portal[zArmor].bottom + scenevalue[sectiongap]
+          if (portal[zMagicArmr].itemsshown <> 0) then
+            portal[zWeapon].top = portal[zMagicArmr].bottom + scenevalue[sectiongap]
+            endif
+        else
+          portal[zWeapon].top = portal[zArmor].bottom + scenevalue[sectiongap]
+          endif
+      else
+        portal[zWeapon].top = portal[zMagicWeap].bottom + scenevalue[sectiongap]
+        endif
+
+      ~our layout height is the extent of the bottommost portal
+      height = portal[zWeapon].bottom
+      ]]></position>
+    </layout>
+
+
+  <!-- zAdjust layout
+        This layout contains the list of activated adjustments for the character.
+  -->
+  <layout
+    id="zAdjust">
+    <portalref portal="zAdjust"/>
+    <portalref portal="zInjury"/>
+    <portalref portal="zNoInjury"/>
+    <templateref template="zCondition" thing="actor"/>
+    <position><![CDATA[
+      ~position the adjustments table at the top
+      perform portal[zAdjust].autoplace
+
+      ~position the injuries table in the left 40% beneath the adjustments
+      ~Note: We don't use autoplace, since we never want the table hidden
+      portal[zInjury].left = 0
+      portal[zInjury].top = autoextent + scenevalue[sectiongap]
+      portal[zInjury].width = width * .4
+      portal[zInjury].height = 5000
+
+      ~if there are no injuries, indicate that fact
+      if (portal[zInjury].itemsshown <> 0) then
+        portal[zNoInjury].visible = 0
+      else
+        perform portal[zNoInjury].centeron[horz,zInjury]
+        perform portal[zNoInjury].alignrel[ttob,zInjury,10]
+        endif
+
+      ~position the condition template to the right of the injuries
+      template[zCondition].left = portal[zInjury].right + 50
+      template[zCondition].top = portal[zInjury].top
+      template[zCondition].width = width - template[zCondition].left
+      perform template[zCondition].render
+
+      ~our layout height is the bottom extent of the elements within
+      height = maximum(portal[zInjury].bottom,template[zCondition].bottom)
+      ]]></position>
+    </layout>
+
+
+  <!-- zGear layout
+        This layout contains just the gear and the personal details, which are our
+        lowest priorities for inclusion on the right side of the character sheet.
+  -->
+  <layout
+    id="zGear">
+    <portalref portal="zMagicItem"/>
+    <portalref portal="zGear"/>
+    <portalref portal="zPersonal"/>
+    <position><![CDATA[
+      ~position the various tables appropriately
+      perform portal[zMagicItem].autoplace
+      perform portal[zGear].autoplace
+      perform portal[zPersonal].autoplace
+
+      ~our layout height is the extent of the elements within
+      height = autoextent
+
+      ]]></position>
+    </layout>
+
+
+  <!-- zRightSide layout
+        This layout is rendered down the right side of the sheet and contains the
+        character portrait, table of special abilities, table of skills, and table
+        of gear. As much gear as will fit is output, with any excess being truncated
+        on this sheet and being included on the spillover sheet.
+  -->
+  <!-- RDS SPC portal zSPPower is for the Super Powers Companion -->
+  <layout
+    id="zRightSide">
+    <portalref portal="zEdge"/>
+    <portalref portal="zCreature"/>
+    <portalref portal="zDrawback"/>
+    <portalref portal="zPower"/>
+    <portalref portal="zSPAttack"/>
+    <portalref portal="zSPPower"/>
+    <templateref template="zPortrait" thing="actor"/>
+    <position><![CDATA[
+      ~hide and show appropriate portals for creatures and non-creatures
+      if (hero.tagis[Hero.Creature] = 0) then
+        portal[zCreature].visible = 0
+      else
+        portal[zEdge].visible = 0
+        endif
+
+      ~position the various tables appropriately
+      perform template[zPortrait].autoplace
+      perform portal[zEdge].autoplace
+      perform portal[zCreature].autoplace
+      perform portal[zDrawback].autoplace
+      perform portal[zPower].autoplace
+      perform portal[zSPAttack].autoplace
+      perform portal[zSPPower].autoplace
+
+      ~our layout height is the extent of the elements within
+      height = autoextent
+      ]]></position>
+    </layout>
+
+  <!-- zValidate layout
+        This layout contains the validation report at the bottom of the sheet.
+  -->
+  <layout
+    id="zValidate">
+    <templateref template="zValidate" thing="actor"/>
+    <position><![CDATA[
+      ~position the validation template at the top
+      perform template[zValidate].autoplace
+
+      ~the height of the layout is the bottommost extent of the elements within
+      height = autoextent
+      ]]></position>
+    </layout>
+
+
+  <!-- extended1 sheet
+        This is the first page of the stanard character sheet, which coordinates the
+        output of a whole bunch of layouts containing different pieces of information
+        for the character. Layouts are estimated to perform whatever calculations are
+        necessary within that layout, such as its overall dimensions. Once estimated,
+        the dimensions of the layout can be used to properly position and size any
+        subsequent layouts that depend on it. So the overall process is to process
+        layouts in an order that progressively fills the sheet with aligned material.
+  -->
+  <sheet
+    id="extended1"
+    name="Extended character sheet, page #1">
+    <layoutref layout="zLogos"/>
+    <layoutref layout="zLeftSide"/>
+    <layoutref layout="zRightSide"/>
+    <layoutref layout="zAdjust"/>
+    <layoutref layout="zArmory"/>
+    <layoutref layout="zGear"/>
+    <layoutref layout="zValidate"/>
+    <position><![CDATA[
+      ~set this global variable to 1 if you want the logos to be stacked; a value
+      ~of zero places them side-by-side
+      scenevalue[stacklogos] = 0
+
+      ~setup the gap to be used between the various sections of the character sheet
+      autogap = 40
+      scenevalue[sectiongap] = autogap
+
+      ~calculate the width of the two columns of the character sheet, leaving a
+      ~suitable center gap between them
+      var colwidth as number
+      colwidth = (width - 50) / 2
+
+      ~if the user wants to omit the validation report, the hide it and allow the
+      ~rest of the sheet to fill that space; otherwise, output the layout and the
+      ~top of the validation report establishes the bottom for all other output
+      var extent as number
+      if (hero.tagis[source.Validation] = 0) then
+        layout[zValidate].visible = 0
+        extent = height
+      else
+        layout[zValidate].width = width
+        perform layout[zValidate].render
+        layout[zValidate].top = height - layout[zValidate].height
+        extent = layout[zValidate].top - autogap
+        endif
+
+      ~position the leftside layout in the upper left corner
+      layout[zLeftSide].width = colwidth
+      layout[zLeftSide].height = extent - layout[zLeftSide].top
+      perform layout[zLeftSide].render
+
+      ~position the logos layout in the upper right corner
+      layout[zLogos].width = colwidth
+      perform layout[zLogos].render
+      layout[zLogos].left = width - colwidth
+
+      ~position the activated adjustments at the bottom on the right; this will
+      ~establish the remaining space available on the right for other layouts
+      layout[zAdjust].width = colwidth
+      layout[zAdjust].left = layout[zLogos].left
+      perform layout[zAdjust].render
+      layout[zAdjust].top = extent - layout[zAdjust].height
+
+      ~position the rightside layout in the remaining space on the right
+      layout[zRightSide].width = colwidth
+      layout[zRightSide].top = layout[zLogos].bottom + autogap
+      layout[zRightSide].left = layout[zLogos].left
+      layout[zRightSide].height = layout[zAdjust].top - autogap - layout[zRightSide].top
+      perform layout[zRightSide].render
+
+      ~position the armory layout within the remaining space on the right
+      layout[zArmory].width = colwidth
+      layout[zArmory].top = layout[zRightSide].bottom + autogap
+      layout[zArmory].left = layout[zLogos].left
+
+      ~if the top of the armory layout is below the adjustments layout, there is no
+      ~room for it, so hide it; otherwise, set height and render the layout properly
+      if (layout[zArmory].top >= layout[zAdjust].top) then
+        layout[zArmory].visible = 0
+      else
+        layout[zArmory].height = layout[zAdjust].top - autogap - layout[zArmory].top
+        perform layout[zArmory].render
+        endif
+
+      ~position the gear layout in whatever space is left on the right
+      layout[zGear].width = colwidth
+      layout[zGear].top = layout[zArmory].bottom + autogap
+      layout[zGear].left = layout[zLogos].left
+      
+      ~if the top of the gear layout is below the adjustments layout, there is no
+      ~room for it, so hide it; otherwise, set height and render the layout properly
+      if (layout[zGear].top >= layout[zAdjust].top) then
+        layout[zGear].visible = 0
+      else
+        layout[zGear].height = layout[zAdjust].top - autogap - layout[zGear].top
+        perform layout[zGear].render
+        endif
+
+      ~if the gear layout is visible and there is open space beneath it, move the
+      ~adjustments layout upward
+      if (layout[zGear].visible <> 0) then
+        if (layout[zAdjust].top > layout[zGear].bottom + autogap) then
+          layout[zAdjust].top = layout[zGear].bottom + autogap
+          endif
+
+      ~otherwise, do the same check with respect to the armory layout
+      elseif (layout[zArmory].visible <> 0) then
+        if (layout[zAdjust].top > layout[zArmory].bottom + autogap) then
+          layout[zAdjust].top = layout[zArmory].bottom + autogap
+          endif
+
+      ~otherwise, position relative to the right-side layout
+      else
+        if (layout[zAdjust].top > layout[zRightSide].bottom + autogap) then
+          layout[zAdjust].top = layout[zRightSide].bottom + autogap
+          endif
+        endif
+      ]]></position>
+    </sheet>
+
+
+  </document>
