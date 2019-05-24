@@ -9,7 +9,8 @@
   <!-- TCA: Tags specific to Rifts -->
 
   <group
-    id="BreedAdv">
+    id="BreedAdv"
+    dynamic="yes">
     <value id="Fast"/>      <!-- Breed Advantage: Fast Breed -->
     <value id="Agile"/>     
     <value id="Strong"/>    
@@ -26,12 +27,21 @@
     <value id="Ability" order="1"/>    <!-- Tag for Racial/IF Abilities -->     
     <value id="Comp" order="2"/>       <!-- Tag for Racial/IF Complications -->     
     </group>
+
+  <group
+    id="LangCat"
+	sequence="explicit">   
+    <value id="Custom" order="1"/>    <!-- Tag for Languages in the Rifts setting -->  
+    <value id="Rifts" order="2"/> 
+    </group>
 	
   <group
-    id="Rifts">  
+    id="Rifts"
+    dynamic="yes">
     <value id="SecondaryPower"/>       <!-- Hide Racial Tab -->  
     <value id="HasSecondaryAB"/>       <!-- Hide Racial Tab -->   
-    <value id="HideRacialTab"/>       <!-- Hide Racial Tab -->   
+    <value id="ShowRacialTab"/>       <!-- Show Racial Tab -->     
+    <value id="HideRacialTab"/>       <!-- Hide Racial Tab -->  
     <value id="HideRacialAbility"/>   <!-- Hide Racial Abilities -->   
     <value id="HideRacialProp"/>      <!-- Hide Racial Properties -->     
     <value id="FortuneAndGlory"/>     <!-- Allow Fortune and Glory selections -->
@@ -66,7 +76,8 @@
   <!-- Hero's Journey -->
   <group
     id="RiftsHJ"
-	sequence="explicit">
+	sequence="explicit"
+    dynamic="yes">
     <value id="BodArm" name="Body Armor" order="1"/>    
     <value id="CCW" name="Close Combat Weapons" order="2"/>    
     <value id="Cyber" name="Cybernetics" order="3"/>    
@@ -123,7 +134,15 @@
     <value id="8" name="2d8"/>
     <value id="9" name="2d10"/>
     <value id="10" name="2d12"/>
-    </group>	
+    </group>		
+
+  <!-- TCA: Power/Robot Armor Strength Tags  -->
+  <group
+    id="ArmorSpecial"
+    name="Armor Special"
+    dynamic="yes">
+    <value id="FullEnvPro" name="Full Environmental Protection"/>
+    </group>
 	
   <!-- TCA: This source enables the selection of Savage Rifts -->
  <source
@@ -151,15 +170,38 @@
     description="Each character utilizes the Tomorrow Legion Players Guide material.">
     </source>
  <source
+    id="PrecludeSciFiRace"
+    name="Sci-Fi Races Unavailable"
+    parent="sepSavRif"
+    reportable="yes"
+	sortorder="2"
+    description="Preclude races found in the Science Fiction Companion.">
+    </source>
+ <source
     id="CoFieldMan"
     name="Coalition Field Manual"
     parent="sepSavRifS"
     reportable="yes"
 	sortorder="1"
-    description="Each character utilizes the Tomorrow Legion Players Guide material.">
+    description="Material from the supplement.">
+    </source>
+ <source
+    id="SavageFoes"
+    name="Savage Foes of North America"
+    parent="sepSavRifS"
+    reportable="yes"
+	sortorder="2"
+    description="Material from the supplement.">
     </source>
 
   <!-- TCA: Various sortsets for Savage Rifts -->
+  <sortset
+    id="LangSortChoose"
+    name="Language Choose">
+    <sortkey isfield="no" id="LangCat"/>
+    <sortkey isfield="no" id="_Name_"/>
+    </sortset>
+	
   <sortset
     id="RacAbilCat"
     name="Hero's Journey">

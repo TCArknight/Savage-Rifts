@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <fileinfo>
+    <info_author>Coordinator: TCArknight (Thomas Clegg)
+Contributors: Salcor, Father Morpheus</info_author>
+    <info_history>Known Issues:
+
+History:</info_history>
+    <info_todo/>
+    </fileinfo>
+  <thing id="armSRCSCA1" name="CS CA-1 &quot;Dead Boy&quot; Heavy Body Armor" description="The standard issue to Coalition soldiers circa 101 P.A. and still one of the finest combat suits found in service anywhere. With the upgrade currently underway to advanced models within the CS military, more of the older Dead Boy suits are finding their way into the Black Market. CA-1 models provide +6 Armor, +2 Toughness, and Full Environmental Protection. They also have built-in mini-computers for basic functions; a communications system with a 10 mile range; public-address loudspeakers; and thermal vision mode for vision. This suit has a Strength Minimum of d6." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <fieldval field="grCost" value="45000"/>
+    <fieldval field="gearWeight" value="18"/>
+    <fieldval field="shortname" value="CA-1 Dead Boy"/>
+    <fieldval field="defStrReq" value="3"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,2,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="armSRCSCA2" name="CS CA-2 &quot;Dead Boy&quot; Light Body Armor" description="Lighter weight and easier to wear, the CA-2 was primarily used by pilots, scouts, and police forces before the massive upgrade program.  It provides +6 Armor.  It also provides the same basic electronic and environmental systems. The biggest attraction most buyers have to this version is the lighter weight and greater mobility." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <fieldval field="grCost" value="35000"/>
+    <fieldval field="shortname" value="CA-2 Dead Boy"/>
+    <fieldval field="gearWeight" value="9"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    </thing>
+  <thing id="armSRCSDP1" name="CS DPM 101 &quot;Dog Pack&quot; Light Riot Armor" description="Issued primarily to Coalition Dog Boy soldiers, this armor has none of the electronics or environmental systems of the CA suits. It is fairly lightweight and certainly easier to find and acquire.  Provides +5 Armor." compset="Armor">
+    <fieldval field="defDefense" value="5"/>
+    <fieldval field="grCost" value="14000"/>
+    <fieldval field="shortname" value="DPM 101 &quot;Dog Pack&quot;"/>
+    <fieldval field="gearWeight" value="8"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    </thing>
+  <thing id="armSRCSCA3" name="CS CA-3 Light &quot;Dead Boy&quot; Body Armor" description="The new standard for scout and special commando units, the CA-3 features light sensitive coating on the highlights to ensure night maneuvers don’t suffer.  CA-3 models provide +6 Armor, +1 Toughness, and Full Environmental Protection. They also have built-in mini-computers for basic functions; a communications system with a 10 mile range; public-address loudspeakers; and both night and thermal vision mode for vision." compset="Armor">
+    <fieldval field="defDefense" value="6"/>
+    <fieldval field="shortname" value="CA-3 Dead Boy"/>
+    <fieldval field="gearWeight" value="12"/>
+    <fieldval field="grCost" value="Unavailable for purchase."/>
+    <usesource source="CoFieldMan"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,1,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="armSRCSCA4" name="CS CA-4 Standard &quot;Dead Boy&quot; Body Armor" description="The new standard for Coalition Grunts, the CA-4 provides +7 Armor and +2 Toughness.  They also have built-in mini-computers for basic functions; a communications system with a 10 mile range; public-address loudspeakers; and both night and thermal vision mode for vision." compset="Armor">
+    <fieldval field="defDefense" value="7"/>
+    <fieldval field="shortname" value="CA-4 Dead Boy"/>
+    <fieldval field="gearWeight" value="20"/>
+    <fieldval field="grCost" value="Unavailable for purchase."/>
+    <usesource source="CoFieldMan"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,2,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="armSRCSCA7" name="CS CA-7 Standard &quot;Dead Boy&quot; Body Armor" description="A very special suit designed for elite assault and special forces units, the CA-7 has a significantly different design.  While there are some updated details—including a new approach to the skullmotif helmet and studded spikes on the shoulders, helmet, elbows, and shins—the CA-7 returns to the all-black coloring of the original Dead Boy suits. These suits also feature embedded vibroknives on the forearms (Str+d6, AP 4, Mega Damage) and a garrote wire connected to the left wrist (Str+d4, must follow successful Grapple with a raise). The suits are also set up to embed a Mag-5 Jetpack, a personal flight system with sound-suppression buffering systems (Flight Pace 10&quot;).  Provides +8 Armor and +2 Toughness." compset="Armor">
+    <fieldval field="shortname" value="CA-7 Dead Boy"/>
+    <fieldval field="gearWeight" value="20"/>
+    <fieldval field="grCost" value="Unavailable for purchase."/>
+    <fieldval field="defDefense" value="8"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="ArmorLoc" tag="Torso"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorType" tag="FutArmor"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
+        perform #traitadjust[trTough,+,2,"Armor"]
+        endif]]></eval>
+    </thing>
+  <thing id="wpCSc18" name="C-18 Laser Pistol" description="This was the standard issue sidearm of the Coalition Army prior to 105 P.A." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="15"/>
+    <fieldval field="wpMedium" value="30"/>
+    <fieldval field="wpLong" value="60"/>
+    <fieldval field="grCost" value="12000"/>
+    <fieldval field="gearWeight" value="2"/>
+    <fieldval field="wpShots" value="10"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    </thing>
+  <thing id="wpCSc10" name="C-10 Light Assault Laser Rifle" description="The Coalition States C-10 light laser rifle is long barreled lighter version of the C-12 Heavy Assault Laser Rifle.    The standard Light Assault Laser rilfe of the Coalition States military prior to 105 P.A.     It has an Intigrated Laser Targeting system which provides a bonus, though it tends to be flaky at times." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="16000"/>
+    <fieldval field="gearWeight" value="5"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
+    <fieldval field="wpShots" value="30"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    </thing>
+  <thing id="wpCSc12" name="C-12 Heavy Assault Laser Rifle" description="The Coalition States C-12 Heavy Assault Laser Rifle.   The standard Heavy Assault Laser rilfe of the Coalition States military prior to 105 P.A.  Has an Intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="20000"/>
+    <fieldval field="gearWeight" value="7"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
+    <fieldval field="wpShots" value="60"/>
+    <fieldval field="wpDmgBonus" value="+1"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    </thing>
+  <thing id="wpCSc14" name="C-14 &quot;Fire Breather&quot; Laser Rifle" description="The Coalition States C-14 &quot;Fire Breather&quot; Laser Rifle.   This is a popular Coalition States Laser Rifle which has a built in Grenade Launcher, (20/40/80, Shots 12, damage by greande type).  Not only does it have abuilt  built in Grenade Launcher, it also has a  scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties).   It was a standard weapon prior to 105 P.A., but will reamin in service for at least another five to ten years." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="30000"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)."/>
+    <fieldval field="wpShots" value="20"/>
+    <fieldval field="gearWeight" value="10"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="StrReqDie" tag="3"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    </thing>
+  <thing id="wpCScv212" name="CV-212 Variable Light Frequency Rifle" description="Originally, the CV-212 Variable Light Frequency Laser Rifle was developed for limited use by CS Skeleabots, and a special operative branch of the CS MIlitary.   Special microchips rotate the light frequency, enabling it to bypass laser resistant armor.  The weapon also has the ability to act as a Mega Damage weapon, but requires 10 shots for a more powerful charge." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="50000"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Mega Damage if 10 shots used.  Scope with nightvision and laser targeting (offset two points of Ra"/>
+    <fieldval field="gearWeight" value="8"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <fieldval field="wpShots" value="30"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    </thing>
+  <thing id="wpCSc27" name="C-27 Heavy Plasma Cannon" description="The Coalition States C-27 Heavy Plasma Cannon was the original heavy support weapon for CS infantry units prior to 105 P.A.  Firing what amounts to a tiny comet of superheated gas, plasma weapons (called “plasma ejectors” by some old-school warriors) are heavy, bulky affairs, causing them all to have the Snapfire quality (−2 if the firer moves on the same round). They have some distinct advantages, though. First, plasma hits a target all-at-once, engulfing the target and affecting the least-armored area on the body. This means anyone not in fully sealed armor is in serious trouble. Second, plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  As with many of the CS weapons, it also has intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
+    <fieldval field="wpDamage" value="2d10"/>
+    <fieldval field="wpShort" value="18"/>
+    <fieldval field="wpMedium" value="36"/>
+    <fieldval field="wpLong" value="72"/>
+    <fieldval field="grCost" value="32000"/>
+    <fieldval field="gearWeight" value="12"/>
+    <fieldval field="wpSpecial" value="Mega Damage.  Engulfs the target and affecting the least-armored area on the body.  Plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  Intigrate"/>
+    <fieldval field="wpShots" value="10"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="LeastArmor"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="StrReqDie" tag="4"/>
+    </thing>
+  <thing id="wpCSs20" name="C-20 Laser Pistol" description="As the Coalition States military upgraded its weapons for the Campgain of Unity, they started with the standard sidearm.  Giving the previous C-18 Laser Pistol an overhaul and upgrade, it was upgraded to the C-20 Laser Pistol.\nIn the post-105 P.A. world, it being issued as a sidearm for officers, military police, guards and special operatives." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="15"/>
+    <fieldval field="wpMedium" value="30"/>
+    <fieldval field="wpLong" value="60"/>
+    <fieldval field="grCost" value="16000"/>
+    <fieldval field="wpShots" value="21"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <fieldval field="gearWeight" value="3"/>
+    <fieldval field="wpDmgBonus" value="+1"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Weapon" tag="SemiAuto" name="Semi-Auto" abbrev="Semi-Auto"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    </thing>
+  <thing id="wpCScp30" name="CP-30 Laser Pulse Pistol" description="New CS heavy Laser Pulse Pistol,  it is now the the standard sidearm for &quot;officer&apos;s&quot; for the CS miltary.   Not to be out done by other weapons manufactures,  the Coalition States military create a new Laser Pulse Pistol.  Able to perform three round bursts, it also has an optional backpack unit which can give it 72 additional shots." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="12"/>
+    <fieldval field="wpMedium" value="24"/>
+    <fieldval field="wpLong" value="48"/>
+    <fieldval field="grCost" value="26000"/>
+    <fieldval field="wpShots" value="30"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="wpDmgBonus" value="+1"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    </thing>
+  <thing id="wpCScp40" name="CP-40 Laser Pulse Rifle" description="One of the new Coalition infantry assault rifle&apos;s, the CP-40 uses similar pulse technology as the CP-30 Laser Pulse Pistol.  With the ability to perform three round bursts and an expanded magazine size, is becoming a standard infantry weapon." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="40000"/>
+    <fieldval field="wpShots" value="60"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out."/>
+    <fieldval field="gearWeight" value="9"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    </thing>
+  <thing id="wpCScp50" name="CP-50 &quot;Dragonfire&quot; Laser Rifle" description="Looking to update the C-14 &quot;Fire Breather&quot; rifle, the CP-50 was created.  With the ability to perform three round bursts, an expanded magazine size, integrated nightvision/laser site, and underslung grenade launcher it will be valued by CS forces.  Built-in Grenade Launcher, (20/40/80, Shots 12, damage by greande type).  Not only does it have abuilt  built in Grenade Launcher, it also has an Integrated scope with nightvision and laser targeting (offset two points of Range and/or darkness penalties)." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="50000"/>
+    <fieldval field="wpShots" value="60"/>
+    <fieldval field="wpSpecial" value="Cauterizes wounds.  Those incapacitated by a laser grants a +2 on Vigor rolls to avoid Bleeding Out.  Integrated scope with nightvision and laser targeting (offset two points of Range and/or darkness "/>
+    <fieldval field="gearWeight" value="10"/>
+    <fieldval field="wpDmgBonus" value="+2"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Weapon" tag="NoRecoil" name="No Recoil Penalty" abbrev="No Recoil Penalty"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="StrReqDie" tag="3"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    </thing>
+  <thing id="wpCSc29" name="C-29 Heavy Plasma Cannon" description="The Coalition States C-29 Heavy Plasma Cannon is the upgraded heavy support weapon for CS infantry units post-105 P.A.  Firing what amounts to a tiny comet of superheated gas, plasma weapons (called “plasma ejectors” by some old-school warriors) are heavy, bulky affairs, causing them all to have the Snapfire quality (−2 if the firer moves on the same round). They have some distinct advantages, though. First, plasma hits a target all-at-once, engulfing the target and affecting the least-armored area on the body. This means anyone not in fully sealed armor is in serious trouble. Second, plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  As with many of the CS weapons, it also has intigrated Laser Targeting system which reduces attack penalites." compset="Ranged">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShort" value="18"/>
+    <fieldval field="wpMedium" value="36"/>
+    <fieldval field="wpLong" value="72"/>
+    <fieldval field="grCost" value="42000"/>
+    <fieldval field="gearWeight" value="12"/>
+    <fieldval field="wpSpecial" value="Mega Damage.  Engulfs the target and affecting the least-armored area on the body.  Plasma tends to ignite targets (usually 1 in 6 chance), doing 1d10 continuous damage until it’s doused.  Intigrate"/>
+    <fieldval field="wpShots" value="16"/>
+    <fieldval field="wpDmgBonus" value="+4"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="StrReqDie" tag="4"/>
+    <tag group="Weapon" tag="LeastArmor"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    </thing>
+  <thing id="wpCScttp40" name="CTT-P40 Particle Beam Cannon" description="In the post-105 P.A. the Coalition States needed a non-integated weapon for its suits of Power Armor.  The CTT-P40 was designed and deployed, while too heavy (89 lbs in weight, requiring min d12 STR to use)  for normal infantry units it can be placed on a fixed tri-pod, vehicle mount point, carried by suit of Power Armor or full conversion Borg, or perhaps the occasional CS Juicer." compset="Ranged">
+    <fieldval field="wpDamage" value="3d8"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="wpLong" value="120"/>
+    <fieldval field="grCost" value="Not Available"/>
+    <fieldval field="gearWeight" value="89"/>
+    <fieldval field="wpSpecial" value="Min Str d10, Mega Damage, Snapfire."/>
+    <fieldval field="wpShots" value="40"/>
+    <fieldval field="wpDmgBonus" value="+5"/>
+    <fieldval field="wpPiercing" value="6"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    <tag group="WeaponType" tag="FutRange" name="Futuristic Ranged" abbrev="Futuristic Ranged"/>
+    <tag group="StrReqDie" tag="6"/>
+    </thing>
+  <thing id="eqCSeap" name="Electro-Adhesive Pads" description="Developed for covert operations by the CS Military, the Electro-Adhesive Pads use small powerful electro-magnets to assist those needing to climb  metal surfaces.  Providing +4 to all Climb checks involving metal." compset="Equipment">
+    <fieldval field="grCost" value="30000"/>
+    <fieldval field="gearWeight" value=".5"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="GearType" tag="Adventure"/>
+    </thing>
+  <thing id="eqCSlprg" name="Lock Pick Release Gun" description="An automatic system which can handle just about any every form of purely mechanical lock, providing a +4 to any Lockpicking skill with such locks." compset="Equipment">
+    <fieldval field="gearWeight" value="2"/>
+    <fieldval field="grCost" value="1800"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="GearType" tag="Adventure"/>
+    </thing>
+  <thing id="eqCSub" name="Utility Belt" description="Standard issue for all field personnel, the Coalition Utility Belt has numerous pouches and containment options, carrying a number of very useful items. While not as all-purpose as the NGS2 Basic Survival Pack, the belt does aid in survival and other operations in many ways.\n\n* One Canteen (half gallon).\n* One Communicator (5 mile range).\n* One Compass/inertial mapper.\n* One Firestarter kit (solar-powered lighter and flint &amp; steel).\n* One Flashlight/signal light (with bright halogen and infrared options).\n* One Mini first aid kit (+1 Healing check, only one use).\n* Power bars (three, each can sustain a normal human for a day)." compset="Equipment">
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="grCost" value="2500"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="GearType" tag="Adventure"/>
+    </thing>
+  <thing id="vhSRCSUAR1" name="CS UAR-1 Enforcer" description="At nearly 20 feet tall and designed to look like a giant suit of Deadboy armor striding across the battlefield, the UAR-1 Enforcer robot armor is bound to make anyone think twice about doing battle with the Coalition. This venerable war machine remains in extensive use throughout the CS, though more and more are finding their way (repainted and modified, of course) into the Black Market. One artifact of its original design is that much of its sensory enhancement is external to the main body; the sensor turret, which provides +2 Notice and radar, can be directly targeted (−4 to hit, an attack dealing 15 damage destroys it). Knocking it out removes those benefits.\n (28 million credits)" compset="Walker" summary="A venerable warmachine of the Coalition States">
+    <fieldval field="vhSize" value="6"/>
+    <fieldval field="vhCrew" value="1+1"/>
+    <fieldval field="vhTough" value="33"/>
+    <fieldval field="vhArmor" value="15"/>
+    <fieldval field="vhTopSpeed" value="10"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="vhSRArmStr" tag="10"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehType" tag="RobotAr"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpWIGL20GL"></bootstrap>
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpLtMisLau">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdLasCan">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMdMisLau"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRCT003" name="CS CR-003 Spider-Skull Walker Assault Armor" description="Designed as much for terror as for tactics, the Spider-Skull is a giant death head motif hull on six legs, festooned with heavy weapons. At 30 feet in height, it towers over most battlefield combatants, and the insect-like legs give it exceptional mobility through rough terrain and surprising capacity for climbing fairly steep inclines. Very few find their way into the Black Market, as they’ve not been part of the phase-out programs. (36 million credits)" compset="Walker" summary="Robot APC">
+    <fieldval field="grCost" value="36000000"/>
+    <fieldval field="vhTopSpeed" value="12"/>
+    <fieldval field="vhTough" value="35"/>
+    <fieldval field="vhArmor" value="16"/>
+    <fieldval field="vhCrew" value="2+6"/>
+    <fieldval field="vhSize" value="8"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhSRArmStr" tag="12"/>
+    <tag group="VehType" tag="RobotAr"/>
+    <tag group="User" tag="Military"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpHvLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpHvLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRAFC023" name="CS AFC-023 Sky Cycle" description="One of the key components of the Coalition military’s air force, the one-man AFC-023 Sky Cycle is an adrenaline junkie’s dream and a safety officer’s nightmare. A longtime mainstay of the Coalition’s military machine, a small number of 023s recently came into the Black Market as newer vehicles slowly replaced them. Fantastic speed and maneuverability make it highly desirable and hard to find, even for the cost. (2 million credits)" compset="Vehicle" summary="One man attack aircraft">
+    <fieldval field="vhAccel" value="30"/>
+    <fieldval field="vhTopSpeed" value="190"/>
+    <fieldval field="vhClimb" value="0"/>
+    <fieldval field="vhTough" value="16"/>
+    <fieldval field="vhArmor" value="6"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="VTOL"/>
+    <tag group="VehType" tag="VTOL"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="Exposed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <child entity="LoadOut">
+      <bootstrap thing="modVHandli"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpHvLasCan"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRAFC050" name="CS AFC-050 Death&apos;s Head Transport" description="One of the most terrifying sights in the sky is a fully-loaded Death’s Head transport; a single vehicle represents a large unit of Coalition soldiers capable of taking on an entire town with ease. The usual compliment aboard is the nine man crew (Pilot, co-pilot, two gunners, technicians); two Mark V APCs with 20 Dead Boy soldiers in each; two UAR-1 Enforcers; a Spider-Skull Walker; and either a hundred more Dead Boys or two dozen SAMAS troopers. One of these should represent a terrible threat for any group of heroes, more of a thing to avoid instead of taking on unless they’ve got one seriously fantastic plan. (Unavailable for purchase)" compset="Vehicle" summary="Massive Coalition combat transport">
+    <fieldval field="vhAccel" value="30"/>
+    <fieldval field="vhTopSpeed" value="245"/>
+    <fieldval field="vhTough" value="52"/>
+    <fieldval field="vhArmor" value="30"/>
+    <fieldval field="vhSize" value="10"/>
+    <fieldval field="vhCrew" value="2+407"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="Vehicle" tag="VTOL"/>
+    <tag group="VehType" tag="Aircraft"/>
+    <tag group="User" tag="Military"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="CargoSpace"/>
+    <tag group="Vehicle" tag="Comm"/>
+    <tag group="Vehicle" tag="DronePABay"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpHvLasCan">
+        <assignval field="stackQty" value="6"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRCSMKV" name="CS Mark V Armored Personnel Carrier" description="Most experienced mercenaries and adventurers in North America dream of one\nday having a Mark V to call their own. A machine designed for combat zones, this\neight-wheeled monster normally loads up 20 Dead Boy soldiers and 6 SAMAS, with\nenough room for crew and cargo for a couple of weeks in the field. Two gunners operate the heavy rail gun and the laser turrets, while the driver or co-driver handles the forward mounted mini rail guns and the missile launchers (a communications\nspecialist is usually assigned as well). It’s highly illegal to own one with the full\narmaments compliment anywhere near Coalition territory, though a stripped-down\nmodel (laser turrets only) will normally only get the hairy eyeball from Coalition\nauthorities if paperwork is otherwise in order. (21 million credits fully loaded; 10\nmillion stripped down)" compset="Vehicle" summary="The standard APC of the Coalition">
+    <fieldval field="vhAccel" value="5"/>
+    <fieldval field="vhTopSpeed" value="30"/>
+    <fieldval field="vhTough" value="32"/>
+    <fieldval field="vhArmor" value="17"/>
+    <fieldval field="vhCrew" value="2+33"/>
+    <fieldval field="grCost" value="21000000"/>
+    <fieldval field="vhCost" value="10 Million stripped"/>
+    <fieldval field="grMaxMods" value="0"/>
+    <fieldval field="vhSize" value="7"/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="User" tag="Military"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="VehType" tag="Ground"/>
+    <tag group="Vehicle" tag="Amphib"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="CargoSpace"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpHvyRailG"></bootstrap>
+      <bootstrap thing="wpMdLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpVhMnMsLa">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      <bootstrap thing="wpMinRailG">
+        <assignval field="stackQty" value="2"/>
+        </bootstrap>
+      </child>
+    </thing>
+  <thing id="vhSRCSIAR4" name="CS IAR-4 Hellraiser" description="Designated officially as an Infantry Assault Robot, and unofficially as a “Robot Killer,”\nthe Hellraiser is a highly mobile and maneuverable combat vehicle designed\nto counter the heavy weapon platforms of enemy forces. Considered by many frontline\nveterans of the Coalition as the best of the new vehicles, the Hellraiser is, among other\nthings, looked upon as a fine “Glitter Boy killer.” The Hellraiser is also effective for\nurban missions and riot control, with a special Electro-Stunner weapon designed\nfor nonlethal pacification. (Unavailable for purchase)" compset="Walker" summary="Coalition Infantry Robot">
+    <fieldval field="vhTopSpeed" value="15"/>
+    <fieldval field="vhTough" value="36"/>
+    <fieldval field="vhArmor" value="18"/>
+    <fieldval field="vhCrew" value="1+2"/>
+    <fieldval field="vhSize" value="6"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="vhSRArmStr" tag="12"/>
+    <tag group="VehType" tag="RobotAr"/>
+    <child entity="LoadOut">
+      <bootstrap thing="wpSRQTROG"></bootstrap>
+      <bootstrap thing="wpSRELSTNR"></bootstrap>
+      <bootstrap thing="wpCSc29"></bootstrap>
+      <bootstrap thing="wpLtLasCan">
+        <assignval field="stackQty" value="2"/>
+        <assignval field="wsLinked" value="1"/>
+        </bootstrap>
+      <bootstrap thing="wpLtMisLau"></bootstrap>
+      <bootstrap thing="wpSRVbrClw"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhCSpa06a" name="CS PA-06A SAMAS" description="Although classified as Power Armor, the flight system requires a Piloting check for high-speed or tricky maneuvers in the SAMAS. With the recent spate of upgrades a few of these have found their way into the Black Market. Even for the prices they go for, they get snatched up fast thanks to the integrated vehicle-grade flight systems." compset="PowerAr" summary="Coalition States PA-06A SAMAS, the most commonly known CS Power Armor." holdable="no">
+    <fieldval field="vhTough" value="2"/>
+    <fieldval field="vhArmor" value="10"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="gearWeight" value="450"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="grCost" value="1600000"/>
+    <fieldval field="vhClimb" value="2"/>
+    <fieldval field="vhTopSpeed" value="10 / 25 "/>
+    <usesource source="CoFieldMan"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="vhSRArmStr" tag="10"/>
+    <tag group="RiftRunDie" tag="4"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   perform hero.assign[Rifts.SuperStrength]
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
+   endif]]></eval>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
+
+if (field[grIsEquip].value <> 0) then
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpLtRailGu"></bootstrap>
+      <bootstrap thing="wpMouRockL"></bootstrap>
+      <bootstrap thing="modPAStren"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhCSpa100" name="CS PA-100 Mauler Power Armor" description="The PA-100 Mauler Power armor is known by the nickname of &quot;No Neck&quot; and a suit of PA which is designed to use blunt-force to survive in an urban environment while people riot.  It has both the ability to work in both amphibious situations, as well as limited flight using maneuvering jets.\n\nThe Mauler is packed with several weapon systems, from Anti-Personnel Lasers, Mini Rail Gun, Mini-Missile Launchers, shoulder mounted Plasma Ejectors, and even Vibro-Sabers mounted in each forearm." compset="PowerAr" summary="New suilt of armor, nick named the &quot;No Neck&quot; it is known for blunt force attacks." holdable="no">
+    <fieldval field="vhTough" value="2"/>
+    <fieldval field="vhArmor" value="10"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="2"/>
+    <fieldval field="gearWeight" value="1800"/>
+    <fieldval field="grMaxMods" value="5"/>
+    <fieldval field="vhTopSpeed" value="7"/>
+    <fieldval field="vhSpecial" value="{b}Maneuvering Jets (Jump 8&quot; horizontal, 4&quot; vertical){br}{b}Swimming Pace: {b} 6"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="vhSRArmStr" tag="11"/>
+    <tag group="RiftRunDie" tag="7"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
+
+if (field[grIsEquip].value <> 0) then
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   perform hero.assign[Rifts.SuperStrength]
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpantiplas"></bootstrap>
+      <bootstrap thing="wpantiplas"></bootstrap>
+      <bootstrap thing="wpMinRailG"></bootstrap>
+      <bootstrap thing="wpVhMnMsLa"></bootstrap>
+      <bootstrap thing="wpPlasmaEV"></bootstrap>
+      <bootstrap thing="wpPlasmaEV"></bootstrap>
+      <bootstrap thing="wpVBSaber"></bootstrap>
+      <bootstrap thing="wpVBSaber"></bootstrap>
+      </child>
+    </thing>
+  <thing id="vhCSpa09A" name="CS PA-09A Super SAMAS" description="Often called the “Grinning Demon,” thanks to the shape of the skeleton jaw motif, the Super SAMAS is a significant upgrade to the original SAMAS power armor. It’s intended for multi-profile missions, including establishing low-to-mid altitude air superiority. Though many pilots are happy flying into battle with only the standard weapons, more than a few will carry the CTT-P40 Particle Beam Cannon as well." compset="PowerAr" summary="Coalition States PA-09A Super SAMAS, new and improved death from above!" holdable="no">
+    <fieldval field="vhTough" value="3"/>
+    <fieldval field="vhArmor" value="12"/>
+    <fieldval field="vhCrew" value="1"/>
+    <fieldval field="vhSize" value="3"/>
+    <fieldval field="gearWeight" value="4400"/>
+    <fieldval field="grMaxMods" value="7"/>
+    <fieldval field="vhClimb" value="2"/>
+    <fieldval field="vhTopSpeed" value="7 / 30"/>
+    <usesource source="CoFieldMan"/>
+    <tag group="Vehicle" tag="NightVis"/>
+    <tag group="Vehicle" tag="Infrared"/>
+    <tag group="Vehicle" tag="SensorSuit"/>
+    <tag group="Vehicle" tag="Radar"/>
+    <tag group="Vehicle" tag="Sealed"/>
+    <tag group="VehType" tag="PowerAr"/>
+    <tag group="Vehicle" tag="Targeting"/>
+    <tag group="VehEra" tag="RiftsEra"/>
+    <tag group="Vehicle" tag="HvyArmor"/>
+    <tag group="Vehicle" tag="FusionPow"/>
+    <tag group="vhSRArmStr" tag="11"/>
+    <tag group="RiftRunDie" tag="7"/>
+    <eval phase="PreTraits" priority="4500"><![CDATA[var myVal as number
+myVal = field[vhTough].text
+
+if (field[grIsEquip].value <> 0) then
+   perform #traitadjust[trTough,+,myVal ,"Power Armor Toughness"]
+   herofield[acDefHead].value += myVal 
+   herofield[acDefArms].value += myVal 
+   herofield[acDefLegs].value += myVal 
+   herofield[acDefTorso].value += myVal 
+   endif]]></eval>
+    <eval phase="Setup" priority="5000" index="2"><![CDATA[trustme
+var DiffStr as number
+DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+
+~ Set strength to Armor Strength if equipped
+if (field[grIsEquip].value <> 0) then
+   perform hero.assign[Rifts.SuperStrength]
+   gizmo.child[modPAStren].field[stackQty].value = DiffStr
+
+   ~Only count Strength Mod 1 time, no matter the Stack
+   field[grCurrMods].value -= (DiffStr - 1)
+else
+   gizmo.child[modPAStren].field[stackQty].value = 1
+   endif]]></eval>
+    <child entity="LoadOut">
+      <bootstrap thing="wpCScttp40"></bootstrap>
+      <bootstrap thing="wpSFVGrenL"></bootstrap>
+      <bootstrap thing="wpSFVGrenL"></bootstrap>
+      <bootstrap thing="wpSRpa09pl"></bootstrap>
+      <bootstrap thing="wpSRpa09pl"></bootstrap>
+      <bootstrap thing="wpVBd10"></bootstrap>
+      <bootstrap thing="wpVBd10"></bootstrap>
+      <bootstrap thing="modPAStren"></bootstrap>
+      </child>
+    </thing>
+  </document>

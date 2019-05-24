@@ -107,13 +107,16 @@
       type="derived"
 	  maxlength="500">
 	  </field>
+	  
+    <!-- Each Frame Complication needs its own identity tag to detect cascading dependencies via prereqs -->
+    <identity group="RiftsHJ"/>
+	
 	<!-- Forward the Heros Journey category to the actor -->
-
     <eval index="1" phase="Initialize" priority="2100"><![CDATA[
       perform forward[RiftsHJ.?]
       ]]></eval>
 	  
-    <!-- Each fortune must consume an instance in the resource tracking edges -->
+    <!-- Each hero journey selection must consume an instance in the resource tracking edges -->
     <eval index="2" phase="Setup" priority="5000"><![CDATA[
       ~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
       doneif (origin.ishero = 0)
@@ -144,6 +147,7 @@
   <compset
     id="HeroJrny">
     <compref component="HeroJrny"/>
+	<compref component="Ability"/>
 	<compref component="Domain"/>
 	<compref component="UserSelect"/>
     </compset>

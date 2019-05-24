@@ -30,6 +30,11 @@
       <it_tagcheck group="User" tag="Activation"/>
       </inputthing>
     <inputthing
+      name="Activation Text?"
+      helptext="Text for the user activation checkbox.">
+      <it_field field="usrChkText"/>
+      </inputthing>
+    <inputthing
       name="Selectable for Creatures?"
       helptext="Specify whether this racial ability is shown for selection when customizing a creature.">
       <it_tagcheck group="User" tag="Creature"/>
@@ -57,6 +62,16 @@
       name="Focus for Knowledge Skill"
       helptext="Specify a Focus if this is a Knowledge Skill.">
       <it_field field="frabDomain"/>
+      </inputthing>
+    <inputthing
+      name="Menu #1 Source"
+      helptext="Specify the source from which to retrieve choices for display in the first menu.">
+      <it_tagpick group="ChooseSrc1" tag="?"/>
+      </inputthing>
+    <inputthing
+      name="Menu #1 Tag Expression"
+      helptext="Specify the tag expression used to identify choices for display in the first menu. If empty, no first menu is shown.">
+      <it_field field="usrCandid1"/>
       </inputthing>
   </editthing>
 
@@ -108,6 +123,7 @@
       <it_field field="frcoDomain"/>
       </inputthing>
   </editthing>
+  
   <!-- Arcane editthing -->
   <editthing
     group="Rifts"
@@ -138,4 +154,105 @@
       <it_taglist group="PowerDeny" tag="?" />
       </inputthing>
     </editthing>  
+
+  <!-- Armor editthing -->
+  <editthing
+    group="Rifts"
+    compset="ArmorRifts"
+    name="Armor (Rifts)"
+    prefix="arm"
+    description="Weapons, vehicles, and simple equipment all have their own tabs for creating objects of those types."
+    summary="Defines armor that can be selected on the Armory tab.">
+    <inputthing
+      name="Armor Type"
+      helptext="Specify the Armor Type.">
+      <it_tagpick group="ArmorType" tag="?"/>
+      </inputthing>
+    <inputthing
+      name="Defense Rating"
+      helptext="Specify the Defense rating of the armor against normal attacks.">
+      <it_field field="defDefense"/>
+      </inputthing>
+    <inputthing
+      name="Ballistic Defense Rating"
+      helptext="Specify the Defense rating of the armor against ballistic attacks (e.g. bullets).">
+      <it_field field="defBullets"/>
+      </inputthing>
+    <inputthing
+      name="Toughness Modifier"
+      helptext="Specify the modifier to hero's toughness from the armor.">
+      <it_field field="arToughness"/>
+      </inputthing>
+    <inputthing
+      name="Covers Torso?"
+      helptext="Specify whether this armor covers the torso.">
+      <it_tagcheck group="ArmorLoc" tag="Torso"/>
+      </inputthing>
+    <inputthing
+      name="Covers Head?"
+      helptext="Specify whether this armor covers the head.">
+      <it_tagcheck group="ArmorLoc" tag="Head"/>
+      </inputthing>
+    <inputthing
+      name="Covers Arms?"
+      helptext="Specify whether this armor covers the arms.">
+      <it_tagcheck group="ArmorLoc" tag="Arms"/>
+      </inputthing>
+    <inputthing
+      name="Covers Legs?"
+      helptext="Specify whether this armor covers the legs.">
+      <it_tagcheck group="ArmorLoc" tag="Legs"/>
+      </inputthing>
+    <inputthing
+      name="Stacks on Top of Regular Armor?"
+      helptext="Specify whether this armor stacks on top of normal armor protection.">
+      <it_tagcheck group="Equipment" tag="StackArmor"/>
+      </inputthing>
+    <inputthing
+      name="Special Traits"
+      helptext="Specify any number of special traits that apply to this armor.">
+      <it_taglist group="ArmorSpecial" tag="?" />
+      </inputthing>
+    <inputthing
+      name="Cost"
+      helptext="Specify the standard cost of the item, with a value of 0 meaning it is free.">
+      <it_field field="grCost"/>
+      </inputthing>
+    <inputthing
+      name="Weight"
+      helptext="Specify the weight of the item in pounds.">
+      <it_field field="gearWeight"/>
+      </inputthing>
+    <inputthing
+      name="Ultra Tech?"
+      helptext="Specify whether this is considered Ultra Tech from the Sci-Fi Companion.">
+      <it_tagcheck group="Equipment" tag="UltraTech"/>
+      </inputthing>
+    <inputthing
+      name="Treat as Standard Gear"
+      helptext="Specify whether this item is designated as 'standard gear' that can be readily omitted from use with selected Savage Settings.">
+      <it_tagcheck group="Equipment" tag="Standard"/>
+      </inputthing>
+    </editthing>
+  
+  <!-- Hero's Jurney editthing -->
+  <editthing
+    group="Rifts"
+    compset="HeroJrny"
+    name="Hero's Journey"
+    prefix="hj"
+    description="The Hero's Journey entry defines a selection on a table for the hero."
+    summary="Defines an entry on a Hero's Journey table.">
+    <inputthing
+      name="Menu #1 Source"
+      helptext="Specify the source from which to retrieve choices for display in the first menu.">
+      <it_tagpick group="ChooseSrc1" tag="?"/>
+      </inputthing>
+    <inputthing
+      name="Menu #1 Tag Expression"
+      helptext="Specify the tag expression used to identify choices for display in the first menu. If empty, no first menu is shown.">
+      <it_field field="usrCandid1"/>
+      </inputthing>
+    </editthing> 
+	
   </document>

@@ -3,7 +3,7 @@
 
   <thing id="edgSRSHFT" name="Arcane Background: Shifter" description="{b}Note:{/b} This is the Edge your character must purchase to possess the &quot;Shifter&quot; arcane background and cast spells." compset="Edge" summary="Gain the Shifter arcane background" uniqueness="unique">
     <fieldval field="shortname" value="Shifter"/>
-    <usesource source="SavRiftC"/>
+    <usesource source="SavGPlu"/>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
     <tag group="Arcane" tag="Magic" name="Magic" abbrev="Magic"/>
     <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
@@ -11,16 +11,6 @@
     <pickreq thing="grpSRShift"/>
     </thing>
 
-  <thing id="rpSRAUGMEN" name="Bionic Augmentation" compset="RacialProp" summary="The Full Conversion Cyborg is Powerful">
-    <usesource source="SavRiftC"/>
-    <eval phase="PreTraits" priority="5000">#traitcreation[attrAgi] += 2
-#traitcreation[attrStr] += 5
-#traitcreation[attrVig] += 3
-
-hero.childfound[attrAgi].field[trtMaximum].value += 5
-hero.childfound[attrStr].field[trtMaximum].value += 5
-hero.childfound[attrVig].field[trtMaximum].value += 5</eval>
-    </thing>
   <thing id="rpSRCYBGHV" name="Big and Heavy" description="Combat Cyborgs are big and heavy, gaining +1 Toughness from their size.\n\nIn addition, cyborgs are extra-heavy making it difficult to operate Power Armor, Robot Armor, and vehicles not built for them. Power Armor must be reinforced, doubling purchase and repair costs. Operating Robot Armor or a vehicle not refitted for them is done at a −2 to all Trait checks, including firing vehicular weapons." compset="RacialProp" summary="The Full Conversion Cyborg is bigger that a normal person">
     <usesource source="SavRiftC"/>
     <bootstrap thing="rpSize1"></bootstrap>
@@ -28,16 +18,7 @@ hero.childfound[attrVig].field[trtMaximum].value += 5</eval>
   <thing id="rpSRCYMMN" name="More Machine" description="‘Borgs add +2 to recover from Shaken, ignore one level of wound modifiers, possess a self-contained breathing apparatus, and are immune to poison and disease." compset="RacialProp" summary="He is more machine now than man">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="racSRDGHTC" name="Dragon Hatchling" description="For Dragon Hatchlings, Rfits Earth is a wonderous paradise of new sensations and experiences.  It may even be their place of birth.  Here in the chaotic freedom of the savage wilderness and rival civilization, the hatchlings can find every exeperience he might imagine.  Countless alien races (D-Bees), the couragous and contridictory humans, magic, technology, combat, science, demons and angels, mountains and oceans, forests and deserts, and portals to anywhere and everywhere.  It&apos;s a great place for beings such as they to spend 500-1000 years growing up.\n\nNote: Because a Dragon hatchling is untested, the character will not choose their hindrances during character creation.  These will be choosen after the first 3 sessions.\n\nThis is the humanoid form of the dragon hatchling.  The character can only maintain this form for a number of hours equal to its Spirit die before needing at least 6 hrs of rest." compset="Race" summary="Dragon Hatchlings are young, naive, and powerfule" uniqueness="unique">
-    <usesource source="SavRiftC"/>
-    <bootstrap thing="rpSRDRGMGT"></bootstrap>
-    <bootstrap thing="rpSRDRGVY"></bootstrap>
-    <bootstrap thing="rpSRDRGINF"></bootstrap>
-    <bootstrap thing="rpSRDRGOUT"></bootstrap>
-    <bootstrap thing="rpSRSLWREG"></bootstrap>
-    <bootstrap thing="rpSRINHRTMGC"></bootstrap>
-    <bootstrap thing="rpSRCDRGTERR"></bootstrap>
-    </thing>
+
   <thing id="arcSRDGPSY" name="Dragon Psionics" description="Dragons Hatchlings are minor psionics at birth." compset="Arcane">
     <fieldval field="arcPowers" value="3"/>
     <fieldval field="arcPoints" value="10"/>
@@ -790,6 +771,7 @@ hero.childfound[attrVig].field[trtMaximum].value += 5</eval>
   <thing id="armSRDGNHD" name="Armored Hide" description="The Dragon Hatchling has strong armor.  This armor is MDC (or Heavy) Armor." compset="Armor" summary="Dragon&apos;s scales are broad and strong">
     <fieldval field="defDefense" value="16"/>
     <usesource source="SavRiftC"/>
+    <tag group="Hide" tag="Equipment"/>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="ArmorLoc" tag="Head"/>
     <tag group="ArmorLoc" tag="Arms"/>
@@ -833,7 +815,7 @@ endif]]>
     <bootstrap thing="drwPsionic"></bootstrap>
     <eval phase="PreTraits" priority="5000">#traitcreation[skPsionics] += 1</eval>
     <eval phase="PreTraits" priority="5000" index="2">#traitcreation[trSRISP] += 15</eval>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="fcSRDRGCYB" name="Cybernetics" description="Dragons&apos; cannot ake cybernetics at any point.  Their bodies reject such foreign implants." compset="FraComp" summary="Unable to use Cybernetics.">
     <usesource source="SavRiftC"/>
@@ -1035,9 +1017,9 @@ header &= hero.child[resRaceSel].field[resSummary].text
 chooser = "(Hindrance.hinConfide|Hindrance.hinHeroic)"
 
 ~set up chooser expressions for Breed Advantages
-hero.child[ehExprHlp1].field[ehRaceAdd].text = additem
-hero.child[ehExprHlp1].field[ehRaceExp].text = chooser
-hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
+hero.child[HeroJourneyHelper].field[ehRaceAdd].text = additem
+hero.child[HeroJourneyHelper].field[ehRaceExp].text = chooser
+hero.child[HeroJourneyHelper].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="edgSRMYHLW" name="Holy/Unholy Warrior" description="Acolytes, clerics, paladins, holy slayers, and other avatars of the gods are frequently tasked with battling the forces of evil in the mortal world. This Edge gives them a slight advantage against such foes.{br}{br}As an action, a priest or other holy person may call upon his chosen deity to repulse supernaturally evil creatures, such as the undead, demons, and the like. It also works on evil characters with the Arcane Background (Miracles) Edge.{br}{br}Repulsing evil costs 1 Power Point and has a range of the character&apos;s Spirit. Targeted creatures within that range must make a Spirit roll. Failure means the creature is Shaken; a 1 means it is destroyed. Wild Cards suffer an automatic Wound instead.{br}{br}A character may also be an Unholy Warrior working for the forces of evil. In this case, he repulses good creatures, such as angels, paladins, or good characters with Arcane Background (Miracles)." compset="Edge" summary="Repulse good/evil for 1PP; Targets make Spirit roll" uniqueness="unique">
     <fieldval field="shortname" value="Holy Warrior"/>
@@ -1059,7 +1041,6 @@ hero.child[ehExprHlp1].field[ehRaceHdr].text = header]]></eval>
     </thing>
   <thing id="hinWKStmch" name="Weak Stomach" description="Your character&apos;s digestive system does not react well to new or unusual foods.  If your hero&apos;s native cusine, or at least very bland meals of proteins and starches, isn&apos;t available, he must make a Vigor roll to eat the available fare.  A failure on the roll means he simply can&apos;t digest it, while a 1 on his Vigor die (regardless of the Wild Die) mean he regurgitates the meal almost immediately - which may have unpleasant social consequences as well.  \n\nThis Hindrance can complicate survival situations for your character as descibed under Hunger in the Savage Worlds Deluxe Edition Rules.  Note that in no way does this Hindrance allow your character to eat substances normally otherwise not consumable by his species" compset="Hindrance" summary="Your digestive system doesn&apos;t reach well to new or unusual foods">
     <fieldval field="shortname" value="Weak Stomach"/>
-    <usesource source="LastP"/>
     <usesource source="SavRiftC"/>
     </thing>
   <thing id="edgNPBTLCO" name="Battle Commander" description="You are just a natural born leader with an eye for strategy.\n\nYou gain 2 extra Bennies at the beginning of each session. These Bennies may only be spent to activate Leadership Edges, or be given away with Common Bond or Natural Leader.\n\nAlternatively, if a Leadership Edge is activated by drawing a specific type of Action Card, you may spend one of these bonus Bennies to activate that Edge" compset="Edge">
@@ -1341,19 +1322,19 @@ endif]]>
     <tag group="MinRank" tag="2"/>
     <tag group="EdgeType" tag="Racial"/>
     <bootstrap thing="abRegenFas"></bootstrap>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="edgSRDRGLLV" name="Dragon Low Light Vision" description="Dragons can develop strong night vision, which enables them to ignore penalties for Dim and Dark conditions." compset="Edge" summary="Dragons can see better in the dark">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="0"/>
     <tag group="EdgeType" tag="Racial"/>
     <bootstrap thing="rpLowLight"></bootstrap>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="edgSRDRGMTMF" name="Dragon Metamorphosis" description="A dragon may change his shape and size at will, appearing as any living creature from the size of a house cat to anything his natural size and weight. He can maintain any such form indefinitely, even while sleeping. The dragon gains no special properties of what he mimics, only the size and appearance, but he retains all of his own abilities except those only usable in dragon form (marked with an *). Only gear carried in humanoid form (see Limited Metamorphosis below) is assumed into any new shape. Any other objects are dropped when transforming to a new body.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n0 is assumed into any new shape. Any other objects are dropped when transforming to a new body." compset="Edge" summary="The dragon can change shape at wil">
     <tag group="EdgeType" tag="Racial"/>
     <tag group="MinRank" tag="2"/>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="wpSRFLMSCL" name="Flaming Scales" description="Flame Wind Hatchlings can immolate themselves, their very scales alight with terrible fire. The fire acts like a damage field, but it does 3d6, Mega Damage. Hatchlings can maintain such a field for a number of rounds equal to their Spirit, after which at least 10 minutes of rest are required before they can activate the effect again." compset="Melee" summary="Flame Wind Dragon&apos;s scale light on fire">
     <fieldval field="wpDamage" value="3d6"/>
@@ -1668,7 +1649,7 @@ rolls += hero.tagcount[RiftsHJ.MagMys]
 validif (rolls >= 3)]]></evalrule>
     <pickreq thing="racSRPsiSt" ispreclude="yes"/>
     <pickreq thing="racSRCyborg" ispreclude="yes"/>
-    <pickreq thing="racSRDGHTC" ispreclude="yes"/>
+    <pickreq thing="racSRDragonHatch" ispreclude="yes"/>
     <pickreq thing="racSRQuiFl" ispreclude="yes"/>
     <pickreq thing="racSRGrack" ispreclude="yes"/>
     <pickreq thing="racSRDogB" ispreclude="yes"/>
@@ -2578,7 +2559,7 @@ rolls += hero.tagcount[RiftsHJ.Psi]
 rolls += hero.tagcount[RiftsHJ.Train]
 
 validif (rolls >= 2)]]></evalrule>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="wpSRDRGCNNRL" name="Dragon Cone of Fire - Normal" description="A Flame Wind Dragon Hatchling can fire a Cone of Flame  from their mouth.   Use a Cone Template, every target within the cone makes an Agility roll -2 to avoid the attack.  Those who fail suffer 2d8." compset="Ranged" summary="Dragons breath weapons">
     <fieldval field="wpDamage" value="2d8"/>
@@ -2630,7 +2611,7 @@ endif]]>
     <tag group="MinRank" tag="1"/>
     <tag group="EdgeType" tag="Iconic"/>
     <bootstrap thing="powSRMegaInvis"></bootstrap>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="edgSRJCBRNGLY" name="Burn for Glory" description="For the rare Juicer who lives long enough to become Legendary, the possibilities are truly spectacular for what she can do with her remaining days.\n\nA Juicer with this Edge may spend a point of Burn to double the result of any Trait or damage roll!" compset="Edge" summary="You are the rare Juicer who has lived up to Julian&apos;s legend">
     <usesource source="SavRiftC"/>
@@ -2755,7 +2736,7 @@ rolls += hero.tagcount[RiftsHJ.Psi]
 rolls += hero.tagcount[RiftsHJ.Train]
 
 validif (rolls >= 2)]]></evalrule>
-    <pickreq thing="racSRDGHTC"/>
+    <pickreq thing="racSRDragonHatch"/>
     </thing>
   <thing id="faSRDGNFTRN" name="Forest Runner Dragon Form" description="This is the natural form of the dragon.  When the dragon is not in its natural form it looses much of it inherent powers.  Humanoid weapons and other personal effect (up to body armor) are assumed into the dragon&apos;s form and reappear when returning to humanoid form.  Any other objects are dropped.  The process doe not work in reverse, all gear carried by the dragon is dropped when transforming into humanoid form.\n\nIn their natural form, dragons cannot wear any armor and can only use vehicular weapons specially adapted for their use at four times the normal cost." compset="FraAbility" summary="The Forest Runner dragon&apos;s natural form">
     <usesource source="SavGPlu"/>
@@ -3642,4 +3623,621 @@ nexteach]]></eval>
     <usesource source="SavGPlu"/>
     <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
     </thing>
+  <thing id="faSRSFTARC" name="Shifter Arcane Background" description="Shifters are Masters of Magic, have the Arcane Background (Magic), and choose\nfrom the following list of powers: armor, banish, barrier, blast, bolt, burrow, burst, conceal arcana, damage field, darksight, deflection, dispel, drain Power Points, entangle, environmental protection, farsight, fear, intangibility, invisibility, light/obscure, quickness, slow, smite, speak language, speed, stun, summon ally, teleport, and warrior’s gift. \n\nThey can choose any Trappings available for their powers." compset="FraAbility" summary="Shifters are arcane spellcasters">
+    <usesource source="SavGPlu"/>
+    <bootstrap thing="skSpellcst"></bootstrap>
+    <bootstrap thing="arcSRSHFR"></bootstrap>
+    <eval phase="PreTraits" priority="5000" index="2">#traitcreation[trSRPPE] += 15</eval>
+    <eval phase="PreTraits" priority="5000">#traitcreation[skSpellcst] += 2</eval>
+    </thing>
+  <thing id="arcSRSHFR" name="Shifter" description="The study of the arcane is essential to a Shifter’s success, and all Shifters are powerful spellcasters. While they don’t possess the same variety of spell knowledge their counterparts among other disciplines might, they don’t hurt for essential power, either. Shifters train in techniques for both diminishing the power of their opponents and turning that power against them.\n\nShifters are mighty spellcasters, starting with three powers of their choice (as well as\nspecific ones, listed below). They begin with a Spellcasting skill of d8 and 15 PPE." compset="Arcane" summary="The Shifter is uses magic">
+    <fieldval field="arcPowers" value="3"/>
+    <fieldval field="arcPoints" value="15"/>
+    <usesource source="SavGPlu"/>
+    <tag group="PowerDeny" tag="powETAMPVS"/>
+    <tag group="PowerDeny" tag="powETARRER"/>
+    <tag group="PowerDeny" tag="powETAWTMI"/>
+    <tag group="PowerDeny" tag="powDLAim"/>
+    <tag group="PowerDeny" tag="powAcAFort"/>
+    <tag group="PowerDeny" tag="powStAFoe"/>
+    <tag group="PowerDeny" tag="powAnalyze"/>
+    <tag group="PowerDeny" tag="powOzAnger"/>
+    <tag group="PowerDeny" tag="powSKAnimH"/>
+    <tag group="PowerDeny" tag="powStAnima"/>
+    <tag group="PowerDeny" tag="powDRAquat"/>
+    <tag group="PowerDeny" tag="powFGArcPr"/>
+    <tag group="PowerDeny" tag="powWWArcRe"/>
+    <tag group="PowerDeny" tag="powStAShie"/>
+    <tag group="PowerDeny" tag="powSSSiphn"/>
+    <tag group="PowerDeny" tag="powGLArm"/>
+    <tag group="PowerDeny" tag="powSKArmor"/>
+    <tag group="PowerDeny" tag="pow50Armor"/>
+    <tag group="PowerDeny" tag="powHEBackw"/>
+    <tag group="PowerDeny" tag="powKGBPoly"/>
+    <tag group="PowerDeny" tag="powETBanis"/>
+    <tag group="PowerDeny" tag="powStBlBan"/>
+    <tag group="PowerDeny" tag="powSRBanishE"/>
+    <tag group="PowerDeny" tag="powSKBanis"/>
+    <tag group="PowerDeny" tag="pow50Barri"/>
+    <tag group="PowerDeny" tag="powGLBarr"/>
+    <tag group="PowerDeny" tag="powSKBarri"/>
+    <tag group="PowerDeny" tag="powSSBLust"/>
+    <tag group="PowerDeny" tag="powSSBless"/>
+    <tag group="PowerDeny" tag="powGLBstFr"/>
+    <tag group="PowerDeny" tag="pow50Beast"/>
+    <tag group="PowerDeny" tag="powSKBeast"/>
+    <tag group="PowerDeny" tag="powBeastFr"/>
+    <tag group="PowerDeny" tag="pow50Becal"/>
+    <tag group="PowerDeny" tag="powETBindE"/>
+    <tag group="PowerDeny" tag="powBindEnt"/>
+    <tag group="PowerDeny" tag="powGLBlast"/>
+    <tag group="PowerDeny" tag="pow50Blast"/>
+    <tag group="PowerDeny" tag="powStBlBla"/>
+    <tag group="PowerDeny" tag="powAOBlas1"/>
+    <tag group="PowerDeny" tag="powAOBlas2"/>
+    <tag group="PowerDeny" tag="powAOBlas3"/>
+    <tag group="PowerDeny" tag="powStBless"/>
+    <tag group="PowerDeny" tag="powStBlBle"/>
+    <tag group="PowerDeny" tag="powBlessCu"/>
+    <tag group="PowerDeny" tag="powNCBless"/>
+    <tag group="PowerDeny" tag="pow50Blind"/>
+    <tag group="PowerDeny" tag="powBlind"/>
+    <tag group="PowerDeny" tag="powStBlBli"/>
+    <tag group="PowerDeny" tag="powSSFlash"/>
+    <tag group="PowerDeny" tag="powSSBlock"/>
+    <tag group="PowerDeny" tag="powOzBlur"/>
+    <tag group="PowerDeny" tag="powDNBolst"/>
+    <tag group="PowerDeny" tag="pow50Bolt"/>
+    <tag group="PowerDeny" tag="powGLBolt"/>
+    <tag group="PowerDeny" tag="powAOBolt1"/>
+    <tag group="PowerDeny" tag="powAOBolt2"/>
+    <tag group="PowerDeny" tag="powAOBolt3"/>
+    <tag group="PowerDeny" tag="powStBTrai"/>
+    <tag group="PowerDeny" tag="powGLBoost"/>
+    <tag group="PowerDeny" tag="powTrait"/>
+    <tag group="PowerDeny" tag="powSKBoost"/>
+    <tag group="PowerDeny" tag="powSSBridg"/>
+    <tag group="PowerDeny" tag="powSKBurro"/>
+    <tag group="PowerDeny" tag="pow50Burro"/>
+    <tag group="PowerDeny" tag="powGLBurr"/>
+    <tag group="PowerDeny" tag="powGLBurst"/>
+    <tag group="PowerDeny" tag="powOzCantr"/>
+    <tag group="PowerDeny" tag="powStCantr"/>
+    <tag group="PowerDeny" tag="powOzChame"/>
+    <tag group="PowerDeny" tag="powSSChGlo"/>
+    <tag group="PowerDeny" tag="powWWChane"/>
+    <tag group="PowerDeny" tag="powHECharm"/>
+    <tag group="PowerDeny" tag="powAcCThor"/>
+    <tag group="PowerDeny" tag="powSRClairvoy"/>
+    <tag group="PowerDeny" tag="powStClair"/>
+    <tag group="PowerDeny" tag="powClairvo"/>
+    <tag group="PowerDeny" tag="powStCArca"/>
+    <tag group="PowerDeny" tag="powSSConSo"/>
+    <tag group="PowerDeny" tag="powNCConce"/>
+    <tag group="PowerDeny" tag="powConcent"/>
+    <tag group="PowerDeny" tag="powSSConfM"/>
+    <tag group="PowerDeny" tag="pow50Confu"/>
+    <tag group="PowerDeny" tag="powFGConfu"/>
+    <tag group="PowerDeny" tag="powFConfus"/>
+    <tag group="PowerDeny" tag="powConfusi"/>
+    <tag group="PowerDeny" tag="powNCConse"/>
+    <tag group="PowerDeny" tag="powConsGrn"/>
+    <tag group="PowerDeny" tag="powOzCWeat"/>
+    <tag group="PowerDeny" tag="powCorpSen"/>
+    <tag group="PowerDeny" tag="powETCreTa"/>
+    <tag group="PowerDeny" tag="powStCDisp"/>
+    <tag group="PowerDeny" tag="powStCurse"/>
+    <tag group="PowerDeny" tag="powETCurse"/>
+    <tag group="PowerDeny" tag="powOzCurse"/>
+    <tag group="PowerDeny" tag="powSKCurse"/>
+    <tag group="PowerDeny" tag="powDLCurse"/>
+    <tag group="PowerDeny" tag="powAcCurse"/>
+    <tag group="PowerDeny" tag="powStBlCur"/>
+    <tag group="PowerDeny" tag="powRpCoLHe"/>
+    <tag group="PowerDeny" tag="powRpCoLSi"/>
+    <tag group="PowerDeny" tag="powRpCoMis"/>
+    <tag group="PowerDeny" tag="powRPCoSWe"/>
+    <tag group="PowerDeny" tag="powRpCotBF"/>
+    <tag group="PowerDeny" tag="powRpCotBe"/>
+    <tag group="PowerDeny" tag="powRpCotES"/>
+    <tag group="PowerDeny" tag="powRpCotEN"/>
+    <tag group="PowerDeny" tag="powRpCotIn"/>
+    <tag group="PowerDeny" tag="powRpCotMa"/>
+    <tag group="PowerDeny" tag="powRpCotOu"/>
+    <tag group="PowerDeny" tag="powRpCotSP"/>
+    <tag group="PowerDeny" tag="powRPCotWS"/>
+    <tag group="PowerDeny" tag="pow50DamgF"/>
+    <tag group="PowerDeny" tag="powDamagFF"/>
+    <tag group="PowerDeny" tag="powStBlDFe"/>
+    <tag group="PowerDeny" tag="powWWDange"/>
+    <tag group="PowerDeny" tag="powETDTLif"/>
+    <tag group="PowerDeny" tag="powDRDarkv"/>
+    <tag group="PowerDeny" tag="powSSDeflt"/>
+    <tag group="PowerDeny" tag="pow50Defle"/>
+    <tag group="PowerDeny" tag="powGLDefl"/>
+    <tag group="PowerDeny" tag="powSKDefle"/>
+    <tag group="PowerDeny" tag="powStDAban"/>
+    <tag group="PowerDeny" tag="powSSDemBo"/>
+    <tag group="PowerDeny" tag="powGLDet"/>
+    <tag group="PowerDeny" tag="powDetect"/>
+    <tag group="PowerDeny" tag="powStDDisp"/>
+    <tag group="PowerDeny" tag="powOzDDoor"/>
+    <tag group="PowerDeny" tag="powDisguis"/>
+    <tag group="PowerDeny" tag="pow50Dispe"/>
+    <tag group="PowerDeny" tag="powSKDispe"/>
+    <tag group="PowerDeny" tag="powGLDisp"/>
+    <tag group="PowerDeny" tag="powDivinat"/>
+    <tag group="PowerDeny" tag="powStBlDiv"/>
+    <tag group="PowerDeny" tag="powStESTDi"/>
+    <tag group="PowerDeny" tag="powStDInsp"/>
+    <tag group="PowerDeny" tag="powStBlDIn"/>
+    <tag group="PowerDeny" tag="powETDrBSS"/>
+    <tag group="PowerDeny" tag="powDrnYear"/>
+    <tag group="PowerDeny" tag="powStDTouc"/>
+    <tag group="PowerDeny" tag="powDrainTo"/>
+    <tag group="PowerDeny" tag="powAcETran"/>
+    <tag group="PowerDeny" tag="powHEEMP"/>
+    <tag group="PowerDeny" tag="powSSChoke"/>
+    <tag group="PowerDeny" tag="powSSDelug"/>
+    <tag group="PowerDeny" tag="powGLElem"/>
+    <tag group="PowerDeny" tag="pow50ElemM"/>
+    <tag group="PowerDeny" tag="powElement"/>
+    <tag group="PowerDeny" tag="powSKElemA"/>
+    <tag group="PowerDeny" tag="powSKElemE"/>
+    <tag group="PowerDeny" tag="powSKElemF"/>
+    <tag group="PowerDeny" tag="powSKElemW"/>
+    <tag group="PowerDeny" tag="pow50ElemP"/>
+    <tag group="PowerDeny" tag="powSSEmpat"/>
+    <tag group="PowerDeny" tag="powFGEmpat"/>
+    <tag group="PowerDeny" tag="powSKEnchW"/>
+    <tag group="PowerDeny" tag="powEnhUnde"/>
+    <tag group="PowerDeny" tag="powOzEnrag"/>
+    <tag group="PowerDeny" tag="powGLEntan"/>
+    <tag group="PowerDeny" tag="powSKEntan"/>
+    <tag group="PowerDeny" tag="powFGEntan"/>
+    <tag group="PowerDeny" tag="pow50Entan"/>
+    <tag group="PowerDeny" tag="powSKEnvir"/>
+    <tag group="PowerDeny" tag="powGLEnvir"/>
+    <tag group="PowerDeny" tag="powDLEnvPr"/>
+    <tag group="PowerDeny" tag="powDLExorc"/>
+    <tag group="PowerDeny" tag="arcEyeStkr"/>
+    <tag group="PowerDeny" tag="powETFamil"/>
+    <tag group="PowerDeny" tag="powAcFarse"/>
+    <tag group="PowerDeny" tag="pow50Farsi"/>
+    <tag group="PowerDeny" tag="powGLFear"/>
+    <tag group="PowerDeny" tag="powWWFear"/>
+    <tag group="PowerDeny" tag="powSKFear"/>
+    <tag group="PowerDeny" tag="powSSFeral"/>
+    <tag group="PowerDeny" tag="powAcFFrom"/>
+    <tag group="PowerDeny" tag="powKGFoFor"/>
+    <tag group="PowerDeny" tag="pow50Fly"/>
+    <tag group="PowerDeny" tag="powSKFly"/>
+    <tag group="PowerDeny" tag="powGLFly"/>
+    <tag group="PowerDeny" tag="powFly"/>
+    <tag group="PowerDeny" tag="powETForge"/>
+    <tag group="PowerDeny" tag="powETFECT"/>
+    <tag group="PowerDeny" tag="powDNFurRL"/>
+    <tag group="PowerDeny" tag="powDLGambl"/>
+    <tag group="PowerDeny" tag="powSSGzMat"/>
+    <tag group="PowerDeny" tag="powSKGhost"/>
+    <tag group="PowerDeny" tag="powStGInsp"/>
+    <tag group="PowerDeny" tag="powStBlGIn"/>
+    <tag group="PowerDeny" tag="powSSGlwPt"/>
+    <tag group="PowerDeny" tag="powSSGBlnd"/>
+    <tag group="PowerDeny" tag="powSSTouch"/>
+    <tag group="PowerDeny" tag="powETGrEdg"/>
+    <tag group="PowerDeny" tag="powGrvShrd"/>
+    <tag group="PowerDeny" tag="powSKGrave"/>
+    <tag group="PowerDeny" tag="powGrvSpk"/>
+    <tag group="PowerDeny" tag="powETGrSpk"/>
+    <tag group="PowerDeny" tag="powStGCurs"/>
+    <tag group="PowerDeny" tag="powStBlGCu"/>
+    <tag group="PowerDeny" tag="pow50GrHea"/>
+    <tag group="PowerDeny" tag="powGrHeal"/>
+    <tag group="PowerDeny" tag="powGLHeal2"/>
+    <tag group="PowerDeny" tag="powStGLBat"/>
+    <tag group="PowerDeny" tag="powGrowShr"/>
+    <tag group="PowerDeny" tag="powWWGuard"/>
+    <tag group="PowerDeny" tag="powOzHarde"/>
+    <tag group="PowerDeny" tag="powETHarSh"/>
+    <tag group="PowerDeny" tag="pow50Havoc"/>
+    <tag group="PowerDeny" tag="powHavoc"/>
+    <tag group="PowerDeny" tag="powSSHlHul"/>
+    <tag group="PowerDeny" tag="pow50Heal"/>
+    <tag group="PowerDeny" tag="powHealing"/>
+    <tag group="PowerDeny" tag="powGLHeal1"/>
+    <tag group="PowerDeny" tag="powDLHunch"/>
+    <tag group="PowerDeny" tag="powFGIllus"/>
+    <tag group="PowerDeny" tag="powSRIllusion"/>
+    <tag group="PowerDeny" tag="powIllusio"/>
+    <tag group="PowerDeny" tag="powStIllus"/>
+    <tag group="PowerDeny" tag="powOzIllus"/>
+    <tag group="PowerDeny" tag="powAcIllus"/>
+    <tag group="PowerDeny" tag="powWWArcR2"/>
+    <tag group="PowerDeny" tag="powStIAban"/>
+    <tag group="PowerDeny" tag="powRpIBeas"/>
+    <tag group="PowerDeny" tag="powDLInspi"/>
+    <tag group="PowerDeny" tag="powOzIAtta"/>
+    <tag group="PowerDeny" tag="powozIChar"/>
+    <tag group="PowerDeny" tag="powOzIHeal"/>
+    <tag group="PowerDeny" tag="powOzIInit"/>
+    <tag group="PowerDeny" tag="powOzIMove"/>
+    <tag group="PowerDeny" tag="powOzISkil"/>
+    <tag group="PowerDeny" tag="powOzICour"/>
+    <tag group="PowerDeny" tag="powSSEnhSp"/>
+    <tag group="PowerDeny" tag="powSSGrSpa"/>
+    <tag group="PowerDeny" tag="powSKInvis"/>
+    <tag group="PowerDeny" tag="powGLInvis"/>
+    <tag group="PowerDeny" tag="powStJet"/>
+    <tag group="PowerDeny" tag="powJet"/>
+    <tag group="PowerDeny" tag="powStBlJet"/>
+    <tag group="PowerDeny" tag="powETKnowl"/>
+    <tag group="PowerDeny" tag="powETLHPA"/>
+    <tag group="PowerDeny" tag="powSSLdyFu"/>
+    <tag group="PowerDeny" tag="powSSLGuid"/>
+    <tag group="PowerDeny" tag="powOzLeap"/>
+    <tag group="PowerDeny" tag="powStLeger"/>
+    <tag group="PowerDeny" tag="powLegerde"/>
+    <tag group="PowerDeny" tag="powOzLevit"/>
+    <tag group="PowerDeny" tag="powFGLevit"/>
+    <tag group="PowerDeny" tag="powSSLfFea"/>
+    <tag group="PowerDeny" tag="powStLight"/>
+    <tag group="PowerDeny" tag="powLight"/>
+    <tag group="PowerDeny" tag="powSKLight"/>
+    <tag group="PowerDeny" tag="powGLLight"/>
+    <tag group="PowerDeny" tag="powStBlLig"/>
+    <tag group="PowerDeny" tag="pow50LitOb"/>
+    <tag group="PowerDeny" tag="powAcLObje"/>
+    <tag group="PowerDeny" tag="powStLBatt"/>
+    <tag group="PowerDeny" tag="powOzLockU"/>
+    <tag group="PowerDeny" tag="powETLBSac"/>
+    <tag group="PowerDeny" tag="powStLTrai"/>
+    <tag group="PowerDeny" tag="powGLLow"/>
+    <tag group="PowerDeny" tag="powStBlLTr"/>
+    <tag group="PowerDeny" tag="pow50Mend"/>
+    <tag group="PowerDeny" tag="powStMend"/>
+    <tag group="PowerDeny" tag="powStMEye"/>
+    <tag group="PowerDeny" tag="powSSMindR"/>
+    <tag group="PowerDeny" tag="powMindRea"/>
+    <tag group="PowerDeny" tag="powDNMindR"/>
+    <tag group="PowerDeny" tag="powDLMindR"/>
+    <tag group="PowerDeny" tag="powSSMinRi"/>
+    <tag group="PowerDeny" tag="powHEMindl"/>
+    <tag group="PowerDeny" tag="powFGMindl"/>
+    <tag group="PowerDeny" tag="powHEMindW"/>
+    <tag group="PowerDeny" tag="powFGMindw"/>
+    <tag group="PowerDeny" tag="powETMMTRP"/>
+    <tag group="PowerDeny" tag="powNCMostB"/>
+    <tag group="PowerDeny" tag="powHEMutat"/>
+    <tag group="PowerDeny" tag="powHRNiteM"/>
+    <tag group="PowerDeny" tag="powDNNumb"/>
+    <tag group="PowerDeny" tag="powSSOakAr"/>
+    <tag group="PowerDeny" tag="powFGObjRe"/>
+    <tag group="PowerDeny" tag="powSSObjRe"/>
+    <tag group="PowerDeny" tag="powAcORead"/>
+    <tag group="PowerDeny" tag="powSKObscu"/>
+    <tag group="PowerDeny" tag="pow50Obscu"/>
+    <tag group="PowerDeny" tag="powObscure"/>
+    <tag group="PowerDeny" tag="powStObscu"/>
+    <tag group="PowerDeny" tag="powGLObsc"/>
+    <tag group="PowerDeny" tag="powETOpGat"/>
+    <tag group="PowerDeny" tag="powETPnTrn"/>
+    <tag group="PowerDeny" tag="powOzParal"/>
+    <tag group="PowerDeny" tag="powStPhant"/>
+    <tag group="PowerDeny" tag="powETPluCl"/>
+    <tag group="PowerDeny" tag="powWWPolte"/>
+    <tag group="PowerDeny" tag="powWWPosse"/>
+    <tag group="PowerDeny" tag="powStPostc"/>
+    <tag group="PowerDeny" tag="powAcPNiga"/>
+    <tag group="PowerDeny" tag="powSSProbe"/>
+    <tag group="PowerDeny" tag="powAcProbe"/>
+    <tag group="PowerDeny" tag="powDNProte"/>
+    <tag group="PowerDeny" tag="powDLProte"/>
+    <tag group="PowerDeny" tag="SFBPsiMigh"/>
+    <tag group="PowerDeny" tag="pow50Pumme"/>
+    <tag group="PowerDeny" tag="powPummel"/>
+    <tag group="PowerDeny" tag="powOzPPatc"/>
+    <tag group="PowerDeny" tag="powPuppet"/>
+    <tag group="PowerDeny" tag="powSKPuppe"/>
+    <tag group="PowerDeny" tag="powGLPupp"/>
+    <tag group="PowerDeny" tag="pow50Quake"/>
+    <tag group="PowerDeny" tag="powStQuake"/>
+    <tag group="PowerDeny" tag="powGLQuick"/>
+    <tag group="PowerDeny" tag="powozRChar"/>
+    <tag group="PowerDeny" tag="powOzRDead"/>
+    <tag group="PowerDeny" tag="powOzRSTho"/>
+    <tag group="PowerDeny" tag="powWWReape"/>
+    <tag group="PowerDeny" tag="powAcRDraf"/>
+    <tag group="PowerDeny" tag="powStRendi"/>
+    <tag group="PowerDeny" tag="powOzResto"/>
+    <tag group="PowerDeny" tag="powDLSanct"/>
+    <tag group="PowerDeny" tag="powStSDesp"/>
+    <tag group="PowerDeny" tag="powStBlSDi"/>
+    <tag group="PowerDeny" tag="powWWSeanc"/>
+    <tag group="PowerDeny" tag="pow50Settl"/>
+    <tag group="PowerDeny" tag="powShape"/>
+    <tag group="PowerDeny" tag="powSKShape"/>
+    <tag group="PowerDeny" tag="powGLShape"/>
+    <tag group="PowerDeny" tag="powIZWTSC"/>
+    <tag group="PowerDeny" tag="powStSilen"/>
+    <tag group="PowerDeny" tag="powOzSilen"/>
+    <tag group="PowerDeny" tag="powStBlSil"/>
+    <tag group="PowerDeny" tag="powETSCPNC"/>
+    <tag group="PowerDeny" tag="powOzSleep"/>
+    <tag group="PowerDeny" tag="powSluggis"/>
+    <tag group="PowerDeny" tag="powHESlowB"/>
+    <tag group="PowerDeny" tag="powSlumber"/>
+    <tag group="PowerDeny" tag="powSKSlumb"/>
+    <tag group="PowerDeny" tag="pow50Smite"/>
+    <tag group="PowerDeny" tag="powSKSMite"/>
+    <tag group="PowerDeny" tag="powGLSmite"/>
+    <tag group="PowerDeny" tag="powSSSAngr"/>
+    <tag group="PowerDeny" tag="pow50Speak"/>
+    <tag group="PowerDeny" tag="powSKSpeak"/>
+    <tag group="PowerDeny" tag="powGLSpeak"/>
+    <tag group="PowerDeny" tag="pow50Speed"/>
+    <tag group="PowerDeny" tag="powGLSpeed"/>
+    <tag group="PowerDeny" tag="powSKSpiri"/>
+    <tag group="PowerDeny" tag="powSpiShie"/>
+    <tag group="PowerDeny" tag="powDNSpiSh"/>
+    <tag group="PowerDeny" tag="powSKSpirW"/>
+    <tag group="PowerDeny" tag="powAcSqual"/>
+    <tag group="PowerDeny" tag="powETSTBAE"/>
+    <tag group="PowerDeny" tag="powAcSWoun"/>
+    <tag group="PowerDeny" tag="pow50Storm"/>
+    <tag group="PowerDeny" tag="powStStorm"/>
+    <tag group="PowerDeny" tag="powStrDead"/>
+    <tag group="PowerDeny" tag="pow50Stun"/>
+    <tag group="PowerDeny" tag="powGLStun"/>
+    <tag group="PowerDeny" tag="powFGStun"/>
+    <tag group="PowerDeny" tag="pow50Succo"/>
+    <tag group="PowerDeny" tag="powSuccor"/>
+    <tag group="PowerDeny" tag="powDLSucco"/>
+    <tag group="PowerDeny" tag="powStBlSuc"/>
+    <tag group="PowerDeny" tag="powStBlSAl"/>
+    <tag group="PowerDeny" tag="powSKSummB"/>
+    <tag group="PowerDeny" tag="powStSCoho"/>
+    <tag group="PowerDeny" tag="powStBlSCo"/>
+    <tag group="PowerDeny" tag="powHRSumDe"/>
+    <tag group="PowerDeny" tag="powETSumDe"/>
+    <tag group="PowerDeny" tag="pow50SumEl"/>
+    <tag group="PowerDeny" tag="powSSSumEl"/>
+    <tag group="PowerDeny" tag="powStSLegi"/>
+    <tag group="PowerDeny" tag="powStBlSLe"/>
+    <tag group="PowerDeny" tag="powOzSMWea"/>
+    <tag group="PowerDeny" tag="powSSSumMa"/>
+    <tag group="PowerDeny" tag="powSSSumMu"/>
+    <tag group="PowerDeny" tag="powSKSummS"/>
+    <tag group="PowerDeny" tag="powHRSumSp"/>
+    <tag group="PowerDeny" tag="powETSumSw"/>
+    <tag group="PowerDeny" tag="powSuppLyc"/>
+    <tag group="PowerDeny" tag="pow50Telek"/>
+    <tag group="PowerDeny" tag="powTelekin"/>
+    <tag group="PowerDeny" tag="powGLTelek"/>
+    <tag group="PowerDeny" tag="powHETelSq"/>
+    <tag group="PowerDeny" tag="powSSTelep"/>
+    <tag group="PowerDeny" tag="powStTelep"/>
+    <tag group="PowerDeny" tag="powTelepat"/>
+    <tag group="PowerDeny" tag="powSRTelepathy"/>
+    <tag group="PowerDeny" tag="powGLTelep"/>
+    <tag group="PowerDeny" tag="powSKTempe"/>
+    <tag group="PowerDeny" tag="powETOraCu"/>
+    <tag group="PowerDeny" tag="powSKTrans"/>
+    <tag group="PowerDeny" tag="powAcTrans"/>
+    <tag group="PowerDeny" tag="powAcTElem"/>
+    <tag group="PowerDeny" tag="powAcTWeap"/>
+    <tag group="PowerDeny" tag="poDLTrinke"/>
+    <tag group="PowerDeny" tag="powSKUndea"/>
+    <tag group="PowerDeny" tag="powSSUnGif"/>
+    <tag group="PowerDeny" tag="powETURDRN"/>
+    <tag group="PowerDeny" tag="powWWVehic"/>
+    <tag group="PowerDeny" tag="powSKViper"/>
+    <tag group="PowerDeny" tag="powSKVisio"/>
+    <tag group="PowerDeny" tag="powDLVisQu"/>
+    <tag group="PowerDeny" tag="powSSVceWi"/>
+    <tag group="PowerDeny" tag="pow50WallW"/>
+    <tag group="PowerDeny" tag="powWallWlk"/>
+    <tag group="PowerDeny" tag="powETWard"/>
+    <tag group="PowerDeny" tag="powSSWrdSh"/>
+    <tag group="PowerDeny" tag="powOzWDead"/>
+    <tag group="PowerDeny" tag="pow50WtrWk"/>
+    <tag group="PowerDeny" tag="powSSWidCl"/>
+    <tag group="PowerDeny" tag="powStWWalk"/>
+    <tag group="PowerDeny" tag="powDLWildW"/>
+    <tag group="PowerDeny" tag="powSSWndWl"/>
+    <tag group="PowerDeny" tag="powDLWinds"/>
+    <tag group="PowerDeny" tag="powSKWithe"/>
+    <tag group="PowerDeny" tag="pow50Zephy"/>
+    <tag group="PowerDeny" tag="powSKZombi"/>
+    <tag group="PowerDeny" tag="powZombie"/>
+    <tag group="PowerDeny" tag="powGLZombi"/>
+    <tag group="PowerDeny" tag="pPRFear"/>
+    <tag group="PowerDeny" tag="pRPBlast"/>
+    <tag group="PowerDeny" tag="pRPFly"/>
+    <tag group="PowerDeny" tag="pRPGrHeal"/>
+    <tag group="PowerDeny" tag="pRPHealing"/>
+    <tag group="PowerDeny" tag="pRPInvis"/>
+    <tag group="PowerDeny" tag="pRPLight"/>
+    <tag group="PowerDeny" tag="pRPObscure"/>
+    <tag group="PowerDeny" tag="pRPPuppet"/>
+    <tag group="PowerDeny" tag="pRPQuick"/>
+    <tag group="PowerDeny" tag="pRPSpeed"/>
+    <tag group="PowerDeny" tag="pRPTrait"/>
+    <tag group="PowerDeny" tag="pRPZombie"/>
+    <tag group="PowerDeny" tag="pSSBlast"/>
+    <tag group="PowerDeny" tag="pSSBoostTr"/>
+    <tag group="PowerDeny" tag="pSSFear"/>
+    <tag group="PowerDeny" tag="pSSFly"/>
+    <tag group="PowerDeny" tag="pSSGrHeal"/>
+    <tag group="PowerDeny" tag="pSSGrowShr"/>
+    <tag group="PowerDeny" tag="pSSInvis"/>
+    <tag group="PowerDeny" tag="pSSLight"/>
+    <tag group="PowerDeny" tag="pSSObscure"/>
+    <tag group="PowerDeny" tag="pSSPuppet"/>
+    <tag group="PowerDeny" tag="pSSQuick"/>
+    <tag group="PowerDeny" tag="pSSSpeed"/>
+    <tag group="PowerDeny" tag="pSSZombie"/>
+    <tag group="PowerDeny" tag="powAlterSe"/>
+    <tag group="PowerDeny" tag="powAnaFoe"/>
+    <tag group="PowerDeny" tag="powAngPea"/>
+    <tag group="PowerDeny" tag="powAniTree"/>
+    <tag group="PowerDeny" tag="powBaldBre"/>
+    <tag group="PowerDeny" tag="powBatSong"/>
+    <tag group="PowerDeny" tag="powBdyGrd"/>
+    <tag group="PowerDeny" tag="powBecalm"/>
+    <tag group="PowerDeny" tag="powBellow"/>
+    <tag group="PowerDeny" tag="powBerserk"/>
+    <tag group="PowerDeny" tag="powBless"/>
+    <tag group="PowerDeny" tag="powBlindFl"/>
+    <tag group="PowerDeny" tag="powBodygua"/>
+    <tag group="PowerDeny" tag="powBridge"/>
+    <tag group="PowerDeny" tag="powCallLig"/>
+    <tag group="PowerDeny" tag="powChaAura"/>
+    <tag group="PowerDeny" tag="powChampF"/>
+    <tag group="PowerDeny" tag="powColDest"/>
+    <tag group="PowerDeny" tag="powConWeat"/>
+    <tag group="PowerDeny" tag="powConfMin"/>
+    <tag group="PowerDeny" tag="powConsecr"/>
+    <tag group="PowerDeny" tag="powCorpsSe"/>
+    <tag group="PowerDeny" tag="powDampBac"/>
+    <tag group="PowerDeny" tag="powDarkvis"/>
+    <tag group="PowerDeny" tag="powDeciph"/>
+    <tag group="PowerDeny" tag="powEQuake"/>
+    <tag group="PowerDeny" tag="powEaglSig"/>
+    <tag group="PowerDeny" tag="powEnhaUnd"/>
+    <tag group="PowerDeny" tag="powFeast"/>
+    <tag group="PowerDeny" tag="powFogClou"/>
+    <tag group="PowerDeny" tag="powFortune"/>
+    <tag group="PowerDeny" tag="powFrzPtrn"/>
+    <tag group="PowerDeny" tag="powGftBatt"/>
+    <tag group="PowerDeny" tag="powGrZombi"/>
+    <tag group="PowerDeny" tag="powGravSpk"/>
+    <tag group="PowerDeny" tag="powGravesp"/>
+    <tag group="PowerDeny" tag="powGrowSh"/>
+    <tag group="PowerDeny" tag="powGuidHan"/>
+    <tag group="PowerDeny" tag="powHBanish"/>
+    <tag group="PowerDeny" tag="powHBlast"/>
+    <tag group="PowerDeny" tag="powHConfus"/>
+    <tag group="PowerDeny" tag="powHFarsig"/>
+    <tag group="PowerDeny" tag="powHFear"/>
+    <tag group="PowerDeny" tag="powHFly"/>
+    <tag group="PowerDeny" tag="powHGrHeal"/>
+    <tag group="PowerDeny" tag="powHGrowth"/>
+    <tag group="PowerDeny" tag="powHHealin"/>
+    <tag group="PowerDeny" tag="powHInvis"/>
+    <tag group="PowerDeny" tag="powHLight"/>
+    <tag group="PowerDeny" tag="powHObscur"/>
+    <tag group="PowerDeny" tag="powHPuppet"/>
+    <tag group="PowerDeny" tag="powHQuick"/>
+    <tag group="PowerDeny" tag="powHSlumbe"/>
+    <tag group="PowerDeny" tag="powHSpeed"/>
+    <tag group="PowerDeny" tag="powHSuccor"/>
+    <tag group="PowerDeny" tag="powHTrait"/>
+    <tag group="PowerDeny" tag="powHWallWa"/>
+    <tag group="PowerDeny" tag="powHWarrio"/>
+    <tag group="PowerDeny" tag="powHZombie"/>
+    <tag group="PowerDeny" tag="powHeatMas"/>
+    <tag group="PowerDeny" tag="powHypTran"/>
+    <tag group="PowerDeny" tag="powIgnite"/>
+    <tag group="PowerDeny" tag="powInsight"/>
+    <tag group="PowerDeny" tag="powKnockdo"/>
+    <tag group="PowerDeny" tag="powKnowAli"/>
+    <tag group="PowerDeny" tag="powLeaping"/>
+    <tag group="PowerDeny" tag="powLocate"/>
+    <tag group="PowerDeny" tag="powLock"/>
+    <tag group="PowerDeny" tag="powMimic"/>
+    <tag group="PowerDeny" tag="powMindRid"/>
+    <tag group="PowerDeny" tag="powMirrorS"/>
+    <tag group="PowerDeny" tag="powMishap"/>
+    <tag group="PowerDeny" tag="powMostBle"/>
+    <tag group="PowerDeny" tag="powNegArca"/>
+    <tag group="PowerDeny" tag="powNightma"/>
+    <tag group="PowerDeny" tag="powOpen"/>
+    <tag group="PowerDeny" tag="powPRFear"/>
+    <tag group="PowerDeny" tag="powPetrify"/>
+    <tag group="PowerDeny" tag="powPoisTou"/>
+    <tag group="PowerDeny" tag="powPrecogn"/>
+    <tag group="PowerDeny" tag="powProBlas"/>
+    <tag group="PowerDeny" tag="powPurify"/>
+    <tag group="PowerDeny" tag="powQuake"/>
+    <tag group="PowerDeny" tag="powRPArmor"/>
+    <tag group="PowerDeny" tag="powRPBarri"/>
+    <tag group="PowerDeny" tag="powRPBindD"/>
+    <tag group="PowerDeny" tag="powRPBlast"/>
+    <tag group="PowerDeny" tag="powRPBleed"/>
+    <tag group="PowerDeny" tag="powRPBlkBl"/>
+    <tag group="PowerDeny" tag="powRPBolt"/>
+    <tag group="PowerDeny" tag="powRPBurrw"/>
+    <tag group="PowerDeny" tag="powRPChnFa"/>
+    <tag group="PowerDeny" tag="powRPDeflc"/>
+    <tag group="PowerDeny" tag="powRPDetct"/>
+    <tag group="PowerDeny" tag="powRPDispl"/>
+    <tag group="PowerDeny" tag="powRPEleme"/>
+    <tag group="PowerDeny" tag="powRPEmpSm"/>
+    <tag group="PowerDeny" tag="powRPEntng"/>
+    <tag group="PowerDeny" tag="powRPEnvir"/>
+    <tag group="PowerDeny" tag="powRPFly"/>
+    <tag group="PowerDeny" tag="powRPGrHea"/>
+    <tag group="PowerDeny" tag="powRPHeal"/>
+    <tag group="PowerDeny" tag="powRPInvis"/>
+    <tag group="PowerDeny" tag="powRPLight"/>
+    <tag group="PowerDeny" tag="powRPNiteI"/>
+    <tag group="PowerDeny" tag="powRPObscu"/>
+    <tag group="PowerDeny" tag="powRPPenta"/>
+    <tag group="PowerDeny" tag="powRPPuppt"/>
+    <tag group="PowerDeny" tag="powRPQuick"/>
+    <tag group="PowerDeny" tag="powRPResur"/>
+    <tag group="PowerDeny" tag="powRPRstPu"/>
+    <tag group="PowerDeny" tag="powRPRuneR"/>
+    <tag group="PowerDeny" tag="powRPShdTo"/>
+    <tag group="PowerDeny" tag="powRPShrod"/>
+    <tag group="PowerDeny" tag="powRPSmite"/>
+    <tag group="PowerDeny" tag="powRPSmkGh"/>
+    <tag group="PowerDeny" tag="powRPSpeed"/>
+    <tag group="PowerDeny" tag="powRPSplTr"/>
+    <tag group="PowerDeny" tag="powRPSptCa"/>
+    <tag group="PowerDeny" tag="powRPSumBn"/>
+    <tag group="PowerDeny" tag="powRPSumSh"/>
+    <tag group="PowerDeny" tag="powRPTelep"/>
+    <tag group="PowerDeny" tag="powRPTrait"/>
+    <tag group="PowerDeny" tag="powRPZomb"/>
+    <tag group="PowerDeny" tag="powRaiseDe"/>
+    <tag group="PowerDeny" tag="powRefuge"/>
+    <tag group="PowerDeny" tag="powRegen"/>
+    <tag group="PowerDeny" tag="powResur"/>
+    <tag group="PowerDeny" tag="powSacrifi"/>
+    <tag group="PowerDeny" tag="powSanctua"/>
+    <tag group="PowerDeny" tag="powSentry"/>
+    <tag group="PowerDeny" tag="powSlowed"/>
+    <tag group="PowerDeny" tag="powSphereM"/>
+    <tag group="PowerDeny" tag="powStorm"/>
+    <tag group="PowerDeny" tag="powStrUnde"/>
+    <tag group="PowerDeny" tag="powSumElem"/>
+    <tag group="PowerDeny" tag="powSummBea"/>
+    <tag group="PowerDeny" tag="powSummDem"/>
+    <tag group="PowerDeny" tag="powSummEle"/>
+    <tag group="PowerDeny" tag="powSummHer"/>
+    <tag group="PowerDeny" tag="powTempest"/>
+    <tag group="PowerDeny" tag="powTongTie"/>
+    <tag group="PowerDeny" tag="powTranspa"/>
+    <tag group="PowerDeny" tag="powViperWe"/>
+    <tag group="PowerDeny" tag="powViperWp"/>
+    <tag group="PowerDeny" tag="powVoiceWi"/>
+    <tag group="PowerDeny" tag="powWallBla"/>
+    <tag group="PowerDeny" tag="powWanderS"/>
+    <tag group="PowerDeny" tag="powWaterWa"/>
+    <tag group="PowerDeny" tag="powWeakenU"/>
+    <tag group="PowerDeny" tag="powWeaponI"/>
+    <tag group="PowerDeny" tag="powWhirlwi"/>
+    <tag group="PowerDeny" tag="powWildSte"/>
+    <tag group="PowerDeny" tag="powWish"/>
+    <tag group="PowerDeny" tag="powWndSens"/>
+    <tag group="PowerDeny" tag="powZephyr"/>
+    <tag group="PowerDeny" tag="powZoneSil"/>
+    <tag group="PowerDeny" tag="powfcBlind"/>
+    <tag group="PowerDeny" tag="powStDArca"/>
+    <tag group="Arcane" tag="Magic"/>
+    <bootstrap thing="drwMagic"></bootstrap>
+    </thing>
+
   </document>

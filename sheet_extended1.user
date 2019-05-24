@@ -495,7 +495,8 @@
     <output_table
       component="Defense"
       showtemplate="zArmorPick"
-      showsortset="Armory">
+      showsortset="Armory"
+	  varyheight="yes">
       <list><![CDATA[
         !component.MagicItem
         ]]></list>
@@ -869,7 +870,9 @@
               major = " {font Wingdings}" & chr(181) & "{revert}"
               endif
             endif
-          @text = field[shortname].text & major & "{/b}  {size 32}" & field[descript].text & "{br}{br}"
+          ~@text = field[shortname].text & major & "{/b}  {size 32}" & field[descript].text & "{br}{br}"
+		  @text = field[shortname].text & major & "{/b}  {size 32}" & field[summary].text & "{br}{br}"
+		  
           ]]></labeltext>
         </output_label>
       </portal>
@@ -2230,7 +2233,7 @@
   <template
     id="zArmorPick"
     name="Output Armor Table"
-    compset="Equipment"
+    compset="ArmorRifts"
     marginvert="1">
 
     <portal
@@ -2246,7 +2249,8 @@
     <portal
       id="name"
       style="outNameMed">
-      <output_label>
+      <output_label
+	  ismultiline="yes">
         <labeltext><![CDATA[
           ~start with the name and switch to a smaller, non-bold font for details
           var temp as string
@@ -2263,25 +2267,60 @@
               endif
             endif
 
-          ~if this is armor, include the areas covered by the equipment
-          if (tagis[component.Armor] <> 0) then
-            temp = tagabbrevs[ArmorLoc.?,","]
-            if (empty(temp) = 0) then
-              @text &= ", Covers: " & temp
-              endif
-            endif
-
           ~wrapup the details
           @text &= ")"
           ]]></labeltext>
         </output_label>
       </portal>
 
-    <position><![CDATA[
-      ~our height is the height of the tallest portal
-      height = maximum(portal[name].height,portal[equipped].height)
-      doneif (issizing <> 0)
+    <portal
+      id="notes"
+      style="outTinyLt">
+      <output_label
+		ismultiline="yes">
+		<labeltext><![CDATA[
+		  var temp as string
+		  var cover as string
+		  var special as string
 
+          if (tagis[component.ArmorSpecial] <> 0) then
+		  
+		    ~ Coverage
+		    cover = field[arCoverage].text
+            if (empty(cover) = 0) then
+              temp &= cover
+              endif
+			  
+		    special = field[arSpecDisp].text
+			
+            if (empty(temp) = 0) then
+              temp &= "; " & special
+			else 
+              temp &= special
+              endif
+            endif
+			
+			@text = temp
+		  
+          ]]></labeltext>
+        </output_label> 
+		</portal>
+
+    <portal
+      id="special"
+      style="outPlain">
+      <output_label>
+        <labeltext><![CDATA[
+          @text = "{font Wingdings}" & chr(171)
+          ]]></labeltext>
+        </output_label>
+      </portal>
+	  
+    <position><![CDATA[
+	  
+      ~place the name and indicators at the top, and the notes underneath
+      portal[name].top = 0
+	  
       ~if the armor is not equipped, hide the bitmap
       if (tagis[Equipped.Equipped] = 0) then
         portal[equipped].visible = 0
@@ -2291,13 +2330,29 @@
       perform portal[equipped].centervert
       perform portal[name].centervert
 
+      portal[notes].width = width
+      ~portal[special].left = portal[name].left + 10
+      ~portal[notes].left = portal[special].right
+      portal[notes].left = portal[name].left + 10
+
       ~shift the "equipped" bitmap downward a little bit; this is because it is a
       ~lone bitmap drawn via encoded text, and bitmaps are never drawn within the
       ~descender portion of the text, which causes it to appear higher than we want it
       portal[equipped].top += 4
 
+      ~perform portal[special].alignrel[ttob,equipped,5]
+      perform portal[notes].alignrel[ttob,equipped,0]
+	  portal[special].visible = 0
+	  
       ~align everything horizontally
       perform portal[name].alignrel[ltor,equipped,5]
+
+	  ~set out portal height to automatically size as needed
+	  perform portal[notes].autoheight
+	  
+	  ~our height is the height of our portal
+      height = portal[notes].bottom
+	  
       ]]></position>
 
     </template>
@@ -2525,11 +2580,15 @@
       </portal>
 
     <portal
-      id="special"
+      id="equipped"
       style="outPlain">
       <output_label>
         <labeltext><![CDATA[
-          @text = "{font Wingdings}" & chr(171)
+		  if (field[grIsEquip].value = 1) then
+            @text = "{font Wingdings}" & chr(171)
+		  else
+		    @text = " "
+			endif
           ]]></labeltext>
         </output_label>
       </portal>
@@ -2538,7 +2597,20 @@
       id="notes"
       style="outTinyLt">
       <output_label
-        field="wpNotes">
+        ismultiline="yes">
+		<labeltext><![CDATA[
+		  var temp as string
+		  var myNotes as string
+		  var mySpecial as string
+
+	      myNotes = field[wpNotes].text
+          if (empty(myNotes) = 0) then
+            temp &= myNotes
+            endif
+			  
+		  @text = temp
+		  
+          ]]></labeltext>
         </output_label>
       </portal>
 
@@ -2640,20 +2712,27 @@
       </portal>
 
     <position><![CDATA[
-      ~our height is based on the tallest portal within
-      if (field[wpNotes].isempty = 0) then
-        height = portal[name].height + portal[notes].height + 5
-      else
-        height = portal[name].height + 5
-      endif
-      doneif (issizing <> 0)
-
+	  var myLength as number
+	  var myHeight as number
+	  
+	  myLength = length(field[wpNotes].text)
+	  myHeight = myLength / 60
+	  myHeight = round(myHeight,0,1)
+	  
+	  ~set out portal height to automatically size as needed
+	  ~perform portal[notes].autoheight
+	  portal[notes].lineheight = myHeight
+	  
       ~place the name and indicators at the top, and the notes underneath
       portal[name].top = 0
       perform portal[badstr].alignrel[btob,name,0]
-      perform portal[special].alignrel[ttob,name,0]
-      perform portal[notes].alignrel[ttob,name,0]
+	  
+	  portal[equipped].top = portal[name].bottom + 5
+	  portal[notes].top = portal[name].bottom + 5
 
+	  ~our height is the height of our portal
+      height = portal[notes].bottom
+	  
       ~position the other portals with the same baseline as the name; since they
       ~use a smaller font, they will have a smaller height, so centering them will
       ~make them appear to float up relative to the name
@@ -2668,7 +2747,7 @@
       portal[damage].width = 195
       portal[ap].width = 50
       portal[range].width = 225
-~      portal[notes].width = width
+~     portal[notes].width = width
 
       ~assign the name the remaining horizontal space
       ~Note: We must also account for a gap of 5 between portals.
@@ -2682,8 +2761,8 @@
       perform portal[ap].alignrel[ltor,damage,5]
       perform portal[range].alignrel[ltor,ap,5]
 
-      portal[special].left = portal[name].left + 10
-      portal[notes].left = portal[special].right
+      portal[equipped].left = portal[name].left
+      portal[notes].left = portal[equipped].right + 5
 
       ~setup to track our position when positioning portals along the x-axis
       var x as number
@@ -2700,14 +2779,12 @@
 
       ~if there are no special details for the weapon, hide the bitmap
       if (field[wpNotes].isempty = 1) then
-        portal[special].visible = 0
+        portal[equipped].visible = 0
         portal[notes].visible = 0
         endif
 
       ~shrink the space for the name based on the presence of the two bitmaps
       portal[name].width -= portal[badstr].width * portal[badstr].visible
-
-~      portal[name].width -= portal[special].width * portal[special].visible
 
       ~size the name to fit the available space, then reposition it at the baseline
       ~Note: This is needed since smaller text will have the same top position.
@@ -2730,9 +2807,9 @@
       portal[name].left = x
       x = portal[name].right
 
-~      if (portal[special].visible <> 0) then
-~        portal[special].left = x
-~        x = portal[special].right
+~      if (portal[equipped].visible <> 0) then
+~        portal[equipped].left = x
+~        x = portal[equipped].right
 ~        endif
 
       ~extend the dots from the right of the name across to the attack portal
@@ -2743,6 +2820,7 @@
         portal[dots].width = portal[attack].left - 5 - portal[dots].left
         endif
 
+	  
       ]]></position>
 
     <header><![CDATA[

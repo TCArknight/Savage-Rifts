@@ -3,7 +3,42 @@ Coalition Field Manual (Complete)
 Fan Material from G+ Community
 
 Known Issues:
-- Fleet-Footed: Combat edge and not Background Edge (bug in core SW data)
+Dragon Hatchling - Unable to use advance to purchase/upgrade abilities
+
+History:
+05/05/19
+New:
+- New setting on Configure Hero to preclude races from the Sci-Fi Companion
+- Use generic Racial Tab instead of Rifts Racial Tab. 
+- Replacement for Skills tab to allow for selection of languages on the tab
+- Rework of Flame Wind Dragon Hatchling
+  * Limited Metamorphosis tags Rifts.DragonForm and Rifts.HumanForm which allow for conditional bootstraps of Dragon-Specific Abilities
+- Rework of Breed Advantage Edge
+  * Each breed is a Simple component with
+    - Helper.Bootstrap tag 
+    - BreedAdv.<name of the breed> tag
+
+Added: 
+- Adjustment for Skill Points Spent
+- New ArmorSpecial component and ArmorRifts compset
+  - adds following fields to Rifts-Specific Armor
+    - arToughness: value to modify wearer's toughness by when equipped
+    - arSpecial: Special details about Armor
+    - arSpecDisp: used to display synthesis of Cover tags and new ArmorSpecial.? tags
+    - arCover: holds text synthesis of display for ArmorLoc.?
+- Rifts Statblock includes display of special features for armor
+- Extended Character sheet
+  - Armor displays increased to include display of coverage and special properties
+- Body Armor selections for Hero's Journey provide modification of selected armor. 
+- Close Combat Weapon selections for Hero's Journey provide modification of selected Melee Weapon (not natural weapons). 
+- Ranged Combat Weapon selections for Hero's Journey provide modification of selected Ranged Weapon (not natural weapons) 
+
+Fixed:
+- Running Die missing for various edge/racial abilities 
+- Cyber-Knight available powers incorrect
+- Combat Cyborg unable to select edge or attribute for Shadow of Themselves
+- Training: Combat Edge entry for Hero's Journey provides too many choices
+
 
 History:
 12/08/18

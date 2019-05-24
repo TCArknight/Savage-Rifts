@@ -18,11 +18,29 @@
 
 <document signature="Hero Lab Data">
 
+
+  <thing
+    id="adjSkillSpent"
+    name="Skill Points Spent"
+    compset="Adjustment"
+    description="Select this adjustment to increase/decrease the number of skill points character has spent.">
+    <tag group="AdjustShow" tag="Increment"/>
+    <tag group="Helper" tag="UserAdjust"/>
+    <tag group="InPlay" tag="PermOK"/>
+    <eval phase="Setup" priority="8000">
+      <before name="Calc trtFinal"/><![CDATA[
+      if (tagis[Helper.Activated] <> 0) then
+		hero.child[resSkill].field[resSpent].value += field[adjUser].value
+        endif
+      ]]></eval>
+    </thing>
+	
   <thing
     id="adjFortGlo"
     name="Fortune and Glory"
     compset="Adjustment"
     description="Select this adjustment to increase/decrease the number of Fortune and Glory selections.">
+    <usesource source="SavRiftC"/>
     <tag group="AdjustShow" tag="Increment"/>
     <tag group="Helper" tag="UserAdjust"/>
     <tag group="InPlay" tag="PermOK"/>
@@ -39,6 +57,7 @@
     name="Hero's Journey"
     compset="Adjustment"
     description="Select this adjustment to increase/decrease the number of Hero's Journey selections.">
+    <usesource source="SavRiftC"/>
     <tag group="AdjustShow" tag="Increment"/>
     <tag group="Helper" tag="UserAdjust"/>
     <tag group="InPlay" tag="PermOK"/>

@@ -1,0 +1,35 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- This file contains all specifications pertaining to the operational control of
+      the data files. This includes usage pools, sources, sortsets, and other related
+      mechanisms.
+-->
+
+<document signature="Hero Lab Structure">
+  <!-- New Sources -->
+ <source
+    id="sepSRComm"
+    name="Community Source Material"
+    selectable="no"
+    parent="sepSavRif"
+    sortorder="3"
+    description="User submitted material for Savage Rifts.">
+ </source>
+  <source
+    id="SavGPlu"
+    name="Savage Rifts Google Plus Community"
+    parent="sepSRComm"
+    reportable="yes"
+	sortorder="1"
+    description="Fan generated Material from the Savage Rifts Google Plus Community.">
+  </source>
+  <source
+    id="SavRDTCM"
+    name="Savage Rifts DotCom"
+    parent="sepSRComm"
+    reportable="yes"
+	sortorder="1"
+    description="Fan Generated Material from the Savage Rifts Play by Post Community.">
+    </source>
+    
+</document>

@@ -43,7 +43,7 @@
       component="none"
       showtemplate="fraChsPic1"
       choosetemplate="SimpleItem"
-	  candidatepick="ehExprHlp1"
+	  candidatepick="FrameworkHelper"
 	  candidatefield="ehFrameExp"
 	  headertemplate="fraChsPic1"
 	  addpick="resFraSel1">
@@ -52,7 +52,7 @@
       <autotag group="Rifts" tag="FrameSel1"/>
       <description/>
       <additem><![CDATA[      
-        @text &= hero.child[ehExprHlp1].field[ehFrameAdd].text
+        @text &= hero.child[FrameworkHelper].field[ehFrameAdd].text
         ]]></additem>
       </table_dynamic>
     </portal>
@@ -64,7 +64,7 @@
       component="none"
       showtemplate="fraChsPic2"
       choosetemplate="SimpleItem"
-	  candidatepick="ehExprHlp2"
+	  candidatepick="FrameworkHelper"
 	  candidatefield="ehFrameExp"
 	  headertemplate="fraChsPic2"
 	  addpick="resFraSel2">
@@ -73,7 +73,7 @@
       <autotag group="Rifts" tag="FrameSel2"/>
       <description/>
       <additem><![CDATA[      
-        @text &= hero.child[ehExprHlp2].field[ehFrameAdd].text
+        @text &= hero.child[FrameworkHelper].field[ehFrameAdd2].text
         ]]></additem>
       </table_dynamic>
     </portal>
@@ -91,7 +91,7 @@
 	  isheader="yes">
       <label>
       	<labeltext><![CDATA[
-  	       @text = hero.child[ehExprHlp1].field[ehFrameHdr].text
+  	       @text = hero.child[FrameworkHelper].field[ehFrameHdr].text
       	   ]]></labeltext>
         </label>
       </portal>
@@ -205,7 +205,7 @@
 	  isheader="yes">
       <label>
       	<labeltext><![CDATA[
-  	       @text = hero.child[ehExprHlp2].field[ehFrameHdr].text
+  	       @text = hero.child[FrameworkHelper].field[ehFrameHdr2].text
       	   ]]></labeltext>
         </label>
       </portal>
@@ -818,11 +818,11 @@
       portal[fraAbility].visible = 1
       portal[fraComp].visible = 1
       portal[fraChsTbl1].visible = 0
-	  if (hero.child[ehExprHlp1].field[ehFrameExp].isempty = 0) then
+	  if (hero.child[FrameworkHelper].field[ehFrameExp].isempty = 0) then
 	    portal[fraChsTbl1].visible = 1
 		endif
       portal[fraChsTbl2].visible = 0
-	  if (hero.child[ehExprHlp2].field[ehFrameExp].isempty = 0) then
+	  if (hero.child[FrameworkHelper].field[ehFrameExp2].isempty = 0) then
 	    portal[fraChsTbl2].visible = 1
 		endif
 		

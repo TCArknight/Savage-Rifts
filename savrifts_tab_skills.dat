@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Skills" tab panel. This tab is where
+      the user selects and adjusts the skills for the character.
+
+      All public visual elements used with this tab panel start with the prefix "sk"
+      to associate them with the tab.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- skLangs portal
+        Presents a dynamic table where the user can add languages for the character.
+  -->
+  <portal
+    id="skSRLangs"
+    style="tblNormal">
+    <table_dynamic
+      component="Language"
+	  choosetemplate="SimpleItem"
+	  choosesortset="LangSortChoose"
+      showtemplate="skLangPickSR"
+      addpick="resLang">
+      <headertitle><![CDATA[
+        @text = "Languages  -  " & hero.child[resLang].field[resSummary].text
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~get the color-highlighted "add" text
+        @text = field[resAddItem].text
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <!-- skLangPick template
+  -->
+  <template
+    id="skLangPickSR"
+    name="Language Pick"
+    compset="Language"
+    marginhorz="5"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="thingname">
+        </label>
+      </portal>
+
+    <portal
+      id="domain"
+      style="editNormal">
+      <edit
+        field="domDomain">
+        </edit>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~position the other portals vertically
+      perform portal[name].centervert
+      perform portal[domain].centervert
+      perform portal[delete].centervert
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~position the name on the left
+      portal[name].left = 0
+
+      ~if we don't need a domain, hide it and let the name use all available space
+      if (tagis[User.NoDomain] = 1) then
+        portal[domain].visible = 0
+        portal[name].width = minimum(portal[name].width,portal[info].left - portal[name].left - 10)
+	  else
+	    ~position the domain portal next to the name
+        perform portal[domain].alignrel[ltor,name,10]
+        portal[domain].width = minimum(150,portal[info].left - portal[domain].left - 5)
+		endif
+		
+      ]]></position>
+
+    </template>
+
+  <!-- skills layout
+        This layout orchestrates the display of the visual elements that comprise
+        the Skills tab. This amounts to a title at the top and a dynamic table below
+        where the user can add and adjust the skills he wants.
+
+        The logic for this layout is similar to (albeit much simpler than) the
+        logic for the Basics tab. So please refer to the Basics tab for more details.
+  -->
+  <layout
+    id="skillsSR">
+    <portalref portal="skSkills" taborder="10"/>
+    <portalref portal="skSRLangs" taborder="20"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      ~freeze our skills table in advancement mode to disable adding new choices
+      ~Note: All freezing must be done *before* any positioning is performed.
+      if (state.iscreate = 0) then
+        portal[skSkills].freeze = 1
+        endif
+
+      ~both tables span the full width
+      portal[skSkills].width = width
+      portal[skSRLangs].width = width
+
+      ~the languages table is only visible if enabled
+      portal[skSRLangs].visible = hero.tagis[Hero.SmartsLang]
+      ~RDS SWD This was added to display the Languages tab when Setting Adjustments alters the number of starting languages
+      ~        It's also used in the Linguist Edge to display the Languages tab
+      if (hero.tagis[Hero.ShowLang] <> 0) then
+          portal[skSRLangs].visible = 1
+          endif
+
+      ~if the languages table is visible, reserve space for it at the bottom
+      var y as number
+      if (portal[skSRLangs].visible = 0) then
+        y = bottom
+      else
+        portal[skSRLangs].maxrows = 3
+        portal[skSRLangs].top = height - portal[skSRLangs].height
+        y = portal[skSRLangs].top - 15
+        endif
+
+      ~position and size the table to span the full layout; it will only use the
+      ~vertical space that it actually needs
+      portal[skSkills].height = y
+
+      ~position the languages table beneath the skills and let is expand
+      portal[skSRLangs].top = portal[skSkills].bottom + 15
+      portal[skSRLangs].height = height - portal[skSRLangs].top
+      ]]></position>
+
+    </layout>
+
+
+  <!-- skills panel
+        This is the "Skills" panel shown within Hero Lab. Since we want this panel
+        to appear after Basics and within the traits grouping, we assign it an
+        "order" of 120.
+
+        The logic for this panel is similar to the logic for the Basics panel, so
+        please refer to the Basics panel for more details.
+  -->
+  <panel
+    id="skillsSR"
+    name="Skills"
+    marginhorz="5"
+    marginvert="5"
+    order="120">
+    <live>source.SavRiftC</live>
+    <layoutref layout="skillsSR"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of components associated with equipment such as
+      weapons, armor, gear, etc.
+-->
+
+<document signature="Hero Lab Structure">
+
+  <!-- ArmorSpecial component -->
+  <component
+    id="ArmorSpecial"
+    name="Armor Special"
+    autocompset="no"
+    ispublic="no">
+
+    <!-- Special details about the weapon -->
+    <field
+      id="arToughness"
+      name="Toughness Modifier"
+      type="derived"
+      defvalue="0">
+      </field>
+	  
+    <!-- Special details about the weapon -->
+    <field
+      id="arSpecial"
+      name="Special"
+      type="derived"
+      maxlength="200">
+      </field>
+	  
+    <!-- Synthesized notes about the armor -->
+    <field
+      id="arSpecDisp"
+      name="Notes"
+      type="derived"
+      maxlength="250">
+      </field>
+	  
+    <!-- Synthesized notes about the armor -->
+    <field
+      id="arCoverage"
+      name="Coverage"
+      type="derived"
+      maxlength="100">
+      </field>
+	  
+    <!-- If equipped and the minimum strength isn't satisfied, apply any penalty and
+        mark ourselves as not satisfying the requirement -->
+
+    <!-- Assign any derived special notes to the appropriate field -->
+    <eval index="1" phase="Render" priority="1000"><![CDATA[
+      var special as string
+
+      ~append any special attributes appropriately (if any)
+      var attribs as string
+      attribs = tagnames[ArmorSpecial.?,", "]
+      if (empty(attribs) = 0) then
+        if (empty(special) = 0) then
+          special &= ", "
+          endif
+        special &= attribs
+        endif
+
+      ~append any special details for this weapon
+      if (field[arSpecial].isempty = 0) then
+        if (empty(special) = 0) then
+          special &= ", "
+          endif
+        special &= field[arSpecial].text
+        endif
+
+      ~we've synthesized the notes for the weapon
+      field[arSpecDisp].text = special
+      ]]></eval>
+	  
+    <!-- compile the display for body coverage to the appropriate field -->
+    <eval index="2" phase="Render" priority="500"><![CDATA[
+      var cover as string
+	  var temp as string
+	  
+	  ~if this is armor, include the areas covered by the equipment
+      cover = tagabbrevs[ArmorLoc.?,","]
+      if (empty(cover) = 0) then
+        temp = "Covers: " & cover
+        endif
+
+      ~we've synthesized the notes for the weapon
+      field[arCoverage].text = temp
+      ]]></eval>
+
+    <!-- modify hero toughness based on embedded value -->
+    <eval index="3" phase="PreTraits" priority="5000"><![CDATA[
+	  if (field[grIsEquip].value <> 0) then
+		perform #traitadjust[trTough,+,field[arToughness].value,"Armor"]
+		endif
+		
+      ]]></eval>
+    </component>
+
+  <!-- Define various component sets associated with the components defined above. -->
+
+  <!-- No compsets are auto-defined for the component -->
+
+  <!-- Armor -->
+  <compset
+    id="ArmorRifts"
+    stackable="yes">
+    <compref component="Armor"/>
+    <compref component="ArmorSpecial"/>
+    <compref component="Defense"/>
+    <compref component="Equippable"/>
+    <compref component="Equipment"/>
+    <compref component="Gear"/>
+    </compset>
+
+  </document>

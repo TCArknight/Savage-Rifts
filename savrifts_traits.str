@@ -171,28 +171,48 @@
     </component>
 
   <component
-    id="ExprHelp"
-    name="Expression Helper">
+    id="ExprHelpHJ"
+    name="Hero's Journey Helper">
+	
+    <field
+      id="ehHJIndex"
+      name="Index"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="ehHJAdd"
+      name="Add Item Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="ehHJHdr"
+      name="Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
 
     <field
-      id="ehRaceAdd"
-      name="Racial AddItem Header"
+      id="ehHJExp"
+      name="Expression"
       type="derived"
 	  maxlength="500">
-	  </field>
-	  
+	  </field> 
+
+    </component>
+
+  <component
+    id="ExprHelpFra"
+    name="Framework Helper">
+	
     <field
-      id="ehRaceHdr"
-      name="Racial Expression Header"
+      id="ehFrameIndex"
+      name="Index"
       type="derived"
-	  maxlength="500">
-	  </field>
-	  
-    <field
-      id="ehRaceExp"
-      name="Racial Property Expression"
-      type="derived"
-	  maxlength="500">
+	  defvalue="0">
 	  </field>
 	  
     <field
@@ -224,78 +244,60 @@
 	  </field>
 	  
     <field
-      id="ehHJAdd"
-      name="Hero's Journey Header"
+      id="ehFrameAdd2"
+      name="Framework AddItem Header"
       type="derived"
 	  maxlength="500">
 	  </field>
 	  
     <field
-      id="ehHJHdr"
-      name="Hero's Journey Header"
+      id="ehFrameHdr2"
+      name="Framework Expression Header"
       type="derived"
 	  maxlength="500">
 	  </field>
-
+	  
     <field
-      id="ehHJExp"
-      name="Hero's Journey Expression"
+      id="ehFrameCst2"
+      name="Framework Expression Cost"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="ehFrameExp2"
+      name="Framework Expression"
       type="derived"
 	  maxlength="500">
-	  </field> 
+	  </field>	
 	  
-	<eval phase="PreTraits" priority="1000" index="1"><![CDATA[
-	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
-	doneif (origin.ishero = 0)
+    </component>
+	
+  <component
+    id="ExprHelp"
+    name="Expression Helper">
 
-	~consume additional resource slots
-	var myCount as number
-	foreach pick in hero where "Rifts.RaceSelect"
-		myCount += 1
-		nexteach
+    <field
+      id="ehRaceAdd"
+      name="Racial AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
 	  
-	perform #resspent[resRaceSel,+,myCount,field[name].text]
-		]]></eval>
-		
-	<eval phase="PreTraits" priority="1000" index="2"><![CDATA[
-	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
-	doneif (origin.ishero = 0)
-
-	~consume additional resource slots
-	var myCount as number
-	var myComp as number
-	
-	myCount = 0
-	myComp = tagvalue[thingid.ehExprHlp?]
-	
-	if (myComp = 1) then
-		foreach pick in hero where "Rifts.FrameSel1"
-			myCount += 1
-			nexteach
-	
-		perform #resspent[resFraSel1,+,myCount,field[name].text]
-	elseif (myComp = 2) then
-		foreach pick in hero where "Rifts.FrameSel2"
-			myCount += 1
-			nexteach
-	
-		perform #resspent[resFraSel2,+,myCount,field[name].text]
-	endif
-
-		]]></eval>
-		
-	<eval phase="PreTraits" priority="1000" index="3"><![CDATA[
-	~if this fortune is not added directly to the hero (i.e. an advance), skip it entirely
-	doneif (origin.ishero = 0)
-
-	~consume additional resource slots
-	var myCount as number
-	foreach pick in hero where "Rifts.HeroJourneySel"
-		myCount += 1
-		nexteach
+    <field
+      id="ehRaceHdr"
+      name="Racial Expression Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
 	  
-	perform #resspent[resHJSel,+,myCount,field[name].text]
-		]]></eval>	  
+    <field
+      id="ehRaceExp"
+      name="Racial Property Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
     </component>
 	
 <!-- TCA - This component set enables the use of Iconic Framework Abilities

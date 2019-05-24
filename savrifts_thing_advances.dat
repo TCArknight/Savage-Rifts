@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the assortment of advances that can be selected by actors as
+      their experience accrues.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- New Dragon Hatchling ability advance
+  -->
+  <thing
+    id="advSRDragonAbil"
+    name="Gain a New Dragon Ability"
+    compset="Advance"
+    description="Select a new ability of your choice.">
+    <fieldval field="advAction" value="New Edge"/>
+    <fieldval field="advDynamic" value="component.Edge"/>
+    <fieldval field="advCost" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="Advance" tag="AddNew"/>
+    <!-- Modify tagexpr to deny edges that have already been added to the character -->
+    <eval index="1" phase="Render" priority="1000">
+      <before name="Assign Dynamic Tagexpr"/><![CDATA[
+      ~get the list of all unique edges on the hero and assemble it as a list of precluded tags
+      var tagexpr as string
+      foreach pick in hero from Edge where "!Hide.Edge"
+        if (eachpick.isunique <> 0) then
+          tagexpr &= " & !Edge." & eachpick.idstring
+          endif
+        nexteach
+
+      ~if there are any tags to exclude, append them to the tagexpr appropriately
+      if (empty(tagexpr) = 0) then
+        field[advDynamic].text &= tagexpr
+        endif
+      ]]></eval>
+
+    <!-- Attach the child entity for tracking the advance -->
+    <child entity="Advance">
+      <tag group="Advance" tag="MustChoose"/>
+      </child>
+    </thing>
+
+  </document>

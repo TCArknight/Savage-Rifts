@@ -11,21 +11,44 @@
 
   <!-- Expression Helper Things  -->
   <thing
-    id="ehExprHlp1"
+    id="HeroJourneyHelper"
     name="Expression Helper"
-    compset="ExprHelp">
+    compset="ExprHelpHJ">
+    <fieldval field="ehHJIndex" value="1"/>
+	
     <!-- Automatically add the helper to every actor -->
     <tag group="Helper" tag="Bootstrap"/>
 
     </thing>
 	
   <thing
-    id="ehExprHlp2"
-    name="Expression Helper"
-    compset="ExprHelp">
+    id="FrameworkHelper"
+    name="Framework Helper"
+    compset="ExprHelpFra">
+    <fieldval field="ehFrameIndex" value="1"/>
+	
     <!-- Automatically add the helper to every actor -->
     <tag group="Helper" tag="Bootstrap"/>
+	
+	<eval phase="PreTraits" priority="10000" index="1"><![CDATA[
+	~if there are no selections on the Framework tab choosers required, then we're done.
+	doneif ((#resmax[resFraSel1] + #resmax[resFraSel2] ) = 0)
 
+	~consume additional resource slots when 
+
+	~Count Edges with Rifts.FrameSel1 tag
+    foreach pick in hero from Edge where "Rifts.FrameSel1"
+	  field[ehFrameCst].value += 1
+	  nexteach
+    perform #resspent[resFraSel1,+,field[ehFrameCst].value,"Framework"]
+   
+	~Count Edges with Rifts.FrameSel1 tag
+    foreach pick in hero from Edge where "Rifts.FrameSel2"
+	  field[ehFrameCst2].value += 1
+	  nexteach
+    perform #resspent[resFraSel2,+,field[ehFrameCst2].value,"Framework"]
+
+		]]></eval>
     </thing>
 	
   <!-- Racial - Bonus Abilities resource  -->
@@ -54,7 +77,7 @@
 	
   <thing
     id="resFraSel2"
-    name="Iconic Framework Selections"
+    name="Iconic Framework Selections 2"
     compset="Resource">
     <fieldval field="resMax" value="0"/>
 	

@@ -47,6 +47,37 @@
     append @newline
     ]]></procedure>
 	
+  <procedure id="sbSRarmor" scripttype="synthesize"><![CDATA[
+    var details as string
+    var ismore as number
+    ismore = !empty(details)
+    ~output the details of all armor
+    foreach pick in hero from Defense sortas Armory
+      if (eachpick.tagis[miType.?] = 0) then
+        if (ismore <> 0) then
+          details &= ", "
+          endif
+        details &= eachpick.field[name].text
+        details &= " (" & signed(eachpick.field[defDefense].text)
+        if (eachpick.tagis[component.Shield] <> 0) then
+          if (eachpick.field[defParry].value <> 0) then
+            details &= ", Parry" & signed(eachpick.field[defParry].text)
+            endif
+          endif
+		if (eachpick.tagis[component.ArmorSpecial] <> 0) then
+		   if (eachpick.field[arSpecDisp].isempty = 0) then
+		     ~There is text in the grNotes field, so output it
+             details &= "; " & eachpick.field[arSpecDisp].text
+             endif
+		   endif
+		   
+        details &= ")"
+        ismore = 1
+        endif
+
+      nexteach
+    ]]></procedure>	
+	
   <!-- Define the statblock as a text-based dossier. The "synthesize" script actually
         generates the output.
   -->
@@ -127,7 +158,7 @@
         var details as string
         details = ""
         call sbweapons
-        call sbarmor
+        call sbSRarmor
         call sbgear
         if (empty(details) = 0) then
           append @boldon & "Gear: " & @boldoff & details & @newline
