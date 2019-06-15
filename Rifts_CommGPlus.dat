@@ -1317,45 +1317,17 @@ endif]]>
     <bootstrap thing="rpImmDisea"></bootstrap>
     <bootstrap thing="rpImmPoiso"></bootstrap>
     </thing>
-  <thing id="edgSRDRGFSRG" name="Dragon Fast Regeneration" description="A dragon’s regenerative abilities can improve over time, allowing him to make a natural healing roll every round. He also gains +2 to recover from being Shaken." compset="Edge" summary="Dragons regenerate FAST!">
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="2"/>
-    <tag group="EdgeType" tag="Racial"/>
-    <bootstrap thing="abRegenFas"></bootstrap>
-    <pickreq thing="racSRDragonHatch"/>
-    </thing>
-  <thing id="edgSRDRGLLV" name="Dragon Low Light Vision" description="Dragons can develop strong night vision, which enables them to ignore penalties for Dim and Dark conditions." compset="Edge" summary="Dragons can see better in the dark">
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    <tag group="EdgeType" tag="Racial"/>
-    <bootstrap thing="rpLowLight"></bootstrap>
-    <pickreq thing="racSRDragonHatch"/>
-    </thing>
-  <thing id="edgSRDRGMTMF" name="Dragon Metamorphosis" description="A dragon may change his shape and size at will, appearing as any living creature from the size of a house cat to anything his natural size and weight. He can maintain any such form indefinitely, even while sleeping. The dragon gains no special properties of what he mimics, only the size and appearance, but he retains all of his own abilities except those only usable in dragon form (marked with an *). Only gear carried in humanoid form (see Limited Metamorphosis below) is assumed into any new shape. Any other objects are dropped when transforming to a new body.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n0 is assumed into any new shape. Any other objects are dropped when transforming to a new body." compset="Edge" summary="The dragon can change shape at wil">
-    <tag group="EdgeType" tag="Racial"/>
-    <tag group="MinRank" tag="2"/>
-    <pickreq thing="racSRDragonHatch"/>
-    </thing>
-  <thing id="wpSRFLMSCL" name="Flaming Scales" description="Flame Wind Hatchlings can immolate themselves, their very scales alight with terrible fire. The fire acts like a damage field, but it does 3d6, Mega Damage. Hatchlings can maintain such a field for a number of rounds equal to their Spirit, after which at least 10 minutes of rest are required before they can activate the effect again." compset="Melee" summary="Flame Wind Dragon&apos;s scale light on fire">
-    <fieldval field="wpDamage" value="3d6"/>
-    <fieldval field="wpSpecial" value="Mega-Damage"/>
-    <usesource source="SavRiftC"/>
-    <tag group="WeaponType" tag="SRMAGMELEE"/>
-    </thing>
-  <thing id="edgSRFLMSCLS" name="Flaming Scales" description="Flame Wind Hatchlings can immolate themselves while in Dragon Form, their very scales alight with terrible fire. The fire acts like a damage field, but it does 3d6, Mega Damage. Hatchlings can maintain such a field for a number of rounds equal to their Spirit, after which at least 10 minutes of rest are required before they can activate the effect again." compset="Edge" summary="The Flame Wind dragon&apos;s Scale light on fire.">
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    <tag group="EdgeType" tag="Iconic"/>
-    <bootstrap thing="wpSRFLMSCL"></bootstrap>
-    <pickreq thing="grpSRFlaWi"/>
-    </thing>
+
+
+
+
   <thing id="edgSRDRGTLPRT" name="Dragon Teleportation" description="The hatchling can learn to naturally use the teleport power, rolling their Spirit for the check and drawing on their PPE to fuel the power." compset="Edge" summary="Dragon&apos;s have been known to teleport">
     <usesource source="SavRiftC"/>
     <tag group="MinRank" tag="1"/>
     <tag group="EdgeType" tag="Iconic"/>
     <bootstrap thing="powTelepor"></bootstrap>
-    <pickreq thing="grpSRFlaWi"/>
-    <exprreq message="Cat&apos;s Eye, Forest Runner, or Flame Wind Dragon Required"><![CDATA[hero.tagis[Group.grpSRCTEYE] + hero.tagis[Group.grpSRFlaWi] + hero.tagis[Group.grpSRDGNFTRN] <> 0]]></exprreq>
+    <pickreq thing="grpSRFlameWind"/>
+    <exprreq message="Cat&apos;s Eye, Forest Runner, or Flame Wind Dragon Required"><![CDATA[hero.tagis[Group.grpSRCTEYE] + hero.tagis[Group.grpSRFlameWind] + hero.tagis[Group.grpSRDGNFTRN] <> 0]]></exprreq>
     </thing>
   <thing id="edgGPKILSHT" name="Killshot" description=" One hit is enough. You hold your breath, aim, and shoot right between the eyes. A raise on a Shooting roll when using firearms deals an extra d8 damage instead of a d6.  This edge only applies to single shot, it cannot be applied to Double Tap, Three Round Burst, or Semi-Auto Rapid Attacks.\n\nOriginally &quot;Right Between the Eyes&quot; from Nemezis." compset="Edge" summary="One hit is enough.">
     <usesource source="SavGPlu"/>
@@ -2508,7 +2480,7 @@ nexteach]]></eval>
     <fieldval field="wpShots" value="4"/>
     <fieldval field="wpFireRate" value="4"/>
     <usesource source="SavGPlu"/>
-    <tag group="Weapon" tag="MGDMG" name="Mega-Damage" abbrev="MD"/>
+    <tag group="Weapon" tag="MegaDmg" name="Mega-Damage" abbrev="MD"/>
     <tag group="Weapon" tag="Dropped"/>
     <tag group="Weapon" tag="SmallBurst"/>
     <tag group="WeaponType" tag="SFVehBombs"/>
@@ -2577,7 +2549,7 @@ validif (rolls >= 2)]]></evalrule>
     <usesource source="SavRiftC"/>
     <tag group="Hide" tag="Equipment"/>
     <tag group="WeaponType" tag="MAGRNGATTK" name="Magic-Based Range Attack"/>
-    <tag group="Weapon" tag="MGDMG"/>
+    <tag group="Weapon" tag="MegaDmg"/>
     </thing>
   <thing id="faSRCTEDGF" name="Cat&apos;s Eye Dragon Form" description="This is the natural form of the dragon.  When the dragon is not in its natural form it looses much of it inherent powers.  Humanoid weapons and other personal effect (up to body armor) are assumed into the dragon&apos;s form and reappear when returning to humanoid form.  Any other objects are dropped.  The process doe not work in reverse, all gear carried by the dragon is dropped when transforming into humanoid form.\n\nIn their natural form, dragons cannot wear any armor and can only use vehicular weapons specially adapted for their use at four times the normal cost." compset="FraAbility" summary="The cat&apos;s eye dragon&apos;s natural form">
     <usesource source="SavGPlu"/>

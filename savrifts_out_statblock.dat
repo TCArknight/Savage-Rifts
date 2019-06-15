@@ -47,6 +47,30 @@
     append @newline
     ]]></procedure>
 	
+  <procedure id="sblistcyber" scripttype="synthesize"><![CDATA[
+    var liston as string
+	var listitem as string
+	var listoff as string
+	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+    var tagexpr as string
+    var ismore as number
+    ismore = 0
+    foreach pick in hero where tagexpr
+      append @boldon & eachpick.field[grStkName].text & " (" & @boldoff
+	  append "x" & eachpick.field[stackQty].text & @boldon & ") " & @boldoff
+	  append "- Strain: " & eachpick.field[cybStrain].text
+	  append liston & @newline
+	  append listitem & eachpick.field[summary].text & @newline
+	  append listoff & @newline
+      ismore = 1
+      nexteach
+
+    ]]></procedure>
+	
   <procedure id="sbSRarmor" scripttype="synthesize"><![CDATA[
     var details as string
     var ismore as number
@@ -77,7 +101,190 @@
 
       nexteach
     ]]></procedure>	
+
+  <!-- Procedure sblistskills
+        Output all of the traits that satisfy the provided tag expression, reporting
+        the name and final value for each. The "tagexpr" text variable specifies the
+        constraints that must be satisfied for the list of traits.
+
+        Inbound parameter:  tagexpr
+  -->
+  <procedure id="sblistskills" scripttype="synthesize"><![CDATA[
+	var liston as string
+	var listitem as string
+	var listoff as string
 	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+	append liston & @newline
+	
+    foreach pick in hero from Skill where "!Hide.Skill"
+	  append listitem
+      append eachpick.field[name].text & " " & eachpick.field[trtDisplay].text
+      append @newline
+      nexteach
+	
+    append listoff & @newline
+	
+    ]]></procedure>
+  <!-- Procedure sblistskills
+        Output all of the traits that satisfy the provided tag expression, reporting
+        the name and final value for each. The "tagexpr" text variable specifies the
+        constraints that must be satisfied for the list of traits.
+
+        Inbound parameter:  tagexpr
+  -->
+  <procedure id="sblisthind" scripttype="synthesize"><![CDATA[
+	var liston as string
+	var listitem as string
+	var listoff as string
+	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+	append liston & @newline
+	
+    foreach pick in hero from Hindrance where "!Print.NoPrint"
+	  append listitem
+      append @boldon & eachpick.field[name].text 
+	  if (eachpick.tagis[User.HindMajor] = 0) then
+	    append " (Minor)"
+	  else 
+	    append " (Major)"
+	    endif
+	  
+	  append ": " & @boldoff & eachpick.field[summary].text & @newline
+      nexteach
+	
+    append listoff & @newline
+	
+    ]]></procedure>	
+
+  <!-- Procedure sblisttraits
+        Output all of the traits that satisfy the provided tag expression, reporting
+        the name and final value for each. The "tagexpr" text variable specifies the
+        constraints that must be satisfied for the list of traits.
+
+        Inbound parameter:  tagexpr
+  -->
+  <procedure id="sblisttraits" scripttype="synthesize"><![CDATA[
+    var tagexpr as string
+	
+	var liston as string
+	var listitem as string
+	var listoff as string
+	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+	append liston & @newline
+	
+    foreach pick in hero where tagexpr
+	  append listitem
+      append @boldon & eachpick.field[name].text
+	  
+	  ~ if eachpick is a Hindrance, indicate Major/Minor
+	  if (eachpick.tagis[component.Hindrance] <> 0) then
+		if (eachpick.tagis[User.HindMajor] = 0) then
+			append " (Minor)"
+		else 
+			append " (Major)"
+		endif
+	  endif
+	  
+	  append ": " & @boldoff
+	  if (length(eachpick.field[descript].text) > 100) then
+        append eachpick.field[summary].text & @newline
+	  else 
+        append eachpick.field[descript].text & @newline
+		endif
+		
+      nexteach
+	
+    append listoff & @newline
+	
+    ]]></procedure>
+  <!-- Procedure sblisttraits
+        Output all of the traits that satisfy the provided tag expression, reporting
+        the name and final value for each. The "tagexpr" text variable specifies the
+        constraints that must be satisfied for the list of traits.
+
+        Inbound parameter:  tagexpr
+  -->
+  <procedure id="sblistarcane" scripttype="synthesize"><![CDATA[
+    var tagexpr as string
+	
+	var liston as string
+	var listitem as string
+	var listoff as string
+	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+	var myAB as string
+	var myPPType as string
+	var myPP as number
+	var myRec as string
+	var myPwrRank as string
+		  
+	if (hero.tagis[Rifts.UsesPPE] <> 0) then
+	  myPPType = "PPE: "
+	elseif (hero.tagis[Rifts.UsesISP] <> 0) then
+	  myPPType = "ISP: "
+	  endif
+			
+	myPP = hero.childfound[trkPower].field[trkMax].value
+		  
+	myRec = "hour"
+	~ check for reduced recharge time (edgRapRch, edgRapRch2, edgSRRapRch3)
+	if (hero.tagis[Edge.edgRapRch] <> 0) then
+	  myRec = "30 minutes"
+	elseif (hero.tagis[Edge.edgRapRch2] <> 0) then
+	  myRec = "15 minutes"
+	elseif (hero.tagis[Edge.edgSRRapRch3] <> 0) then
+	  myRec = "5 minutes"
+	  endif
+		  
+	append @newline
+    append @boldon & "Powers" & @boldoff & @newline
+	  
+	~ get the Arcane Background name
+	foreach pick in hero from Arcane
+	  myAB = eachpick.field[name].text
+	  nexteach
+		  
+    append @boldon & "Arcane Background: " & myAB & @boldoff & @newline
+	append @boldon & myPPType & @boldoff & myPP
+	append @boldon & " - Recovery: " & @boldoff & "1/" & myRec & @newline
+
+	~output Primary AB powers
+    foreach pick in hero from Power where "!Rifts.SecondaryPower"
+      append @boldon & eachpick.field[name].text & @boldoff & " (Cost: " & eachpick.field[powPoints].text & ") " 
+	  myPwrRank = eachpick.tagnames[MinRank.?,";"]
+	  append "[" & myPwrRank & "]" & @newline
+	  append liston & @newline
+      append listitem & @boldon & "Range: " & @boldoff & eachpick.field[powRange].text & @newline
+      append listitem & @boldon & "Duration: " & @boldoff & eachpick.field[powLength].text & @newline
+      append listitem & @boldon & "Trapping: " & @boldoff & eachpick.field[powTraps].text & @newline
+      append listitem & @boldon & "Effect: " & @boldoff & eachpick.field[summary].text & @newline
+      append listoff & @newline
+      nexteach
+			
+	~output Secondary AB powers
+	~if (hero.tagis[Rifts.HasSecondaryAB] <> 0) then
+    ~  append @boldon & "Secondary Arcane Powers:" & @boldoff & @newline
+    ~  foreach pick in hero from Power where "Rifts.SecondaryPower"
+    ~    append chr(149) & eachpick.field[name].text & ": "
+    ~    append eachpick.field[summary].text & @newline
+    ~    nexteach
+	~  endif
+	
+    ]]></procedure>
   <!-- Define the statblock as a text-based dossier. The "synthesize" script actually
         generates the output.
   -->
@@ -292,5 +499,117 @@
       </dossier_text>
     </dossier>
 
+  <!-- Statblock to generate a forum post layout for the SavageRifts.com website.
+  -->
+  <dossier
+    id="savriftscom"
+    name="Character Output (SavageRifts.com)">
+    <dossier_text
+      styles="bbcode"
+      grouping="statblock">
+      <synthesize><![CDATA[
+        var txt as string
+        var tagexpr as string
+		var ismore as number
+		
+		var size118on as string
+		var sizeoff as string
+		size118on = "[size=118]"
+		sizeoff = "[/size]"
+	
+        ~start by getting our name
+        var name as string
+        call sbname
+
+        ~output our name
+        append @boldon & size118on & name & sizeoff & @boldoff & @newline
+		
+		~output Rank, Experience and Advances left
+		append @boldon & "Rank: " & @boldoff & herofield[acRankName].text
+		append @boldon & "     Experience: " & @boldoff & herofield[acFinalXP].text
+		append @boldon & "     Advances Left: " & @boldoff & #resleft[resAdvance] & @newline
+		
+        ~output any race or creature type (plus faction and group)
+        if (!hero.tagis[Hero.NoRace] + hero.tagis[Hero.Creature] > 0) then
+          append @boldon & herofield[acRacePref].text & ": " & @boldoff
+          append herofield[acRaceName].text & @newline
+          endif
+
+        if (herofield[acFactName].isempty = 0) then
+          append @boldon & herofield[acFactTerm].text & ": " & @boldoff
+          append herofield[acFactName].text & @newline
+          endif
+
+        if (herofield[acGrpName].isempty = 0) then
+          append @boldon & herofield[acGrpTerm].text & ": " & @boldoff
+          append herofield[acGrpName].text & @newline
+          endif
+
+        ~output attributes
+        append @boldon & "Attributes: " & @boldoff
+        tagexpr = "component.Attribute & !Hide.Attribute"
+        call sbtraits
+
+        ~output derived traits
+		append @boldon & "Charisma: " & @boldoff & hero.child[trCharisma].field[trtDisplay].text & "; " 
+		
+		append @boldon & "Pace: " & @boldoff & hero.child[trPace].field[trtDisplay].text & " ("
+		append hero.child[trRunning].field[trtDisplay].text & "); " 
+		
+		append @boldon & "Parry: " & @boldoff & hero.child[trParry].field[trtDisplay].text & "; "
+		
+		append @boldon & "Toughness: " & @boldoff & hero.child[trTough].field[trtDisplay].text & "; "
+		
+		append @boldon & "Strain: " & @boldoff & hero.child[trSFStrain].field[trtDisplay].text & " (Max: " & hero.child[trSFStrnMx].field[trtDisplay].text & ")" & @newline
+		 
+        append @newline
+
+        ~output skills
+        append @boldon & "Skills: " & @boldoff & @newline
+        call sblistskills
+		
+        ~output all Smarts-based languages
+        if (hero.tagis[Hero.SmartsLang] <> 0) then
+          ismore = 0
+          foreach pick in hero from Language sortas Domain
+            if (ismore = 0) then
+              append @boldon & "Languages: " & @boldoff
+            else
+              append ", "
+              endif
+            append eachpick.field[domDomain].text
+            ismore = 1
+            nexteach
+          if (ismore <> 0) then
+            append @newline
+            endif
+          endif
+		  
+        ~output hindrances
+        append @newline & @boldon & "Hindrances: " & @boldoff & @newline
+		tagexpr = "component.Hindrance & !Print.NoPrint"
+        call sblisttraits	
+		
+        ~output edges
+        append @newline & @boldon & "Edges: " & @boldoff & @newline
+		tagexpr = "component.Edge & !Hide.Edge & !Print.NoPrint"
+        call sblisttraits
+
+        ~output Cybernetics
+		if (hero.haschild[Cyberware] <> 0) then
+		  append @newline
+          append @boldon & "Cyberware: " & @boldoff & @newline
+          tagexpr = "component.Cyberware"
+          call sblistcyber
+		  endif
+
+        ~output arcane powers
+        if (hero.haschild[Power] <> 0) then
+          append @newline
+		  call sblistarcane
+          endif
+        ]]></synthesize>
+      </dossier_text>
+    </dossier>
 
   </document>

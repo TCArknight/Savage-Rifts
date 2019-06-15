@@ -64,7 +64,10 @@
     <value id="StartGear"/>           <!-- indicates starting gear framework ability -->  
     <value id="SuperStrength"/>       <!-- indicates starting gear framework ability -->  
     <value id="MegaPowerValid"/>      <!-- indicates access to the Mega Power version of powers -->
-    <value id="NoCostPower"/>         <!-- indicates power for free -->		
+    <value id="NoCostPower"/>         <!-- indicates power for free -->
+    <value id="DragonAbility"/>       <!-- indicates dragon hatchling ability upgrade -->	
+    <value id="Gain10PPE"/>       <!-- indicates a gain of 10 instead of 5 PPE for the Power Points edge -->
+    <value id="Gain10ISP"/>       <!-- indicates a gain of 10 instead of 5 ISP for the Power Points edge -->			
     </group>
 	
   <!-- Power Group tags - Used for tagging powers valid for selection in various choosers, etc. -->
@@ -193,7 +196,7 @@
 	sortorder="2"
     description="Material from the supplement.">
     </source>
-
+	
   <!-- TCA: Various sortsets for Savage Rifts -->
   <sortset
     id="LangSortChoose"

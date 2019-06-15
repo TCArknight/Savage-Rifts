@@ -5,13 +5,13 @@
 Contributors: Salcor, Father Morpheus</info_author>
     <info_history><![CDATA[
 Known Issues:
-Dragon Hatchling - Unable to use advance to purchase/upgrade abilities
 
 History:
-05/05/19
+06/15/19
 New:
 - New setting on Configure Hero to preclude races from the Sci-Fi Companion
 - Use generic Racial Tab instead of Rifts Racial Tab. 
+- Partial implementation of output on the BBCode Statblock output for Output in format for use in forum games on SavageRifts.com
 - Replacement for Skills tab to allow for selection of languages on the tab
 - Rework of Flame Wind Dragon Hatchling
   * Limited Metamorphosis tags Rifts.DragonForm and Rifts.HumanForm which allow for conditional bootstraps of Dragon-Specific Abilities
@@ -36,10 +36,13 @@ Added:
 - Ranged Combat Weapon selections for Hero's Journey provide modification of selected Ranged Weapon (not natural weapons) 
 
 Fixed:
+- Creatures created with core Rifts settings treated as Human in addition when saved to portfolio and reloaded (Human tags, abilities, etc.)
 - Running Die missing for various edge/racial abilities 
 - Cyber-Knight available powers incorrect
 - Combat Cyborg unable to select edge or attribute for Shadow of Themselves
 - Training: Combat Edge entry for Hero's Journey provides too many choices
+- Exceptional Rapid Recharge shows as "Impr Rapid Recharge"
+- Dragon Hatchling is nable to use advance to purchase/upgrade abilities
 
 12/07/18
 New:
@@ -892,9 +895,9 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
       var totalcount as number
       totalcount = 0
 
-      foreach pick in hero where "thingid.skKnow?|thingid.skHealing|thingid.skInvest"
+      foreach pick in hero from Skill where "thingid.skKnow?|thingid.skHealing|thingid.skInvest"
         if (eachpick.field[trtFinal].value >= 2) then
-          totalcount += (field[trtUser].value - 1)
+          totalcount += (eachpick.field[trtUser].value - 1)
           endif
         nexteach
 		
@@ -1841,8 +1844,8 @@ else
     <pickreq thing="edgSRMasterPsi"/>
     <pickreq thing="powSmite"/>
     </thing>
-  <thing id="edgSRRapRc" name="Exceptional Rapid Recharge" description="The caster with this Edge recovers Power Points (PPE/ISP) at a rate of one point every five minutes." compset="Edge" summary="Regain 1 Power Point every 5 minutes" uniqueness="unique">
-    <fieldval field="shortname" value="Impr Rapid Recharge"/>
+  <thing id="edgSRRapRch3" name="Exceptional Rapid Recharge" description="The caster with this Edge recovers Power Points (PPE/ISP) at a rate of one point every five minutes." compset="Edge" summary="Regain 1 Power Point every 5 minutes" uniqueness="unique">
+    <fieldval field="shortname" value="Excp Rapid Recharge"/>
     <usesource source="SavRiftC"/>
     <tag group="EdgeType" tag="Power" name="Power" abbrev="Power"/>
     <tag group="MinRank" tag="2" name="Veteran" abbrev="Veteran"/>
@@ -1994,7 +1997,7 @@ if (@ispick <> 0) then
     <tag group="User" tag="NoDomain"/>
     <tag group="LangCat" tag="Rifts"/>
     </thing>
-  <thing id="lgSRJapanese" name="Jspanese" description="The main language of the Japanese Islands and the New Japanese Republic, spoken by many in what was the Pacific Northwest of the United States, as well as much of the west coast of Canada." compset="Language" summary="This represents a specific Langauge" uniqueness="unique">
+  <thing id="lgSRJapanese" name="Japanese" description="The main language of the Japanese Islands and the New Japanese Republic, spoken by many in what was the Pacific Northwest of the United States, as well as much of the west coast of Canada." compset="Language" summary="This represents a specific Langauge" uniqueness="unique">
     <fieldval field="domDomain" value="Japanese"/>
     <usesource source="SavRiftC"/>
     <tag group="User" tag="NoDomain"/>
@@ -2107,16 +2110,7 @@ perform #traitroll[skThrowing,-,2,"Storm-Fouled Senses"]
     <tag group="Hero" tag="GroupUse"/>
     <tag group="Hero" tag="GroupReq"/>
     <tag group="Settings" tag="NoHumans"/>
-    <eval phase="Initialize" index="3"><![CDATA[~If Super Strength, tag hero for encumb/Load Limit as if using SPC2
-doneif (hero.tagis[Rifts.SuperStrength] <> 0)
-
-perform hero.assign[Hero.UsingSPC]
-
-~no standard humans
-perform hero.assign[Settings.NoHumans]
-
-~hide default Skills tab
-perform hero.assign[HideTab.skills]]]></eval>
+    <tag group="Hero" tag="NoStdCreat"/>
     <eval phase="Render" priority="5000" index="4"><![CDATA[~Reveal PPE and ISP tracker as appropriate and set the values
 if (hero.tagis[Rifts.UsesISP] <> 0) then
   hero.child[trkPower].field[livename].text = "ISP"
@@ -2143,6 +2137,16 @@ if (hero.tagis[Hero.SmartsLang] = 1) then
   #resmax[resLang] -= 1
   #resleft[resLang] -= 1
   endif]]></eval>
+    <eval phase="Initialize" index="3"><![CDATA[~If Super Strength, tag hero for encumb/Load Limit as if using SPC2
+doneif (hero.tagis[Rifts.SuperStrength] <> 0)
+
+perform hero.assign[Hero.UsingSPC]
+
+~no standard humans
+perform hero.assign[Settings.NoHumans]
+
+~hide default Skills tab
+perform hero.assign[HideTab.skills]]]></eval>
     </thing>
   <thing id="racSRDnorr" name="D&apos;Norr" description="Though not supernaturally connected to evil in any way, the D’Norr are more colloquially referred to as “Devilmen” due to their distinctive appearance. Otherwise looking similar to humans, their heads and faces give them the moniker. They have an elongated cranium dotted with tiny spines extending up and back from the forehead (dark red for males, purple for females), and two small horns above the brow. Their overall skin tone is tan-red, and the males have a series of tiny spines on their chins. All have dark blue eyes and pointed ears. \n\nD’Norr are known, by those willing to know them, as intelligent, compassionate, and drawn to nonviolent pursuits and social interaction. Many seek a pacifist’s path, at least as much as possible in such a dangerous world. Most seek out new experiences, new people, and new ideas. Due to their open nature and sensitivity, they are more susceptible to moments and sights of true horror but have a natural affinity for magic." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
@@ -2312,15 +2316,6 @@ chooser = "Helper.BreedAdvMain"
 hero.child[RacialHelper1].field[rhEdgeAdd].text = additem
 hero.child[RacialHelper1].field[rhEdgeExp].text = chooser
 hero.child[RacialHelper1].field[rhEdgeHdr].text = header]]></eval>
-    </thing>
-  <thing id="edgSRBreWa" name="Breed Advantage (Water)" description="The various breeds of canine provide distinct genetic advantages for individual Dog Boys. Some are fast, others strong, still others astoundingly good trackers.\n\nThis Edge may be taken more than once to represent a breed more fully expressing itself over time, but only once per Rank. The GM has final approval over each choice to ensure it makes sense. Each time the Edge is taken, choose one of the following advantages:\n\nThe character gains a d6 Swimming (or a one die increase in his skill), and swims at his skill die’s Pace. This may only be taken once." compset="Edge">
-    <usesource source="SavRiftC"/>
-    <tag group="MinRank" tag="0"/>
-    <tag group="EdgeType" tag="Background"/>
-    <eval phase="Traits" priority="10000"><![CDATA[perform #traitroll[skSwimming,+,1,"Breed Advantage (Water)"]
-
-perform hero.assign[BreedAdv.Water]]]></eval>
-    <exprreq message="Dog Boy race required."><![CDATA[hero.tagis[Race.racSRDogB] <> 0]]></exprreq>
     </thing>
   <thing id="rpSRKeenSm" name="Keen Sense of Smell" description="Dog Boys have a sense of smell similar to their canine counterparts. They gain a +2 bonus on Notice checks based on smell, as well as +2 on all Tracking rolls." compset="RacialProp">
     <usesource source="SavRiftC"/>
@@ -2553,7 +2548,7 @@ hero.childfound[resSkill].field[resSpent].value -= 1</eval>
         perform #traitroll[skTracking,+,2,"Hunter"]
         endif]]></eval>
     <exprreq message="Spirit d6 required."><![CDATA[#trait[attrSpi] >= 3]]></exprreq>
-    <exprreq message="Fighting d8 required."><![CDATA[#trait[skFighting] >= 4]]></exprreq>
+    <exprreq message="Fighting d8 required."><![CDATA[#traitfound[skFighting] >= 4]]></exprreq>
     <exprreq message="Dog Boy or Psi-Stalker race required."><![CDATA[(hero.tagis[Race.racSRPsiSt] + hero.tagis[Race.racSRDogB] ) <> 0]]></exprreq>
     <exprreq message="Vigor d8 required."><![CDATA[#trait[attrVig] >= 4]]></exprreq>
     </thing>
@@ -2872,7 +2867,7 @@ validif (rolls = 0)]]></evalrule>
     <pickreq thing="racSRDragonHatch" ispreclude="yes"/>
     <pickreq thing="racSRCyborg" ispreclude="yes"/>
     </thing>
-  <thing id="grpSRMarsA" name="M.A.R.S. (Body-Fixer)" description="This package also relates to Cyber-Docs, combining the two ideas. A medical professional and life saver, a Body-Fixer/Cyber-Doc is welcome anywhere she goes.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsA" name="M.A.R.S. (Body-Fixer)" description="This package also relates to Cyber-Docs, combining the two ideas. A medical professional and life saver, a Body-Fixer/Cyber-Doc is welcome anywhere she goes.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30).\n\n{b}Body Fixer{/b}\nThis package also relates to Cyber-Docs, combining the two ideas. A medical professional and life saver, a Body-Fixer/Cyber-Doc is welcome anywhere she goes.\n\n* Add one die type to Smarts.\n* Begin with Healing d8, Knowledge (Cybernetics) d6, and Knowledge (Medicine) d6.\n* Begin with the Healer Edge.\n* Begin with the Glitter Boy’s starting Gear along with a Bio-Analysis, a Dosimeter, and a Trauma Kit." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="skHealing"></bootstrap>
@@ -2904,7 +2899,7 @@ hero.childfound[resSkill].field[resSpent].value -= 3</eval>
     <pickreq thing="racSRDragonHatch" ispreclude="yes"/>
     <pickreq thing="racSRCyborg" ispreclude="yes"/>
     </thing>
-  <thing id="grpSRMarsB" name="M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsB" name="M.A.R.S. (City Rat)" description="Masters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30).\n\n{b}City Rat{/b}\nMasters of the urban sprawls that represent civilization in the new world, City Rats also take pride in whatever cybernetics they manage to get installed.\n\n* Select cybernetic systems up to 4 total Strain.\n* Begin with Streetwise d6 and the Scrounger Edge. \n* Begin with the Crazy’s starting gear." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="skStreet"></bootstrap>
@@ -3100,7 +3095,7 @@ hero.child[FrameworkHelper].field[ehFrameHdr].text = header]]></eval>
     <pickreq thing="racSRDragonHatch" ispreclude="yes"/>
     <pickreq thing="racSRCyborg" ispreclude="yes"/>
     </thing>
-  <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="If none of the classic OCC packages works for what you want, simply use this package’s benefits to structure a framework to your liking.\n\n* Begin with +5 skill points.\n* Begin with two Edges of your choice, ignoring Rank requirements.\n* Make one additional roll on the M.A.R.S. Fortune &amp; Glory Table.\n* Begin with the starting gear of any one Iconic Framework of your choosing.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
+  <thing id="grpSRMarsF" name="M.A.R.S. (Personal Concept)" description="This package unites technical and mechanical mastery with the possession of a very useful vehicle.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30).\n\n{b}Custom Concept{/b}\nIf none of the classic OCC packages works for what you want, simply use this package’s benefits to structure a framework to your liking.\n\n* Begin with +5 skill points.\n* Begin with two Edges of your choice, ignoring Rank requirements.\n* Make one additional roll on the M.A.R.S. Fortune &amp; Glory Table.\n* Begin with the starting gear of any one Iconic Framework of your choosing.\n\nNOTES: When you build a character using the M.A.R.S. approach, replace the Iconic Framework with the following steps:\n1. Select a M.A.R.S. Package from the list below.\n2. All M.A.R.S. heroes begin with three rolls on any Hero’s Journey tables you like (although some make far less sense than others). Make these rolls before you assign attributes and skills.\n3. Give your character 20 Experience Points and the four Advances that come with them. This means she begins play as a Seasoned Rank character.\n4. All M.A.R.S. heroes begin with three rolls on the M.A.R.S. Fortune &amp; Glory Table in this section (see page 30)." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <tag group="Rifts" tag="MARS"/>
     <bootstrap thing="faSRSkill5"></bootstrap>
@@ -3601,32 +3596,30 @@ validif (rolls = 0)</evalrule>
     <pickreq thing="racSRDragonHatch" ispreclude="yes"/>
     <pickreq thing="racSRCyborg" ispreclude="yes"/>
     </thing>
-  <thing id="grpSRFlaWi" name="Flame Wind Dragon Hatchling" description="{b}{i}THE DRAGON’S HERO’S JOURNEY (TWO ROLLS){/b}{/i}\nDue to their very young starting age, as well as their enormous raw power, Dragon Hatchlings only gain two rolls on the Hero’s Journey Tables. They are restricted to {b}Education{/b}, {b}Psionics{/b}, and {b}Training{/b}, each of which represents something imprinted on the dragon’s psyche from a parent at birth." compset="Group" uniqueness="unique">
+  <thing id="grpSRFlameWind" name="Flame Wind Dragon Hatchling" description="{b}{i}THE DRAGON’S HERO’S JOURNEY (TWO ROLLS){/b}{/i}\nDue to their very young starting age, as well as their enormous raw power, Dragon Hatchlings only gain two rolls on the Hero’s Journey Tables. They are restricted to {b}Education{/b}, {b}Psionics{/b}, and {b}Training{/b}, each of which represents something imprinted on the dragon’s psyche from a parent at birth." compset="Group" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <bootstrap thing="faSRDragonPsionic"></bootstrap>
-    <bootstrap thing="faSRLtdMetamorph"></bootstrap>
-    <bootstrap thing="faSRSizePlus6">
+    <bootstrap thing="rpSRDragonPsionic"></bootstrap>
+    <bootstrap thing="rpSRLtdMetamorph"></bootstrap>
+    <bootstrap thing="rpSRSize">
       <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
+      <assignval field="raceValue" value="6"/>
       </bootstrap>
-    <bootstrap thing="faSRArmoredHide">
-      <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
-      </bootstrap>
-    <bootstrap thing="faSRDragClawBite">
+    <bootstrap thing="rpSRDragClawBite">
       <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
       </bootstrap>
     <bootstrap thing="faSRFireBreath">
       <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
       </bootstrap>
-    <bootstrap thing="faDragonFlight">
+    <bootstrap thing="rpSRDragonFlight">
       <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
       </bootstrap>
     <bootstrap thing="faSRImpervFire"></bootstrap>
-    <bootstrap thing="faDragonInfravis"></bootstrap>
-    <bootstrap thing="faSRInherentMag"></bootstrap>
-    <bootstrap thing="faSRMighty"></bootstrap>
-    <bootstrap thing="faSRNighImmortal"></bootstrap>
-    <bootstrap thing="faSRSlowRegen"></bootstrap>
-    <bootstrap thing="faSRTailLash">
+    <bootstrap thing="rpSRDragonInfra"></bootstrap>
+    <bootstrap thing="rpSRInherentMag"></bootstrap>
+    <bootstrap thing="rpSRMighty"></bootstrap>
+    <bootstrap thing="rpSRNighImmortal"></bootstrap>
+    <bootstrap thing="rpSRRegenSlow"></bootstrap>
+    <bootstrap thing="rpSRTailLash">
       <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
       </bootstrap>
     <bootstrap thing="fcSRDragonCyber"></bootstrap>
@@ -3670,15 +3663,6 @@ validif (rolls >= 2)]]></evalrule>
     <tag group="ArmorLoc" tag="Arms"/>
     <tag group="ArmorLoc" tag="Legs"/>
     <tag group="ArmorType" tag="FutArmor"/>
-    </thing>
-  <thing id="creBrodkil" name="Brodkil" description="Nine feet tall, hulking bodies, enormous mouths with bone-crushing jaws - Brodkils are a terrifying race of sub-demons in their natural forms." compset="Creature" uniqueness="unique">
-    <fieldval field="crePace" value="8"/>
-    <usesource source="SavRiftC"/>
-    <tag group="SpiDie" tag="3"/>
-    <tag group="StrDie" tag="6"/>
-    <tag group="VigDie" tag="5"/>
-    <tag group="AgiDie" tag="4"/>
-    <tag group="SmaDie" tag="2"/>
     </thing>
   <thing id="hinLastCal" name="Last Call" compset="Hindrance">
     <usesource source="SavRiftC"/>
@@ -5483,6 +5467,7 @@ hero.child[attrVig].field[trtMaximum].value += field[stackQty].value</eval>
     <tag group="ArmorLoc" tag="Head"/>
     <tag group="ArmorType" tag="FutArmor"/>
     <tag group="ArmorSpecial" tag="FullEnvPro"/>
+    <tag group="ArmorSpecial" tag="BoostStr1" name="Strength (+1 die size)" abbrev="Str (+1d)"/>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[attrStr,+,1,"Armor"]
         endif]]></eval>
@@ -5876,6 +5861,7 @@ hero.childfound[attrStr].field[trtMaximum].value += 2</eval>
     <tag group="ArmorType" tag="Other"/>
     <tag group="ArmorLoc" tag="Torso"/>
     <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorSpecial" tag="MegaDmg" name="Mega-Damage"/>
     <eval phase="PreTraits" priority="5000"><![CDATA[if (field[grIsEquip].value <> 0) then
         perform #traitadjust[trTough,+,3,"Toughness"]
         endif]]></eval>
@@ -8387,6 +8373,7 @@ endif]]>
   <thing id="racSRHuman" name="Human" description="Humans are the standard by which all others are measured. Not because they are the oldest, wisest, or strongest of the races, but because they are the most widespread and varied.{br}{br}Humans come in all varieties, from savage warriors of distant jungles to wise priests and holy crusaders.{br}{br}Humans live a little over half a century in low-tech worlds, and nearly twice that in the modern age. Their skin color ranges from dark brown to the color of snow, and their eyes are blue, green, brown, or some mix of the three." compset="Race" replaces="racHuman" uniqueness="unique">
     <usesource source="SavRiftC"/>
     <bootstrap thing="rpSRBonusEdge"></bootstrap>
+    <containerreq phase="Initialize" priority="2100">!hero#Hero.Creature</containerreq>
     </thing>
   <thing id="rpSRBonusEdge" name="Bonus Edge" description="Humans start play with a free Edge (although they must still meet the requirements for the edge)." compset="RacialProp" summary="You start with a free edge that you could take normally.">
     <usesource source="SavRiftC"/>
@@ -8409,8 +8396,9 @@ hero.child[RacialHelper1].field[rhEdgeHdr].text = header]]></eval>
     </thing>
   <thing id="racSRDragonHatch" name="Dragon Hatchling" description="For Dragon Hatchlings, Rfits Earth is a wonderous paradise of new sensations and experiences.  It may even be their place of birth.  Here in the chaotic freedom of the savage wilderness and rival civilization, the hatchlings can find every exeperience he might imagine.  Countless alien races (D-Bees), the couragous and contridictory humans, magic, technology, combat, science, demons and angels, mountains and oceans, forests and deserts, and portals to anywhere and everywhere.  It&apos;s a great place for beings such as they to spend 500-1000 years growing up.\n\nNote: Because a Dragon hatchling is untested, the character will not choose their hindrances during character creation.  These will be choosen after the first 3 sessions." compset="Race" uniqueness="unique">
     <usesource source="SavRiftC"/>
-    <eval phase="Setup" priority="1000"><![CDATA[~ all of the Hatchling's abilities are on the Framework, so hide racial tab
-perform hero.assign[RacialTab.HideRacialTab]]]></eval>
+    <bootstrap thing="rpSRArmoredHide">
+      <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
+      </bootstrap>
     </thing>
   <thing id="rpSRUpgradeable" name="Upgradable" description="’Borgs start with the Upgradable Edge." compset="RacialProp">
     <usesource source="SavRiftC"/>
@@ -8516,6 +8504,21 @@ if (field[usrChosen1].ischosen <> 0) then
   myChoice = "BreedAdv." & field[usrChosen1].chosen.field[name].text
   perform assignstr[myChoice]
   perform forward[BreedAdv.?]
+  endif]]></eval>
+    <eval phase="Initialize" priority="6000" index="3"><![CDATA[if (tagis[BreedAdv.Agile] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"Agility increases by 1 rank"]
+elseif (tagis[BreedAdv.Strong] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"Strength increases by 1 rank"]
+elseif (tagis[BreedAdv.Rugged] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"Vigor increases by 1 rank"]
+elseif (tagis[BreedAdv.Fast] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"Pace +2, Running die increases a type"]
+elseif (tagis[BreedAdv.Tough] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"+2 Toughness"]
+elseif (tagis[BreedAdv.Tracker] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"+2 on all Tracking rolls"]
+elseif (tagis[BreedAdv.Water] = 1) then
+  perform state.thing[edgSRBreedAdvant].amendthing[description,"d6 (or +1 die type increase) in Swimming skill"]
   endif]]></eval>
     <pickreq thing="racSRDogB"/>
     </thing>
@@ -8625,7 +8628,7 @@ perform #traitadjust[trPace,+,2,"Breed Advantage (Fast)"]]]>
     <tag group="Helper" tag="ModSeEdge" name="ModSeEdge" abbrev="ModSeEdge"/>
     <tag group="Helper" tag="ModVeEdge" name="ModVeEdge" abbrev="ModVeEdge"/>
     </thing>
-  <thing id="faSRDragonPsionic" name="Arcane Background (Psionics)" description="As a minor psionic, a Dragon Hatchling begins with three powers (from the Mind Melter list) and 10 ISP. He also has a beginning Psionics skill of d6." compset="FraAbility">
+  <thing id="rpSRDragonPsionic" name="Arcane Background (Psionics)" description="As a minor psionic, a Dragon Hatchling begins with three powers (from the Mind Melter list) and 10 ISP. He also has a beginning Psionics skill of d6." compset="RacialProp">
     <usesource source="SavRiftC"/>
     <bootstrap thing="skPsionics">
       <assignval field="livename" value="Psionics"/>
@@ -8651,35 +8654,36 @@ perform hero.assign[Rifts.UsesISP]</eval>
     <tag group="User" tag="Activation"/>
     <tag group="Print" tag="NoPrint"/>
     </thing>
-  <thing id="faSRLtdMetamorph" name="Limited Metamorphosis" description="A dragon begins life able to adopt a single human or humanoid form for a limited amount of time each day. He can maintain this humanoid form for a number of hours equal to his Spirit die before needing at least six hours of rest. The dragon gains no special properties of what he mimics, only the size and appearance, but he retains all of his own abilities except those only usable in dragon form (marked with an *). Weapons and other personal effects (up to body armor) are assumed into the dragon’s form and reappear when returning to humanoid form. Any other objects are dropped. The process does not work in reverse, all gear carried by the dragon is dropped when transforming into humanoid form." compset="FraAbility">
+  <thing id="rpSRLtdMetamorph" name="Limited Metamorphosis" description="A dragon begins life able to adopt a single human or humanoid form for a limited amount of time each day. He can maintain this humanoid form for a number of hours equal to his Spirit die before needing at least six hours of rest. The dragon gains no special properties of what he mimics, only the size and appearance, but he retains all of his own abilities except those only usable in dragon form (marked with an *). Weapons and other personal effects (up to body armor) are assumed into the dragon’s form and reappear when returning to humanoid form. Any other objects are dropped. The process does not work in reverse, all gear carried by the dragon is dropped when transforming into humanoid form." compset="RacialProp">
     <fieldval field="usrChkText" value="In Human Form?"/>
     <usesource source="SavRiftC"/>
     <tag group="User" tag="Activation"/>
     <tag group="Rifts" tag="DragonForm" name="Dragon Form"/>
     <tag group="Rifts" tag="HumanForm" name="Human Form"/>
-    <bootstrap thing="armNatural">
+    <bootstrap thing="armSRNatural">
       <assignval field="defDefense" value="0"/>
       </bootstrap>
     <eval phase="Initialize" priority="500"><![CDATA[~ if box is unchecked, then in dragon form, if checked, in human form
 if (field[usrIsCheck].value = 0) then
   perform forward[Rifts.DragonForm]
   ~Adjust Natural Armor
-  hero.childfound[armNatural].field[defDefense].value += 16
+  hero.childfound[armSRNatural].field[defDefense].value += 16
   perform #traitadjust[trTough,+,6,"Armored Hide"]
 else
   perform forward[Rifts.HumanForm]
 endif]]></eval>
     </thing>
-  <thing id="faSRSizePlus6" name="Size +6" description="In their natural forms, Dragon Hatchlings are usually 15–20 feet from snout to tail-tip, and weigh up to 7 tons. This means, when not using their Metamorphosis abilities, Hatchlings gain +6 Toughness." compset="FraAbility" summary="Dragon Hatchlings are usually 15–20 feet from snout to tail-tip, and weigh up to 7 tons.">
+  <thing id="rpSRSize" name="Size" description="In their natural forms, Dragon Hatchlings are usually 15–20 feet from snout to tail-tip, and weigh up to 7 tons. This means, when not using their Metamorphosis abilities, Hatchlings gain Toughness equal to their Size." compset="RacialProp" summary="Dragon Hatchlings are usually 15–20 feet from snout to tail-tip, and weigh up to 7 tons.">
     <usesource source="SavRiftC"/>
-    <eval phase="Initialize" priority="1000"><![CDATA[
-if (hero.tagis[source.ShowSize] <> 0) then
-  perform #traitadjust[trSize,+,6,"Size"]
+    <eval phase="PreTraits" priority="5000" index="2"><![CDATA[if (hero.tagis[source.ShowSize] <> 0) then
+  perform #traitadjust[trSize,+,field[raceValue].value,"Size"]
 else
-  perform #traitadjust[trTough,+,6,"Size"]
+  perform #traitadjust[trTough,+,field[raceValue].value,"Size"]
   endif]]></eval>
+    <eval phase="Render" priority="1000" index="3"><![CDATA[field[livename].text = field[name].text & " " & signed(field[raceValue].value)
+field[shortname].text = field[livename].text]]></eval>
     </thing>
-  <thing id="faSRArmoredHide" name="Armored Hide" description="The Hatchling has +16 M.D.C. Armor and +6 Toughness in dragon form." compset="FraAbility" summary="Dragon Hatchlings are usually 15–20 feet from snout to tail-tip, and weigh up to 7 tons.">
+  <thing id="rpSRArmoredHide" name="Armored Hide" description="The Hatchling has +16 M.D.C. Armor and +6 Toughness in dragon form." compset="RacialProp" summary="Dragon Hatchlings are usually 15–20 feet from snout to tail-tip, and weigh up to 7 tons.">
     <usesource source="SavRiftC"/>
     </thing>
   <thing id="wpSRDragClawBite" name="Dragon Claws/Bite" description="Dragons can naturally attack with massive teeth and talons" compset="Melee" uniqueness="unique">
@@ -8692,7 +8696,7 @@ else
     <tag group="Hide" tag="Equipment" name="Equipment" abbrev="Equipment"/>
     <tag group="WeaponType" tag="Natural"/>
     </thing>
-  <thing id="faSRDragClawBite" name="Claws/Bite" description="Dragons can naturally attack with massive teeth and talons" compset="FraAbility">
+  <thing id="rpSRDragClawBite" name="Claws/Bite" description="Dragons can naturally attack with massive teeth and talons" compset="RacialProp">
     <usesource source="SavRiftC"/>
     <bootstrap thing="wpSRDragClawBite"></bootstrap>
     </thing>
@@ -8710,7 +8714,7 @@ else
     <fieldval field="wpMedium" value="24"/>
     <fieldval field="wpLong" value="48"/>
     <usesource source="SavRiftC"/>
-    <tag group="Weapon" tag="MGDMG"/>
+    <tag group="Weapon" tag="MegaDmg"/>
     <tag group="WeaponType" tag="Natural"/>
     <tag group="Equipment" tag="Natural"/>
     <tag group="Hide" tag="Equipment"/>
@@ -8721,10 +8725,10 @@ else
     <tag group="WeaponType" tag="Natural"/>
     <tag group="Equipment" tag="Natural"/>
     <tag group="Hide" tag="Equipment"/>
-    <tag group="Weapon" tag="MGDMG"/>
+    <tag group="Weapon" tag="MegaDmg"/>
     <tag group="Weapon" tag="ConeTempl"/>
     </thing>
-  <thing id="faDragonFlight" name="Flight" description="The Hatchling has a Flying Pace of 12&quot; and Climb 0. Flight is usable in another form if it has wings." compset="FraAbility">
+  <thing id="rpSRDragonFlight" name="Flight" description="The Hatchling has a Flying Pace of 12&quot; and Climb 0. Flight is usable in another form if it has wings." compset="RacialProp">
     <usesource source="SavRiftC"/>
     <eval phase="Traits" priority="5000"><![CDATA[~if our total weight carried exceeds the load limit, flying Pace is at -2
 var fly as number
@@ -8738,27 +8742,32 @@ hero.child[trPace].field[trtSpecial].value = fly]]></eval>
   <thing id="faSRImpervFire" name="Impervious to Fire" description="Fire and heat (including plasma weapons) do not affect a Flame Wind Dragon at all." compset="FraAbility">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="faDragonInfravis" name="Infravision" description="Dragons halve the penalties for dark lighting against living targets (round down)." compset="FraAbility">
+  <thing id="rpSRDragonInfra" name="Infravision" description="Dragons halve the penalties for dark lighting against living targets (round down)." compset="RacialProp">
     <usesource source="SavRiftC"/>
+    <eval phase="Effects" priority="1000"><![CDATA[~if hero has Low Light vision, no need for this to be active 
+if (hero.tagis[RacialProp.rpLowLight] <> 0) then
+  perform assign[Hide.Ability]
+  perform assign[Print.NoPrint]
+  endif]]></eval>
     </thing>
-  <thing id="faSRInherentMag" name="Inherently Magical" description="Hatchlings know no magic spells, but they have a natural pool of 10 PPE and can use any Techno-Wizard devices. A dragon who takes an Arcane Background adds his starting PPE to any gained from the Edge. Additionally, whenever he takes the Power Points Edge, he gains +10 PPE instead of +5." compset="FraAbility" summary="Dragon Hatchlings have natural pool of PPE.">
+  <thing id="rpSRInherentMag" name="Inherently Magical" description="Hatchlings know no magic spells, but they have a natural pool of 10 PPE and can use any Techno-Wizard devices. A dragon who takes an Arcane Background adds his starting PPE to any gained from the Edge. Additionally, whenever he takes the Power Points Edge, he gains +10 PPE instead of +5." compset="RacialProp" summary="Dragon Hatchlings have natural pool of PPE.">
     <usesource source="SavRiftC"/>
     <eval phase="Setup" priority="5000">#trkmax[trkPower2] += 10
 	perform hero.child[trkPower2].delete[Hide.Tracker]</eval>
     </thing>
-  <thing id="faSRMighty" name="Mighty" description="Even Dragon Hatchlings are incredibly strong, beginning with a Strength of d12+4. They are also very resilient, starting with a d8 Vigor. Neither attribute has a maximum limit." compset="FraAbility">
+  <thing id="rpSRMighty" name="Mighty" description="Even Dragon Hatchlings are incredibly strong, beginning with a Strength of d12+4. They are also very resilient, starting with a d8 Vigor. Neither attribute has a maximum limit." compset="RacialProp">
     <usesource source="SavRiftC"/>
-    <eval phase="PreTraits" priority="5000">#traitcreation[attrAgi] += 8
-hero.child[attrAgi].field[trtMaximum].value = 99
+    <eval phase="PreTraits" priority="5000">#traitcreation[attrStr] += 8
+hero.child[attrStr].field[trtMaximum].value = 99
 #traitcreation[attrVig] += 2</eval>
     </thing>
-  <thing id="faSRNighImmortal" name="Nigh-Immortality" description="Unless killed through violence or other means, dragons can live anywhere from 6,000 to 12,000 years. They require only magical energy to sustain themselves, eating and drinking simply for pleasure. They are immune to normal poisons and diseases." compset="FraAbility" summary="Long-lived. Immune to normal Poisons and Diseases">
+  <thing id="rpSRNighImmortal" name="Nigh-Immortality" description="Unless killed through violence or other means, dragons can live anywhere from 6,000 to 12,000 years. They require only magical energy to sustain themselves, eating and drinking simply for pleasure. They are immune to normal poisons and diseases." compset="RacialProp" summary="Long-lived. Immune to normal Poisons and Diseases">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="faSRSlowRegen" name="Slow Regeneration" description="These creatures can even regenerate lost limbs over time, making a natural healing roll once per day." compset="FraAbility" summary="Natural healing roll daily, can regenerate lost limbs over time.">
+  <thing id="rpSRRegenSlow" name="Slow Regeneration" description="These creatures can even regenerate lost limbs over time, making a natural healing roll once per day." compset="RacialProp" summary="Natural healing roll daily, can regenerate lost limbs over time.">
     <usesource source="SavRiftC"/>
     </thing>
-  <thing id="faSRTailLash" name="Tail Lash" description="The dragon can sweep all opponents in his rear facing in a 2&quot; long by 4&quot; wide rectangle. This is a Fighting attack which ignores size penalties, doing Str+d8 (Mega Damage)." compset="FraAbility">
+  <thing id="rpSRTailLash" name="Tail Lash" description="The dragon can sweep all opponents in his rear facing in a 2&quot; long by 4&quot; wide rectangle. This is a Fighting attack which ignores size penalties, doing Str+d8 (Mega Damage)." compset="RacialProp">
     <usesource source="SavRiftC"/>
     </thing>
   <thing id="fcSRDragonCyber" name="Cybernetics" description="Dragons cannot take cybernetics at any point. Their bodies reject such foreign implants." compset="FraComp" summary="Cybernetics even affect a techno-wizard...for now">
@@ -8814,12 +8823,105 @@ hero.child[attrAgi].field[trtMaximum].value = 99
     <usesource source="SavRiftC"/>
     <tag group="ArmorType" tag="ExoArmor"/>
     </thing>
-  <preclude id="racSFAvion" source="PrecludeSciFiRace"/>
-  <preclude id="racSFConst" source="PrecludeSciFiRace"/>
-  <preclude id="racSFRigel" source="PrecludeSciFiRace"/>
-  <preclude id="racSFAurax" source="PrecludeSciFiRace"/>
-  <preclude id="racSFDeade" source="PrecludeSciFiRace"/>
-  <preclude id="racSFFlora" source="PrecludeSciFiRace"/>
+  <thing id="edgSRDraAbiRegFst" name="Dragon Ability (Fast Regeneration)" description="A dragon’s regenerative abilities can improve over time, allowing him to make a natural healing roll every round. He also gains +2 to recover from being Shaken." compset="Edge" uniqueness="useronce">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Hide" tag="Edge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="Rifts" tag="NewDragonAbil" name="New Dragon Ability"/>
+    <tag group="EdgeType" tag="Racial"/>
+    <bootstrap thing="rpSRRegenFast"></bootstrap>
+    </thing>
+  <thing id="edgSRDraAbiLL" name="Dragon Ability (Low Light)" description="Dragons can develop strong night vision, which enables them to ignore penalties for Dim and Dark conditions." compset="Edge" uniqueness="useronce">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Hide" tag="Edge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="Rifts" tag="NewDragonAbil"/>
+    <tag group="EdgeType" tag="Racial"/>
+    <bootstrap thing="rpLowLight"></bootstrap>
+    </thing>
+  <thing id="edgSRDraAbiFlaScl" name="Dragon Ability (Flaming Scales)" description="Flame Wind Hatchlings can immolate themselves while in Dragon Form, their very scales alight with terrible fire. The fire acts like a damage field, but it does 3d6, Mega Damage. Hatchlings can maintain such a field for a number of rounds equal to their Spirit, after which at least 10 minutes of rest are required before they can activate the effect again." compset="Edge" uniqueness="useronce">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="Hide" tag="Edge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="Rifts" tag="NewDragonAbil" name="New Dragon Ability"/>
+    <tag group="EdgeType" tag="Racial"/>
+    <bootstrap thing="rpSRFlamingScales">
+      <containerreq phase="Initialize" priority="900">hero#Rifts.DragonForm</containerreq>
+      </bootstrap>
+    </thing>
+  <thing id="edgSRDraAbiMeta" name="Dragon Ability (Metamorphosis)" description="At Veteran Rank, a dragon may change his shape and size at will, appearing as any living creature from the size of a house cat to anything his natural size and weight. He can maintain any such form indefinitely, even while sleeping. The dragon gains no special properties of what he mimics, only the size and appearance, but he retains all of his own abilities except those only usable in dragon form. Only gear carried in humanoid form (as per Limited Metamorphosis) is assumed into any new shape. Any other objects are dropped when transforming to a new body." compset="Edge" uniqueness="useronce">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="2"/>
+    <tag group="Hide" tag="Edge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="Rifts" tag="NewDragonAbil"/>
+    <tag group="EdgeType" tag="Racial"/>
+    <bootstrap thing="rpSRDraMetamorph"></bootstrap>
+    </thing>
+  <thing id="edgSRDraAbiSize1" name="Dragon Ability (Size to +7)" description="As they grow, dragons gain in size. At Seasoned, the Hatchling may take this Advance to increase his Size to +7. \n\nEach time he takes this Advance, he gains a die type in Strength." compset="Edge" uniqueness="useronce">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="Hide" tag="Edge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="Rifts" tag="NewDragonAbil" name="New Dragon Ability"/>
+    <tag group="EdgeType" tag="Racial"/>
+    <eval phase="PreTraits" priority="4000">#traitcreation[attrStr] += 1
+
+hero.childfound[rpSRSize].field[raceValue].value += 1</eval>
+    </thing>
+  <thing id="edgSRDraAbiSize2" name="Dragon Ability (Size to +8)" description="As they grow, dragons gain in size. \n\nAt Heroic, he can take it again to increase his size to +8, gain +4 Armor and +2 Toughness, increase Claw/Bite damage to Str+3d8 AP 8, and apply a −2 to Fear, but he replaces his Large ability with Huge. \n\nEach time he takes this Advance, he gains a die type in Strength." compset="Edge" uniqueness="useronce">
+    <usesource source="SavRiftC"/>
+    <tag group="MinRank" tag="3"/>
+    <tag group="Hide" tag="Edge"/>
+    <tag group="Print" tag="NoPrint"/>
+    <tag group="Rifts" tag="NewDragonAbil" name="New Dragon Ability"/>
+    <tag group="EdgeType" tag="Racial"/>
+    <eval phase="PreTraits" priority="4000"><![CDATA[#traitcreation[attrStr] += 1
+
+hero.childfound[rpSRSize].field[raceValue].value += 1
+hero.childfound[armSRNatural].field[defDefense].value += 4
+perform #traitadjust[trTough,+,2,"Huge"]
+
+hero.childfound[wpSRDragClawBite].field[wpDmgBoTxt].text = "3d8"
+hero.childfound[wpSRDragClawBite].field[wpPiercing].value += 4]]></eval>
+    </thing>
+  <thing id="rpSRRegenFast" name="Fast Regeneration" description="A dragon’s regenerative abilities can improve over time, allowing him to make a natural healing roll every round. He also gains +2 to recover from being Shaken." compset="RacialProp" summary="Natural healing roll every round; +2 to recover from Shaken">
+    <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="DragonAbility"/>
+    <pickreq thing="racSRDragonHatch"/>
+    </thing>
+  <thing id="wpSRFlamingScales" name="Flaming Scales" description="Flame Wind Hatchlings can immolate themselves, their very scales alight with terrible fire. The fire acts like a damage field, but it does 3d6, Mega Damage. Hatchlings can maintain such a field for a number of rounds equal to their Spirit, after which at least 10 minutes of rest are required before they can activate the effect again." compset="Melee" summary="Flame Wind Dragon&apos;s scales light on fire">
+    <fieldval field="wpDamage" value="3d6"/>
+    <usesource source="SavRiftC"/>
+    <tag group="WeaponType" tag="Natural"/>
+    <tag group="Weapon" tag="MegaDmg"/>
+    <tag group="Equipment" tag="Natural"/>
+    <tag group="Hide" tag="Equipment"/>
+    </thing>
+  <thing id="rpSRFlamingScales" name="Flaming Scales" description="Flame Wind Hatchlings can immolate themselves while in Dragon Form, their very scales alight with terrible fire. The fire acts like a damage field, but it does 3d6, Mega Damage. Hatchlings can maintain such a field for a number of rounds equal to their Spirit, after which at least 10 minutes of rest are required before they can activate the effect again." compset="RacialProp" summary="The Flame Wind dragon&apos;s scales light on fire.">
+    <usesource source="SavRiftC"/>
+    <tag group="Rifts" tag="DragonAbility"/>
+    <bootstrap thing="wpSRFlamingScales"></bootstrap>
+    <pickreq thing="grpSRFlameWind"/>
+    </thing>
+  <thing id="rpSRDraMetamorph" name="Metamorphosis" description="At Veteran Rank, a dragon may change his shape and size at will, appearing as any living creature from the size of a house cat to anything his natural size and weight. He can maintain any such form indefinitely, even while sleeping. The dragon gains no special properties of what he mimics, only the size and appearance, but he retains all of his own abilities except those only usable in dragon form. Only gear carried in humanoid form (as per Limited Metamorphosis) is assumed into any new shape. Any other objects are dropped when transforming to a new body." compset="Edge" summary="The dragon can change shape at will to any living creature.">
+    <tag group="Rifts" tag="DragonAbility"/>
+    <pickreq thing="racSRDragonHatch"/>
+    </thing>
+  <thing id="armSRNatural" name="Natural Armor" compset="ArmorRifts" uniqueness="unique">
+    <fieldval field="defDefense" value="1"/>
+    <usesource source="SavRiftC"/>
+    <tag group="ArmorLoc" tag="Legs" name="Legs" abbrev="L"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    <tag group="ArmorType" tag="Natural" name="Natural Armor" abbrev="Natural Armor"/>
+    <tag group="Equipment" tag="AutoEquip" name="Gear is auto-equipped" abbrev="Gear is auto-equipped"/>
+    <tag group="Equipment" tag="Natural" name="Natural weapon/armor/etc." abbrev="Natural weapon/armor/etc."/>
+    <tag group="ArmorLoc" tag="Arms" name="Arms" abbrev="A"/>
+    <tag group="ArmorLoc" tag="Head" name="Head" abbrev="H"/>
+    </thing>
   <preclude id="racSFRakas" source="PrecludeSciFiRace"/>
   <preclude id="racSFYeti" source="PrecludeSciFiRace"/>
   <preclude id="racSFSauri" source="PrecludeSciFiRace"/>
@@ -8834,12 +8936,12 @@ hero.child[attrAgi].field[trtMaximum].value = 99
   <preclude id="racSFSerra" source="PrecludeSciFiRace"/>
   <preclude id="racSFKalia" source="PrecludeSciFiRace"/>
   <preclude id="racSFInsec" source="PrecludeSciFiRace"/>
-  <extthing thing="powConfusi" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="lgLanguage" group="LangCat" tag="Custom"/>
-  <extthing thing="powDamageF" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDarksig" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDeflect" group="PowerGroup" tag="MindMelter"/>
-  <extthing thing="powDisguis" group="PowerGroup" tag="MindMelter"/>
+  <preclude id="racSFAvion" source="PrecludeSciFiRace"/>
+  <preclude id="racSFConst" source="PrecludeSciFiRace"/>
+  <preclude id="racSFRigel" source="PrecludeSciFiRace"/>
+  <preclude id="racSFAurax" source="PrecludeSciFiRace"/>
+  <preclude id="racSFDeade" source="PrecludeSciFiRace"/>
+  <preclude id="racSFFlora" source="PrecludeSciFiRace"/>
   <extthing thing="powDispel" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powDivinat" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powDrainPP" group="PowerGroup" tag="MindMelter"/>
@@ -8867,4 +8969,11 @@ hero.child[attrAgi].field[trtMaximum].value = 99
   <extthing thing="powBarrier" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powBlind" group="PowerGroup" tag="MindMelter"/>
   <extthing thing="powBolt" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powConfusi" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="lgLanguage" group="LangCat" tag="Custom"/>
+  <extthing thing="rpLowLight" group="Rifts" tag="DragonAbility"/>
+  <extthing thing="powDamageF" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDarksig" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDeflect" group="PowerGroup" tag="MindMelter"/>
+  <extthing thing="powDisguis" group="PowerGroup" tag="MindMelter"/>
   </document>

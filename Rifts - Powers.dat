@@ -449,7 +449,7 @@ perform #resspent[resPowers,-,1,field[name].text]</eval>
     <eval phase="Setup" priority="5100">~negate power slot cost
 perform #resspent[resPowers,-,1,field[name].text]</eval>
     </thing>
-  <thing id="powSRMegaStun" name="Stun (Greater Stun)" description="This Mega Power enhances the core {i}stun{i/} effects in a couple of ways. First, the area is increased to a Large Burst Template. Second, all resistance rolls are made at −2, or −4 with a raise. Finally, any Vigor check of 1 or less means the target is Incapacitated; such targets make Vigor checks each following round to recover to Shaken status." compset="Power" summary="All within Medium Burst Template roll Vigor or Shaken (-2 with raise)">
+  <thing id="powSRMegaStun" name="Stun (Greater Stun)" description="This Mega Power enhances the core {i}stun{/i} effects in a couple of ways. First, the area is increased to a Large Burst Template. Second, all resistance rolls are made at −2, or −4 with a raise. Finally, any Vigor check of 1 or less means the target is Incapacitated; such targets make Vigor checks each following round to recover to Shaken status." compset="Power" summary="All within Medium Burst Template roll Vigor or Shaken (-2 with raise)">
     <fieldval field="powPoints" value="2 (4)"/>
     <fieldval field="powRange" value="12/24/48 (18/36/72)"/>
     <fieldval field="powLength" value="Special"/>

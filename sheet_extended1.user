@@ -2712,16 +2712,11 @@
       </portal>
 
     <position><![CDATA[
-	  var myLength as number
-	  var myHeight as number
 	  
-	  myLength = length(field[wpNotes].text)
-	  myHeight = myLength / 60
-	  myHeight = round(myHeight,0,1)
+	  portal[notes].width = width
 	  
 	  ~set out portal height to automatically size as needed
-	  ~perform portal[notes].autoheight
-	  portal[notes].lineheight = myHeight
+	  perform portal[notes].autoheight
 	  
       ~place the name and indicators at the top, and the notes underneath
       portal[name].top = 0
