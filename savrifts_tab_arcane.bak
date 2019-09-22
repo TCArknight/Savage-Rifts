@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Arcane" tab panel. This tab is where
+      the user selects and adjusts the arcane powers for the character.
+
+      All public visual elements used with this tab panel start with the prefix "ap"
+      to associate them with the tab. We use "ap" for "arcane powers" instead of
+      "ar", since "ar" is already in use for the "Armory" panel.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- apPowers portal
+        Presents a dynamic table where the user can add and adjust arcane powers for
+        the character.
+
+        We use the "SimpleItem" template for selecting arcane powers, since all we
+        need is basic information. We use a custom template for showing the selected
+        powers to allow display of the various fields of powers.
+
+        We use an "additem" script to highlight whether more powers can be selected.
+        This requires that we specify the "addthing" referenced in the script, which
+        is the resource for tracking arcane powers.
+
+        We use a "titlebar" script to replace the default title on the choose form
+        with something that includes the summary information as helpful feedback to
+        the user.
+
+        We use a "headertitle" script to place a suitable title above the table. The
+        title includes an indication of how many arcane powers have been chosen and
+        how many remain, with appropriate color highlighting to prompt the user.
+  -->
+  <!-- RDS SWD added a denytag to enable the association of Powers to Arcane Backgrounds from the AB end -->
+  <portal
+    id="apPowersSR"
+    style="tblNormal">
+    <table_dynamic
+      component="Power"
+      showtemplate="apPower"
+      choosetemplate="SimpleItem"
+      addpick="resPowers"
+      descwidth="350">
+      <list>!Helper.Foreign</list>
+      <denytag usehero="yes" container="PowerDeny" thing="Power"/>
+      <titlebar><![CDATA[
+        @text = "Add an Arcane Power - " & hero.child[resPowers].field[resSummary].text
+        ]]></titlebar>
+      <description/>
+      <headertitle><![CDATA[
+        @text = "Arcane Powers -  " & hero.child[resPowers].field[resSummary].text
+        ]]></headertitle>
+      <additem><![CDATA[
+        ~get the color-highlighted "add" text
+        @text = field[resAddItem].text
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+
+  <!-- arcane layout
+        This layout orchestrates the display of the visual elements that comprise
+        the Arcane tab. This amounts to a header at the top and a dynamic table
+        below where the user can add and adjust the arcane powers he wants.
+
+        The logic for this layout is similar to (albeit much simpler than) the
+        logic for the Basics tab. So please refer to the Basics tab for more details.
+  -->
+  <layout
+    id="arcaneSR">
+    <portalref portal="apPowersSR" taborder="10"/>
+    <templateref template="apHeader" thing="actor"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      ~position and size the template and table to span the full layout
+      perform template[apHeader].autoplace
+      perform portal[apPowersSR].autoplace[8]
+	  
+      ]]></position>
+
+    </layout>
+
+
+  <!-- arcane panel
+        This is the "Arcane" panel shown within Hero Lab. Since we want this panel
+        to appear after Edges and within the traits grouping, we assign it an
+        "order" of 140.
+
+        The logic for this panel is similar to the logic for the Basics panel, so
+        please refer to the Basics panel for more details.
+  -->
+  <!-- RDS SPC Prevent the SPC Super Powers from showing up here -->
+  <panel
+    id="arcaneSR"
+    name="Arcane Rifts"
+    marginhorz="5"
+    marginvert="5"
+    order="140">
+    <live><![CDATA[source.SavRiftC & Arcane.?]]></live>
+    <layoutref layout="arcaneSR"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>

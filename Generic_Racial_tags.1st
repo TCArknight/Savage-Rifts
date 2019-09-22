@@ -1,0 +1,23 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- This file contains all specifications pertaining to the operational control of
+      the data files. This includes usage pools, sources, sortsets, and other related
+      mechanisms.
+-->
+
+<document signature="Hero Lab Structure">
+  <!-- TCA: Tags -->
+  <group
+    id="RacialTab"
+    dynamic="yes">
+    <value id="HideRacialTab"/>   <!-- Hide the Racial Tab -->
+    <value id="EdgeSelected1"/>   <!-- Edge selected via edge chooser 1 -->
+    <value id="EdgeSelected2"/>   <!-- Edge selected via edge chooser 2 -->
+    <value id="SkillSelected1"/>  <!-- Skill selected via skill chooser 1 -->
+    <value id="SkillSelected2"/>  <!-- Skill selected via skill chooser 2 -->
+    <value id="SimpleSelected1"/> <!-- Simple Item selected via simple chooser 1 -->
+    <value id="SimpleSelected2"/> <!-- Simple Item selected via simple chooser 2 -->
+    <value id="RPropSelected"/> <!-- Simple Item selected via simple chooser 2 -->
+    </group>
+
+  </document>

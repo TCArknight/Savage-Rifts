@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the assortment of miscellaneous things that are required for
+      the game system. Miscellaneous things include the mechanisms for managing applied
+      damage, user images, and personal info for each actor. It also includes things
+      used to track resource pools, such as those used for managing the available
+      attribute points, skill points, etc.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- cyberware Strain  -->
+  <thing
+    id="resGenCybStrain"
+    name="Strain"
+    compset="Resource">
+    <fieldval field="resMax" value="0"/>
+	
+    <!-- Automatically add the resource to every actor -->
+    <tag group="Helper" tag="Bootstrap"/>
+
+    <!-- If the resource is underspent, report a validation error -->
+    <eval index="1" phase="Traits" priority="3500" name="Initialize Max Strain"><![CDATA[
+      ~Max strain is the lower of Vigor or Spirit
+	  var myMax as number
+	  var myVig as number
+	  var mySpi as number
+	  
+      myMax = 0
+	  
+	  myVig = #trait[attrVig]
+	  mySpi = #trait[attrSpi]
+	  
+	  myMax = minimum(myVig,mySpi) * 2
+
+      ~ resMax is myMax
+      field[resMax].value += myMax
+
+      ]]></eval>
+	  
+    <!-- We only need to know if the resource is overspent, report a validation error -->
+    <evalrule index="1" phase="Validate" priority="5000" message="Resource overspent"><![CDATA[
+      ~if we have a non-PC and this resource is impacted, we're always valid
+      validif (tagis[Helper.NPCImpact] + !hero.tagis[Hero.PC] >= 2)
+
+      ~if we aren't overspent, we're valid
+      validif (field[resLeft].value >= 0)
+
+      ~mark associated tabs as invalid
+      container.panelvalid[gencyber] = 0
+
+      ]]></evalrule>	
+    </thing>
+  </document>

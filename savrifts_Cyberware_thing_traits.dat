@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <!-- Strain (Current) Trait -->
+  <thing
+    id="trSRCybStrain"
+    name="Current Strain"
+    compset="Trait"
+    isunique="yes"
+    description="Strain used">
+    <usesource source="SavRiftC" />
+    <tag group="explicit" tag="6"/>
+
+    <!-- Calculate the trait as appropriate -->
+    <eval index="1" phase="Effects" priority="1000"><![CDATA[
+      ~Hide trSFStrain
+      perform hero.childfound[trSFStrain].assign[Hide.Trait]
+      ]]></eval>
+	  
+    <!-- Calculate the trait as appropriate -->
+    <eval index="2" phase="Final" priority="1000" name="Current Strain"><![CDATA[
+      ~Current Strain is the Spent of resGenCybStrain resource
+
+      var bonus as number
+      bonus = hero.child[resGenCybStrain].field[resSpent].value
+	  field[trtFinal].value = bonus
+      ]]></eval>
+	  
+    </thing>
+	
+  <!-- Strain (Current) Trait -->
+  <thing
+    id="trSRCybStrainMax"
+    name="Max Strain"
+    compset="Trait"
+    isunique="yes"
+    description="Strain used">
+    <usesource source="SavRiftC" />
+    <tag group="explicit" tag="6"/>
+
+    <!-- Calculate the trait as appropriate -->
+    <eval index="1" phase="Effects" priority="1000"><![CDATA[
+      ~Hide trSFStrain
+      perform hero.childfound[trSFStrnMx].assign[Hide.Trait]
+      ]]></eval>
+	  
+    <!-- Calculate the trait as appropriate -->
+    <eval index="2" phase="Final" priority="1000" name="Max Strain"><![CDATA[
+      ~Max Strain is the max of the resGenCybStrain resource
+
+      var bonus as number
+      bonus = hero.child[resGenCybStrain].field[resMax].value
+	  field[trtFinal].value = bonus
+	  
+      ]]></eval>
+	  
+    </thing>
+  </document>

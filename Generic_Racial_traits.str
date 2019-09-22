@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of components that don't really fit anywhere
+      else, such as resources, journal entries, etc.
+-->
+
+<document signature="Hero Lab Structure">
+
+  <!-- TCA - This component is a helper component for various Racial expressions/choosers -->
+  <component
+    id="RacialHelper"
+    name="Racial Helper">
+    <field
+      id="rhIndex"
+      name="Index"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="rhEdgeAdd"
+      name="Racial Edge AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhEdgeHdr"
+      name="Racial Edge Expression Header"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhEdgeExp"
+      name="Racial Edge Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+
+    <field
+      id="rhEdgeCst"
+      name="Racial Edge Cost 1"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="rhEdgeAdd2"
+      name="Racial Edge AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhEdgeHdr2"
+      name="Racial Edge Expression Header"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhEdgeExp2"
+      name="Racial Edge Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+
+    <field
+      id="rhEdgeCst2"
+      name="Racial Edge Cost 2"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="rhSkillAdd"
+      name="Racial Skill AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhSkillHdr"
+      name="Racial Skill Header"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhSkillExp"
+      name="Racial Skill Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+
+    <field
+      id="rhSkillCst"
+      name="Racial Skill Cost 1"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="rhSkillAdd2"
+      name="Racial Skill AddItem Header 2"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhSkillHdr2"
+      name="Racial Skill Header 2"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhSkillExp2"
+      name="Racial Skill Expression 2"
+      type="derived"
+	  maxlength="500">
+	  </field>	
+
+    <field
+      id="rhSkillCst2"
+      name="Racial Skill Cost 2"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
+    <field
+      id="rhSimpleAdd"
+      name="Racial Simple AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhSimpleHdr"
+      name="Racial Simple Header"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhSimpleExp"
+      name="Racial Simple Expression"
+      type="derived"
+	  maxlength="500">
+	  </field>
+
+    <field
+      id="rhSimpleCst"
+      name="Racial Simple Cost 1"
+      type="derived"
+	  defvalue="0">
+	  </field>
+ 	  
+    <field
+      id="rhSimpleAdd2"
+      name="Racial Simple AddItem Header 2"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhSimpleHdr2"
+      name="Racial Simple Header 2"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhSimpleExp2"
+      name="Racial Simple Expression 2"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+
+    <field
+      id="rhSimpleCst2"
+      name="Racial Simple Cost 2"
+      type="derived"
+	  defvalue="0">
+	  </field>
+
+    <field
+      id="rhRPropAdd"
+      name="Racial Property AddItem Header"
+      type="derived"
+	  maxlength="500">
+	  </field>
+	  
+    <field
+      id="rhRPropHdr"
+      name="Racial Property Header"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+	  
+    <field
+      id="rhRPropExp"
+      name="Racial Property Expression"
+      type="derived"
+	  maxlength="500">
+	  </field> 
+
+    <field
+      id="rhRPropCst"
+      name="Racial Property Cost"
+      type="derived"
+	  defvalue="0">
+	  </field>	  
+	  
+    </component>
+
+	
+  </document>

@@ -108,12 +108,13 @@
 	  maxlength="500">
 	  </field>
 	  
-    <!-- Each Frame Complication needs its own identity tag to detect cascading dependencies via prereqs -->
+    <!-- Each HJ Entry needs its own identity tag to detect cascading dependencies via prereqs -->
     <identity group="RiftsHJ"/>
 	
-	<!-- Forward the Heros Journey category to the actor -->
+	<!-- Forward the Heros Journey table and identity to the actor -->
     <eval index="1" phase="Initialize" priority="2100"><![CDATA[
       perform forward[RiftsHJ.?]
+	  perform forward[RiftsHJTable.?]
       ]]></eval>
 	  
     <!-- Each hero journey selection must consume an instance in the resource tracking edges -->

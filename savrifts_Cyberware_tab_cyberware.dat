@@ -1,0 +1,913 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Gear" tab panel. This tab is where
+      the user selects general gear (non-weapons) for the character.
+
+      All public visual elements used with this tab panel start with the prefix "gr"
+      to associate them with the tab.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- tabGenCyberware  -->
+  <portal
+    id="tabGenCyberware"
+    style="tblNormal">
+    <table_dynamic
+      component="Gear"
+      showtemplate="GenCyberPick"
+      choosetemplate="GenCyberThing"
+      choosesortset="GenCyberware"
+      showsortset="GenCyberware"
+      buytemplate="BuyCash"
+      selltemplate="SellCash"
+      descwidth="350">
+      <list>component.GenCyberware</list>
+      <titlebar><![CDATA[
+        @text = "Add Cyberware"
+        ]]></titlebar>
+      <description/>
+      <headertitle><![CDATA[
+          @text &= " Cyberware -  " & hero.child[resGenCybStrain].field[resSummary].text
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add New Cyberware"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="gcybSkillsChooser"
+    style="tblNormal">
+    <table_dynamic
+      component="Skill"
+      showtemplate="skPickExt"
+      choosetemplate="skThing"
+      descwidth="350">
+      <list>Helper.SkillChip</list>
+      <candidate>component.Skill &amp; !Hide.Skill</candidate>
+      <autotag group="Helper" tag="SkillChip"/>
+      <titlebar><![CDATA[
+        @text = "Add a New Skill from a Skill Chip"
+        ]]></titlebar>
+      <headertitle><![CDATA[
+        @text = "New Skills from Skill Chips"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add a New Skill from a Skill Chip"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <!-- Adding portals for each rank of Edge -->
+  <portal
+    id="gcybNoEdgesTable"
+    style="tblNormal">
+    <table_dynamic
+      component="Edge"
+      showtemplate="edEdgePick"
+      choosetemplate="gcybEdgeThing"
+      choosesortset="Edge"
+      descwidth="350">
+      <list>Helper.ModNoEdge</list>
+      <candidate>EdgeType.Combat &amp; (MinRank.0 | thingid.edgSep?)</candidate>
+      <autotag group="Helper" tag="ModNoEdge"/>
+      <autotag group="thing" tag="skipprereq"/>
+      <autotag group="cybTrait" tag="Edge"/>
+      <titlebar><![CDATA[
+        @text = "Add a New Novice Combat Edge from Cyberware"
+        ]]></titlebar>
+      <description><![CDATA[
+        ~append our description
+        var descript as string
+        var skipprereq as number
+        skipprereq = 1
+        call Descript
+        @text = descript
+        ]]></description>
+      <headertitle><![CDATA[
+        @text = "New Novice Combat Edges from Cyberware"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add a New Novice Combat Edge from Cyberware"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="gcybSeEdgesTable"
+    style="tblNormal">
+    <table_dynamic
+      component="Edge"
+      showtemplate="edEdgePick"
+      choosetemplate="gcybEdgeThing"
+      choosesortset="Edge"
+      descwidth="350">
+      <list>Helper.ModSeEdge</list>
+      <candidate>EdgeType.Combat &amp; (MinRank.1 | thingid.edgSep?)</candidate>
+      <autotag group="Helper" tag="ModSeEdge"/>
+      <autotag group="thing" tag="skipprereq"/>
+      <autotag group="cybTrait" tag="Edge"/>
+      <titlebar><![CDATA[
+        @text = "Add a New Seasoned Combat Edge from Cyberware"
+        ]]></titlebar>
+      <description><![CDATA[
+        ~append our description
+        var descript as string
+        var skipprereq as number
+        skipprereq = 1
+        call Descript
+        @text = descript
+        ]]></description>
+      <headertitle><![CDATA[
+        @text = "New Seasoned Combat Edges from Cyberware"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add a New Seasoned Combat Edge from Cyberware"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="gcybVeEdgesTable"
+    style="tblNormal">
+    <table_dynamic
+      component="Edge"
+      showtemplate="edEdgePick"
+      choosetemplate="gcybEdgeThing"
+      choosesortset="Edge"
+      descwidth="350">
+      <list>Helper.ModVeEdge</list>
+      <candidate>EdgeType.Combat &amp; (MinRank.2 | thingid.edgSep?)</candidate>
+      <autotag group="Helper" tag="ModVeEdge"/>
+      <autotag group="thing" tag="skipprereq"/>
+      <autotag group="cybTrait" tag="Edge"/>
+      <titlebar><![CDATA[
+        @text = "Add a New Veteran Combat Edge from Cyberware"
+        ]]></titlebar>
+      <description><![CDATA[
+        ~append our description
+        var descript as string
+        var skipprereq as number
+        skipprereq = 1
+        call Descript
+        @text = descript
+        ]]></description>
+      <headertitle><![CDATA[
+        @text = "New Veteran Combat Edges from Cyberware"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add a New Veteran Combat Edge from Cyberware"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="gcybHeEdgesTable"
+    style="tblNormal">
+    <table_dynamic
+      component="Edge"
+      showtemplate="edEdgePick"
+      choosetemplate="gcybEdgeThing"
+      choosesortset="Edge"
+      descwidth="350">
+      <list>Helper.ModHeEdge</list>
+      <candidate>EdgeType.Combat &amp; (MinRank.3 | thingid.edgSep?)</candidate>
+      <autotag group="Helper" tag="ModHeEdge"/>
+      <autotag group="thing" tag="skipprereq"/>
+      <autotag group="cybTrait" tag="Edge"/>
+      <titlebar><![CDATA[
+        @text = "Add a New Heroic Combat Edge from Cyberware"
+        ]]></titlebar>
+      <description><![CDATA[
+        ~append our description
+        var descript as string
+        var skipprereq as number
+        skipprereq = 1
+        call Descript
+        @text = descript
+        ]]></description>
+      <headertitle><![CDATA[
+        @text = "New Heroic Combat Edges from Cyberware"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add a New Heroic Combat Edge from Cyberware"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="gcybLeEdgesTable"
+    style="tblNormal">
+    <table_dynamic
+      component="Edge"
+      showtemplate="edEdgePick"
+      choosetemplate="gcybEdgeThing"
+      choosesortset="Edge"
+      descwidth="350">
+      <list>Helper.ModLeEdge</list>
+      <candidate>EdgeType.Combat &amp; (MinRank.4 | thingid.edgSep?)</candidate>
+      <autotag group="Helper" tag="ModLeEdge"/>
+      <autotag group="thing" tag="skipprereq"/>
+      <autotag group="cybTrait" tag="Edge"/>
+      <titlebar><![CDATA[
+        @text = "Add a New Legendary Combat Edge from Cyberware"
+        ]]></titlebar>
+      <description><![CDATA[
+        ~append our description
+        var descript as string
+        var skipprereq as number
+        skipprereq = 1
+        call Descript
+        @text = descript
+        ]]></description>
+      <headertitle><![CDATA[
+        @text = "New Legendary Combat Edges from Cyberware"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add a New Legendary Combat Edge from Cyberware"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <!-- edEdgeThg template
+        Displays the name of the thing and any non-standard cost indicator.
+  -->
+  <template
+    id="gcybEdgeThing"
+    name="Edge Thing"
+    compset="Edge"
+    marginhorz="3"
+    marginvert="2">
+
+<!-- RDS SFC This is set to showdisabled=no so that all Edges show as valid as Cyberware removes all restrictions but other edges -->
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes"
+      showdisabled="no">
+      <label>
+        <labeltext><![CDATA[
+          @text = field[name].text
+          if (field[edgCost].value > 1) then
+            @text &= " (" & field[edgCost].value & "x)"
+            endif
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our width and height based on our tallest portal
+      height = portal[name].height
+      width = 265
+      doneif (issizing <> 0)
+
+      ~position the name on the left
+      portal[name].left = 0
+
+      ~center the name if this is a show-only thing
+      if (tagis[thing.showonly] <> 0) then
+        perform portal[name].centerhorz
+
+        ~because we set showdisabled="no" on the portal definition above,
+        ~manually grey out show only portals
+        perform portal[name].setstyle[lblDisable]
+        endif
+      ]]></position>
+
+    </template>
+
+  <template
+    id="gcybEdgePick"
+    name="Edge Pick"
+    compset="Edge"
+    marginhorz="3"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="lblNormal"
+      showinvalid="yes">
+      <label
+        field="thingname">
+        </label>
+      </portal>
+
+    <portal
+      id="menu1"
+      style="menuSmall">
+      <menu_things
+        field="usrChosen1"
+        component="none"
+        maxvisible="10"
+        usepicksfield="usrSource1"
+        candidatefield="usrCandid1">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="menu2"
+      style="menuSmall">
+      <menu_things
+        field="usrChosen2"
+        component="none"
+        maxvisible="10"
+        usepicksfield="usrSource2"
+        candidatefield="usrCandid2">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="lbldomain"
+      style="lblSecond">
+      <label>
+        <labeltext><![CDATA[
+          if (tagis[DomainTerm.?] <> 0) then
+            @text = tagnames[DomainTerm.?] & ":"
+          else
+            @text = "Domain:"
+            endif
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="domain"
+      style="editNormal">
+      <edit
+        field="domDomain">
+        </edit>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this item">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~determine whether our menus are visible
+      ~Note: Remember that a non-empty tagexpr field indicates menu selection is used.
+      if (field[usrCandid1].isempty <> 0) then
+        portal[menu1].visible = 0
+        endif
+      if (field[usrCandid2].isempty <> 0) then
+        portal[menu2].visible = 0
+        endif
+
+      ~position our tallest portal at the top
+      portal[info].top = 0
+
+      ~position the other portals vertically
+      perform portal[name].centervert
+      perform portal[delete].centervert
+      perform portal[menu1].centervert
+      perform portal[menu2].centervert
+      perform portal[domain].centervert
+      perform portal[lbldomain].alignrel[btob,domain,0]
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~position the name on the left and use availble space, with a gap for menus
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,portal[info].left - portal[name].left - 150)
+
+      ~position the menus to the right of the name in the available space
+      perform portal[menu1].alignrel[ltor,name,10]
+      portal[menu1].width = (portal[info].left - portal[menu1].left - 20) / 2
+      portal[menu2].width = portal[menu1].width
+      perform portal[menu2].alignrel[ltor,menu1,10]
+
+      ~if we don't need a domain, hide the portals
+      if (tagis[User.NeedDomain] = 0) then
+        portal[lbldomain].visible = 0
+        portal[domain].visible = 0
+
+      ~otherwise, position the domain portals next to the name, making sure the
+      ~domain edit portal doesn't run beyond the available space
+      ~RDS altered to make the name portal invivisible and shift the domain to the name position
+      ~    to use it as a custom Edge name when the Custom Edge is chosen
+      else
+        if (tagis[Custom.Edge] > 0) then
+          portal[name].visible = 0
+          portal[lbldomain].visible = 0
+          portal[domain].left = 0
+          portal[domain].width = minimum(150,portal[info].left - portal[domain].left - 10)
+        else
+          perform portal[lbldomain].alignrel[ltor,name,10]
+          perform portal[domain].alignrel[ltor,lbldomain,5]
+          portal[domain].width = minimum(150,portal[info].left - portal[domain].left - 10)
+          endif
+        endif
+
+      ~if a menu is visible, make sure it has a selection
+      if (portal[menu1].visible <> 0) then
+        if (field[usrChosen1].ischosen = 0) then
+          perform portal[menu1].setstyle[menuErrSm]
+          endif
+        endif
+      if (portal[menu2].visible <> 0) then
+        if (field[usrChosen2].ischosen = 0) then
+          perform portal[menu2].setstyle[menuErrSm]
+          endif
+        endif
+
+      ~if the ability is auto-added, change its font to indicate that fact
+      if (candelete = 0) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+
+    </template>
+
+
+
+  <!-- sfGrThing template
+        Derived from the SimpleItem template, this includes the purchase cost and
+        the lotsize of the item to be purchased.
+  -->
+  <template
+    id="GenCyberThing"
+    name="Gear Thing"
+    compset="GenCyberware"
+    marginhorz="3"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          @text = field[name].text
+          if (field[lotsize].value > 1) then
+            @text &= " (x" & field[lotsize].text & ")"
+            endif
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="strain"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          @text = field[gcybStrain].value
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="cost"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          @text = field[grCost].text
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our dimensions, with a width that we dictate
+      height = portal[name].height
+      width = 285
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~if this is a show-only thing, hide the cost, then position the name
+      if (tagis[thing.showonly] <> 0) then
+        portal[cost].visible = 0
+        portal[strain].visible = 0
+        portal[name].width = width
+        done
+        endif
+
+      ~position the cost portal on the far right
+      perform portal[cost].alignedge[right,0]
+
+      ~position the damage portal to the left of the cost; we want the damage to
+      ~be centered in its own column relative to a centerpoint position
+      perform portal[strain].centerpoint[horz,225]
+
+      ~position the name on the left and let it use all available space
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,portal[strain].left - 10)
+      ]]></position>
+
+    </template>
+
+
+  <!-- GenCyberPick template
+        Derived from the SimpleItem template, this includes the gear button to move
+        equipment between various containers.  -->
+  <template
+    id="GenCyberPick"
+    name="Gear Pick"
+    compset="GenCyberware"
+    marginhorz="2"
+    marginvert="3">
+
+    <portal
+      id="name"
+      style="lblLeft"
+      showinvalid="yes">
+      <label
+        field="grStkName">
+        </label>
+      </portal>
+
+    <portal
+      id="namecheck"
+      style="chkNormal"
+      showinvalid="yes"
+      tiptext="Click to equip this Skill Chip.">
+      <checkbox
+        field="grIsEquip"
+        dynamicfield="grStkName">
+        </checkbox>
+      </portal>
+
+  <!-- RDS IZ20 This was added to allow external factors to effect modifiers without unequipping the cyberware -->
+    <portal
+      id="cybcheck"
+      style="chkNormal"
+      showinvalid="yes"
+      tiptext="Click to enable a conditional modifier.">
+      <checkbox
+        field="gcybActive"
+        dynamicfield="grStkName">
+        </checkbox>
+      </portal>
+
+    <portal
+      id="skillthing"
+      style="menuNormal"
+      width="154">
+      <menu_things
+        field="gcybChosen1"
+        component="Skill"
+        maxvisible="20">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="attribute"
+      style="menuNormal"
+      width="275">
+      <menu_things
+        field="gcybChosen1"
+        component="Attribute"
+        maxvisible="5">
+        <candidate>!Attribute.attrSup</candidate>
+        </menu_things>
+      </portal>
+
+    <portal
+      id="rangething"
+      style="menuNormal"
+      width="154">
+      <menu_things
+        field="gcybChosen1"
+        component="none"
+        maxvisible="10"
+        usepicksfield="cybSource1"
+        candidatefield="cybCandid1">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="domain"
+      style="editNormal">
+      <edit
+        field="gcybDomain"
+        maxlength="50">
+        </edit>
+      </portal>
+	  
+    <portal
+      id="menu1"
+      style="menuSmall">
+      <menu_things
+        field="gcybChosen1"
+        component="none"
+        maxvisible="10"
+        usepicksfield="gcybSource1"
+        candidatefield="gcybCandid1">
+        </menu_things>
+      </portal>
+
+    <portal
+      id="bonusValue"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          @text =  " (+" & field[gcybValue].text & " die type)"
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="strain"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          @text = field[gcybStrain].value
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="grade"
+      style="lblLeft">
+      <label>
+        <labeltext><![CDATA[
+          @text =  " (" & field[gcybGrade].text & ")"
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this equipment">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      var namewidth as number
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      if (hero.tagis[source.sfGradCybr] = 0) then
+        portal[grade].visible = 0
+        endif
+
+      ~center the portals vertically
+      perform portal[info].centervert
+      perform portal[name].centervert
+      perform portal[namecheck].centervert
+      perform portal[cybcheck].centervert
+      perform portal[grade].centervert
+      perform portal[bonusValue].centervert
+      perform portal[strain].centervert
+      perform portal[delete].centervert
+      perform portal[menu1].centervert
+	  
+      portal[name].visible = 0
+      portal[namecheck].visible = 0
+      portal[cybcheck].visible = 0
+
+      ~position the grade portal to the right of the name
+      if (tagis[Equipped.Equippable] <> 0) then
+        portal[namecheck].visible = 1
+        perform portal[grade].alignrel[ltor,namecheck,2]
+        namewidth = portal[namecheck].width
+
+      elseif (tagis[User.Activation] <> 0) then
+        portal[cybcheck].visible = 1
+        perform portal[grade].alignrel[ltor,cybcheck,2]
+        namewidth = portal[cybcheck].width
+
+      else
+        portal[name].visible = 1
+        perform portal[grade].alignrel[ltor,name,2]
+        namewidth = portal[name].width
+        endif
+
+      portal[grade].width = 100
+
+      perform portal[skillthing].centervert
+      perform portal[domain].centervert
+      perform portal[bonusValue].centervert
+      portal[skillthing].visible = 0
+      portal[skillthing].width = 124
+      portal[domain].visible = 0
+      portal[domain].width = 80
+      portal[bonusValue].visible = 0
+      portal[bonusValue].width = 82
+	  
+      ~determine whether our menus are visible
+      ~Note: Remember that a non-empty tagexpr field indicates menu selection is used.
+      if (field[gcybCandid1].isempty <> 0) then
+        portal[menu1].visible = 0
+        endif
+	  
+      ~Add drop menus for the Skill chips and the Skill Trait bonuses
+      if (tagis[Cyberware.cybTraitSk] + tagis[Cyberware.cybSkill] <> 0) then
+        portal[skillthing].visible = 1
+        var rightedge as number
+        if (portal[grade].visible = 0) then
+          rightedge = namewidth
+        else
+          rightedge = namewidth + portal[grade].width
+          endif
+        portal[skillthing].left = rightedge + 5
+        rightedge = rightedge + portal[skillthing].width
+        perform portal[domain].alignrel[ltor,skillthing,5]
+        if (tagis[User.NeedDomain] <> 0) then
+          portal[domain].visible = 1
+          rightedge = rightedge + portal[domain].width + 5
+          endif
+        endif
+
+      if (tagis[Cyberware.cybSkill] <> 0) then
+        portal[bonusValue].visible = 1
+        if (tagis[User.NeedDomain] <> 0) then
+          perform portal[bonusValue].alignrel[ltor,domain,0]
+        else
+          portal[bonusValue].left = rightedge + 5
+          endif
+        endif
+
+      ~Add drop menu for the Attribute Trait bonuses
+      perform portal[attribute].centervert
+      portal[attribute].visible = 0
+      portal[attribute].width = 74
+      if (tagis[Cyberware.cybTraitAt] + tagis[Cyberware.cybTrait] <> 0) then
+        portal[attribute].visible = 1
+        var rightedge as number
+        if (portal[grade].visible = 0) then
+          rightedge = namewidth
+        else
+          rightedge = namewidth + portal[grade].width
+          endif
+        portal[attribute].left = rightedge + 5
+        endif
+
+      ~Add drop menu for the Attribute Trait bonuses
+      perform portal[rangething].centervert
+      portal[rangething].visible = 0
+      portal[rangething].width = 124
+      if (tagis[Cyberware.cybRanged] <> 0) then
+        portal[rangething].visible = 1
+        var rightedge as number
+        if (portal[grade].visible = 0) then
+          rightedge = namewidth
+        else
+          rightedge = namewidth + portal[grade].width
+          endif
+        portal[rangething].left = rightedge + 5
+        endif
+
+      ~position the info portal to the left of the delete button
+	  portal[menu1].width = 125
+      perform portal[menu1].alignrel[ltor,name,8]
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~position the strain portal to the left of the info and
+      ~be centered in its own column relative to a centerpoint position
+      perform portal[strain].centerpoint[horz,410]
+
+      ~if the gear can't be deleted (i.e. it's been auto-added instead of user-added,
+      ~set the style to indicate that behavior to the user
+      if (candelete = 0) then
+        perform portal[name].setstyle[lblAuto]
+        endif
+      ]]></position>
+
+    </template>
+
+  <!-- gear layout
+        This layout orchestrates the display of the visual elements that comprise
+        the Gear tab. This amounts to a title and a table that allow the user to
+        add gear to the character.
+
+        The logic for this layout is similar to preceeding tabs, so please refer
+        to those tabs for more details.
+  -->
+  <layout
+    id="gencyber">
+    <portalref portal="tabGenCyberware" taborder="10"/>
+    <portalref portal="gcybSkillsChooser" taborder="20"/>
+    <portalref portal="gcybNoEdgesTable" taborder="30"/>
+    <portalref portal="gcybSeEdgesTable" taborder="40"/>
+    <portalref portal="gcybVeEdgesTable" taborder="50"/>
+    <portalref portal="gcybHeEdgesTable" taborder="60"/>
+    <portalref portal="gcybLeEdgesTable" taborder="70"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      autogap = 10
+      ~all tables span the full width
+      portal[tabGenCyberware].width = width
+      portal[gcybSkillsChooser].width = width
+      portal[gcybNoEdgesTable].width = width
+      portal[gcybSeEdgesTable].width = width
+      portal[gcybVeEdgesTable].width = width
+      portal[gcybHeEdgesTable].width = width
+      portal[gcybLeEdgesTable].width = width
+
+      perform portal[tabGenCyberware].batchadd
+
+      portal[gcybSkillsChooser].visible = 0
+      if (hero.tagis[Cyberware.cybSkill] + portal[gcybSkillsChooser].itemsshown <> 0) then
+        portal[gcybSkillsChooser].visible = 1
+        perform portal[gcybSkillsChooser].batchadd
+        endif
+
+      portal[gcybNoEdgesTable].visible = 0
+      if (hero.tagis[Cyberware.cybCombat1] + portal[gcybNoEdgesTable].itemsshown <> 0) then
+        portal[gcybNoEdgesTable].visible = 1
+        perform portal[gcybNoEdgesTable].batchadd
+        endif
+
+      portal[gcybSeEdgesTable].visible = 0
+      if (hero.tagis[Cyberware.cybCombat2] + portal[gcybSeEdgesTable].itemsshown <> 0) then
+        portal[gcybSeEdgesTable].visible = 1
+        perform portal[gcybSeEdgesTable].batchadd
+        endif
+
+      portal[gcybVeEdgesTable].visible = 0
+      if (hero.tagis[Cyberware.cybCombat3] + portal[gcybVeEdgesTable].itemsshown <> 0) then
+        portal[gcybVeEdgesTable].visible = 1
+        perform portal[gcybVeEdgesTable].batchadd
+        endif
+
+      portal[gcybHeEdgesTable].visible = 0
+      if (hero.tagis[Cyberware.cybCombat4] + portal[gcybHeEdgesTable].itemsshown <> 0) then
+        portal[gcybHeEdgesTable].visible = 1
+        perform portal[gcybHeEdgesTable].batchadd
+        endif
+
+      portal[gcybLeEdgesTable].visible = 0
+      if (hero.tagis[Cyberware.cybCombat5] + portal[gcybLeEdgesTable].itemsshown <> 0) then
+        portal[gcybLeEdgesTable].visible = 1
+        perform portal[gcybLeEdgesTable].batchadd
+        endif
+
+      perform this.batchplace
+
+      ]]></position>
+
+    </layout>
+
+
+  <!-- gear panel
+        This is the "Gear" panel shown within Hero Lab. Since we want this panel to
+        appear second within the second grouping (equipment), we assign it an
+        "order" of 220.
+
+        The logic for this panel is similar to the logic for the preceeding panels,
+        so please refer to those panels for more details.
+		
+		original live:
+		<live>((source.sfShowCybr | Hero.ShowCyber) &amp; !Hindrance.hinSFCybRe &amp; !Race.racSFConst &amp; source.SciFi &amp; !Creature.creSFR?) | Cyberware.? | (CybRobAdd.? &amp; (!Race.racSFConst &amp; !Creature.creSFR?))</live>
+  -->
+  <panel
+    id="gencyber"
+    name="Cyberware SR"
+    marginhorz="5"
+    marginvert="5"
+    order="220">
+	<live>source.SavRiftC</live>
+    <layoutref layout="gencyber"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>
+

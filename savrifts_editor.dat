@@ -235,7 +235,7 @@
       </inputthing>
     </editthing>
   
-  <!-- Hero's Jurney editthing -->
+  <!-- Hero's Journey editthing -->
   <editthing
     group="Rifts"
     compset="HeroJrny"
@@ -254,5 +254,108 @@
       <it_field field="usrCandid1"/>
       </inputthing>
     </editthing> 
+
+
+  <!-- RDS SFC This includes the input/editing of items for the Sci-Fi Companion -->
+  <!-- Vehicle editthing -->
+  <editthing
+    group="Rifts"
+    compset="PowerArRifts"
+    name="Power Armor (Rifts)"
+    prefix="vh"
+    description="Weapons, vehicles, and simple equipment all have their own tabs for creating objects of those types."
+    summary="Defines a suit of Power Armor that can be selected on the Heavy Gear tab.">
+    <inputthing
+      name="Vehicle Type"
+      helptext="Specify the type for this vehicle.">
+      <it_tagpick group="VehType" tag="?" require="yes" deftag="PowerAr" dynamic="yes"/>
+      </inputthing>
+    <inputthing
+      name="Vehicle Era"
+      helptext="Specify the era for this vehicle.">
+      <it_tagpick group="VehEra" tag="?" require="yes" deftag="RiftsEra" dynamic="yes"/>
+      </inputthing>
+    <inputthing
+      name="Strength"
+      helptext="Strength rating of the Power Armor.">
+      <it_taglist group="vhSRArmStr" tag="?" deftag="7" />
+      </inputthing>
+    <inputthing
+      name="Acceleration"
+      helptext="Specify the vehicle's accelartion rating.">
+      <it_field field="vhAccel"/>
+      </inputthing>
+    <inputthing
+      name="Top Speed"
+      helptext="Specify the vehicle's top speed rating.">
+      <it_field field="vhTopSpeed"/>
+      </inputthing>
+    <inputthing
+      name="Climb"
+      helptext="Specify the vehicle's climb rating. This is only applicable to aircraft.">
+      <it_field field="vhClimb"/>
+      </inputthing>
+    <inputthing
+      name="Toughness"
+      helptext="Specify the vehicle's Toughness rating. For vehicles with multiple values, specify all values separated by slashes (e.g. 14/11/11).">
+      <it_field field="vhTough"/>
+      </inputthing>
+    <inputthing
+      name="Armor Rating"
+      helptext="Specify the vehicle's Armor rating. For vehicles with multiple values, specify all values separated by slashes (e.g. 14/11/11).">
+      <it_field field="vhArmor"/>
+      </inputthing>
+    <inputthing
+      name="Crew &amp; Passenger Size"
+      helptext="Specify the vehicle's crew size. If passengers can be carried, add that number after a plus sign (e.g. 1+3).">
+      <it_field field="vhCrew"/>
+      </inputthing>
+    <inputthing
+      name="Special Traits"
+      helptext="Specify any number of special traits that apply to this vehicle.">
+      <it_taglist group="Vehicle" tag="?" />
+      </inputthing>
+    <inputthing
+      name="Military Cost?"
+      helptext="Specify whether this vehicle is for military use only and has no standard cost.">
+      <it_tagcheck group="User" tag="Military"/>
+      </inputthing>
+    <inputthing
+      name="Displayed Cost Range"
+      helptext="Specify the cost range of the vehicle for display (e.g. $1-3,000).">
+      <it_field field="vhCost"/>
+      </inputthing>
+    <inputthing
+      name="Base Cost"
+      helptext="Specify the base cost of the vehicle, with a value of 0 meaning it is free.">
+      <it_field field="grCost"/>
+      </inputthing>
+    <inputthing
+      name="Weight"
+      helptext="Specify the weight of the item in pounds.">
+      <it_field field="gearWeight"/>
+      </inputthing>
+    <inputthing
+      name="Special Behaviors"
+      helptext="Specify any special behaviors for the vehicle of which the user should be reminded.">
+      <it_field field="vhSpecial"/>
+      </inputthing>
+    <inputthing
+      name="Equipment Load-Out"
+      helptext="If the vehicle has weapons or other attached equipment, provide a load-out summary for display to the user during vehicle selection.">
+      <it_field field="vhLoadout"/>
+      </inputthing>
+  <!-- RDS SFC The Sci-Fi Companion adds Modifications to Vehicles, and also Power Armor, Walkers and Starships, with their own modifications  -->
+    <inputthing
+      name="Size"
+      helptext="Specify the Size of the Vehicle. Note: This is for the SciFi Companion Modification costs.">
+      <it_field field="vhSize"/>
+      </inputthing>
+    <inputthing
+      name="Max # of Modifications"
+      helptext="This is the maximum number of Modification Slots available on the vehicle. Note: This is for the SciFi Companion.">
+      <it_field field="grMaxMods"/>
+      </inputthing>
+    </editthing>
 	
   </document>

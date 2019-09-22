@@ -192,8 +192,20 @@
       id="name"
       style="lblNormal"
       showinvalid="yes">
-      <label
-        field="thingname">
+      <label>
+	    <labeltext><![CDATA[
+		  var temp as string
+		  var mylen as number
+		  
+	      temp = tagids[RiftsHJTable.?,","] 
+		  mylen = length(temp)-13
+		  
+		  temp = mid(temp,13,mylen)
+		  
+		  temp &= ": " & field[name].text
+		  
+		  @text = temp
+		  ]]></labeltext>
         </label>
       </portal>
 

@@ -194,7 +194,14 @@
       type="derived"
 	  maxlength="500">
 	  </field>
-
+	  
+    <field
+      id="ehHJCst"
+      name="Cost"
+      type="derived"
+	  defvalue="0">
+	  </field>
+	  
     <field
       id="ehHJExp"
       name="Expression"

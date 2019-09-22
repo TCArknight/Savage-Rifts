@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definition of the "Gear" tab panel. This tab is where
+      the user selects general gear (non-weapons) for the character.
+
+      All public visual elements used with this tab panel start with the prefix "gr"
+      to associate them with the tab.
+-->
+
+<document signature="Hero Lab Data">
+
+
+  <!-- SRPowerAr portal
+        Presents a dynamic table where the user can add Power Armor for the character.
+
+        We use separate templates for selecting vehicles and showing the vehicles
+        that have been chosen. Each of these appears further below.
+
+        We use an "additem" script to simply prompt the user to add vehicles.
+
+        The "buytemplate" and "selltemplate" attributes hook in the logic for
+        properly buying and selling vehicles for cash.
+
+        We use a "headertitle" script to place a suitable title above the table.
+
+        The "list" tag expression restricts everything to only vehicles (e.g. no
+        weapons). The "candidate" tag expression is omitted, resulting in the same
+        contents as the "list" tag expression.
+  -->
+  <portal
+    id="SRPowerAr"
+    style="tblNormal">
+    <table_dynamic
+      component="Gear"
+      showtemplate="SRPAPick"
+      choosetemplate="SRHGThing"
+      choosesortset="GenVehicle"
+      buytemplate="BuyCash"
+      selltemplate="SellCash"
+      descwidth="350">
+      <list>component.PowerAr</list>
+      <titlebar><![CDATA[
+        @text = "Select Power Armor to Purchase from the List Below"
+        ]]></titlebar>
+      <headertitle><![CDATA[
+        @text = "Power Armor"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add New Power Armor"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+
+  <portal
+    id="SRWalker"
+    style="tblNormal">
+    <table_dynamic
+      component="Gear"
+      showtemplate="SRWaPick"
+      choosetemplate="SRHGThing"
+      choosesortset="GenVehicle"
+      buytemplate="BuyCash"
+      selltemplate="SellCash"
+      descwidth="350">
+      <list>component.Walker</list>
+      <titlebar><![CDATA[
+        @text = "Select Robot Armor to Purchase from the List Below"
+        ]]></titlebar>
+      <headertitle><![CDATA[
+        @text = "Robot Armor"
+        ]]></headertitle>
+      <additem><![CDATA[
+        @text = "Add New Robot Armor"
+        ]]></additem>
+      </table_dynamic>
+    </portal>
+	
+  <!-- SRHGThing template
+        Derived from the SimpleItem template, this includes the purchase cost of
+        the vehicle to be purchased.
+  -->
+  <template
+    id="SRHGThing"
+    name="Vehicle Thing"
+    compset="Vehicle"
+    marginhorz="3"
+    marginvert="2">
+
+    <portal
+      id="name"
+      style="lblNormal">
+      <label field="name">
+        </label>
+      </portal>
+
+    <portal
+      id="cost"
+      style="lblNormal">
+      <label>
+        <labeltext><![CDATA[
+          @text = field[grCost].text
+          ]]></labeltext>
+        </label>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our dimensions, with a width that we dictate
+      height = portal[name].height
+      width = 250
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      if (tagis[thing.showonly] <> 0) then
+        portal[cost].visible = 0
+        portal[name].width = width
+        done
+        endif
+
+      ~position the cost portal on the far right
+      perform portal[cost].alignedge[right,0]
+
+      ~position the name on the left and let it use all available space
+      portal[name].left = 0
+      portal[name].width = minimum(portal[name].width,portal[cost].left - 10)
+      ]]></position>
+
+    </template>
+
+  <!-- SRPAPick template
+        Derived from the SimpleItem template, this includes the gear button to move
+        equipment between various containers.
+  -->
+  <template
+    id="SRPAPick"
+    name="Power Armor Pick"
+    compset="PowerArRifts"
+    marginhorz="3"
+    marginvert="3">
+
+    <portal
+      id="name"
+      style="chkNormal"
+      showinvalid="yes"
+      tiptext="Click to pilot this vehicle">
+      <checkbox
+        field="grIsEquip"
+        dynamicfield="grStkName">
+        </checkbox>
+      </portal>
+
+    <portal
+      id="container"
+      style="imgNormal">
+      <image_literal
+        image="container.bmp"
+        isbuiltin="yes"
+        istransparent="yes">
+        </image_literal>
+      <mouseinfo><![CDATA[
+        call InfoHolder
+        ]]></mouseinfo>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo><![CDATA[
+        call InfoPARifts
+        ]]></mouseinfo>
+      </portal>
+
+    <portal
+      id="edit"
+      style="actEdit"
+      tiptext="Click here to edit the entry.">
+      <action
+        action="edit">
+        </action>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this vehicle">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~center the portals vertically
+      perform portal[info].centervert
+      perform portal[name].centervert
+      perform portal[delete].centervert
+      perform portal[container].centervert
+      perform portal[edit].centervert
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~position the edit portal to the left of the info button
+	  portal[edit].visible = 0
+      ~perform portal[edit].alignrel[rtol,info,-8]
+
+      ~show the 'container' icon to the left of the edit button
+      perform portal[container].alignrel[rtol,info,-8]
+
+      ~position the name on the left and position the user-fillable name field next to it
+      var limit as number
+      portal[name].left = 0
+
+      ]]></position>
+
+    </template>
+
+  <!-- sfWaPick template
+        Derived from the SimpleItem template, this includes the gear button to move
+        equipment between various containers.
+  -->
+  <template
+    id="SRWaPick"
+    name="Walker Pick"
+    compset="Walker"
+    marginhorz="3"
+    marginvert="3">
+
+    <portal
+      id="name"
+      style="chkNormal"
+      showinvalid="yes"
+      tiptext="Click to pilot this vehicle">
+      <checkbox
+        field="grIsEquip"
+        dynamicfield="grStkName">
+        </checkbox>
+      </portal>
+
+    <portal
+      id="container"
+      style="imgNormal">
+      <image_literal
+        image="container.bmp"
+        isbuiltin="yes"
+        istransparent="yes">
+        </image_literal>
+      <mouseinfo><![CDATA[
+        call InfoHolder
+        ]]></mouseinfo>
+      </portal>
+
+    <portal
+      id="info"
+      style="actInfo">
+      <action
+        action="info">
+        </action>
+      <mouseinfo/>
+      </portal>
+
+    <portal
+      id="edit"
+      style="actEdit"
+      tiptext="Click here to edit the entry.">
+      <action
+        action="edit">
+        </action>
+      </portal>
+
+    <portal
+      id="delete"
+      style="actDelete"
+      tiptext="Click to delete this vehicle">
+      <action
+        action="delete">
+        </action>
+      </portal>
+
+    <position><![CDATA[
+      ~set up our height based on our tallest portal
+      height = portal[info].height
+
+      ~if this is a "sizing" calculation, we're done
+      doneif (issizing <> 0)
+
+      ~center the portals vertically
+      perform portal[info].centervert
+      perform portal[name].centervert
+      perform portal[delete].centervert
+      perform portal[container].centervert
+      perform portal[edit].centervert
+
+      ~position the delete portal on the far right
+      perform portal[delete].alignedge[right,0]
+
+      ~position the info portal to the left of the delete button
+      perform portal[info].alignrel[rtol,delete,-8]
+
+      ~position the edit portal to the left of the info button
+      perform portal[edit].alignrel[rtol,info,-8]
+
+      ~show the 'container' icon to the left of the edit button
+      perform portal[container].alignrel[rtol,info,-32]
+
+      ~position the name on the left and position the user-fillable name field next to it
+      var limit as number
+      portal[name].left = 0
+
+      ]]></position>
+
+    </template>
+
+  <!-- gear layout
+        This layout orchestrates the display of the visual elements that comprise
+        the Gear tab. This amounts to a title and a table that allow the user to
+        add gear to the character.
+
+        The logic for this layout is similar to preceeding tabs, so please refer
+        to those tabs for more details.
+  -->
+  <layout
+    id="srhvygear">
+    <portalref portal="SRPowerAr" taborder="10"/>
+    <portalref portal="SRWalker" taborder="20"/>
+
+    <!-- This script sizes and positions the layout and its child visual elements. -->
+    <position><![CDATA[
+      autogap = 10
+
+      ~set all tables to span the full width of the layout
+      portal[SRPowerAr].width = width
+      portal[SRWalker].width = width
+	  
+      perform portal[SRPowerAr].batchadd
+      perform portal[SRWalker].batchadd
+
+      perform this.batchplace
+
+      ]]></position>
+
+    </layout>
+
+
+  <!-- gear panel
+        This is the "Gear" panel shown within Hero Lab. Since we want this panel to
+        appear second within the second grouping (equipment), we assign it an
+        "order" of 220.
+
+        The logic for this panel is similar to the logic for the preceeding panels,
+        so please refer to those panels for more details.
+  -->
+  <panel
+    id="srhvygear"
+    name="Heavy Gear SR"
+    marginhorz="5"
+    marginvert="5"
+    order="220">
+    <live>source.SavRiftC</live>
+    <layoutref layout="srhvygear"/>
+    <position><![CDATA[
+      ]]></position>
+    </panel>
+
+
+  </document>

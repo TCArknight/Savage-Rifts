@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <fileinfo>
+    <info_author>Coordinator: TCArknight (Thomas Clegg)
+Contributors: Salcor, Father Morpheus</info_author>
+    <info_history>Known Issues:
+
+History:</info_history>
+    <info_todo/>
+    </fileinfo>
+  <thing id="creSRSkelebot" name="Skelebot" compset="Creature" uniqueness="unique">
+    <usesource source="SavageFoes"/>
+    <tag group="SmaDie" tag="3"/>
+    <tag group="SpiDie" tag="2"/>
+    <tag group="StrDie" tag="7"/>
+    <tag group="VigDie" tag="5"/>
+    <tag group="AgiDie" tag="2"/>
+    <bootstrap thing="abConstruc"></bootstrap>
+    <bootstrap thing="abSRArmor4"></bootstrap>
+    <bootstrap thing="abSRSensorSuite"></bootstrap>
+    </thing>
+  <thing id="abSRArmor4" name="Armor" description="Advanced alloy structure" compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature"/>
+    <bootstrap thing="armSRNatural"></bootstrap>
+    <eval phase="Effects" priority="5000"><![CDATA[
+      ~set the defensive value for the armor
+      perform hero.child[armSRNatural].setfocus
+      focus.field[defDefense].value = 4
+
+      ~if we've been assigned a custom name, assign it to the armor
+      if (empty(field[livename].text) = 0) then
+        focus.field[livename].text = field[livename].text
+        endif
+
+      ~append the value to both names
+      field[livename].text = field[name].text & " +4"
+      focus.field[livename].text = focus.field[name].text & " +4"]]></eval>
+    </thing>
+  <thing id="abSRSensorSuite" name="Sensor Suite" description="+4 to Notice checks; Can detect chemicals, radiation, and electrical fields up to 500 feet." compset="RaceAbil" uniqueness="unique">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[perform #traitroll[skNotice,+,4,"Sensor Suite"]]]>
+      <before name="Calc trtFinal"/>
+      </eval>
+    </thing>
+  <thing id="abSRWpnMountGren" name="Weapon Mount: Grenade Launcher" compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature"/>
+    </thing>
+  <thing id="creSRBrodkil" name="Brodkil" description="Nine feet tall, hulking bodies, enormous mouths with bone-crushing jaws - Brodkils are a terrifying race of sub-demons in their natural forms." compset="Creature" uniqueness="unique">
+    <fieldval field="crePace" value="8"/>
+    <usesource source="SavageFoes"/>
+    <tag group="SpiDie" tag="3"/>
+    <tag group="StrDie" tag="6"/>
+    <tag group="VigDie" tag="5"/>
+    <tag group="AgiDie" tag="4"/>
+    <tag group="SmaDie" tag="2"/>
+    <bootstrap thing="abSRArmor2"></bootstrap>
+    <bootstrap thing="abSRBiteClaw"></bootstrap>
+    <bootstrap thing="abFear">
+      <assignval field="abilValue" value="0"/>
+      </bootstrap>
+    <bootstrap thing="abSRInfernalForm"></bootstrap>
+    <bootstrap thing="abSRInfravision"></bootstrap>
+    <bootstrap thing="abSize">
+      <assignval field="abilValue" value="2"/>
+      </bootstrap>
+    <bootstrap thing="abSRSlowRegen"></bootstrap>
+    <bootstrap thing="abSRWeakBrodHW"></bootstrap>
+    <bootstrap thing="skFighting"></bootstrap>
+    <bootstrap thing="skIntimid"></bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <bootstrap thing="skShooting"></bootstrap>
+    <bootstrap thing="skStealth"></bootstrap>
+    <bootstrap thing="skSurvival"></bootstrap>
+    <bootstrap thing="abSRInvisibility"></bootstrap>
+    </thing>
+  <thing id="abSRArmor2" name="Armor +2" description="Creature has an armored hide." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature"/>
+    <bootstrap thing="armSRNatural"></bootstrap>
+    <eval phase="Effects" priority="5000">~set the defensive value for the armor
+      perform hero.child[armSRNatural].setfocus
+      focus.field[defDefense].value = 2</eval>
+    </thing>
+  <thing id="wpSRBrodClawBite" name="Bite/Claw" compset="Melee" uniqueness="unique">
+    <usesource source="SavageFoes"/>
+    <tag group="WeaponDie" tag="3" name="d6" abbrev="d6"/>
+    <tag group="WeaponType" tag="Natural" name="Natural Weapon" abbrev="NatWep"/>
+    <tag group="Hide" tag="Equipment" name="Equipment" abbrev="Equipment"/>
+    <tag group="Equipment" tag="Natural"/>
+    </thing>
+  <thing id="abSRBiteClaw" name="Bite/Claw" description="Str + d6" compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature"/>
+    <bootstrap thing="wpSRBrodClawBite"></bootstrap>
+    </thing>
+  <thing id="abSRInfernalForm" name="Infernal Form" description="Immune to normal fire, heat, and cold (but affected by Mega Damage sources); immune to disease and poisons." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature"/>
+    </thing>
+  <thing id="abSRInfravision" name="Infravision" description="Creatures with Infravision halve penalties (round down) for bad lighting when attacking living targets." compset="RaceAbil" summary="Half penalty (round down) for bad lighting vs. live targets" uniqueness="unique">
+    <usesource source="SavageFoes"/>
+    <tag group="User" tag="Creature" name="Creature" abbrev="Creature"/>
+    </thing>
+  <thing id="abSRInvisibility" name="Invisibility" description="As the power, but used at will without a roll (at the base −4 level). Brodkil use this to ambush foes, but rarely remain invisible once combat is underway, instead relying on their horrific presence to unnerve foes.\n\n{i}{b}Invisibility{/b}\nBeing invisible is a powerful aid in combat and useful for spying on maidens’ changing rooms as well.\n\nWith a success, the character is transparent, but a vague outline is visible. A character may detect the invisible presence if he has a reason to look and makes a Notice roll at –4. Once detected, he may attack the foe at –4 as well. {/i}" compset="RaceAbil" summary="-4 to Notice (at will)">
+    <usesource source="SavageFoes"/>
+    </thing>
+  <thing id="abSRSlowRegen" name="Slow Regeneration" description="Creature gains a natural healing roll once per day.\n" compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    </thing>
+  <thing id="abSRWeakBrodHW" name="Weakness (Holy Weapons)" description="As demons, Brodkil take +4 damage from holy attacks and weapons." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    </thing>
+  <thing id="creSRBrodkilCybL" name="Brodkil (Cybernetic (Legs))" description="Nine feet tall, hulking bodies, enormous mouths with bone-crushing jaws - Brodkils are a terrifying race of sub-demons in their natural forms." compset="Creature" uniqueness="unique">
+    <fieldval field="crePace" value="8"/>
+    <usesource source="SavageFoes"/>
+    <tag group="SpiDie" tag="3"/>
+    <tag group="StrDie" tag="8"/>
+    <tag group="VigDie" tag="5"/>
+    <tag group="AgiDie" tag="4"/>
+    <tag group="SmaDie" tag="2"/>
+    <bootstrap thing="abSRArmor2"></bootstrap>
+    <bootstrap thing="abSRBiteClaw"></bootstrap>
+    <bootstrap thing="abFear">
+      <assignval field="abilValue" value="0"/>
+      </bootstrap>
+    <bootstrap thing="abSRInfernalForm"></bootstrap>
+    <bootstrap thing="abSRInfravision"></bootstrap>
+    <bootstrap thing="abSize">
+      <assignval field="abilValue" value="2"/>
+      </bootstrap>
+    <bootstrap thing="abSRSlowRegen"></bootstrap>
+    <bootstrap thing="abSRWeakBrodHW"></bootstrap>
+    <bootstrap thing="skFighting"></bootstrap>
+    <bootstrap thing="skIntimid"></bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <bootstrap thing="skShooting"></bootstrap>
+    <bootstrap thing="skStealth"></bootstrap>
+    <bootstrap thing="skSurvival"></bootstrap>
+    <bootstrap thing="cybSRBiStA">
+      <assignval field="stackQty" value="2"/>
+      </bootstrap>
+    <bootstrap thing="cybSROptiP"></bootstrap>
+    <bootstrap thing="cybSRTaEye"></bootstrap>
+    <bootstrap thing="cybSRArmP"></bootstrap>
+    <bootstrap thing="cybSRLegUp"></bootstrap>
+    </thing>
+  <thing id="creSRBrodkilCybA" name="Brodkil (Cybernetic (Arm))" description="Nine feet tall, hulking bodies, enormous mouths with bone-crushing jaws - Brodkils are a terrifying race of sub-demons in their natural forms." compset="Creature" uniqueness="unique">
+    <fieldval field="crePace" value="8"/>
+    <usesource source="SavageFoes"/>
+    <tag group="SpiDie" tag="3"/>
+    <tag group="StrDie" tag="8"/>
+    <tag group="VigDie" tag="5"/>
+    <tag group="AgiDie" tag="4"/>
+    <tag group="SmaDie" tag="2"/>
+    <bootstrap thing="abSRArmor2"></bootstrap>
+    <bootstrap thing="abSRBiteClaw"></bootstrap>
+    <bootstrap thing="abFear">
+      <assignval field="abilValue" value="0"/>
+      </bootstrap>
+    <bootstrap thing="abSRInfernalForm"></bootstrap>
+    <bootstrap thing="abSRInfravision"></bootstrap>
+    <bootstrap thing="abSize">
+      <assignval field="abilValue" value="2"/>
+      </bootstrap>
+    <bootstrap thing="abSRSlowRegen"></bootstrap>
+    <bootstrap thing="abSRWeakBrodHW"></bootstrap>
+    <bootstrap thing="skFighting"></bootstrap>
+    <bootstrap thing="skIntimid"></bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <bootstrap thing="skShooting"></bootstrap>
+    <bootstrap thing="skStealth"></bootstrap>
+    <bootstrap thing="skSurvival"></bootstrap>
+    <bootstrap thing="cybSRBiStA">
+      <assignval field="stackQty" value="2"/>
+      </bootstrap>
+    <bootstrap thing="cybSROptiP"></bootstrap>
+    <bootstrap thing="cybSRTaEye"></bootstrap>
+    <bootstrap thing="cybSRArmP"></bootstrap>
+    <bootstrap thing="cybSRExArm"></bootstrap>
+    </thing>
+  <thing id="creSRFuryBeetle" name="Fury Beetle" description="Most monsters encountered on Rifts Earth are named locally based on their appearance and behavior. The Fury Beetle is a classic example of this: it looks at least somewhat beetle-ish (if a beetle were 10 feet tall and 20 feet long!) and moves like an insect. Agitated or in battle, a Fury Beetle skitters around rapidly, emitting a horrible wailing noise.\n\nThough not normally aggressive, Fury Beetles are easily startled and lash out at anything that disturbs them. The “fury” part of their name comes from their determination to fight to the death, unless an opponent flees—or “plays dead,” which has been known to work in a number of encounters. Despite their armored hide (which many hunters use to make effective armor) and many legs, Fury Beetles are more animal than insect, and have been hunted and even domesticated in some places as a food source.\n\nThe Simvan (page 75) favor Fury Beetles as riding animals, a practice other cavalryoriented nomads have adopted as well. Wild Fury Beetles are most likely a challenge for anyone who stumbles across them, whether the beetle is hunting for food—they are omnivores—or protecting its domain." compset="Creature" uniqueness="unique">
+    <fieldval field="crePace" value="12"/>
+    <fieldval field="creParry" value="4"/>
+    <usesource source="SavageFoes"/>
+    <tag group="StrDie" tag="13"/>
+    <tag group="VigDie" tag="8"/>
+    <tag group="AgiDie" tag="4"/>
+    <tag group="SpiDie" tag="3"/>
+    <tag group="SmaDie" tag="2"/>
+    <bootstrap thing="abLarge"></bootstrap>
+    <bootstrap thing="abSize">
+      <assignval field="abilValue" value="4"/>
+      </bootstrap>
+    <bootstrap thing="abSRSlowRegen"></bootstrap>
+    <bootstrap thing="abSRFullSpecVis"></bootstrap>
+    <bootstrap thing="abSRPsionicSenses"></bootstrap>
+    <bootstrap thing="abSRRapidMove"></bootstrap>
+    <bootstrap thing="abSRArmoredShell"></bootstrap>
+    <bootstrap thing="abSRClawBiteFuryB"></bootstrap>
+    <bootstrap thing="edgAlert"></bootstrap>
+    <bootstrap thing="edgSRCharg"></bootstrap>
+    <bootstrap thing="edgFrenzy"></bootstrap>
+    <bootstrap thing="skFighting"></bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <eval phase="PreTraits" priority="5500">#traitcreation[skFighting] += 2
+#traitcreation[skNotice] += 2</eval>
+    </thing>
+  <thing id="abSRArmoredShell" name="Armored Shell" description="Fury Beetles have +12 M.D.C. Armor and +2 Toughness." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <bootstrap thing="armSRNatural"></bootstrap>
+    <eval phase="Effects" priority="5500"><![CDATA[~set the defensive value for the armor
+perform hero.child[armSRNatural].setfocus
+focus.field[defDefense].value = 12
+perform focus.assign[ArmorSpecial.MegaDmg]
+
+perform #traitadjust[trTough,+,2,"Reinforced Frame"]]]></eval>
+    </thing>
+  <thing id="abSRClawBiteFuryB" name="Claws/Bite" description="Str+2d8, AP 8, Mega Damage. The Fury Beetle can gut a Glitter Boy." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <bootstrap thing="wpSRFuryBClawsB"></bootstrap>
+    </thing>
+  <thing id="wpSRFuryBClawsB" name="Claws/Bite" description="Str+2d8, AP 8, Mega Damage. The Fury Beetle can gut a Glitter Boy." compset="Melee" uniqueness="unique">
+    <fieldval field="wpPiercing" value="8"/>
+    <fieldval field="wpDamage" value="Str"/>
+    <fieldval field="wpDmgBoTxt" value="+2d8"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Weapon" tag="MegaDmg"/>
+    <tag group="Hide" tag="Equipment" name="Equipment" abbrev="Equipment"/>
+    <tag group="Equipment" tag="Natural"/>
+    <tag group="WeaponType" tag="Natural" name="Natural Weapon" abbrev="NatWep"/>
+    </thing>
+  <thing id="abSRFullSpecVis" name="Full-Spectrum Vision" description="Able to see in the infared and ultraviolent spectrums, as well as sense thermal patterns and possessed of full night vision, the Fury Beetle ignores all Illumination penalties." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    </thing>
+  <thing id="abSRPsionicSenses" name="Psionic Senses" description="Fury Beetles have natural psionic sensory gifts. They can make a Notice check to psychically find water, and are also able to sense any arcane or psionic energies." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    </thing>
+  <thing id="abSRRapidMove" name="Rapid Movement" description="All those legs give the Fury Beetle exceptional Pace, with a d10 Run die." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <eval phase="PreTraits" priority="6000"><![CDATA[if (hero.tagis[source.RunningDie] <> 0) then
+
+  perform #traitadjust[trRunning,=,10,"Rapid Movement"]
+
+  endif]]></eval>
+    </thing>
+  <thing id="creSRGargoyle" name="Gargoyle" description="Sub-demons from a hellish dimension, the gargoyles predominantly settled in Europe where they clash constantly with the New German Republic and its major corporate benefactor, Triax Industries. However, plenty of gargoyles can be found in North America, especially since the Coalition’s war against (and total destruction of) Tolkeen. The sorcerers of the besieged magic kingdom called forth any supernatural entities they could lure to battle, and gargoyles by the many thousands responded.\n\nIn the aftermath of the war, gargoyles can be found in great numbers in the Federation of Magic, happily serving Lord Dunscon and his fellow mages. Many others wander the lands, preying on anyone they perceive as weaker or in possession of things they desire. Gargoyles have developed a decided appreciation of technology, especially where weapons are concerned. As well, they consider most humans and humanoid D-Bees to be fine eating.\n\nWhile there are a number of sub-species, the typical gargoyle stands around 12’ to 15’ tall, is powerfully muscular and tough, and has an enormous bat-like wingspan. Though reptilian in appearance and hatched from eggs, gargoyles are actually warm-blooded. They have huge beaklike maws with sharp fangs, glowing yellow eyes, and skin tones ranging from dark green to gray." compset="Creature" uniqueness="unique">
+    <fieldval field="crePace" value="6"/>
+    <fieldval field="creParry" value="2"/>
+    <usesource source="SavageFoes"/>
+    <tag group="StrDie" tag="8"/>
+    <tag group="VigDie" tag="5"/>
+    <tag group="User" tag="Wildcard"/>
+    <tag group="AgiDie" tag="4"/>
+    <tag group="SpiDie" tag="3"/>
+    <tag group="SmaDie" tag="2"/>
+    <bootstrap thing="abFear"></bootstrap>
+    <bootstrap thing="abSRFly12Zero"></bootstrap>
+    <bootstrap thing="abSize">
+      <assignval field="abilValue" value="3"/>
+      </bootstrap>
+    <bootstrap thing="abSRSlowRegen"></bootstrap>
+    <bootstrap thing="abSRSuperiorVis"></bootstrap>
+    <bootstrap thing="abSRArmoredHide"></bootstrap>
+    <bootstrap thing="skFighting"></bootstrap>
+    <bootstrap thing="skIntimid"></bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <bootstrap thing="skShooting"></bootstrap>
+    <bootstrap thing="skStealth"></bootstrap>
+    <bootstrap thing="skSurvival"></bootstrap>
+    <bootstrap thing="abSRGargoyleTail"></bootstrap>
+    <bootstrap thing="abSRGargoyleClaws"></bootstrap>
+    </thing>
+  <thing id="abSRArmoredHide" name="Armored Hide" description="Gargoyles have +9 Armor and +2 Toughness." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <bootstrap thing="armSRNatural"></bootstrap>
+    <eval phase="Effects" priority="5500"><![CDATA[~set the defensive value for the armor
+perform hero.child[armSRNatural].setfocus
+focus.field[defDefense].value = 9
+
+perform #traitadjust[trTough,+,2,"Reinforced Frame"]]]></eval>
+    </thing>
+  <thing id="wpSRGargoyleClaws" name="Claws" description="Str+2d8, AP 8, Mega Damage. The Fury Beetle can gut a Glitter Boy." compset="Melee" uniqueness="unique">
+    <fieldval field="wpDamage" value="Str"/>
+    <fieldval field="wpDmgBoTxt" value="+2d6"/>
+    <fieldval field="wpPiercing" value="6"/>
+    <usesource source="SavageFoes"/>
+    <tag group="Hide" tag="Equipment" name="Equipment" abbrev="Equipment"/>
+    <tag group="Equipment" tag="Natural"/>
+    <tag group="WeaponType" tag="Natural" name="Natural Weapon" abbrev="NatWep"/>
+    <tag group="Weapon" tag="MegaDmg"/>
+    </thing>
+  <thing id="abSRGargoyleClaws" name="Claws" description="Str+2d6, AP 6." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <bootstrap thing="wpSRGargoyleClaws"></bootstrap>
+    </thing>
+  <thing id="abSRFly12Zero" name="Flight" description="Creature can fly with a Pace 12 (with a d8 run die) and\nClimb 0." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <eval phase="Traits" priority="5000"><![CDATA[
+      ~if our total weight carried exceeds the load limit, flying Pace is at -2
+      var fly as number
+      fly = 12
+      if (#resmax[resLoadLim] < hero.child[resEncumb].field[resSpent].value) then
+        fly -= 2
+        endif
+      hero.child[trPace].field[trtSpecial].value = fly]]></eval>
+    <eval phase="PreTraits" priority="6000" index="2"><![CDATA[if (hero.tagis[source.RunningDie] <> 0) then
+
+  perform #traitadjust[trRunning,=,8,"Flight"]
+
+  endif]]></eval>
+    </thing>
+  <thing id="abSRSuperiorVis" name="Superior Vision" description="Gargoyles enjoy +2 to all vision-based Notice checks and have low light vision (ignoring penalties for Dim and Dark conditions)." compset="RaceAbil" summary="+2 Vision based Notice; Ignore DIm and Dark condition penalties">
+    <usesource source="SavageFoes"/>
+    </thing>
+  <thing id="abSRGargoyleTail" name="Tail" description="The gargoyle’s tail, while not fully prehensile, can still pack a solid wallop of Str+d4, and the attack doesn’t inflict a multi-action penalty." compset="RaceAbil">
+    <usesource source="SavageFoes"/>
+    <bootstrap thing="wpSRGargoyleTail"></bootstrap>
+    </thing>
+  <thing id="wpSRGargoyleTail" name="Tail" description="The gargoyle’s tail, while not fully prehensile, can still pack a solid wallop of Str+d4, and the attack doesn’t inflict a multi-action penalty." compset="Melee" summary="Dragons attack with its tail">
+    <fieldval field="wpDmgBoTxt" value="+d4"/>
+    <fieldval field="wpDamage" value="Str"/>
+    <usesource source="SavageFoes"/>
+    <tag group="WeaponType" tag="Natural"/>
+    <tag group="Equipment" tag="Natural"/>
+    <tag group="Hide" tag="Equipment" name="Equipment" abbrev="Equipment"/>
+    </thing>
+  <thing id="creSRNeuronBeast" name="Neuron Beast" description="One ton, 20 feet tall, possessing four arms and well over a dozen tentacles beneath a spiky, horrific body, the Neuron Beast (so named for its similarity a cluster of human nerve endings) is another alien demon to plague humanity and civilization since the first days of the Rifts. Psychic vampires who feed on strong emotion, most Neuron Beasts are not only drawn to conflict, they actively manipulate situations and beings to create and promote conflict.\n\nThough capable of engaging in direct combat, Neuron Beasts much prefer to hover nearby, soaking in the psychic energies generated when two or more factions engage in an argument or battle engineered by their efforts. Not every Neuron Beast is evil, but most regard humans and D-Bees as lesser beings best used to their purposes. Their demonic origins mean Cyber-Knights and others with the Champion Edge enjoy bonuses when fighting them.\n\nSince the fall of Tolkeen, many Neuron Beasts made their way into the Magic Zone and now work with Lord Dunscon. Many others wander the lands, looking for people or factions to manipulate, posing as mighty demon lords or godlings ready to grant wishes for the services they seek. If forced into combat, they have considerable arcane and psionic might, as well as all those arms and tentacles." compset="Creature" uniqueness="unique">
+    <fieldval field="crePace" value="8"/>
+    <usesource source="SavageFoes"/>
+    <tag group="SpiDie" tag="6"/>
+    <tag group="StrDie" tag="7"/>
+    <tag group="VigDie" tag="5"/>
+    <tag group="AgiDie" tag="4"/>
+    <tag group="SmaDie" tag="6"/>
+    <bootstrap thing="edgArcMag"></bootstrap>
+    <bootstrap thing="edgSRSecABPsi"></bootstrap>
+    <bootstrap thing="edg1stStk2"></bootstrap>
+    <bootstrap thing="edgLvlHed2"></bootstrap>
+    <bootstrap thing="edgJackAll"></bootstrap>
+    <bootstrap thing="edgLingist"></bootstrap>
+    <bootstrap thing="edgSRMajorPsiSec"></bootstrap>
+    <bootstrap thing="edgSRMoM"></bootstrap>
+    <bootstrap thing="edgMental"></bootstrap>
+    <bootstrap thing="edgSRScho"></bootstrap>
+    <bootstrap thing="edgSR6Sen"></bootstrap>
+    <bootstrap thing="edgStrWill"></bootstrap>
+    <bootstrap thing="edgWizard"></bootstrap>
+    <bootstrap thing="skFighting"></bootstrap>
+    <bootstrap thing="skIntimid"></bootstrap>
+    <bootstrap thing="skInvest"></bootstrap>
+    <bootstrap thing="skKnow"></bootstrap>
+    <bootstrap thing="skKnowArca"></bootstrap>
+    <bootstrap thing="skKnowHist"></bootstrap>
+    <bootstrap thing="skKnowScie"></bootstrap>
+    <bootstrap thing="skNotice"></bootstrap>
+    <bootstrap thing="skPersuade"></bootstrap>
+    <bootstrap thing="skPsionics"></bootstrap>
+    <bootstrap thing="skSpellcst"></bootstrap>
+    <bootstrap thing="skStealth"></bootstrap>
+    <bootstrap thing="skTaunt"></bootstrap>
+    <bootstrap thing="edgAlert"></bootstrap>
+    <eval phase="PreTraits" priority="5500">#traitcreation[skFighting] += 2
+#traitcreation[skIntimid] += 4
+#traitcreation[skInvest] += 2
+#traitcreation[skNotice] += 2</eval>
+    </thing>
+  </document>

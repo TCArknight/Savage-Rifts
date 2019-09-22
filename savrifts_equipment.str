@@ -13,7 +13,7 @@
     autocompset="no"
     ispublic="no">
 
-    <!-- Special details about the weapon -->
+    <!-- Toughness bonus for the armor -->
     <field
       id="arToughness"
       name="Toughness Modifier"
@@ -21,7 +21,7 @@
       defvalue="0">
       </field>
 	  
-    <!-- Special details about the weapon -->
+    <!-- Special details about the armor -->
     <field
       id="arSpecial"
       name="Special"
@@ -37,7 +37,7 @@
       maxlength="250">
       </field>
 	  
-    <!-- Synthesized notes about the armor -->
+    <!-- Areas of coverage for the armor -->
     <field
       id="arCoverage"
       name="Coverage"
@@ -98,6 +98,37 @@
       ]]></eval>
     </component>
 
+  <!-- ArmorSpecial component -->
+  <component
+    id="PAStrength"
+    name="Armor Strength"
+    autocompset="no"
+    ispublic="no">
+	  
+    <!-- Synthesized notes about the armor -->
+    <field
+      id="vhStrDisplay"
+      name="Strength"
+      type="derived"
+      maxlength="250">
+      </field>
+	  
+    <!-- If equipped and the minimum strength isn't satisfied, apply any penalty and
+        mark ourselves as not satisfying the requirement -->
+
+    <eval phase="PreTraits" priority="5000"><![CDATA[var DiffStr as number
+	DiffStr = tagvalue[vhSRArmStr.?] - #traituser[attrStr]
+	
+	field[vhStrDisplay].text = tagnames[vhSRArmStr.?,", "] 
+
+	~ Set strength to Armor Strength if equipped
+	if (field[grIsEquip].value <> 0) then
+	  perform hero.assign[Rifts.SuperStrength]
+	  #traitinplay[attrStr] += DiffStr
+	  endif]]></eval>
+
+    </component>
+	
   <!-- Define various component sets associated with the components defined above. -->
 
   <!-- No compsets are auto-defined for the component -->
@@ -114,4 +145,14 @@
     <compref component="Gear"/>
     </compset>
 
+  <!-- Power Armor -->
+  <compset
+    id="PowerArRifts">
+    <compref component="PowerAr"/>
+    <compref component="PAStrength"/>
+    <compref component="Equippable"/>
+    <compref component="Vehicle"/>
+    <compref component="Gear"/>
+    </compset>
+	
   </document>
