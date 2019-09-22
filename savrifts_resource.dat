@@ -19,6 +19,20 @@
     <!-- Automatically add the helper to every actor -->
     <tag group="Helper" tag="Bootstrap"/>
 
+	<eval phase="PreTraits" priority="10000" index="1"><![CDATA[
+	~if there are no selections on the Hero Journey tab choosers required, then we're done.
+	doneif ((#resmax[resHJSel] ) = 0)
+
+	~consume additional resource slots when 
+
+	~Count Edges with Rifts.HeroJourneySel tag
+    foreach pick in hero from Edge where "Rifts.HeroJourneySel"
+	  field[ehHJCst].value += 1
+	  nexteach
+    perform #resspent[resHJSel,+,field[ehHJCst].value,"Hero's Journey Selection"]
+
+		]]></eval>
+		
     </thing>
 	
   <thing

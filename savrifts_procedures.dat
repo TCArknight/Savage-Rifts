@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of assorted procedures that are used
+      throughout the data files. Since procedures are typically called from multiple
+      places, it usually makes sense to put them all in one central location where
+      you can always find them instead of having them littered throughout the data
+      files and hard to locate when you need to refer to them.
+  -->
+
+<document signature="Hero Lab Data">
+
+
+<!-- ##################
+      The following procedures are generic and used in various places
+     ##################
+-->
+
+<!-- ##################
+      The following procedures are used in conjuction with description and mouse-info scripts
+     ##################
+-->
+
+  <!-- Procedure InfoVeh
+        Generate details specific to vehicles. The text is placed into the
+        "iteminfo" variable for subsequent use by our caller.
+
+        Outbound parameter: iteminfo
+  -->
+  <procedure id="InfoPARifts" scripttype="mouseinfo"><![CDATA[
+    ~declare variables that are used to communicate with our caller
+    var iteminfo as string
+
+    ~declare variables that are used internally
+    var v_name as string
+
+    ~get the item name; if this is a pick, amend the name with our gear quantity
+    v_name = field[name].text
+    if (ispick <> 0) then
+      ~if this is gear with a quantity of more than one, append it to the name
+      if (isgear <> 0) then
+        if (stackable <> 0) then
+          if (field[stackQty].value > 1) then
+            v_name &= " (x" & field[stackQty].text & ")"
+            endif
+          endif
+        endif
+      endif
+
+    ~start our info text with the centered name and switch to left-justified text
+    iteminfo = "{b}" & v_name & "{/b}{br}{br}{align left}"
+
+    ~report the vehicle size
+    iteminfo &= "{b}Size:{/b} " & field[vhSize].value & "{br}"
+	
+	~report the toughness and armor
+    if (tagis[VehType.PowerAr] <> 0) then
+      iteminfo &= "{b}Armor{/b}: +" & field[vhArmor].text 
+	  if (tagis[Vehicle.MDCArmor] <> 0) then
+	    iteminfo &= " (M.D.C.){br}"
+	  else
+	    iteminfo &= "{br}"
+		endif
+      iteminfo &= "{b}Toughness{/b}: +" & field[vhTough].text & "{br}"
+    else
+      iteminfo &= "{b}Toughness(Armor){/b}: " & field[vhTough].text & "(" & field[vhArmor].text & "){br}"
+      endif
+	
+    ~report the acceleration and speed
+    if (tagis[VehType.PowerAr] <> 0) then
+	  iteminfo &= "{b}Strength:{/b} " & field[vhStrDisplay].text & "{br}"
+      iteminfo &= "{b}Pace:{/b} " & field[vhTopSpeed].text & "{br}"
+    elseif (tagis[VehType.Walker] <> 0) then
+      iteminfo &= "{b}Strength:{/b} " & tagnames[vhWalkerSt.?] & "{br}"
+      iteminfo &= "{b}Pace:{/b} " & field[vhTopSpeed].text & "{br}"
+    else
+      iteminfo &= "{b}Acc/Top Speed:{/b} " & field[vhAccel].text & "/" & field[vhTopSpeed].text & "{br}"
+      endif
+
+    ~report the crew size
+    if (tagis[VehType.PowerAr] = 0) then
+      iteminfo &= "{b}Crew:{/b} " & field[vhCrew].text & "{br}"
+      endif
+
+    ~RDS SFC This provides the the upper limit for the number of Modifications allowed on this gear, if this gear is able to be modified
+    if (empty(field[grMaxMods].text) = 0) then
+      iteminfo &= "{b}Max # Mods Allowed:{/b} " & field[grMaxMods].text & "{br}"
+      iteminfo &= "{b}         Current # Mods:{/b} " & field[grCurrMods].text & "{br}"
+      endif
+
+    iteminfo &= "{br}"
+
+    ~finish with generic special traits
+    ~report any special details about the weapon (omitting if there are none)
+    var special as string
+    ~ special = tagnames[Vehicle.?,", "]
+	
+    if (!field[vhSpecial].isempty + !empty(special) > 0) then
+      iteminfo &= "{b}Special:{/b} "
+      if (empty(special) = 0) then
+        iteminfo &= special
+        endif
+      if (field[vhSpecial].isempty = 0) then
+        if (empty(special) = 0) then
+          iteminfo &= "{br}{br}{b}Notes: {/b}"
+          endif
+        iteminfo &= field[vhSpecial].text
+        endif
+      iteminfo &= "{br}"
+      endif
+
+    ~if there is no child entity/gizmo, then there's nothing more to do
+    doneif (isentity = 0)
+
+    ~if this is a thing, report the basic load-out for the vehicle based on the field;
+    ~otherwise, synthesize any load-out for the vehicle as a pick appropriately
+    ~Note: We must differentiate between a thing and a pick when accessing the entity,
+    ~       as we want summary details for a thing and complete details for a pick
+    var loadout as string
+    if (ispick = 0) then
+      loadout = field[vhLoadout].text & "{br}"
+    else
+      loadout = ""
+
+      var dupcount as number
+      var dupstack as number
+      var prevmod as string
+      var clipped as number
+      var breakit as number
+      var ending as number
+      var firstpart as string
+      var lastpart as string
+      var multiplier as string
+      var ModList as string
+ 
+      dupcount = 1
+      prevmod = ""
+      clipped = 0
+      breakit = 0
+      ending = 0
+      multiplier = ""
+      ModList = ""
+
+      foreach pick in gizmo
+        if (eachpick.tagis[Modificatn.Modificatn] = 0) then
+          if (compare(prevmod,eachpick.idstring) = 0) then
+            dupcount += 1
+            if (eachpick.field[stackQty].value > 1) then 
+              dupstack += eachpick.field[stackQty].value
+            else  
+              dupstack += 1
+              endif
+            if (dupcount = 2) then
+              breakit = lastpos(ModList," - ")
+              ending = length(ModList)
+              firstpart = mid(ModList,0,breakit)
+              lastpart = mid(ModList,breakit,ending)
+              ModList =  firstpart & " (x" & dupstack & ")" & lastpart
+            elseif (dupcount > 2) then
+              breakit = lastpos(ModList," - ")
+              clipped = breakit -5
+              ending = length(ModList)
+              firstpart = mid(ModList,0,clipped)
+              lastpart = mid(ModList,breakit,ending)
+              ModList =  firstpart & " (x" & dupstack & ")" & lastpart
+              endif
+          else
+            if (empty(ModList) <> 0) then
+              if (eachpick.field[stackQty].value > 1) then 
+                ModList = "{horz 10}" & chr(149) & " " & eachpick.field[name].text & " (x" & eachpick.field[stackQty].value & ")"
+              else
+                ModList = "{horz 10}" & chr(149) & " " & eachpick.field[name].text 
+                endif
+            else
+              if (eachpick.field[stackQty].value > 1) then 
+                ModList &= "{br}{horz 10}" & chr(149) & " " & eachpick.field[name].text & " (x" & eachpick.field[stackQty].value & ")"
+              else
+                ModList &= "{br}{horz 10}" & chr(149) & " " & eachpick.field[name].text
+                endif
+              endif
+            
+            if (eachpick.tagis[WeaponType.?] <> 0) then
+            	if (eachpick.tagis[WeaponType.FutMelee] + eachpick.tagis[WeaponType.SFVehMelee] <> 0) then
+                ModList &= "{br}{horz 60}" & chr(164) & " " & eachpick.field[wpShowDmg].text
+              else
+                ModList &= "{br}{horz 60}" & chr(164) & " " & eachpick.field[wpShowDmg].text & ", " & eachpick.field[wpRange].text
+                endif
+
+              if (eachpick.field[wpNotes].isempty = 0) then
+                ModList &= " (" & eachpick.field[wpNotes].text & ")"
+                endif
+              endif
+            prevmod = eachpick.idstring
+            dupcount = 1
+            dupstack = 1
+            endif
+          endif
+        nexteach
+      loadout &= ModList & "{br}"
+      endif
+ 
+    ~if there is any load-out for the vehicle, output it
+    if (empty(loadout) = 0) then
+      iteminfo &= "{b}Weapons/Equipment:{/b}{br}" & loadout
+      endif
+
+    @text = iteminfo
+	
+    ]]></procedure>
+
+<!-- ##################
+      The following procedures are used by the Dashboard and Tactical Console panels
+     ##################
+-->
+
+<!-- ##################
+      The following procedures are used in conjunction with printed output
+     ##################
+-->
+
+<!-- ##################
+      The following procedures are used for miscellaneous purposes
+     ##################
+-->
+
+  </document>

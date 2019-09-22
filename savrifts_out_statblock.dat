@@ -24,7 +24,36 @@
       nexteach
     append @newline
     ]]></procedure>
+	
+  <!-- Procedure sbherojrnylist
+        Output all of the hero journey entries that satisfy the provided tag expression, reporting
+        the name and final value for each. The "tagexpr" text variable specifies the
+        constraints that must be satisfied for the list of traits.
 
+        Inbound parameter:  tagexpr
+  -->
+  <procedure id="sbherojrnylist" scripttype="synthesize"><![CDATA[
+    var liston as string
+	var listitem as string
+	var listoff as string
+	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+    var tagexpr as string
+
+	append liston& @newline
+    foreach pick in hero where tagexpr
+	  append listitem & @boldon & eachpick.tagnames[RiftsHJTable.?,","] & @boldoff & @newline
+      append liston & @newline 
+	  append listitem & eachpick.field[name].text & ": " & eachpick.field[summary].text & @newline
+	  append listoff & @newline
+      nexteach
+    append listoff & @newline
+	
+    ]]></procedure>
+	
   <procedure id="sbfortune" scripttype="synthesize"><![CDATA[
     var tagexpr as string
     var ismore as number
@@ -34,6 +63,28 @@
       ismore = 1
       nexteach
     append @newline
+    ]]></procedure>
+	
+  <procedure id="sbfortunelist" scripttype="synthesize"><![CDATA[
+    var liston as string
+	var listitem as string
+	var listoff as string
+	
+	liston = "[list]"
+	listitem = "[*]"
+    listoff = "[/list]"
+	
+    var tagexpr as string
+
+	append liston & @newline
+    foreach pick in hero where tagexpr
+      append listitem & @boldon & eachpick.field[name].text & @boldoff & @newline
+	  append liston & @newline 
+	  append listitem & eachpick.field[summary].text & @newline
+      append listoff & @newline
+      nexteach
+    append listoff & @newline
+	
     ]]></procedure>
 	
   <procedure id="sbcyber" scripttype="synthesize"><![CDATA[
@@ -51,14 +102,9 @@
     var liston as string
 	var listitem as string
 	var listoff as string
-	
-	liston = "[list]"
-	listitem = "[*]"
-    listoff = "[/list]"
-	
     var tagexpr as string
-    var ismore as number
-    ismore = 0
+    
+    append liston & @newline
     foreach pick in hero where tagexpr
       append @boldon & eachpick.field[grStkName].text & " (" & @boldoff
 	  append "x" & eachpick.field[stackQty].text & @boldon & ") " & @boldoff
@@ -66,9 +112,8 @@
 	  append liston & @newline
 	  append listitem & eachpick.field[summary].text & @newline
 	  append listoff & @newline
-      ismore = 1
       nexteach
-
+	  append listoff & @newline
     ]]></procedure>
 	
   <procedure id="sbSRarmor" scripttype="synthesize"><![CDATA[
@@ -129,39 +174,6 @@
     append listoff & @newline
 	
     ]]></procedure>
-  <!-- Procedure sblistskills
-        Output all of the traits that satisfy the provided tag expression, reporting
-        the name and final value for each. The "tagexpr" text variable specifies the
-        constraints that must be satisfied for the list of traits.
-
-        Inbound parameter:  tagexpr
-  -->
-  <procedure id="sblisthind" scripttype="synthesize"><![CDATA[
-	var liston as string
-	var listitem as string
-	var listoff as string
-	
-	liston = "[list]"
-	listitem = "[*]"
-    listoff = "[/list]"
-	
-	append liston & @newline
-	
-    foreach pick in hero from Hindrance where "!Print.NoPrint"
-	  append listitem
-      append @boldon & eachpick.field[name].text 
-	  if (eachpick.tagis[User.HindMajor] = 0) then
-	    append " (Minor)"
-	  else 
-	    append " (Major)"
-	    endif
-	  
-	  append ": " & @boldoff & eachpick.field[summary].text & @newline
-      nexteach
-	
-    append listoff & @newline
-	
-    ]]></procedure>	
 
   <!-- Procedure sblisttraits
         Output all of the traits that satisfy the provided tag expression, reporting
@@ -231,10 +243,14 @@
 	var myPP as number
 	var myRec as string
 	var myPwrRank as string
+	var mySecPPType as string
+	var mySecPP as number
+	var mySecRec as string
+	var mySecPwrRank as string
 		  
 	if (hero.tagis[Rifts.UsesPPE] <> 0) then
 	  myPPType = "PPE: "
-	elseif (hero.tagis[Rifts.UsesISP] <> 0) then
+	elseif (hero.tagis[Rifts.UsesISP] + hero.tagis[Edge.edgArcPsi] <> 0) then
 	  myPPType = "ISP: "
 	  endif
 			
@@ -276,15 +292,100 @@
       nexteach
 			
 	~output Secondary AB powers
-	~if (hero.tagis[Rifts.HasSecondaryAB] <> 0) then
-    ~  append @boldon & "Secondary Arcane Powers:" & @boldoff & @newline
+	if (hero.tagis[Rifts.HasSecondaryAB] <> 0) then
+      append @boldon & "Secondary Arcane Powers:" & @boldoff & @newline
     ~  foreach pick in hero from Power where "Rifts.SecondaryPower"
     ~    append chr(149) & eachpick.field[name].text & ": "
     ~    append eachpick.field[summary].text & @newline
     ~    nexteach
-	~  endif
+	  endif
 	
     ]]></procedure>
+
+  <procedure id="sbadvancelist" scripttype="synthesize"><![CDATA[
+    var liston as string
+	var listitem as string
+	var listoff as string
+    var tagexpr as string
+	
+	var totCost as number
+	var halfItem as number
+    
+	var FullAdvances as number
+	var AdvanceName as string
+	
+    append liston & @newline 
+	
+    foreach pick in hero from Advance sortas AdvanceOut
+
+      ~ append what XP portion the advance is for
+      if (FullAdvances = 0) then
+	    AdvanceName = "Novice 1: "
+	  elseif (FullAdvances = 1) then
+	    AdvanceName = "Novice 2: "
+	  elseif (FullAdvances = 2) then
+	    AdvanceName = "Novice 3: "
+	  elseif (FullAdvances = 3) then
+	    AdvanceName = "Seasoned 1: "
+	  elseif (FullAdvances = 4) then
+	    AdvanceName = "Seasoned 2: "
+	  elseif (FullAdvances = 5) then
+	    AdvanceName = "Seasoned 3: "
+	  elseif (FullAdvances = 6) then
+	    AdvanceName = "Veteran 1: "
+	  elseif (FullAdvances = 7) then
+	    AdvanceName = "Veteran 2: "
+	  elseif (FullAdvances = 8) then
+	    AdvanceName = "Veteran 3: "
+	  elseif (FullAdvances = 9) then
+	    AdvanceName = "Heroic 1: "
+	  elseif (FullAdvances = 10) then
+	    AdvanceName = "Heroic 2: "
+	  elseif (FullAdvances = 11) then
+	    AdvanceName = "Heroic 3: "
+	  elseif (FullAdvances = 12) then
+	    AdvanceName = "Legendary 1: "
+	  elseif (FullAdvances = 13) then
+	    AdvanceName = "Legendary 2: "
+	  elseif (FullAdvances = 14) then
+	    AdvanceName = "Legendary 3: "
+	  elseif (FullAdvances = 15) then
+	    AdvanceName = "Legendary 4: "
+	    endif
+
+	  totCost = eachpick.field[advCost].value
+	  
+	  if (totCost = 1) then
+	    append listitem & AdvanceName
+		halfItem = 0
+	  else
+	    if (halfItem = 1) then
+	      append ", "
+		else
+		  append listitem & AdvanceName
+		  endif
+		endif
+		
+      ~ append advance details	  
+	  append eachpick.field[advAction].text & " (" & eachpick.field[name].text & ")"
+	  
+	  if (totCost = 1) then
+	    append @newline
+		FullAdvances += 1
+	  else
+	    if (halfItem = 1) then
+		  append @newline
+		  halfItem = 0
+		  FullAdvances += 1
+		else
+	      halfItem += 1
+		  endif
+		endif
+		
+      nexteach
+	  append listoff & @newline
+    ]]></procedure>
+	
   <!-- Define the statblock as a text-based dossier. The "synthesize" script actually
         generates the output.
   -->
@@ -463,7 +564,7 @@
 		  endif
 		
         ~output Hero's Journey selections
-		if (hero.tagis[RiftsHJ.?] <> 0) then
+		if (hero.tagis[RiftsHJTable.?] <> 0) then
 		  append @newline
           append @boldon & "Hero's Journey: " & @boldoff & @newline
           tagexpr = "component.HeroJrny"
@@ -508,6 +609,14 @@
       styles="bbcode"
       grouping="statblock">
       <synthesize><![CDATA[
+        var liston as string
+	    var listitem as string
+	    var listoff as string
+	
+	    liston = "[list]"
+	    listitem = "[*]"
+        listoff = "[/list]"
+		
         var txt as string
         var tagexpr as string
 		var ismore as number
@@ -543,6 +652,26 @@
         if (herofield[acGrpName].isempty = 0) then
           append @boldon & herofield[acGrpTerm].text & ": " & @boldoff
           append herofield[acGrpName].text & @newline
+		  
+		  append @boldon & herofield[acGrpTerm].text & "Abilities" & @boldoff & @newline
+		  append liston & @newline
+		  foreach pick in hero from FraAbility
+            append listitem & @boldon & eachpick.field[name].text & @boldoff & @newline
+	        append liston & @newline 
+	        append listitem & eachpick.field[summary].text & @newline
+            append listoff & @newline
+            nexteach
+          append listoff & @newline
+		  
+		  append @boldon & herofield[acGrpTerm].text & "Complications" & @boldoff & @newline
+		  append liston & @newline
+		  foreach pick in hero from FraComp
+            append listitem & @boldon & eachpick.field[name].text & @boldoff & @newline
+	        append liston & @newline 
+	        append listitem & eachpick.field[summary].text & @newline
+            append listoff & @newline
+            nexteach
+          append listoff & @newline
           endif
 
         ~output attributes
@@ -560,7 +689,7 @@
 		
 		append @boldon & "Toughness: " & @boldoff & hero.child[trTough].field[trtDisplay].text & "; "
 		
-		append @boldon & "Strain: " & @boldoff & hero.child[trSFStrain].field[trtDisplay].text & " (Max: " & hero.child[trSFStrnMx].field[trtDisplay].text & ")" & @newline
+		append @boldon & "Strain: " & @boldoff & hero.child[trSRCybStrain].field[trtDisplay].text & " (Max: " & hero.child[trSRCybStrainMax].field[trtDisplay].text & ")" & @newline
 		 
         append @newline
 
@@ -608,6 +737,28 @@
           append @newline
 		  call sblistarcane
           endif
+		  
+        ~output Fortune and Glory selections
+		if (hero.tagis[Rifts.FortuneAndGlory] <> 0) then
+		  append @newline
+          append @boldon & "Fortune and Glory: " & @boldoff & @newline
+          tagexpr = "component.Fortune"
+          call sbfortunelist
+		  endif
+		
+        ~output Hero's Journey selections
+		if (hero.tagis[RiftsHJTable.?] <> 0) then
+		  append @newline
+          append @boldon & "Hero's Journey: " & @boldoff & @newline
+          tagexpr = "component.HeroJrny"
+          call sbherojrnylist
+		  endif
+
+        ~output Advances
+		append @newline
+        append @boldon & "Advances: " & @boldoff & @newline
+        call sbadvancelist
+		
         ]]></synthesize>
       </dossier_text>
     </dossier>

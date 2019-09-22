@@ -636,8 +636,8 @@ else
       <bootstrap thing="wpVhMnMsLa"></bootstrap>
       <bootstrap thing="wpPlasmaEV"></bootstrap>
       <bootstrap thing="wpPlasmaEV"></bootstrap>
-      <bootstrap thing="wpVBSaber"></bootstrap>
-      <bootstrap thing="wpVBSaber"></bootstrap>
+      <bootstrap thing="wpVehVBSaber"></bootstrap>
+      <bootstrap thing="wpVehVBSaber"></bootstrap>
       </child>
     </thing>
   <thing id="vhCSpa09A" name="CS PA-09A Super SAMAS" description="Often called the “Grinning Demon,” thanks to the shape of the skeleton jaw motif, the Super SAMAS is a significant upgrade to the original SAMAS power armor. It’s intended for multi-profile missions, including establishing low-to-mid altitude air superiority. Though many pilots are happy flying into battle with only the standard weapons, more than a few will carry the CTT-P40 Particle Beam Cannon as well." compset="PowerAr" summary="Coalition States PA-09A Super SAMAS, new and improved death from above!" holdable="no">
@@ -692,8 +692,8 @@ else
       <bootstrap thing="wpSFVGrenL"></bootstrap>
       <bootstrap thing="wpSRpa09pl"></bootstrap>
       <bootstrap thing="wpSRpa09pl"></bootstrap>
-      <bootstrap thing="wpVBd10"></bootstrap>
-      <bootstrap thing="wpVBd10"></bootstrap>
+      <bootstrap thing="wpVehVB"></bootstrap>
+      <bootstrap thing="wpVehVB"></bootstrap>
       <bootstrap thing="modPAStren"></bootstrap>
       </child>
     </thing>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of components associated with equipment such as
+      weapons, armor, gear, etc.
+-->
+
+<document signature="Hero Lab Structure">
+
+  <!-- Rifts Cyberware component
+        All Cyberware derives from this component
+  -->
+  <component
+    id="GenCyberware"
+    name="Cyberware"
+    autocompset="no"
+    panellink="gencyber">
+
+    <!-- This contains the amount of Strain the Cyberware exerts -->
+    <field
+      id="gcybStrain"
+      name="Strain this Cyberware exerts"
+      type="derived">
+      </field>
+
+    <!-- Domain details for something that has a particular focus (e.g. knowledge skills) -->
+    <field
+      id="gcybDomain"
+      name="Domain"
+      maxlength="50"
+      type="user">
+      </field>
+
+    <!-- Tracks the first selection made when a menu choice is required -->
+    <field
+      id="gcybChosen1"
+      name="Chosen Skill"
+      type="user"
+      style="menu">
+      </field>
+
+    <!-- Candidate tagexpr used to determine which picks/things are shown in menu #1
+          NOTE! If this field is empty, it means NO first menu is shown for the pick.
+    -->
+    <field
+      id="gcybCandid1"
+      name="Candidate TagExpr for Menu #1"
+      type="derived"
+      maxlength="1000"
+      defvalue="">
+      </field>
+
+    <!-- Source to pull choices from within menu #1 -->
+    <field
+      id="gcybSource1"
+      name="Source for Menu #1 Choices"
+      type="derived">
+      <!-- Determine the source to choose from based on the tag, defaulting to "Hero" -->
+      <calculate phase="Render" priority="10000"><![CDATA[
+        if (tagis[ChooseSrc1.Thing] <> 0) then
+          @value = 0
+        elseif (tagis[ChooseSrc1.Container] <> 0) then
+          @value = 1
+        elseif (tagis[ChooseSrc1.Hero] <> 0) then
+          @value = 2
+        else
+          @value = 2
+          endif
+        ]]></calculate>
+      </field>
+
+    <!-- This is to place a value for Skill Chip Bonus -->
+    <field
+      id="gcybValue"
+      name="Value"
+      type="derived"
+      persistence="full">
+      </field>
+
+    <!-- This is a Cyberware grade field for Settings like Interface Zero 2.0 -->
+    <field
+      id="gcybGrade"
+      name="Grade"
+      type="user"
+      minvalue="1"
+      maxvalue="4"
+      maxfinal="100"
+      nevercache="yes">
+      <finalize><![CDATA[
+        if (tagis[cybGrade.1] <> 0) then
+          @value = 1
+          @text = "Gutterware"
+        elseif (tagis[cybGrade.2] <> 0) then
+          @value = 2
+          @text = "Streetware"
+        elseif (tagis[cybGrade.3] <> 0) then
+          @value = 3
+          @text = "Hyperchrome"
+        elseif (tagis[cybGrade.4] <> 0) then
+          @value = 4
+          @text = "Milware"
+        else
+          @text = "No Grade"
+          endif
+        ]]></finalize>
+      </field>
+
+    <!-- Are the Cyberware's abilities on/applicable? This is for Cyberware that either has a conditional modifier that depends on external factors
+         like a Survival bonus that's only good in a certain type of terrain, or a Charisma modifier that depends on the sex of the target. 
+         It's a separate issue from Equipping/Unequipping the object, as being in effect or not has no effect on the Strain -->
+    <field
+      id="gcybActive"
+      name="Cyberware is Active/Applicable"
+      type="user"
+      minvalue="0"
+      maxvalue="1"
+      defvalue="1">
+      </field>
+
+    <linkage linkage="gcybAtt" optional="yes"/>
+    <linkage linkage="gcybSkill" optional="yes"/>
+
+    <identity group="GenCyberware"/>
+
+    <!-- RDS SFC Add the exclusion for Standard Modifications -->
+    <containerreq phase="Initialize" priority="2000">
+      <match>Equipment.StdCyber</match>
+      !hero#Hero.NoStdCyber
+      </containerreq>
+      
+    <creation><![CDATA[
+          ~if we don't have a transaction pick to initialize from, use what we know;
+          ~this can occur if the gear is bootstrapped or auto-added for the actor
+          if (hero.istransact <> 0) then
+
+            if (tagis[Equipment.Leveled] <> 0) then
+              field[gcybValue].value = hero.transact.field[xactValue].value
+              endif
+            endif
+      ]]></creation>
+
+    <!-- RDS SFC Track the Cyberware on the actor by assigning the appropriate tag 
+                 I changed the timing on this to a bit earlier to allow the Drone Slots Derived Trait's visibility to be turned on and off by the 
+                 existence of a Vehicle Control Interface on the hero -->
+    <eval index="1" phase="Setup" priority="3000" name="Forward Cyberware tags"><![CDATA[
+      perform forward[GenCyberware.?]
+      ]]></eval>
+
+    <eval index="2" phase="Traits" priority="5000" name="Calc Current Strain"><![CDATA[
+      if (hero.tagis[Race.racSFConst] + hero.tagis[Creature.creSFR?] = 0) then
+        if (tagis[Equipped.Equippable] <> 0) then
+          if (tagis[Equipped.Equipped] <> 0) then
+            ~perform hero.child[trSFStrain].field[trtBonus].modify[+,field[gcybStrain].value,"Current Strain"]
+		    perform #resspent[resGenCybStrain,+,field[gcybStrain].value,field[name].text]
+            endif
+        else
+          ~perform hero.child[trSFStrain].field[trtBonus].modify[+,field[gcybStrain].value,"Current Strain"]
+		  perform #resspent[resGenCybStrain,+,field[gcybStrain].value,field[name].text]
+          endif
+        endif
+      ]]></eval>
+
+    <evalrule index="1" phase="Validate" priority="9000" message="Cyberware exceeds limit on number of uses per item."><![CDATA[
+      var totaluses as number
+
+      if (empty(field[grDupMax].text) = 1) then
+        @valid = 1
+        endif
+        
+      totaluses = container.intersect[GenCyberware,GenCyberware,counttarget]
+
+      if (totaluses <= field[grDupMax].text) then
+        @valid = 1
+        endif
+      ]]></evalrule>
+
+    <evalrule index="2" phase="Validate" priority="9000" message="Constructs and Robots are not allowed to have Cyberware."><![CDATA[
+      validif (hero.tagis[Race.racSFConst] + hero.tagis[Creature.creSFR?] = 0)
+
+      if (hero.tagis[GenCyberware.?] = 0) then
+        @valid = 1
+        endif
+      ]]></evalrule>
+
+    </component>
+	
+  <!-- Define various component sets associated with the components defined above. -->
+
+  <!-- No compsets are auto-defined for the component -->
+
+  <!-- Savage Rifts Cyberware -->
+  <compset
+    id="GenCyberware"
+    stackable="yes">
+    <compref component="GenCyberware"/>
+    <compref component="Gear"/>
+    <compref component="Equippable"/>
+    </compset>
+	
+  </document>

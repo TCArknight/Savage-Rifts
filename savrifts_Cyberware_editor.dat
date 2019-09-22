@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains the definitions of how the Editor should handle all the
+      various publicly accessible objects (i.e. component sets) within the game
+      system. A separate "editthing" elemenet is defined for each component set,
+      along with the appropriate details for how to configure each facet via
+      "inputthing" elements.
+-->
+
+<document signature="Hero Lab Data">
+
+  <!-- TCA - Generic Cyberware editor -->
+
+  <!-- Cyberware editthing -->
+  <editthing
+    group="Rifts"
+    compset="GenCyberware"
+    name="Cyberware (Rifts)"
+    prefix="gcyb"
+    description="Cyberware in the Rifts setting."
+    summary="Defines generic cyberware that can be selected on the generic Cyberware tab.">
+    <inputthing
+      name="Cyberware Category"
+      helptext="Specify the Cyberware Type.">
+      <it_tagpick group="CyberCat" tag="?"/>
+      </inputthing>
+    <inputthing
+      name="Max Times"
+      helptext="Specify the number of times the item can be added to the hero.">
+      <it_field field="grDupMax"/>
+      </inputthing>
+    <inputthing
+      name="Standard Cyberware?"
+      helptext="Specify whether this is a piece of Standard Cyberware.">
+      <it_tagcheck group="Equipment" tag="StdCyber"/>
+      </inputthing>
+    <inputthing
+      name="Conditional ?"
+      helptext="Specify whether this cyberware has an effect that can be activated by the user. Skill Chips do not need this as they are Equipped or not.">
+      <it_tagcheck group="User" tag="Activation"/>
+      </inputthing>
+    <inputthing
+      name="Focus required?"
+      helptext="Specify whether this cyberware has a user-specified requirement.">
+      <it_tagcheck group="User" tag="NeedDomain"/>
+      </inputthing>
+    <inputthing
+      name="Focus for domain."
+      helptext="Specify a Focus.">
+      <it_field field="gcybDomain"/>
+      </inputthing>
+    <inputthing
+      name="Cost"
+      helptext="Specify the standard cost of the item, with a value of 0 meaning it is free.">
+      <it_field field="grCost"/>
+      </inputthing>
+    </editthing>
+	
+  </document>
