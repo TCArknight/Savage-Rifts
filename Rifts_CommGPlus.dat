@@ -19,7 +19,7 @@
     <usesource source="SavRiftC"/>
     </thing>
 
-  <thing id="arcSRDGPSY" name="Dragon Psionics" description="Dragons Hatchlings are minor psionics at birth." compset="Arcane">
+  <thing id="arcSRDGPSY" name="Dragon Psionics" description="Dragons Hatchlings are minor psionics at birth." compset="Arcane" uniqueness="unique">
     <fieldval field="arcPowers" value="3"/>
     <fieldval field="arcPoints" value="10"/>
     <usesource source="SavRiftC"/>
@@ -1626,7 +1626,7 @@ validif (rolls >= 3)]]></evalrule>
     <pickreq thing="racSRGrack" ispreclude="yes"/>
     <pickreq thing="racSRDogB" ispreclude="yes"/>
     </thing>
-  <thing id="arcSRGPCMMG" name="Combat Mage" description="Combat Mages are defined by the magical powers they wield, focusing on spells made for direct battlefield application. Most of them relate to the delivery of or protection from damage, which also informs their spell trappings which favor acid, cold/ice, electricity, and fire." compset="Arcane" summary="Combat Mage Arcane Background">
+  <thing id="arcSRGPCMMG" name="Combat Mage" description="Combat Mages are defined by the magical powers they wield, focusing on spells made for direct battlefield application. Most of them relate to the delivery of or protection from damage, which also informs their spell trappings which favor acid, cold/ice, electricity, and fire." compset="Arcane" summary="Combat Mage Arcane Background" uniqueness="unique">
     <fieldval field="arcPowers" value="5"/>
     <fieldval field="arcPoints" value="20"/>
     <usesource source="SavGPlu"/>
@@ -2771,7 +2771,7 @@ rolls += hero.tagcount[RiftsHJ.Cyber]
 
 validif (rolls = 0)</evalrule>
     </thing>
-  <thing id="arcSRPSLNG" name="Psi-Slinger" description="Psi-slingers are minor psionics focused on precognition and telekinesis." compset="Arcane" summary="Psi Slingers unlock their psionic potential">
+  <thing id="arcSRPSLNG" name="Psi-Slinger" description="Psi-slingers are minor psionics focused on precognition and telekinesis." compset="Arcane" summary="Psi Slingers unlock their psionic potential" uniqueness="unique">
     <fieldval field="arcPowers" value="3"/>
     <fieldval field="arcPoints" value="10"/>
     <usesource source="SavGPlu"/>
@@ -3602,7 +3602,7 @@ nexteach]]></eval>
     <eval phase="PreTraits" priority="5000" index="2">#traitcreation[trSRPPE] += 15</eval>
     <eval phase="PreTraits" priority="5000">#traitcreation[skSpellcst] += 2</eval>
     </thing>
-  <thing id="arcSRSHFR" name="Shifter" description="The study of the arcane is essential to a Shifter’s success, and all Shifters are powerful spellcasters. While they don’t possess the same variety of spell knowledge their counterparts among other disciplines might, they don’t hurt for essential power, either. Shifters train in techniques for both diminishing the power of their opponents and turning that power against them.\n\nShifters are mighty spellcasters, starting with three powers of their choice (as well as\nspecific ones, listed below). They begin with a Spellcasting skill of d8 and 15 PPE." compset="Arcane" summary="The Shifter is uses magic">
+  <thing id="arcSRSHFR" name="Shifter" description="The study of the arcane is essential to a Shifter’s success, and all Shifters are powerful spellcasters. While they don’t possess the same variety of spell knowledge their counterparts among other disciplines might, they don’t hurt for essential power, either. Shifters train in techniques for both diminishing the power of their opponents and turning that power against them.\n\nShifters are mighty spellcasters, starting with three powers of their choice (as well as\nspecific ones, listed below). They begin with a Spellcasting skill of d8 and 15 PPE." compset="Arcane" summary="The Shifter is uses magic" uniqueness="unique">
     <fieldval field="arcPowers" value="3"/>
     <fieldval field="arcPoints" value="15"/>
     <usesource source="SavGPlu"/>
